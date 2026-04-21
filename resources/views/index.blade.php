@@ -63,7 +63,7 @@
                 <!-- Tombol Autentikasi -->
                 <div class="hidden md:flex items-center space-x-4">
                     <a href="#" class="text-sm font-medium text-gray-700 px-6 py-2 border border-gray-300 rounded-full hover:bg-gray-50 transition">Daftar</a>
-                    <a href="#" class="text-sm font-medium text-white bg-merek-biru px-6 py-2 rounded-full hover:bg-opacity-90 hover:shadow-md transition">Masuk</a>
+                    <a href="{{ route('login') }}" class="text-sm font-medium text-white bg-merek-biru px-6 py-2 rounded-full hover:bg-opacity-90 hover:shadow-md transition">Masuk</a>
                 </div>
 
                 <!-- Tombol menu seluler -->
@@ -84,7 +84,7 @@
                 <a href="#form-transfer" onclick="toggleMobileMenu()" class="mobile-nav-link block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors">Form Transfer</a>
                 <div class="mt-4 flex flex-col gap-2 px-3">
                     <a href="#" class="text-center text-base font-medium text-gray-700 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Daftar</a>
-                    <a href="#" class="text-center text-base font-medium text-white bg-merek-biru py-2 rounded-lg hover:bg-opacity-90 transition-colors">Masuk</a>
+                    <a href="{{ route('login') }}" class="text-center text-base font-medium text-white bg-merek-biru py-2 rounded-lg hover:bg-opacity-90 transition-colors">Masuk</a>
                 </div>
             </div>
         </div>
