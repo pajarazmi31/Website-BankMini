@@ -16,13 +16,10 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 Route::post('/login', function () {
- 
-    return redirect()->route('dashboard');
-});
-Route::post('/logout', function () {
-    return redirect()->route('login');
-})->name('logout');
-
-Route::get('/logout', function () {
-    return redirect()->route('login');
+    /* 
+    | Bagian ini dapat diganti dengan AuthController untuk menangani logika login.
+    | Frontend sudah siap menerima session 'success' atau 'error' 
+    | untuk menampilkan notifikasi toast.
+    */
+    return redirect()->back()->with('error', 'Fitur login sedang disiapkan oleh tim backend.');
 });
