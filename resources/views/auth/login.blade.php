@@ -21,8 +21,11 @@
                     fontFamily: {
                         sans: ['Poppins', 'sans-serif'],
                     },
+                    backgroundImage: {
+                        'gradient-merek': 'linear-gradient(to right, #143657, #1E5081, #143657)',
+                    },
                     colors: {
-                        'primary-blue': '#1c4e80', /* Warna biru sesuai gambar yang diberikan */
+                        'primary-blue': '#1c4e80', 
                         'accent-yellow': '#eab308', /* Warna kuning untuk teks 'menggunakan' */
                     }
                 }
@@ -113,7 +116,7 @@
     </div>
 
     <!-- Sisi Kanan (Banner Halo) -->
-    <div class="w-full lg:w-1/2 bg-primary-blue lg:rounded-l-[4.5rem] flex items-center justify-center p-10 py-20 lg:p-16 relative overflow-hidden">
+    <div class="w-full lg:w-1/2 bg-gradient-merek lg:rounded-l-[4.5rem] flex items-center justify-center p-10 py-20 lg:p-16 relative overflow-hidden">
 
 
         <div class="text-center text-white max-w-[460px] z-10">
@@ -123,16 +126,8 @@
             </h2>
             
             <p class="text-base lg:text-lg leading-relaxed mb-8 text-gray-100">
-                Jika belum punya akun, segera daftar dengan data diri Anda untuk <span class="text-accent-yellow font-semibold">menggunakan</span> semua fitur website.
+                Selamat datang kembali di <span class="text-accent-yellow font-semibold">Bank Mini</span> SMKN 1 Kawali. Silakan masuk untuk mengakses layanan perbankan sekolah Anda.
             </p>
-            
-            <button 
-                type="button"
-                class="border-[1.5px] border-white text-white hover:bg-white hover:text-primary-blue font-semibold py-2.5 px-14 rounded-xl transition-colors duration-300"
-                onclick="showMessage('Mengarahkan ke halaman pendaftaran...')"
-            >
-                Daftar
-            </button>
 
         </div>
     </div>
