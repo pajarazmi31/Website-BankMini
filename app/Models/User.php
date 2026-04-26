@@ -45,4 +45,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function nasabah() {
+        return $this->hasOne(nasabah::class);
+    }
 }

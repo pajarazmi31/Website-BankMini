@@ -40,7 +40,7 @@
         }
     </script>
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="shortcut icon" href="{{ asset('img/icon/fav-icon 1.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/landingpageicon/fav-icon 1.png') }}" type="image/x-icon">
 </head>
 <body class="font-sans text-gray-800 bg-merek-bg antialiased selection:bg-merek-kuning selection:text-white">
 
@@ -132,7 +132,7 @@
                 <div class="md:col-span-7 flex flex-col justify-center">
                     <div class="flex items-center gap-4 mb-6">
                         <div class="w-12 h-12 rounded-full bg-merek-hijau flex items-center justify-center shadow-md overflow-hidden">
-                            <img src="{{ asset('img/icon/Bank Icon.png') }}" alt="Bank Icon" class="w-8 h-8 object-contain">
+                            <img src="{{ asset('img/landingpageicon/Bank Icon.png') }}" alt="Bank Icon" class="w-8 h-8 object-contain">
                         </div>
                         <h3 class="text-2xl font-bold text-merek-hijau">Fasilitas Belajar Praktis</h3>
                     </div>
@@ -153,7 +153,7 @@
                         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
                         
                         <div class="relative z-10">
-                        <img src="{{ asset('img/icon/shield-shaded (1) 1.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
+                        <img src="{{ asset('img/landingpageicon/shield-shaded (1) 1.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
                             <h3 class="text-2xl font-bold">Keamanan Terjamin</h3>
                         </div>
                         <p class="text-gray-300 text-base mb-8 leading-relaxed">
@@ -165,11 +165,11 @@
 
                         <ul class="space-y-4">
                             <li class="flex items-center gap-4 text-sm font-medium text-gray-200">
-                                <img src="{{ asset('img/icon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                                <img src="{{ asset('img/landingpageicon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
                                 Audit Bulanan Berkala
                             </li>
                             <li class="flex items-center gap-4 text-sm font-medium text-gray-200">
-                                <img src="{{ asset('img/icon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                                <img src="{{ asset('img/landingpageicon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
                                 Sistem Terenkripsi
                             </li>
                         </ul>
@@ -239,7 +239,7 @@
                     <!-- Alur Nabung Card -->
                     <div class="bg-white rounded-[2rem] p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
                         <div class="flex items-center gap-4 mb-10">
-                            <img src="{{ asset('img/icon/cash-stack 1 (1).png') }}" alt="Cash Icon" class="w-10 h-10 object-contain">
+                            <img src="{{ asset('img/landingpageicon/cash-stack 1 (1).png') }}" alt="Cash Icon" class="w-10 h-10 object-contain">
                             <h3 class="text-2xl font-bold text-[#1e3a5f]">Alur Nabung</h3>
                         </div>
                         
@@ -274,7 +274,7 @@
 
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-10 text-white">
-                                <img src="{{ asset('img/icon/cash-stack 1.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain brightness-0 invert">
+                                <img src="{{ asset('img/landingpageicon/cash-stack 1.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain brightness-0 invert">
                                 <h3 class="text-2xl font-bold">Alur Tarik Tunai</h3>
                             </div>
                             
@@ -318,8 +318,8 @@
                         <div class="absolute top-0 left-0 -ml-12 -mt-12 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
                         
                         <div class="relative z-10">
-                            <div class="flex items-center gap-4 mb-10 text-white">
-                                <img src="{{ asset('img/icon/cash-stack 1.png') }}" alt="Transfer Icon" class="w-10 h-10 object-contain brightness-0 invert">
+                            <div class="flex items-center gap-4 m\b-10 text-white">
+                                <img src="{{ asset('img/landingpageicon/cash-stack 1.png') }}" alt="Transfer Icon" class="w-10 h-10 object-contain brightness-0 invert">
                                 <h3 class="text-2xl font-bold">Alur Transfer</h3>
                             </div>
                             
@@ -348,7 +348,7 @@
                 <div class="lg:col-span-8 bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl border border-gray-100">
                     @if(session('success'))
                         <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#1A8F6A] text-[#1A8F6A] rounded-r-lg flex items-center gap-3">
-                            <img src="{{ asset('img/icon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                            <img src="{{ asset('img/landingpageicon/check2-circle 1.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
                             <p class="text-sm font-medium">{{ session('success') }}</p>
                         </div>
                     @endif
@@ -424,7 +424,7 @@
                                 class="mt-1 min-h-[160px] relative flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg bg-white hover:bg-gray-50 transition cursor-pointer group overflow-hidden {{ $errors->has('bukti_transfer') ? 'border-red-300' : 'border-gray-300' }}">
                                 <!-- Konten Default (Ikon & Teks) -->
                                 <div id="upload-placeholder" class="space-y-2 text-center transition-all duration-300">
-                                    <img src="{{ asset('img/icon/cloud-arrow-up 1.png') }}" alt="Upload Icon" class="w-12 h-12 mx-auto object-contain">
+                                    <img src="{{ asset('img/landingpageicon/cloud-arrow-up 1.png') }}" alt="Upload Icon" class="w-12 h-12 mx-auto object-contain">
                                     <div class="flex text-sm text-gray-600 justify-center">
                                         <span class="font-medium text-merek-biru">Klik untuk unggah bukti</span>
                                     </div>
@@ -467,7 +467,7 @@
                     <!-- Kolom Info -->
                     <div class="lg:col-span-4">
                         <div class="flex items-center gap-3 mb-8">
-                            <img src="{{ asset('img/icon/Bank Icon.png') }}" alt="Bank Icon" class="w-8 h-8 object-contain">
+                            <img src="{{ asset('img/landingpageicon/Bank Icon.png') }}" alt="Bank Icon" class="w-8 h-8 object-contain">
                             <span class="font-bold text-2xl text-[#1e3a5f]">Bank Mini SMKN 1 Kawali</span>
                         </div>
                         <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Alamat</h5>

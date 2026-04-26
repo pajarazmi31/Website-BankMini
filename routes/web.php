@@ -11,15 +11,14 @@ Route::get('/login', function () {
 })->name('login');
 
 
-Route::get('/dashboard', function () {
-    return view('costumer_service.dashboard');
-})->name('dashboard');
+Route::get('/nasabah/dashboard', function () {
+    return view('nasabah.dashboard');
+})->name('nasabah.dashboard');
 
-Route::post('/login', function () {
-    /* 
-    | Bagian ini dapat diganti dengan AuthController untuk menangani logika login.
-    | Frontend sudah siap menerima session 'success' atau 'error' 
-    | untuk menampilkan notifikasi toast.
-    */
-    return redirect()->back()->with('error', 'Fitur login sedang disiapkan oleh tim backend.');
-});
+Route::get('/nasabah/transfer', function () {
+    return view('nasabah.transfer');
+})->name('nasabah.transfer');
+
+
+
+
