@@ -19,6 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'nasabah_id',
         'email',
         'password',
     ];
@@ -48,5 +49,9 @@ class User extends Authenticatable
 
     public function nasabah() {
         return $this->hasOne(nasabah::class);
+    }
+
+    public function petugas() {
+        return $this->hasOne(petugas::class);
     }
 }

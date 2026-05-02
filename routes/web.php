@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\loginController;
 
 Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+//Halaman Login
+Route::get('/login', [loginController::class, 'index'])->name('halaman.login');
 

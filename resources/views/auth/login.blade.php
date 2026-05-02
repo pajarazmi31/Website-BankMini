@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Bank Mini</title>
-    
+
     <!-- Import Google Fonts (Poppins) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Tailwind Config for Custom Colors & Fonts -->
     <script>
         tailwind.config = {
@@ -29,7 +29,7 @@
             }
         }
     </script>
-    
+
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
 </head>
@@ -46,7 +46,7 @@
     <!-- Sisi Kiri (Form Login) -->
     <div class="w-full lg:w-1/2 min-h-screen lg:min-h-0 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative">
         <div class="w-full max-w-[360px]">
-            
+
             <div class="flex justify-center mb-8">
                 <a href="{{ url('/') }}">
                     <img src="{{ asset('img/logosmk.png') }}" alt="Logo SMKN 1 Kawali" class="w-24 h-24 object-contain hover:scale-105 transition-transform">
@@ -60,22 +60,22 @@
                 Untuk masuk ke akun anda, lengkapi form di bawah ini.
             </p>
 
-            {{-- 
-                CATATAN BACKEND: 
+            {{--
+                CATATAN BACKEND:
                 - Form menggunakan method POST ke route('login').
                 - Parameter input: 'email' dan 'password'.
             --}}
-            <form id="loginForm" method="POST" action="{{ route('login') }}" class="space-y-6">
+            <form id="loginForm" method="POST" action="{{ route('halaman.login') }}" class="space-y-6">
                 @csrf
                 <!-- Input Email -->
                 <div>
                     <label for="email" class="block text-gray-500 font-medium mb-1.5 text-xs uppercase tracking-wider">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
+                    <input
+                        type="email"
+                        id="email"
                         name="email"
                         value="{{ old('email') }}"
-                        required 
+                        required
                         class="w-full px-4 py-2.5 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm"
                     >
                     @error('email')
@@ -86,11 +86,11 @@
                 <!-- Input Password -->
                 <div>
                     <label for="password" class="block text-gray-500 font-medium mb-1.5 text-xs uppercase tracking-wider">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
+                    <input
+                        type="password"
+                        id="password"
                         name="password"
-                        required 
+                        required
                         class="w-full px-4 py-2.5 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm"
                     >
                     @error('password')
@@ -100,8 +100,8 @@
 
                 <!-- Tombol Masuk -->
                 <div class="pt-2">
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         class="btn-primary w-full bg-primary-blue hover:bg-[#143252] text-white font-semibold py-3.5 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
                     >
                         Masuk
@@ -117,16 +117,16 @@
 
 
         <div class="text-center text-white max-w-[460px] z-10">
-            
+
             <h2 class="text-4xl lg:text-5xl font-bold mb-4 tracking-wide">
                 Halo!
             </h2>
-            
+
             <p class="text-base lg:text-lg leading-relaxed mb-8 text-gray-100">
                 Jika belum punya akun, segera daftar dengan data diri Anda untuk <span class="text-accent-yellow font-semibold">menggunakan</span> semua fitur website.
             </p>
-            
-            <button 
+
+            <button
                 type="button"
                 class="border-[1.5px] border-white text-white hover:bg-white hover:text-primary-blue font-semibold py-2.5 px-14 rounded-xl transition-colors duration-300"
                 onclick="showMessage('Mengarahkan ke halaman pendaftaran...')"
@@ -148,20 +148,20 @@
         // Fungsi untuk menampilkan pesan (menggantikan fungsi alert default browser)
         function showMessage(text) {
             clearTimeout(messageTimeout);
-            
+
             messageText.textContent = text;
             messageBox.classList.remove('hidden', 'toast-leave');
             messageBox.classList.add('toast-enter');
-            
+
             // Sembunyikan setelah 3 detik
             messageTimeout = setTimeout(() => {
                 messageBox.classList.remove('toast-enter');
                 messageBox.classList.add('toast-leave');
-                
+
                 // Hapus class hidden setelah animasi selesai
                 setTimeout(() => {
                     messageBox.classList.add('hidden');
-                }, 400); 
+                }, 400);
             }, 3000);
         }
 
@@ -170,7 +170,7 @@
         // ==========================================
         // Script ini otomatis menangkap pesan 'success' atau 'error' dari session.
         // Dapat dipicu via controller: return redirect()->back()->with('success', 'Isi Pesan');
-        
+
         @if(session('success'))
             showMessage("{{ session('success') }}");
         @endif
@@ -179,13 +179,13 @@
             showMessage("{{ session('error') }}");
         @endif
 
-        // Note: 
+        // Note:
         // Event listener 'submit' dinonaktifkan agar form dapat diproses langsung oleh server.
         // Silakan sesuaikan jika ingin menggunakan AJAX.
-        
+
         /*
         loginForm.addEventListener('submit', function(e) {
-            // e.preventDefault(); 
+            // e.preventDefault();
         });
         */
     </script>
