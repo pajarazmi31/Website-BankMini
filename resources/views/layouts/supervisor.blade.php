@@ -66,9 +66,7 @@
             </button>
             
             <div class="flex items-center gap-3 px-6 mb-10">
-                <div class="text-brand-blue">
-                    <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
-                </div>
+                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
                 <div>
                     <h1 class="font-extrabold text-[16px] leading-tight tracking-tight text-gray-900">BANK MINI</h1>
                     <p class="text-[10px] text-gray-500 font-medium mt-0.5">SMKN 1 Kawali</p>

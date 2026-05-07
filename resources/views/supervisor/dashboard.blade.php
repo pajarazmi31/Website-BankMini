@@ -37,35 +37,80 @@
 </section>
 
 <!-- Bottom Content -->
-<section class="grid grid-cols-1 gap-6">
-    <div class="flex flex-col gap-3.5">
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+    <div class="lg:col-span-2 flex flex-col gap-3.5">
         <div class="flex justify-between items-end mb-1 px-1">
             <h3 class="text-[20px] font-bold text-gray-800">Pending Verifikasi</h3>
-            <button onclick="switchView('history')" class="text-[12px] font-semibold text-gray-800 hover:text-brand-blue transition-colors">Lihat Semua</button>
+            <button onclick="switchView('history')" class="text-[13px] font-bold text-gray-500 hover:text-brand-blue transition-colors">Lihat Semua</button>
         </div>
         
         <div class="flex flex-col gap-3">
             <!-- Row 1 -->
-            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
-                <div class="flex items-center gap-3.5">
+            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
+                <div class="flex items-center gap-4">
                     <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Pajar Azmi</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru</p>
+                        <h4 class="font-bold text-[16px] text-gray-800">Pajar Azmi</h4>
+                        <p class="text-[12px] text-gray-400 font-medium">Registrasi Akun Baru</p>
                     </div>
                 </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
             </div>
             <!-- Row 2 -->
-            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
-                <div class="flex items-center gap-3.5">
+            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
+                <div class="flex items-center gap-4">
                     <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Anisa Siti</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Transfer Masuk</p>
+                        <h4 class="font-bold text-[16px] text-gray-800">Anisa Siti</h4>
+                        <p class="text-[12px] text-gray-400 font-medium">Transfer Masuk</p>
                     </div>
                 </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
+            </div>
+            <!-- Row 3 -->
+            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[16px] text-gray-800">Rafka</h4>
+                        <p class="text-[12px] text-gray-400 font-medium">Transfer Masuk</p>
+                    </div>
+                </div>
+                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Red Card: Segera Periksa! -->
+    <div class="bg-[#fee2e2] rounded-[24px] p-7 shadow-sm border border-red-100 flex flex-col gap-8 mt-1">
+        <div class="flex items-center gap-3">
+            <i class="ph-fill ph-warning text-[26px] text-[#dc2626]"></i>
+            <h3 class="text-[16px] font-bold text-[#dc2626] uppercase tracking-wide">Segera Periksa!</h3>
+        </div>
+
+        <div class="flex flex-col gap-7">
+            <!-- Item 1 -->
+            <div class="flex items-center justify-between group cursor-pointer" onclick="window.location.href='{{ route('supervisor.verifikasi') }}'">
+                <div class="flex items-center gap-5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#dc2626] shadow-[0_0_8px_rgba(220,38,38,0.4)]"></div>
+                    <div>
+                        <h4 class="font-bold text-[18px] text-[#991b1b] leading-tight tracking-tight">Registrasi Akun</h4>
+                        <p class="text-[12px] text-[#dc2626] font-bold mt-1.5">12 Rekening baru harus diperiksa</p>
+                    </div>
+                </div>
+                <i class="ph ph-caret-right text-[22px] text-[#dc2626]/40 group-hover:text-[#dc2626] transition-all"></i>
+            </div>
+
+            <!-- Item 2 -->
+            <div class="flex items-center justify-between group cursor-pointer" onclick="window.location.href='{{ route('supervisor.verifikasi') }}'">
+                <div class="flex items-center gap-5">
+                    <div class="w-2.5 h-2.5 rounded-full bg-[#dc2626] shadow-[0_0_8px_rgba(220,38,38,0.4)]"></div>
+                    <div>
+                        <h4 class="font-bold text-[18px] text-[#991b1b] leading-tight tracking-tight">Transfer Pihak Luar</h4>
+                        <p class="text-[12px] text-[#dc2626] font-bold mt-1.5">10 Transfer harus diperiksa</p>
+                    </div>
+                </div>
+                <i class="ph ph-caret-right text-[22px] text-[#dc2626]/40 group-hover:text-[#dc2626] transition-all"></i>
             </div>
         </div>
     </div>

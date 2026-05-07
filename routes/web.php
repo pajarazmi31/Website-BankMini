@@ -11,7 +11,6 @@ Route::get('/login', function () {
 })->name('login');
 
 
-
 Route::get('/nasabah/dashboard', function () {
     return view('nasabah.dashboard');
 })->name('nasabah.dashboard');

@@ -93,19 +93,7 @@
             
             <!-- Logo Section -->
             <div class="flex items-center gap-3 px-6 mb-10">
-                <div class="text-brand-blue">
-                    <!-- Custom Bank Icon SVG -->
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 21h18"/>
-                        <path d="M3 10h18"/>
-                        <path d="M5 6l7-3 7 3"/>
-                        <path d="M4 10v11"/>
-                        <path d="M20 10v11"/>
-                        <path d="M8 14v3"/>
-                        <path d="M12 14v3"/>
-                        <path d="M16 14v3"/>
-                    </svg>
-                </div>
+                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
                 <div>
                     <h1 class="font-extrabold text-[16px] leading-tight tracking-tight text-gray-900">BANK MINI</h1>
                     <p class="text-[10px] text-gray-500 font-medium mt-0.5">SMKN 1 Kawali</p>
@@ -233,6 +221,7 @@
                                     <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Penerima</th>
                                     <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nominal Transfer</th>
                                     <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nomor Telepon</th>
+                                    <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Status</th>
                                     <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-[140px] border-b border-gray-100">Aksi</th>
                                 </tr>
                             </thead>
@@ -249,6 +238,11 @@
                                     <td class="py-4 px-2 border-b border-gray-50">Salsabila Rosi Cahyani</td>
                                     <td class="py-4 px-2 border-b border-gray-50">Rp. 200.000</td>
                                     <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
+                                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                            <i class="ph-bold ph-clock text-[15px]"></i>
+                                        </button>
+                                    </td>
                                     <td class="py-4 px-2 border-b border-gray-50">
                                         <div class="flex items-center justify-center gap-2">
                                             <!-- Tombol Lihat (Mata) memanggil view Form -->
@@ -271,6 +265,11 @@
                                     <td class="py-4 px-2 border-b border-gray-50">Anisa Siti Nur Fajriyanti</td>
                                     <td class="py-4 px-2 border-b border-gray-50">Rp. 10.000</td>
                                     <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
+                                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                            <i class="ph-bold ph-clock text-[15px]"></i>
+                                        </button>
+                                    </td>
                                     <td class="py-4 px-2 border-b border-gray-50">
                                         <div class="flex items-center justify-center gap-2">
                                             <button onclick="viewDetail('Salsabila Rosi Cahyani', 'Anisa Siti Nur Fajriyanti', 'Rp. 10.000', '03-03-232410229', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
@@ -286,6 +285,11 @@
                                     <td class="py-4 px-2 border-b border-gray-50">Yanto Supriyanto</td>
                                     <td class="py-4 px-2 border-b border-gray-50">Rp. 5.000</td>
                                     <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
+                                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                            <i class="ph-bold ph-clock text-[15px]"></i>
+                                        </button>
+                                    </td>
                                     <td class="py-4 px-2 border-b border-gray-50">
                                         <div class="flex items-center justify-center gap-2">
                                             <button onclick="viewDetail('Anisa Siti Nur Fajriyanti', 'Yanto Supriyanto', 'Rp. 5.000', '01-02-030081983', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
@@ -301,6 +305,11 @@
                                     <td class="py-4 px-2 border-b border-gray-50">Ali Mahendra</td>
                                     <td class="py-4 px-2 border-b border-gray-50">Rp. 150.000</td>
                                     <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
+                                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                            <i class="ph-bold ph-clock text-[15px]"></i>
+                                        </button>
+                                    </td>
                                     <td class="py-4 px-2 border-b border-gray-50">
                                         <div class="flex items-center justify-center gap-2">
                                             <button onclick="viewDetail('Yanto Supriyanto', 'Ali Mahendra', 'Rp. 150.000', '01-03-050081993', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
@@ -316,6 +325,11 @@
                                     <td class="py-4 px-2 border-b border-gray-50">Pajar Azmi Anugraha</td>
                                     <td class="py-4 px-2 border-b border-gray-50">Rp. 25.000</td>
                                     <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
+                                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                            <i class="ph-bold ph-clock text-[15px]"></i>
+                                        </button>
+                                    </td>
                                     <td class="py-4 px-2 border-b border-gray-50">
                                         <div class="flex items-center justify-center gap-2">
                                             <button onclick="viewDetail('Ali Mahendra', 'Pajar Azmi Anugraha', 'Rp. 25.000', '03-03-232410204', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
