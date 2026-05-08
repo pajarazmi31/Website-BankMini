@@ -1,0 +1,202 @@
+@extends('layouts.cs')
+
+@section('title', 'Customer Service - Dashboard')
+@section('header_title', 'Selamat Datang, Costumer Service!')
+@section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
+
+@section('content')
+<div id="viewMain" class="fade-in block">
+<!-- Statistics Cards -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-7">
+    <!-- Total Nasabah -->
+    <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+        <div class="relative z-10">
+            <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Nasabah</p>
+            <h3 class="text-[28px] md:text-[32px] font-bold">3.455</h3>
+        </div>
+        <div class="absolute -right-2 -bottom-2 flex opacity-10">
+            <i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i>
+        </div>
+    </div>
+
+    <!-- Nasabah Hari Ini -->
+    <div class="bg-brand-green rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+        <div class="relative z-10">
+            <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Nasabah Hari Ini</p>
+            <h3 class="text-[28px] md:text-[32px] font-bold">500</h3>
+        </div>
+        <div class="absolute -right-2 -bottom-2 flex opacity-10">
+            <i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i>
+        </div>
+    </div>
+
+    <!-- Pending Verifikasi -->
+    <div class="bg-brand-gold rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+        <div class="relative z-10">
+            <p class="text-[11px] font-semibold tracking-[0.08em] text-yellow-100/80 mb-2.5 uppercase">Pending Verifikasi</p>
+            <h3 class="text-[28px] md:text-[32px] font-bold">34</h3>
+        </div>
+        <div class="absolute -right-2 -bottom-2 flex opacity-10">
+            <i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i>
+        </div>
+    </div>
+</section>
+
+<!-- Bottom Content -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+    <!-- Left Column: Aktivitas Terkini -->
+    <div class="lg:col-span-8 flex flex-col gap-3.5">
+        <div class="flex justify-between items-end mb-1 px-1">
+            <h3 class="text-[20px] font-bold text-gray-800">Aktivitas Terkini</h3>
+            <button onclick="switchView('history')" class="text-[12px] font-semibold text-gray-800 hover:text-brand-blue">Lihat Semua</button>
+        </div>
+        
+        <div class="flex flex-col gap-3">
+            <!-- Item 1 -->
+            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
+                <div class="flex items-center gap-3.5">
+                    <i class="ph-fill ph-user-circle text-[32px] md:text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[14px] md:text-[15px] text-gray-800">Pajar Azmi</h4>
+                        <p class="text-[11px] md:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
+                    </button>
+                    <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-clock text-[14px] md:text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Item 2 -->
+            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
+                <div class="flex items-center gap-3.5">
+                    <i class="ph-fill ph-user-circle text-[32px] md:text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[14px] md:text-[15px] text-gray-800">Anisa Siti</h4>
+                        <p class="text-[11px] md:text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
+                    </button>
+                    <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-check-circle text-[14px] md:text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Info & Aksi Cepat -->
+    <div class="lg:col-span-4 flex flex-col gap-6">
+        <div class="bg-[#fce8e8] rounded-[20px] p-5 shadow-sm border border-red-100">
+            <div class="flex items-center gap-2 mb-2 text-[#d32f2f]">
+                <i class="ph-fill ph-warning text-[20px]"></i>
+                <h4 class="font-bold text-[15px]">Integritas & Keamanan</h4>
+            </div>
+            <p class="text-[12px] text-[#d32f2f] leading-relaxed">
+                Pastikan setiap proses verifikasi data nasabah dilakukan sesuai dengan standar operasional Bank Mini SMKN 1 Kawali.
+            </p>
+        </div>
+
+        <div class="flex flex-col gap-3.5">
+            <div class="px-1 mb-1">
+                <h3 class="text-[20px] font-bold text-gray-800">Aksi Cepat</h3>
+            </div>
+            <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}?view=tambah'" class="bg-white rounded-[16px] p-4 flex items-center gap-4 shadow-card hover:bg-gray-50 transition-colors text-left w-full border border-transparent hover:border-gray-100">
+                <div class="text-brand-blue bg-[#f8f9fb] p-2 rounded-lg">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><line x1="8" y1="8" x2="8" y2="12"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="16" y1="8" x2="16" y2="12"/><line x1="8" y1="16" x2="16" y2="16"/>
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="font-bold text-[15px] text-brand-blue mb-0.5">Buka Rekening</h4>
+                    <p class="text-[11px] text-gray-500">Proses pembukaan buku rekening</p>
+                </div>
+            </button>
+        </div>
+    </div>
+</section>
+</div>
+
+<!-- VIEW HISTORY: Semua Aktivitas (10 Terakhir) -->
+<div id="viewHistory" class="fade-in hidden">
+    <div class="bg-white rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-10">
+        <div class="flex justify-between items-center mb-10">
+            <button onclick="switchView('main')" class="text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2">
+                Kembali
+            </button>
+            <h3 class="text-[22px] font-bold text-gray-800">Riwayat Aktivitas</h3>
+        </div>
+
+        <div class="space-y-6">
+            <!-- Row 1 -->
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-50 hover:border-gray-100 transition-all">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-gray-800">Pajar Azmi</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 14:30</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-clock text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Row 2 -->
+            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-50 hover:border-gray-100 transition-all">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-gray-800">Anisa Siti</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • 11:20</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-check-circle text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    function switchView(viewName) {
+        const mainView = document.getElementById('viewMain');
+        const historyView = document.getElementById('viewHistory');
+        
+        if (viewName === 'history') {
+            mainView.classList.remove('block');
+            mainView.classList.add('hidden');
+            historyView.classList.remove('hidden');
+            historyView.classList.add('block');
+        } else {
+            historyView.classList.remove('block');
+            historyView.classList.add('hidden');
+            mainView.classList.remove('hidden');
+            mainView.classList.add('block');
+        }
+        
+        // Scroll top (karena di CS overflow auto ada di main content atau window)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        const scrollableMain = document.querySelector('main');
+        if(scrollableMain) scrollableMain.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+@endsection
