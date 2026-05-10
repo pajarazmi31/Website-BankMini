@@ -67,7 +67,7 @@
         </button>
         <!-- Logo Area -->
         <div class="px-8 pt-8 pb-10 flex items-center gap-3">
-            <img src="{{ asset('img/nasabahicon/bank 2.png') }}" alt="Bank Logo" class="w-10 h-10 object-contain">
+            <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-10 h-10 object-contain">
             <div>
                 <h1 class="font-bold text-lg leading-tight tracking-tight">BANK MINI</h1>
                 <p class="text-[10px] text-textGray">SMKN 1 Kawali</p>
@@ -84,19 +84,20 @@
                 <!-- Active Item -->
                 <li>
                     <a href="{{ route('nasabah.dashboard') }}" class="flex items-center gap-3 text-textDark font-semibold py-3 hover:text-primary transition-colors">
-                        <img src="{{ asset('img/nasabahicon/speedometer2 1.png') }}" alt="Dashboard" class="w-5 h-5">
+                        <img src="{{ asset('img/icon/sidebar/dashboard.png') }}" alt="Dashboard" class="w-5 h-5">
                         Dashboard
                     </a>
                 </li>
                 <!-- Inactive Item -->
                 <li>
                     <a href="{{ route('nasabah.transfer') }}" class="flex items-center gap-3 text-textGray font-medium py-3 hover:text-primary transition-colors">
-                        <img src="{{ asset('img/nasabahicon/arrow-left-right 1.png') }}" alt="Transfer" class="w-5 h-5 opacity-50">
+                        <img src="{{ asset('img/icon/sidebar/transfer.png') }}" alt="Transfer" class="w-5 h-5 opacity-50">
                         Transfer
                     </a>
                 </li>
                 <!-- Logout -->
                 <li class="mt-4">
+<<<<<<< HEAD
                     <form action="{{ route('logout') }}" method="post">
                         @csrf
                             <button
@@ -107,6 +108,15 @@
                     </form>
                     {{-- <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
                         <img src="{{ asset('img/nasabahicon/box-arrow-left 1.png') }}" alt="Logout" class="w-5 h-5">
+=======
+                    <!-- 
+                        BAGIAN BACKEND: LOGOUT
+                        - Saat ini berupa link ke route('login').
+                        - Idealnya menggunakan method POST ke route logout untuk menghapus session auth secara aman.
+                    -->
+                    <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
+                        <img src="{{ asset('img/icon/sidebar/logout.png') }}" alt="Logout" class="w-5 h-5">
+>>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
                         Keluar
                     </a> --}}
                 </li>
@@ -120,7 +130,7 @@
         <!-- MOBILE TOP BAR -->
         <div class="lg:hidden flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 sticky top-0 z-30">
             <div class="flex items-center gap-2">
-                <i class="ph ph-bank text-2xl text-primary"></i>
+                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-7 h-7 object-contain">
                 <span class="font-bold text-sm tracking-tight">BANK MINI</span>
             </div>
             <button class="p-2 bg-gray-50 rounded-lg text-primary" onclick="toggleSidebar()">
@@ -138,14 +148,14 @@
             <div class="flex items-center gap-6">
                 <!-- Status Tag -->
                 <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold">
-                    <img src="{{ asset('img/nasabahicon/check2-circle 2.png') }}" alt="Status" class="w-4 h-4">
+                    <img src="{{ asset('img/icon/dashboard/check-status.png') }}" alt="Status" class="w-4 h-4">
                     Rekening Aktif
                 </div>
 
                 <!-- User Profile -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center overflow-hidden border border-gray-100">
-                        <img src="{{ asset('img/nasabahicon/person-circle 1.png') }}" alt="User" class="w-full h-full object-cover">
+                        <img src="{{ asset('img/icon/navbar/user-avatar.png') }}" alt="User" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
@@ -162,13 +172,20 @@
         </div>
 
         <!-- CONTENT AREA -->
+<<<<<<< HEAD
         <div class="px-6 lg:px-10 pb-10">
 
+=======
+        <div id="viewMain" class="fade-in block">
+            <div class="px-6 lg:px-10 pb-10">
+            
+>>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
             <!-- TOP SECTION: Balance & Warning -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
                 <!-- Saldo Card -->
-                <div class="lg:col-span-2 bg-primary-gradient rounded-2xl p-6 lg:p-8 relative overflow-hidden shadow-lg text-white">
+                <div class="lg:col-span-2 bg-primary-gradient rounded-[24px] p-8 lg:p-10 relative overflow-hidden shadow-lg text-white">
+                    <!-- FITUR BACKEND: Ambil data saldo total nasabah dari database -->
                     <!-- Background Watermark Icon (Premium Wallet - Moved Left) -->
                     <div class="absolute right-8 top-1/2 -translate-y-1/2 w-44 h-44 opacity-[0.08] text-white">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" class="w-full h-full">
@@ -186,11 +203,13 @@
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                             <!-- Pemasukan -->
+                            <!-- FITUR BACKEND: Hitung total pemasukan nasabah bulan ini -->
                             <div class="bg-primaryLight/70 rounded-xl p-4 lg:p-5 backdrop-blur-sm">
                                 <p class="text-[10px] lg:text-xs font-bold tracking-widest text-gray-200 uppercase mb-1 lg:mb-2">Pemasukan Bulan Ini</p>
                                 <p class="text-lg lg:text-xl font-bold">+ Rp 1.500.000</p>
                             </div>
                             <!-- Pengeluaran -->
+                            <!-- FITUR BACKEND: Hitung total pengeluaran nasabah bulan ini -->
                             <div class="bg-primaryLight/70 rounded-xl p-4 lg:p-5 backdrop-blur-sm">
                                 <p class="text-[10px] lg:text-xs font-bold tracking-widest text-gray-200 uppercase mb-1 lg:mb-2">Pengeluaran Bulan Ini</p>
                                 <p class="text-lg lg:text-xl font-bold">- Rp 500.000</p>
@@ -200,12 +219,12 @@
                 </div>
 
                 <!-- Tips Keamanan Card -->
-                <div class="bg-warningBg rounded-2xl p-7 shadow-sm border border-orange-100 flex flex-col justify-center">
-                    <div class="flex items-center gap-2 mb-3 text-amber-900">
-                        <i class="ph-fill ph-warning text-xl"></i>
-                        <h4 class="font-bold text-lg">Tips Keamanan</h4>
+                <div class="bg-[#fef3c7] rounded-[24px] p-8 shadow-sm border border-orange-100/50 flex flex-col h-fit self-start">
+                    <div class="flex items-center gap-2 mb-3 text-[#92400e]">
+                        <i class="ph-fill ph-warning text-2xl text-[#b45309]"></i>
+                        <h4 class="font-bold text-[16px]">Tips Keamanan</h4>
                     </div>
-                    <p class="text-sm text-amber-900/80 leading-relaxed">
+                    <p class="text-[12px] text-[#92400e] leading-relaxed font-medium">
                         Jangan pernah memberikan PIN atau password kepada siapapun, termasuk pihak yang mengaku sebagai petugas Bank Mini.
                     </p>
                 </div>
@@ -215,15 +234,20 @@
             <div class="mt-10">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-xl font-bold text-gray-800">Riwayat Transaksi Terbaru</h3>
-                        <a href="{{ route('nasabah.transfer', ['view' => 'history']) }}" class="text-xs font-semibold text-gray-400 hover:text-active-blue transition-colors">Lihat Semua</a>
+                        <button onclick="switchView('history')" class="text-xs font-semibold text-gray-400 hover:text-active-blue transition-colors">Lihat Semua</button>
                     </div>
 
                 <div class="bg-transparent space-y-4">
+                    <!-- 
+                        BAGIAN BACKEND: RIWAYAT TRANSAKSI TERBARU
+                        - Data statis di bawah ini hanya untuk preview UI.
+                        - Backend dev perlu mengambil 3-5 data transaksi terbaru milik nasabah yang login dari database.
+                    -->
                     <!-- Item Statis 1 -->
                     <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-full bg-[#ccf0dd] flex items-center justify-center">
-                                <img src="{{ asset('img/nasabahicon/box-arrow-in-down-left 1.png') }}" alt="Income" class="w-6 h-6">
+                                <img src="{{ asset('img/icon/dashboard/income.png') }}" alt="Income" class="w-6 h-6">
                             </div>
                             <div>
                                 <p class="font-bold text-lg text-textDark">Setor Tunai</p>
@@ -236,7 +260,7 @@
                     <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 rounded-full bg-[#fbd4d4] flex items-center justify-center">
-                                <img src="{{ asset('img/nasabahicon/box-arrow-up-right 1.png') }}" alt="Expense" class="w-6 h-6">
+                                <img src="{{ asset('img/icon/dashboard/expense.png') }}" alt="Expense" class="w-6 h-6">
                             </div>
                             <div>
                                 <p class="font-bold text-lg text-textDark">Tarik Tunai</p>
@@ -252,8 +276,13 @@
             <div class="mt-10 bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col md:flex-row mb-10 border border-gray-100">
                 <!-- Bagian Gambar Kiri -->
                 <div class="md:w-[40%] bg-primary relative min-h-[250px]">
+<<<<<<< HEAD
                     <img src="{{ asset('img/nasabahicon/banner_saving.png') }}"
                          alt="Ilustrasi Menabung"
+=======
+                    <img src="{{ asset('img/banner_saving.png') }}" 
+                         alt="Ilustrasi Menabung" 
+>>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
                          class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent"></div>
                 </div>
@@ -266,11 +295,11 @@
                     </p>
                     <ul class="space-y-3">
                         <li class="flex items-center gap-3 text-sm font-semibold text-textDark">
-                            <img src="{{ asset('img/nasabahicon/check2-circle 2.png') }}" alt="Check" class="w-5 h-5">
+                            <img src="{{ asset('img/icon/dashboard/check-status.png') }}" alt="Check" class="w-5 h-5">
                             Sistem Terenkripsi
                         </li>
                         <li class="flex items-center gap-3 text-sm font-semibold text-textDark">
-                            <img src="{{ asset('img/nasabahicon/check2-circle 2.png') }}" alt="Check" class="w-5 h-5">
+                            <img src="{{ asset('img/icon/dashboard/check-status.png') }}" alt="Check" class="w-5 h-5">
                             Aman & Terpercaya
                         </li>
                     </ul>
@@ -278,7 +307,63 @@
             </div>
 
         </div>
+        </div>
+
+        <!-- VIEW HISTORY: Riwayat Transaksi (10 Terakhir) -->
+        <div id="viewHistory" class="fade-in hidden">
+            <div class="px-6 lg:px-10 pb-10 mt-4 lg:mt-0">
+                <div class="bg-white rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-12">
+                    <div class="flex justify-between items-center mb-12">
+                        <button onclick="switchView('main')" class="text-[14px] font-bold text-textDark hover:text-primary transition-colors">
+                            Kembali
+                        </button>
+                        <h3 class="text-[22px] font-bold text-textDark">Riwayat Transaksi</h3>
+                    </div>
+
+                    <div class="space-y-8">
+                        <!-- 
+                            BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG
+                            - Lakukan looping foreach untuk 10 transaksi terakhir.
+                        -->
+                        @php
+                            $history10 = [
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '25 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                                ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                                ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '15 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                                ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '14 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '10 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                                ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '05 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
+                                ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '01 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
+                            ];
+                        @endphp
+                        @foreach($history10 as $item)
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-[{{ $item['bg'] }}] flex items-center justify-center">
+                                    <img src="{{ asset('img/icon/dashboard/' . $item['type'] . '.png') }}" alt="{{ $item['type'] }}" class="w-6 h-6">
+                                </div>
+                                <div>
+                                    <p class="font-bold text-lg text-textDark">{{ $item['title'] }}</p>
+                                    <p class="text-[11px] text-textGray mt-0.5">{{ $item['date'] }}</p>
+                                </div>
+                            </div>
+                            <p class="font-bold text-lg text-[{{ $item['color'] }}]">{{ $item['amount'] }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
+
+    <style>
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 
     <script>
         function toggleSidebar() {
@@ -292,6 +377,26 @@
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
             }
+        }
+
+        function switchView(viewName) {
+            const mainView = document.getElementById('viewMain');
+            const historyView = document.getElementById('viewHistory');
+            
+            if (viewName === 'history') {
+                mainView.classList.remove('block');
+                mainView.classList.add('hidden');
+                historyView.classList.remove('hidden');
+                historyView.classList.add('block');
+            } else {
+                historyView.classList.remove('block');
+                historyView.classList.add('hidden');
+                mainView.classList.remove('hidden');
+                mainView.classList.add('block');
+            }
+            
+            // Scroll top
+            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
