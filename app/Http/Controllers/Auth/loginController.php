@@ -14,14 +14,22 @@ class loginController extends Controller
     }
 
     public function login( Request $request) {
+    // buat cek limit
+    // kalo perlu hehe 
+        $key = $request->email . $request->ip();
+
+    // validasi login na
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
 
+    // loginnya benar atau tidak
         if(Auth::attempt($request->only('email','password'))) {
             $user = Auth::user();
+            $request->session()->regenerate();
 
+    // cek role user
             if($user->role === 'nasabah' ) {
                 return redirect()->route('halaman.login')->with('success','Kamu Berhasil Masuk Ke Akun Nasabah');
             }
