@@ -15,7 +15,7 @@ class loginController extends Controller
 
     public function login( Request $request) {
     // buat cek limit
-    // kalo perlu hehe 
+    // kalo perlu hehe
         $key = $request->email . $request->ip();
 
     // validasi login na
@@ -48,7 +48,5 @@ class loginController extends Controller
                 return redirect()->route('halaman.login')->with('failed' ,'Hak Akses Tidak Ada');
             }
         }
-
-
     }
 }
