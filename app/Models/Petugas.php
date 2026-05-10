@@ -14,4 +14,8 @@ class Petugas extends Model
         'password',
         'role',
     ]);
+
+    public function user() {
+        $this->belongsTo(User::class);
+    }
 }

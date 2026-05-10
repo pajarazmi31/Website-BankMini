@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Bank Mini</title>
-    
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -43,14 +43,14 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #f1f1f1;
         }
         ::-webkit-scrollbar-thumb {
-            background: #d1d5db; 
+            background: #d1d5db;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #9ca3af; 
+            background: #9ca3af;
         }
     </style>
 </head>
@@ -97,10 +97,18 @@
                 </li>
                 <!-- Logout -->
                 <li class="mt-4">
-                    <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
+                    <form action="{{ route('logout') }}" method="post">
+                        @csrf
+                            <button
+                            type="submit"
+                            class="bg-red-500 text-white px-4 py-2 rounded">
+                            Logout
+                        </button>
+                    </form>
+                    {{-- <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
                         <img src="{{ asset('img/nasabahicon/box-arrow-left 1.png') }}" alt="Logout" class="w-5 h-5">
                         Keluar
-                    </a>
+                    </a> --}}
                 </li>
             </ul>
         </div>
@@ -108,7 +116,7 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col h-screen overflow-y-auto w-full">
-        
+
         <!-- MOBILE TOP BAR -->
         <div class="lg:hidden flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 sticky top-0 z-30">
             <div class="flex items-center gap-2">
@@ -123,25 +131,25 @@
         <!-- HEADER -->
         <header class="px-6 lg:px-10 py-6 lg:py-8 flex flex-col md:flex-row justify-between items-start md:items-center bg-background/80 backdrop-blur-sm sticky top-0 z-20 hidden lg:flex">
             <div>
-                <h2 class="text-2xl font-bold text-textDark">Selamat Datang, Nasabah!</h2>
+                <h2 class="text-2xl font-bold text-textDark">Selamat Datang, {{ $nasabah->nama_nasabah }}!</h2>
                 <p class="text-textGray text-sm mt-1">Kelola keuangan Anda dengan aman dan mudah di Bank Mini.</p>
             </div>
-            
+
             <div class="flex items-center gap-6">
                 <!-- Status Tag -->
                 <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold">
                     <img src="{{ asset('img/nasabahicon/check2-circle 2.png') }}" alt="Status" class="w-4 h-4">
                     Rekening Aktif
                 </div>
-                
+
                 <!-- User Profile -->
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 bg-gray-50 rounded-full flex items-center justify-center overflow-hidden border border-gray-100">
                         <img src="{{ asset('img/nasabahicon/person-circle 1.png') }}" alt="User" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-textDark leading-tight">Nasabah Demo</p>
-                        <p class="text-xs text-textGray">nasabah@email.com</p>
+                        <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
+                        <p class="text-xs text-textGray">{{ $user->email }}</p>
                     </div>
                 </div>
             </div>
@@ -149,16 +157,16 @@
 
         <!-- MOBILE HEADER INFO (Visible on Mobile) -->
         <div class="lg:hidden px-6 pt-4 pb-2">
-            <h2 class="text-xl font-bold text-textDark">Halo, Nasabah!</h2>
+            <h2 class="text-xl font-bold text-textDark">Halo, {{ $nasabah->nama_nasabah }}!</h2>
             <p class="text-textGray text-[10px]">Pantau saldo dan transaksi Anda hari ini.</p>
         </div>
 
         <!-- CONTENT AREA -->
         <div class="px-6 lg:px-10 pb-10">
-            
+
             <!-- TOP SECTION: Balance & Warning -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
+
                 <!-- Saldo Card -->
                 <div class="lg:col-span-2 bg-primary-gradient rounded-2xl p-6 lg:p-8 relative overflow-hidden shadow-lg text-white">
                     <!-- Background Watermark Icon (Premium Wallet - Moved Left) -->
@@ -244,12 +252,12 @@
             <div class="mt-10 bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col md:flex-row mb-10 border border-gray-100">
                 <!-- Bagian Gambar Kiri -->
                 <div class="md:w-[40%] bg-primary relative min-h-[250px]">
-                    <img src="{{ asset('img/nasabahicon/banner_saving.png') }}" 
-                         alt="Ilustrasi Menabung" 
+                    <img src="{{ asset('img/nasabahicon/banner_saving.png') }}"
+                         alt="Ilustrasi Menabung"
                          class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent"></div>
                 </div>
-                
+
                 <!-- Bagian Teks Kanan -->
                 <div class="md:w-[60%] p-10 flex flex-col justify-center">
                     <h3 class="text-2xl font-bold text-textDark mb-3">Mulai Menabung untuk Masa Depan.</h3>
@@ -276,7 +284,7 @@
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
-            
+
             if (sidebar.classList.contains('-translate-x-full')) {
                 sidebar.classList.remove('-translate-x-full');
                 overlay.classList.remove('hidden');
