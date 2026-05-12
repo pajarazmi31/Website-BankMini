@@ -1,7 +1,9 @@
 @extends('layouts.teller')
 
 @section('title', 'Teller Dashboard')
-@section('header_title', 'Selamat Datang, Teller!')
+@section('header_title')
+    Selamat Datang, {{ $teller->nama_petugas }}!
+@endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('content')
@@ -45,9 +47,9 @@
             <h3 class="text-[20px] font-bold text-gray-800">Transaksi Terbaru</h3>
             <button onclick="switchView('history')" class="text-[12px] font-semibold text-gray-800 hover:text-brand-blue">Lihat Semua</button>
         </div>
-        
+
         <div class="flex flex-col gap-3">
-            <!-- 
+            <!--
                 BAGIAN BACKEND: TRANSAKSI TERBARU
                 - Data $transactions di bawah ini hanya data statis untuk preview UI.
                 - Backend dev perlu mengambil data transaksi terbaru (setor, tarik, transfer) dari database.
@@ -118,7 +120,7 @@
         </div>
 
         <div class="space-y-6">
-            <!-- 
+            <!--
                 BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG (TELLER)
                 - Lakukan looping foreach untuk 10 transaksi terakhir.
             -->
@@ -164,7 +166,7 @@
     function switchView(viewName) {
         const mainView = document.getElementById('viewMain');
         const historyView = document.getElementById('viewHistory');
-        
+
         if (viewName === 'history') {
             mainView.classList.remove('block');
             mainView.classList.add('hidden');
@@ -176,7 +178,7 @@
             mainView.classList.remove('hidden');
             mainView.classList.add('block');
         }
-        
+
         // Scroll top
         window.scrollTo({ top: 0, behavior: 'smooth' });
         const scrollableMain = document.querySelector('main');

@@ -24,6 +24,8 @@ class UserSeeder extends Seeder
 
         $roleSupervisor = Role::where('nama_role', 'supervisor')->first();
 
+        $roleCs = Role::where('nama_role', 'customerservice')->first();
+
         // USER NASABAH
 
         $userNasabah = User::create([
@@ -92,6 +94,23 @@ class UserSeeder extends Seeder
             'email' => 'supervisor@gmail.com',
             'password' => Hash::make('123456'),
             'role' => 'supervisor',
+        ]);
+
+
+        // USER CUSTOMER SERVICE
+        $userCs = User::create([
+            'name' => 'Aditya',
+            'role_id' => $roleCs->id,
+            'email' => 'adityanugrahakawali2@gmail.com',
+            'password' => Hash::make('123456'),
+        ]);
+
+        Petugas::create([
+            'nama_petugas' => 'Aditya',
+            'user_id' => $userCs->id,
+            'email' => 'adityanugrahakawali2@gmail.com',
+            'password' => Hash::make('123456'),
+            'role' => 'customerservice',
         ]);
     }
 }

@@ -68,7 +68,7 @@
                 - Form menggunakan method POST ke route('login').
                 - Parameter input: 'email' dan 'password'.
             --}}
-            <form id="loginForm" method="POST" action="{{ route('proses.login') }}" class="space-y-6">
+            <form id="loginForm" method="post" action="{{ route('proses.login') }}" class="space-y-6">
                 @csrf
                 <!-- Input Email -->
                 <div>

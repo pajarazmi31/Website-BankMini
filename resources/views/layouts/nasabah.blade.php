@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Bank Mini')</title>
-    
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -23,8 +23,8 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     colors: {
-                        background: '#f8f9fc', 
-                        primary: '#15395b', 
+                        background: '#f8f9fc',
+                        primary: '#15395b',
                         primaryLight: '#436585',
                         cardLight: '#eef2f6',
                         warningBg: '#fcefc7',
@@ -47,7 +47,7 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-        
+
         /* Remove number input arrows */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
@@ -67,7 +67,7 @@
         <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-textDark" onclick="toggleSidebar()">
             <i class="ph ph-x text-2xl"></i>
         </button>
-        
+
         <div class="px-8 pt-8 pb-10 flex items-center gap-3">
             <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-10 h-10 object-contain">
             <div>
@@ -80,9 +80,9 @@
             <p class="text-xs font-semibold text-gray-400 mb-4 tracking-wider">MENU</p>
             <ul class="space-y-2 relative">
                 @php $route = Route::currentRouteName(); @endphp
-                
+
                 <!-- Indikator Aktif -->
-                <div class="absolute -left-8 w-2 h-10 bg-primary rounded-r-lg transition-all duration-300" 
+                <div class="absolute -left-8 w-2 h-10 bg-primary rounded-r-lg transition-all duration-300"
                      style="top: {{ $route == 'nasabah.dashboard' ? '4px' : '52px' }}"></div>
 
                 <li>
@@ -98,15 +98,16 @@
                     </a>
                 </li>
                 <li class="mt-4">
-                    <!-- 
-                        BAGIAN BACKEND: LOGOUT
-                        - Saat ini berupa link ke route('login').
-                        - Idealnya menggunakan method POST ke route logout untuk menghapus session auth secara aman.
-                    -->
-                    <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
-                        <img src="{{ asset('img/icon/sidebar/logout.png') }}" alt="Logout" class="w-5 h-5">
-                        Keluar
-                    </a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+
+                            <button
+                                type="submit"
+                                class="bg-red-500 text-white px-4 py-2 rounded"
+                            >
+                                Logout
+                            </button>
+                        </form>
                 </li>
             </ul>
         </div>
@@ -131,7 +132,7 @@
                 <h2 class="text-2xl font-bold text-textDark">@yield('header_title')</h2>
                 <p class="text-textGray text-sm mt-1">@yield('header_subtitle')</p>
             </div>
-            
+
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold">
                     <img src="{{ asset('img/icon/dashboard/check-status.png') }}" alt="Status" class="w-4 h-4">
@@ -142,8 +143,8 @@
                         <img src="{{ asset('img/icon/navbar/user-avatar.png') }}" alt="User" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <p class="text-sm font-bold text-textDark leading-tight">Nasabah Demo</p>
-                        <p class="text-xs text-[#a0aab8]">nasabah@email.com</p>
+                        <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
+                        <p class="text-xs text-[#a0aab8]">{{ $user->email }}</p>
                     </div>
                 </div>
             </div>

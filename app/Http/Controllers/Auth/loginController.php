@@ -38,20 +38,18 @@ class loginController extends Controller
             }
 
             if($role == 'teller') {
-                return redirect()->route('halaman.login')->with('success','Kamu Berhasil Masuk Ke Akun Teller');
+                return redirect()->route('teller.dashboard')->with('success','Kamu Berhasil Masuk Ke Akun Teller');
             }
 
-            if($role == 'superVisor') {
-                return redirect()->route('halaman.login')->with('success', 'Kamu Berhasil Masuk Ke Akun Super Visor');
+            if($role == 'supervisor') {
+                return redirect()->route('supervisor.dashboard')->with('success', 'Kamu Berhasil Masuk Ke Akun Super Visor');
             }
 
-            if($role == 'customerSer') {
-                return redirect()->route('halaman.login')->with('success','Kamu Berhasil Masuk Ke Akun Customer Serveice');
+            if($role == 'customerservice') {
+                return redirect()->route('cs.dashboard')->with('success','Kamu Berhasil Masuk Ke Akun Customer Serveice');
             }
-
-            return back()->withErrors([
-                'email' => 'Email atau password salah',
-            ]);
+        } else {
+            return back()->with('failed','kamu gak punya hak akses');
         }
     }
 

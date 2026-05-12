@@ -64,7 +64,7 @@
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-brand-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <div class="flex items-center gap-3 px-6 mb-10">
                 <div class="text-brand-blue">
                     <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
@@ -80,11 +80,11 @@
             </div>
 
             <nav class="flex-1 flex flex-col gap-1 w-full overflow-y-auto custom-scrollbar">
-                @php 
+                @php
                     $route = Route::currentRouteName();
                     $isKelolaData = str_contains($route, 'supervisor.datapetugas') || str_contains($route, 'supervisor.datanasabah');
                 @endphp
-                
+
                 <!-- Dashboard -->
                 <div class="relative">
                     @if($route == 'supervisor.dashboard')
@@ -127,10 +127,16 @@
 
                 <!-- Keluar -->
                 <div class="px-6 mt-4">
-                    <a href="{{ route('login') }}" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="bg-red-500 text-white px-4 py-2 rounded"
+                        >
+                            Logout
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>
@@ -159,8 +165,8 @@
                 <div class="flex items-center gap-3">
                     <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                     <div class="text-left">
-                        <p class="font-bold text-[14px] text-gray-800 leading-tight">Supervisor</p>
-                        <p class="text-[12px] text-gray-400 mt-0.5">supervisor@gmail.com</p>
+                        <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $super->nama_petugas }}</p>
+                        <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                     </div>
                 </div>
             </header>

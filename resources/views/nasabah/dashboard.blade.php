@@ -97,28 +97,16 @@
                 </li>
                 <!-- Logout -->
                 <li class="mt-4">
-<<<<<<< HEAD
-                    <form action="{{ route('logout') }}" method="post">
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
-                            <button
+
+                        <button
                             type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded">
+                            class="bg-red-500 text-white px-4 py-2 rounded"
+                        >
                             Logout
                         </button>
                     </form>
-                    {{-- <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
-                        <img src="{{ asset('img/nasabahicon/box-arrow-left 1.png') }}" alt="Logout" class="w-5 h-5">
-=======
-                    <!-- 
-                        BAGIAN BACKEND: LOGOUT
-                        - Saat ini berupa link ke route('login').
-                        - Idealnya menggunakan method POST ke route logout untuk menghapus session auth secara aman.
-                    -->
-                    <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-3 hover:text-red-600 transition-colors">
-                        <img src="{{ asset('img/icon/sidebar/logout.png') }}" alt="Logout" class="w-5 h-5">
->>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
-                        Keluar
-                    </a> --}}
                 </li>
             </ul>
         </div>
@@ -171,15 +159,8 @@
             <p class="text-textGray text-[10px]">Pantau saldo dan transaksi Anda hari ini.</p>
         </div>
 
-        <!-- CONTENT AREA -->
-<<<<<<< HEAD
-        <div class="px-6 lg:px-10 pb-10">
-
-=======
         <div id="viewMain" class="fade-in block">
             <div class="px-6 lg:px-10 pb-10">
-            
->>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
             <!-- TOP SECTION: Balance & Warning -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -238,7 +219,7 @@
                     </div>
 
                 <div class="bg-transparent space-y-4">
-                    <!-- 
+                    <!--
                         BAGIAN BACKEND: RIWAYAT TRANSAKSI TERBARU
                         - Data statis di bawah ini hanya untuk preview UI.
                         - Backend dev perlu mengambil 3-5 data transaksi terbaru milik nasabah yang login dari database.
@@ -276,13 +257,8 @@
             <div class="mt-10 bg-white rounded-3xl overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col md:flex-row mb-10 border border-gray-100">
                 <!-- Bagian Gambar Kiri -->
                 <div class="md:w-[40%] bg-primary relative min-h-[250px]">
-<<<<<<< HEAD
-                    <img src="{{ asset('img/nasabahicon/banner_saving.png') }}"
+                    <img src="{{ asset('img/banner_saving.png') }}"
                          alt="Ilustrasi Menabung"
-=======
-                    <img src="{{ asset('img/banner_saving.png') }}" 
-                         alt="Ilustrasi Menabung" 
->>>>>>> f10377a23ac29b81e8bc9d5d3b85f510ab1082a5
                          class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-gradient-to-r from-primary/60 to-transparent"></div>
                 </div>
@@ -321,7 +297,7 @@
                     </div>
 
                     <div class="space-y-8">
-                        <!-- 
+                        <!--
                             BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG
                             - Lakukan looping foreach untuk 10 transaksi terakhir.
                         -->
@@ -382,7 +358,7 @@
         function switchView(viewName) {
             const mainView = document.getElementById('viewMain');
             const historyView = document.getElementById('viewHistory');
-            
+
             if (viewName === 'history') {
                 mainView.classList.remove('block');
                 mainView.classList.add('hidden');
@@ -394,7 +370,7 @@
                 mainView.classList.remove('hidden');
                 mainView.classList.add('block');
             }
-            
+
             // Scroll top
             document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
         }
