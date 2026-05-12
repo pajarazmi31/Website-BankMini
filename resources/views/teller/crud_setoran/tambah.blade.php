@@ -11,6 +11,7 @@
                 <div class="w-full max-w-[200px]">
                     <input type="text" placeholder="Petugas" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50/30 focus:outline-none focus:border-[#c0860b] transition-all">
                 </div>
+
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">

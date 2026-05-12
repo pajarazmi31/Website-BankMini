@@ -12,11 +12,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                        <input type="text" placeholder="Nama Lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                        <input type="number" placeholder="0103232410204" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="number" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>

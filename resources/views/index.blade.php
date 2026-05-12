@@ -158,7 +158,7 @@
                         <p class="text-gray-300 text-base mb-8 leading-relaxed">
                             Setiap transaksi diawasi langsung oleh guru pembimbing dan sistem tercatat secara digital untuk transparansi penuh.
                         </p>
-                        
+                          
                         <!-- Garis Pemisah -->
                         <div class="border-t border-white/10 mb-8"></div>
 

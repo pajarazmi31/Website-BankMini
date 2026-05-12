@@ -26,6 +26,15 @@
                         background: '#f8f9fc', 
                         primary: '#15395b', 
                         primaryLight: '#436585',
+                        brand: {
+                            blue: '#1c3a5a',
+                            green: '#10a163',
+                            gold: '#bd8607',
+                            bg: '#f8f9fb',
+                            textDark: '#1e293b',
+                            textMuted: '#94a3b8',
+                            sidebarIcon: '#a1a1aa'
+                        },
                         cardLight: '#eef2f6',
                         warningBg: '#fcefc7',
                         textDark: '#1f2937',
@@ -34,6 +43,7 @@
                         btnGreen: '#1aa061',
                         accentYellow: '#c88d22',
                     },
+
                     backgroundImage: {
                         'primary-gradient': 'linear-gradient(to right, #143657, #1E5081, #143657)',
                     }
@@ -101,7 +111,10 @@
                         </a>
                     </li>
                     <li class="pt-4 px-4">
-                        <a href="{{ route('login') }}" class="flex items-center gap-3 text-red-500 font-medium py-2 hover:text-red-600 transition-colors">
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-3 text-red-500 font-medium py-2 hover:text-red-600 transition-colors">
                             <img src="{{ asset('img/icon/sidebar/logout.png') }}" alt="Logout" class="w-5 h-5">
                             <span class="text-[14px]">Keluar</span>
                         </a>
@@ -140,7 +153,9 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[40px] text-primary"></i>
                         <div class="text-left">
+                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
                             <p class="text-sm font-bold text-textDark leading-tight">Nasabah Demo</p>
+                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
                             <p class="text-xs text-textGray mt-0.5">nasabah@email.com</p>
                         </div>
                     </div>

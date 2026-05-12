@@ -126,23 +126,18 @@
             <h3 class="text-[22px] font-bold text-textDark">Riwayat Transaksi</h3>
         </div>
 
-        <div class="space-y-8">
+        <div class="space-y-6">
             @php
-                $history10 = [
+                $history5 = [
                     ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '25 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
                     ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
                     ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
                     ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
                     ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
-                    ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '15 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
-                    ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '14 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
-                    ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '10 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
-                    ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '05 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
-                    ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '01 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
                 ];
             @endphp
-            @foreach($history10 as $item)
-            <div class="flex justify-between items-center">
+            @foreach($history5 as $item)
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-full bg-[{{ $item['bg'] }}] flex items-center justify-center">
                         <img src="{{ asset('img/icon/dashboard/' . $item['type'] . '.png') }}" alt="{{ $item['type'] }}" class="w-6 h-6">
@@ -156,6 +151,10 @@
             </div>
             @endforeach
         </div>
+
+        <!-- Pagination -->
+        <x-pagination total="3" />
+
     </div>
 </div>
 @endsection

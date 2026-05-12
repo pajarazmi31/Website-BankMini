@@ -133,9 +133,9 @@
             <h3 class="text-[22px] font-bold text-gray-800">Riwayat Aktivitas</h3>
         </div>
 
-        <div class="space-y-6">
+        <div class="space-y-5">
             <!-- Row 1 -->
-            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-50 hover:border-gray-100 transition-all">
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
                     <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
                     <div>
@@ -144,16 +144,16 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
                         <i class="ph-fill ph-eye text-[16px]"></i>
                     </button>
-                    <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
                         <i class="ph-bold ph-clock text-[16px]"></i>
                     </button>
                 </div>
             </div>
             <!-- Row 2 -->
-            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-50 hover:border-gray-100 transition-all">
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
                     <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
                     <div>
@@ -162,15 +162,73 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
                         <i class="ph-fill ph-eye text-[16px]"></i>
                     </button>
-                    <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center cursor-default">
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center cursor-default">
                         <i class="ph-bold ph-check-circle text-[16px]"></i>
                     </button>
                 </div>
             </div>
+            <!-- Row 3 -->
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-gray-800">Salsabila</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 09:15</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-clock text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Row 4 -->
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-gray-800">Hamdan</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • Kemarin</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-check-circle text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Row 5 -->
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-4">
+                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <div>
+                        <h4 class="font-bold text-[15px] text-gray-800">Rafka</h4>
+                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 2 Hari Lalu</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-clock text-[16px]"></i>
+                    </button>
+                </div>
+            </div>
         </div>
+
+        <!-- Pagination -->
+        <x-pagination total="3" />
+
     </div>
 </div>
 @endsection

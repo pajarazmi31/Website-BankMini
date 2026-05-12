@@ -168,20 +168,16 @@
                     - Lakukan looping foreach untuk 10 transaksi terakhir (khusus transfer).
                 -->
                 @php
-                    $history10 = [
+                    $history5 = [
                         ['name' => 'Pajar Azmi', 'date' => '25 Desember 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
                         ['name' => 'Anisa Siti', 'date' => '10 Desember 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
                         ['name' => 'Ramdan', 'date' => '05 Desember 2026', 'amount' => '- Rp. 200.000', 'color' => '#ef4444'],
                         ['name' => 'Pajar Azmi', 'date' => '25 November 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
                         ['name' => 'Anisa Siti', 'date' => '10 November 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                        ['name' => 'Budi', 'date' => '05 November 2026', 'amount' => '- Rp. 200.000', 'color' => '#ef4444'],
-                        ['name' => 'Pajar Azmi', 'date' => '25 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
-                        ['name' => 'Anisa Siti', 'date' => '10 Oktober 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                        ['name' => 'Budi', 'date' => '05 Oktober 2026', 'amount' => '- Rp. 200.000', 'color' => '#ef4444'],
-                        ['name' => 'Pajar Azmi', 'date' => '25 September 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
                     ];
                 @endphp
-                @foreach($history10 as $item)
+                @foreach($history5 as $item)
+
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-4">
                         <i class="ph-fill ph-user-circle text-[44px] text-[#1c3a5a]"></i>
@@ -194,8 +190,12 @@
                 </div>
                 @endforeach
             </div>
+
+            <!-- Pagination -->
+            <x-pagination total="3" />
         </div>
     </div>
+
 
 </div>
 @endsection

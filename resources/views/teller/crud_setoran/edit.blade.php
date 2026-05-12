@@ -9,8 +9,9 @@
                     <h3 class="text-[20px] font-bold text-gray-800">Edit Data Penyetoran</h3>
                 </div>
                 <div class="w-full max-w-[200px]">
-                    <input type="text" id="edit_petugas" placeholder="Petugas" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50/30 focus:outline-none focus:border-[#c0860b] transition-all">
+                    <input type="text" id="edit_petugas" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50/30 focus:outline-none focus:border-[#c0860b] transition-all">
                 </div>
+
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
