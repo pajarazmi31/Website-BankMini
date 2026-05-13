@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bank Mini SMKN 1 Kawali</title>
-    
+
     <!-- Font Google: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Ikon Phosphor -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -23,16 +24,18 @@
                         sans: ['Inter', 'sans-serif'],
                     },
                     backgroundImage: {
-                        'gradient-merek': 'linear-gradient(to right, #143657, #1E5081, #143657)',
+                        'gradient-merek': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
+
+                        'gradient-tombol': 'linear-gradient(to right, #143657, #1E5081)',
                     },
                     colors: {
                         merek: {
-                            biru: '#1E3A5F',      // Latar belakang biru gelap utama
-                            gelap: '#162D4A',      // Biru lebih gelap untuk beberapa kartu
-                            terang: '#284B75',     // Biru lebih terang untuk skeleton
-                            kuning: '#D9A036',    // Kuning aksen
-                            hijau: '#1A8F6A',     // Hijau aksen
-                            bg: '#F4F6F9'         // Latar belakang abu-abu terang utama
+                            biru: '#1E3A5F', // Latar belakang biru gelap utama
+                            gelap: '#162D4A', // Biru lebih gelap untuk beberapa kartu
+                            terang: '#284B75', // Biru lebih terang untuk skeleton
+                            kuning: '#D9A036', // Kuning aksen
+                            hijau: '#1A8F6A', // Hijau aksen
+                            bg: '#F4F6F9' // Latar belakang abu-abu terang utama
                         }
                     }
                 }
@@ -42,6 +45,7 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="shortcut icon" href="{{ asset('img/icon/landingpage/fav-icon.png') }}" type="image/x-icon">
 </head>
+
 <body class="font-sans text-gray-800 bg-merek-bg antialiased selection:bg-merek-kuning selection:text-white">
 
     <!-- Bilah Navigasi -->
@@ -56,7 +60,7 @@
                         <span class="font-bold text-xl tracking-tight text-gray-900">BANK MINI <span class="hidden sm:inline">SMKN 1 KAWALI</span></span>
                     </a>
                 </div>
-                
+
                 <!-- Menu Desktop -->
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="#beranda" class="desktop-nav-link text-sm font-semibold text-gray-900 border-b-2 border-merek-kuning pb-1 transition-all duration-200">Beranda</a>
@@ -67,7 +71,7 @@
 
                 <!-- Tombol Autentikasi -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-white bg-gradient-merek px-6 py-2 rounded-[10px] hover:bg-opacity-90 hover:shadow-md transition">Masuk</a>
+                    <a href="{{ route('login') }}" class="text-sm font-medium text-white bg-gradient-tombol px-6 py-2 rounded-[10px] hover:bg-opacity-90 hover:shadow-md transition">Masuk</a>
                 </div>
 
                 <!-- Tombol menu seluler -->
@@ -87,7 +91,7 @@
                 <a href="#alur-layanan" onclick="toggleMobileMenu()" class="mobile-nav-link block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors">Alur Layanan</a>
                 <a href="#form-transfer" onclick="toggleMobileMenu()" class="mobile-nav-link block px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-md transition-colors">Form Transfer</a>
                 <div class="mt-4 flex flex-col gap-2 px-3">
-                    <a href="{{ route('login') }}" class="text-center text-base font-medium text-white bg-gradient-merek py-2 rounded-[10px] hover:bg-opacity-90 transition-colors">Masuk</a>
+                    <a href="{{ route('login') }}" class="text-center text-base font-medium text-white bg-gradient-tombol py-2 rounded-[10px] hover:bg-opacity-90 transition-colors">Masuk</a>
                 </div>
             </div>
         </div>
@@ -110,7 +114,7 @@
                         Buka Tabungan
                     </a>
                 </div>
-                
+
                 <!-- Gambar Utama -->
                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl max-w-lg mx-auto lg:ml-auto -mt-4 lg:mt-0">
                     <img src="{{ asset('img/kone.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px]">
@@ -123,11 +127,11 @@
 
     <!-- Bagian Tentang / Fitur (Tumpang Tindih) -->
     <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-12 lg:-mt-40 z-20 mb-20 scroll-mt-24">
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden p-8 md:p-12">
+        <div class="bg-white rounded-[20px] shadow-xl overflow-hidden p-8 md:p-12">
             <div class="text-center mb-10">
                 <h2 class="text-3xl font-bold text-merek-biru">Apa Itu Bank Mini Sekolah?</h2>
             </div>
-            
+
             <div class="grid md:grid-cols-12 gap-12 items-center">
                 <!-- Konten Kiri -->
                 <div class="md:col-span-7 flex flex-col justify-center">
@@ -147,18 +151,18 @@
 
                 <!-- Konten Kanan (Kartu Gelap) -->
                 <div class="md:col-span-5">
-                    <div class="bg-gradient-merek rounded-[2rem] p-8 lg:p-10 text-white shadow-2xl border border-white/5 relative overflow-hidden group">
+                    <div class="bg-gradient-merek rounded-[20px] p-8 lg:p-10 text-white shadow-2xl border border-white/5 relative overflow-hidden group">
                         <!-- Dekorasi Gradient Halus -->
                         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
-                        
-                        <div class="relative z-10">
-                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain mb-4 -mt-2">
+
+                        <div class="relative z-10 flex items-center gap-4 mb-4">
+                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
                             <h3 class="text-2xl font-bold">Keamanan Terjamin</h3>
                         </div>
                         <p class="text-gray-300 text-base mb-8 leading-relaxed">
                             Setiap transaksi diawasi langsung oleh guru pembimbing dan sistem tercatat secara digital untuk transparansi penuh.
                         </p>
-                          
+
                         <!-- Garis Pemisah -->
                         <div class="border-t border-white/10 mb-8"></div>
 
@@ -172,10 +176,10 @@
                                 Sistem Terenkripsi
                             </li>
                         </ul>
-                        </div>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 
@@ -241,11 +245,11 @@
                             <img src="{{ asset('img/icon/landingpage/cash-stack.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain">
                             <h3 class="text-2xl font-bold text-[#1e3a5f]">Alur Nabung</h3>
                         </div>
-                        
+
                         <div class="relative space-y-12 ml-4">
                             <!-- Garis Vertikal -->
                             <div class="absolute top-5 left-5 w-[1.5px] h-[calc(100%-40px)] bg-gray-100 -translate-x-1/2 z-0"></div>
-                            
+
                             <!-- Langkah 1 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">1</div>
@@ -276,11 +280,11 @@
                                 <img src="{{ asset('img/icon/landingpage/cash-stack-invert.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain brightness-0 invert">
                                 <h3 class="text-2xl font-bold">Alur Tarik Tunai</h3>
                             </div>
-                            
+
                             <div class="relative space-y-12 ml-4">
                                 <!-- Garis Vertikal -->
                                 <div class="absolute top-5 left-5 w-[1.5px] h-[calc(100%-40px)] bg-white/10 -translate-x-1/2 z-0"></div>
-                                
+
                                 <!-- Langkah 1 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#B87333] text-white flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">1</div>
@@ -325,13 +329,13 @@
                     <div class="bg-gradient-merek rounded-[20px] p-10 shadow-xl relative overflow-hidden group flex-grow">
                         <!-- Dekorasi -->
                         <div class="absolute top-0 left-0 -ml-12 -mt-12 w-32 h-32 bg-white/5 rounded-full blur-3xl"></div>
-                        
+
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-10 -mt-2 text-white">
                                 <img src="{{ asset('img/icon/landingpage/cash-stack-invert.png') }}" alt="Transfer Icon" class="w-10 h-10 object-contain brightness-0 invert">
                                 <h3 class="text-2xl font-bold">Alur Transfer</h3>
                             </div>
-                            
+
                             <div class="space-y-4">
                                 <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -356,10 +360,10 @@
                 <!-- Formulir Kanan -->
                 <div class="lg:col-span-8 bg-white rounded-[20px] p-8 sm:p-12 shadow-xl border border-gray-100">
                     @if(session('success'))
-                        <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#1A8F6A] text-[#1A8F6A] rounded-r-lg flex items-center gap-3">
-                            <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
-                            <p class="text-sm font-medium">{{ session('success') }}</p>
-                        </div>
+                    <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#1A8F6A] text-[#1A8F6A] rounded-r-lg flex items-center gap-3">
+                        <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                        <p class="text-sm font-medium">{{ session('success') }}</p>
+                    </div>
                     @endif
 
                     <!-- 
@@ -370,7 +374,7 @@
                         - enctype="multipart/form-data": WAJIB ada karena form ini mengunggah file gambar (bukti transfer).
                     -->
                     <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
-                        
+
                         <!-- 
                             BAGIAN BACKEND: CSRF TOKEN
                             - Mencegah serangan CSRF. Wajib ada di setiap form POST di Laravel.
@@ -385,25 +389,25 @@
                                     - name="nama_pengirim": Key yang akan ditangkap oleh $request di backend.
                                     - value="{{ old('nama_pengirim') }}": Mempertahankan nilai input jika terjadi error validasi.
                                 -->
-                                <input type="text" name="nama_pengirim" value="{{ old('nama_pengirim') }}" 
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_pengirim') ? 'border-red-500' : 'border-gray-200' }}" 
+                                <input type="text" name="nama_pengirim" value="{{ old('nama_pengirim') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nama lengkap">
-                                @error('nama_pengirim') 
-                                    <!-- BAGIAN BACKEND: ERROR NAMA PENGIRIM -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('nama_pengirim')
+                                <!-- BAGIAN BACKEND: ERROR NAMA PENGIRIM -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
-                            
+
                             <!-- Kolom: Nomor Telepon -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
                                 <!-- BAGIAN BACKEND: INPUT NOMOR TELEPON -->
-                                <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}" 
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_telepon') ? 'border-red-500' : 'border-gray-200' }}" 
+                                <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_telepon') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Contoh: 08123456789">
-                                @error('nomor_telepon') 
-                                    <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('nomor_telepon')
+                                <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -411,12 +415,12 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT NAMA PENERIMA -->
-                                <input type="text" name="nama_penerima" value="{{ old('nama_penerima') }}" 
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_penerima') ? 'border-red-500' : 'border-gray-200' }}" 
+                                <input type="text" name="nama_penerima" value="{{ old('nama_penerima') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Nama lengkap penerima">
-                                @error('nama_penerima') 
-                                    <!-- BAGIAN BACKEND: ERROR NAMA PENERIMA -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('nama_penerima')
+                                <!-- BAGIAN BACKEND: ERROR NAMA PENERIMA -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -424,12 +428,12 @@
                             <div class="relative">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Transfer</label>
                                 <!-- BAGIAN BACKEND: INPUT TANGGAL TRANSFER -->
-                                <input type="date" name="tanggal_transfer" value="{{ old('tanggal_transfer') }}" 
+                                <input type="date" name="tanggal_transfer" value="{{ old('tanggal_transfer') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition text-gray-500 appearance-none {{ $errors->has('tanggal_transfer') ? 'border-red-500' : 'border-gray-200' }}">
                                 <i class="ph ph-caret-down absolute right-4 top-10 text-gray-400 pointer-events-none"></i>
-                                @error('tanggal_transfer') 
-                                    <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('tanggal_transfer')
+                                <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -437,12 +441,12 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
-                                <input type="text" name="nomor_rekening_penerima" value="{{ old('nomor_rekening_penerima') }}" 
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}" 
+                                <input type="text" name="nomor_rekening_penerima" value="{{ old('nomor_rekening_penerima') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nomor rekening">
-                                @error('nomor_rekening_penerima') 
-                                    <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('nomor_rekening_penerima')
+                                <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -457,12 +461,12 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Transfer</label>
                                 <!-- BAGIAN BACKEND: INPUT JUMLAH TRANSFER -->
-                                <input type="number" name="jumlah_transfer" value="{{ old('jumlah_transfer') }}" 
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('jumlah_transfer') ? 'border-red-500' : 'border-gray-200' }}" 
+                                <input type="number" name="jumlah_transfer" value="{{ old('jumlah_transfer') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('jumlah_transfer') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="0">
-                                @error('jumlah_transfer') 
-                                    <!-- BAGIAN BACKEND: ERROR JUMLAH TRANSFER -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p> 
+                                @error('jumlah_transfer')
+                                <!-- BAGIAN BACKEND: ERROR JUMLAH TRANSFER -->
+                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -470,7 +474,7 @@
                         <!-- Kolom: Upload Bukti -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Unggah Bukti Transfer</label>
-                            <div onclick="document.getElementById('file-upload').click()" 
+                            <div onclick="document.getElementById('file-upload').click()"
                                 class="mt-1 min-h-[160px] relative flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg bg-white hover:bg-gray-50 transition cursor-pointer group overflow-hidden {{ $errors->has('bukti_transfer') ? 'border-red-300' : 'border-gray-300' }}">
                                 <!-- Konten Default (Ikon & Teks) -->
                                 <div id="upload-placeholder" class="space-y-2 text-center transition-all duration-300">
@@ -498,9 +502,9 @@
                                 -->
                                 <input id="file-upload" name="bukti_transfer" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
                             </div>
-                            @error('bukti_transfer') 
-                                <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
-                                <p class="text-xs text-red-500 mt-2">{{ $message }}</p> 
+                            @error('bukti_transfer')
+                            <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
+                            <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
                             @enderror
                         </div>
 
@@ -531,7 +535,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start">
-                    
+
                     <!-- Kolom Alamat -->
                     <div>
                         <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Alamat</h5>
@@ -546,15 +550,15 @@
                         <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Media Digital</h5>
                         <ul class="space-y-2 text-sm text-gray-500">
                             <li>
-                                <span class="font-medium">Instagram :</span> 
+                                <span class="font-medium">Instagram :</span>
                                 <a href="https://instagram.com/smkn1kawali" target="_blank" class="hover:text-[#1e3a5f] hover:underline transition">@smkn1kawali</a>
                             </li>
                             <li>
-                                <span class="font-medium">Tiktok :</span> 
+                                <span class="font-medium">Tiktok :</span>
                                 <a href="https://tiktok.com/@smkn1kawali" target="_blank" class="hover:text-[#1e3a5f] hover:underline transition">@smkn1kawali</a>
                             </li>
                             <li>
-                                <span class="font-medium">Youtube :</span> 
+                                <span class="font-medium">Youtube :</span>
                                 <a href="https://youtube.com/@SMKN1KawaliOfficial" target="_blank" class="hover:text-[#1e3a5f] hover:underline transition">@SMKN1KawaliOfficial</a>
                             </li>
                         </ul>
@@ -565,11 +569,11 @@
                         <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Kontak Kami</h5>
                         <ul class="space-y-2 text-sm text-gray-500">
                             <li>
-                                <span class="font-medium">Email :</span> 
+                                <span class="font-medium">Email :</span>
                                 <a href="mailto:sekolah@gmail.com" class="hover:text-[#1e3a5f] hover:underline transition">sekolah@gmail.com</a>
                             </li>
                             <li>
-                                <span class="font-medium">Telepon :</span> 
+                                <span class="font-medium">Telepon :</span>
                                 <a href="tel:089001009098" class="hover:text-[#1e3a5f] hover:underline transition">(089) 001-009-098</a>
                             </li>
                         </ul>
@@ -583,8 +587,8 @@
                     </div>
                 </div>
             </div>
-            
-        
+
+
         </div>
     </footer>
 
@@ -614,7 +618,7 @@
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             const icon = document.getElementById('menu-icon');
-            
+
             if (menu.classList.contains('hidden')) {
                 menu.classList.remove('hidden');
                 menu.classList.add('animate-fade-in-down');
@@ -650,7 +654,7 @@
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     const sectionId = section.getAttribute('id');
-                    
+
                     // Hanya perbarui 'current' jika bagian ini memiliki ID yang valid
                     if (window.scrollY >= sectionTop - 250 && sectionId) {
                         current = sectionId;
@@ -662,7 +666,7 @@
                     // Reset semua tautan ke status tidak aktif
                     link.classList.remove('text-gray-900', 'border-merek-kuning', 'font-semibold');
                     link.classList.add('text-gray-500', 'border-transparent', 'font-medium');
-                    
+
                     // Jika href link cocok dengan ID section saat ini, berikan status aktif
                     if (link.getAttribute('href') === `#${current}`) {
                         link.classList.remove('text-gray-500', 'border-transparent', 'font-medium');
@@ -675,7 +679,7 @@
                     // Reset status
                     link.classList.remove('text-merek-kuning', 'bg-gray-50');
                     link.classList.add('text-gray-600');
-                    
+
                     // Beri status aktif
                     if (link.getAttribute('href') === `#${current}`) {
                         link.classList.remove('text-gray-600');
@@ -686,4 +690,5 @@
         });
     </script>
 </body>
+
 </html>

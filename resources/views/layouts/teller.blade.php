@@ -36,7 +36,10 @@
                         'sidebar': '4px 0 24px -4px rgba(0,0,0,0.02)'
                     },
                     backgroundImage: {
-                        'primary-gradient': 'linear-gradient(to right, #143657, #1E5081, #143657)',
+                        'primary-gradient': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
+                        'success-gradient': 'linear-gradient(to bottom, #008959, #1FB581, #008959)',
+                        'warning-gradient': 'linear-gradient(to bottom, #AC7500, #dd9700, #AC7500)',
+                        'button-gradient': 'linear-gradient(to right, #008959, #1E9F71, #008959)',
                     }
                 }
             }
@@ -150,7 +153,7 @@
 
         <div class="max-w-[1050px] mx-auto w-full flex flex-col h-full mt-2 pb-10 px-6 lg:px-10">
             <!-- Header Section -->
-            <header class="flex flex-col md:flex-row justify-between items-start md:items-center py-6 lg:py-8 mb-4 gap-4 hidden lg:flex">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 lg:py-8 mb-4 gap-4  hidden lg:flex">
                 <div class="flex-1">
                     <h2 class="text-[22px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[12px] md:text-[14px]">@yield('header_subtitle', 'Kelola transaksi nasabah.')</p>

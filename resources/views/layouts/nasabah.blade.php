@@ -45,7 +45,9 @@
                     },
 
                     backgroundImage: {
-                        'primary-gradient': 'linear-gradient(to right, #143657, #1E5081, #143657)',
+                        'primary-gradient': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
+                        'secondary-gradient': 'linear-gradient(to bottom, #E1E9F2, #F9FCFF, #E1E9F2)',
+                        'success-gradient': 'linear-gradient(to right, #008959, #1E9F71, #008959)',
                     }
                 }
             }

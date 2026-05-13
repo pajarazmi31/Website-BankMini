@@ -19,7 +19,7 @@
     </div>
 
     <!-- Total Nasabah -->
-    <div class="bg-brand-green rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+    <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Total Nasabah</p>
             {{-- BACKEND: {{ $totalNasabah }} --}}
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Pending Verifikasi -->
-    <div class="bg-brand-gold rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center sm:col-span-2 lg:col-span-1">
+    <div class="bg-warning-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center sm:col-span-2 lg:col-span-1">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-yellow-100/80 mb-2.5 uppercase">Pending Verifikasi</p>
             {{-- BACKEND: {{ $totalPending }} --}}
@@ -88,7 +88,7 @@
     <div class="bg-[#fee2e2] rounded-[24px] p-7 shadow-sm border border-red-100 flex flex-col gap-8 mt-1">
         <div class="flex items-center gap-3">
             <i class="ph-fill ph-warning text-[26px] text-[#dc2626]"></i>
-            <h3 class="text-[16px] font-bold text-[#dc2626] uppercase tracking-wide">Segera Periksa!</h3>
+            <h3 class="text-[14px] font-bold text-[#dc2626]  tracking-wide">Segera Periksa!</h3>
         </div>
 
         <div class="flex flex-col gap-7">
@@ -97,8 +97,8 @@
                 <div class="flex items-center gap-5">
                     <div class="w-2.5 h-2.5 rounded-full bg-[#dc2626] shadow-[0_0_8px_rgba(220,38,38,0.4)]"></div>
                     <div>
-                        <h4 class="font-bold text-[18px] text-[#991b1b] leading-tight tracking-tight">Registrasi Akun</h4>
-                        <p class="text-[12px] text-[#dc2626] font-bold mt-1.5">12 Rekening baru harus diperiksa</p>
+                        <h4 class="font-bold text-[16px] text-[#991b1b] leading-tight tracking-tight">Registrasi Akun</h4>
+                        <p class="text-[10px] text-[#dc2626] mt-1">12 Rekening baru harus diperiksa</p>
                     </div>
                 </div>
                 <i class="ph ph-caret-right text-[22px] text-[#dc2626]/40 group-hover:text-[#dc2626] transition-all"></i>
@@ -109,8 +109,8 @@
                 <div class="flex items-center gap-5">
                     <div class="w-2.5 h-2.5 rounded-full bg-[#dc2626] shadow-[0_0_8px_rgba(220,38,38,0.4)]"></div>
                     <div>
-                        <h4 class="font-bold text-[18px] text-[#991b1b] leading-tight tracking-tight">Transfer Pihak Luar</h4>
-                        <p class="text-[12px] text-[#dc2626] font-bold mt-1.5">10 Transfer harus diperiksa</p>
+                        <h4 class="font-bold text-[16px] text-[#991b1b] leading-tight tracking-tight">Transfer Pihak Luar</h4>
+                        <p class="text-[10px] text-[#dc2626] mt-1">10 Transfer harus diperiksa</p>
                     </div>
                 </div>
                 <i class="ph ph-caret-right text-[22px] text-[#dc2626]/40 group-hover:text-[#dc2626] transition-all"></i>
@@ -127,17 +127,17 @@
             <button onclick="switchView('main')" class="text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2 w-fit">
                 <i class="ph ph-arrow-left"></i> Kembali
             </button>
-            <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Semua Pending Verifikasi</h3>
+            <h3 class="text-[18px] md:text-[22px] font-bold text-gray-800">Semua Pending Verifikasi</h3>
         </div>
 
-        <div class="space-y-5">
+        <div class="lg:space-y-5">
             <!-- Row 1 -->
             <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Pajar Azmi</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 14:30</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Pajar Azmi</h4>
+                        <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Registrasi Akun Baru • 14:30</p>
                     </div>
                 </div>
                 <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
@@ -147,10 +147,10 @@
             <!-- Row 2 -->
             <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Anisa Siti</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Transfer Masuk • 11:20</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Anisa Siti</h4>
+                        <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Transfer Masuk • 11:20</p>
                     </div>
                 </div>
                 <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
@@ -160,10 +160,10 @@
             <!-- Row 3 -->
             <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Rafka</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Transfer Masuk • 10:45</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Rafka</h4>
+                        <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Transfer Masuk • 10:45</p>
                     </div>
                 </div>
                 <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
@@ -173,10 +173,10 @@
             <!-- Row 4 -->
             <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Salsabila</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 09:15</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Salsabila</h4>
+                        <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Registrasi Akun Baru • 09:15</p>
                     </div>
                 </div>
                 <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
@@ -186,10 +186,10 @@
             <!-- Row 5 -->
             <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Hamdan</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Transfer Masuk • Kemarin</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Hamdan</h4>
+                        <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Transfer Masuk • Kemarin</p>
                     </div>
                 </div>
                 <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">

@@ -20,7 +20,9 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                                onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
+                        >
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="RPL">RPL</option>
                             <option value="TKJ">TKJ</option>
@@ -37,11 +39,15 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal Lahir</label>
-                        <input type="date" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors text-gray-400">
+                        <input type="date" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors text-gray-400"
+                                onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
+                        >
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                                onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
+                        >
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="l">Laki-laki</option>
                             <option value="p">Perempuan</option>
@@ -53,7 +59,9 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                                onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
+                        >
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam">Islam</option>
                             <option value="Kristen">Kristen</option>
@@ -157,7 +165,7 @@
             <!-- BUTTONS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
                 <button type="button" onclick="switchView('tabel')" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kembali</button>
-                <button type="submit" class="w-full bg-brand-green hover:bg-[#0e8f56] text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kirim</button>
+                <button type="submit" class="w-full bg-button-gradient hover:bg-[#0e8f56] text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kirim</button>
             </div>
         </form>
     </div>

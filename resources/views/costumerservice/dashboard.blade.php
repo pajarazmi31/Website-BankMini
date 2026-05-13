@@ -20,7 +20,7 @@
     </div>
 
     <!-- Nasabah Hari Ini -->
-    <div class="bg-brand-green rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+    <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Nasabah Hari Ini</p>
             <h3 class="text-[28px] md:text-[32px] font-bold">500</h3>
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Pending Verifikasi -->
-    <div class="bg-brand-gold rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+    <div class="bg-warning-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-yellow-100/80 mb-2.5 uppercase">Pending Verifikasi</p>
             <h3 class="text-[28px] md:text-[32px] font-bold">34</h3>
@@ -103,7 +103,7 @@
             </p>
         </div>
 
-        <div class="flex flex-col gap-3.5">
+        <div class="flex flex-col gap-3.5 mb-5">
             <div class="px-1 mb-1">
                 <h3 class="text-[20px] font-bold text-gray-800">Aksi Cepat</h3>
             </div>
@@ -127,20 +127,20 @@
 <div id="viewHistory" class="fade-in hidden">
     <div class="bg-white rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-10">
         <div class="flex justify-between items-center mb-10">
-            <button onclick="switchView('main')" class="text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2">
+            <button onclick="switchView('main')" class="text-[12px] lg:text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2">
                 Kembali
             </button>
-            <h3 class="text-[22px] font-bold text-gray-800">Riwayat Aktivitas</h3>
+            <h3 class="text-[14px] lg:text-[22px] font-bold text-gray-800">Riwayat Aktivitas</h3>
         </div>
 
-        <div class="space-y-5">
+        <div class="lg:space-y-5">
             <!-- Row 1 -->
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Pajar Azmi</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 14:30</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Pajar Azmi</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 14:30</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -153,12 +153,12 @@
                 </div>
             </div>
             <!-- Row 2 -->
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Anisa Siti</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • 11:20</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Anisa Siti</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • 11:20</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -171,12 +171,12 @@
                 </div>
             </div>
             <!-- Row 3 -->
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Salsabila</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 09:15</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Salsabila</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 09:15</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -189,12 +189,12 @@
                 </div>
             </div>
             <!-- Row 4 -->
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Hamdan</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • Kemarin</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Hamdan</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Edit Data Nasabah • Kemarin</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -207,12 +207,12 @@
                 </div>
             </div>
             <!-- Row 5 -->
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">Rafka</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 2 Hari Lalu</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">Rafka</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • 2 Hari Lalu</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-2">
