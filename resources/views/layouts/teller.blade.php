@@ -126,18 +126,6 @@
                 </div>
                 <!-- Logout -->
                 <div class="px-6 mt-4">
-<<<<<<< HEAD
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                            Logout
-                        </button>
-                    </form>
-=======
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -145,7 +133,6 @@
                         <i class="ph ph-sign-out text-[22px]"></i>
                         <span class="text-[14px]">Keluar</span>
                     </a>
->>>>>>> 9545566c75822286211757139198d9fd0425cfb2
                 </div>
             </nav>
         </div>
@@ -185,15 +172,10 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[42px] text-brand-blue"></i>
                         <div class="flex flex-col">
-<<<<<<< HEAD
-                            <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">{{ $teller->nama_petugas }}</p>
-                            <p class="text-[13px] text-gray-400 font-medium">{{ $user->email }}</p>
-=======
                             {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
                             <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">Teller</p>
                             {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
                             <p class="text-[13px] text-gray-400 font-medium">teller@gmail.com</p>
->>>>>>> 9545566c75822286211757139198d9fd0425cfb2
                         </div>
                     </div>
                 </div>
@@ -250,9 +232,9 @@
             const toast = document.getElementById('toastAlert');
             const toastMsg = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
-            
+
             toastMsg.textContent = message;
-            
+
             if (type === 'error') {
                 toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
                 toastIcon.classList.replace('bg-green-500/20', 'bg-red-500/20');
@@ -281,7 +263,7 @@
             const confirmBtn = document.getElementById('btnConfirmDelete');
 
             modal.classList.replace('hidden', 'flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 content.classList.replace('scale-95', 'scale-100');
@@ -301,7 +283,7 @@
 
             content.classList.replace('scale-100', 'scale-95');
             content.classList.replace('opacity-100', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.replace('flex', 'hidden');
             }, 300);

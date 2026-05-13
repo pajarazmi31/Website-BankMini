@@ -128,19 +128,6 @@
 
                 <!-- Keluar -->
                 <div class="px-6 mt-4">
-<<<<<<< HEAD
-                    <form action="{{ route('logout') }}" method="POST">
-                        @csrf
-
-                        <button
-                            type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                            Logout
-                        </button>
-                    </form>
-                </div>
-=======
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                     </form>
@@ -148,8 +135,7 @@
                         <i class="ph ph-sign-out text-[22px]"></i>
                         <span class="text-[14px]">Keluar</span>
                     </a>
-                </div> 
->>>>>>> 9545566c75822286211757139198d9fd0425cfb2
+                </div>
             </nav>
         </div>
     </aside>
@@ -174,13 +160,6 @@
                     <h2 class="text-[20px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[10px] md:text-[14px]">@yield('header_subtitle', 'Kelola pengawasan Bank Mini.')</p>
                 </div>
-<<<<<<< HEAD
-                <div class="flex items-center gap-3">
-                    <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $super->nama_petugas }}</p>
-                        <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
-=======
                 <div class="flex items-center gap-6">
                     <!-- Search Bar (Standardized) -->
                     @if(Route::currentRouteName() != 'supervisor.dashboard')
@@ -198,7 +177,6 @@
                             {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
                             <p class="text-[12px] text-gray-400 mt-0.5">supervisor@gmail.com</p>
                         </div>
->>>>>>> 9545566c75822286211757139198d9fd0425cfb2
                     </div>
                 </div>
 
@@ -267,9 +245,9 @@
             const toast = document.getElementById('toastAlert');
             const toastMsg = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
-            
+
             toastMsg.textContent = message;
-            
+
             // Set colors based on type
             if (type === 'error') {
                 toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
@@ -299,7 +277,7 @@
             const confirmBtn = document.getElementById('btnConfirmDelete');
 
             modal.classList.replace('hidden', 'flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 content.classList.replace('scale-95', 'scale-100');
@@ -319,7 +297,7 @@
 
             content.classList.replace('scale-100', 'scale-95');
             content.classList.replace('opacity-100', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.replace('flex', 'hidden');
             }, 300);
