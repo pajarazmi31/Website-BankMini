@@ -27,6 +27,8 @@
                         'gradient-merek': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
 
                         'gradient-tombol': 'linear-gradient(to right, #143657, #1E5081)',
+                        
+                        'button-gradient': 'linear-gradient(to right, #008959, #1E9F71, #008959)',
                     },
                     colors: {
                         merek: {
@@ -56,8 +58,8 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#beranda" class="flex items-center gap-2 group">
-                        <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-10 h-10 object-contain transition-transform group-hover:scale-105">
-                        <span class="font-bold text-xl tracking-tight text-gray-900">BANK MINI <span class="hidden sm:inline">SMKN 1 KAWALI</span></span>
+                        <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-5 h-5 lg:w-10 lg:h-10 object-contain transition-transform group-hover:scale-105">
+                        <span class="font-bold text-sm  lg:text-xl tracking-tight text-gray-900">BANK MINI SMKN 1 KAWALI</span>
                     </a>
                 </div>
 
@@ -98,14 +100,14 @@
     </nav>
 
     <!-- Bagian Utama (Hero) -->
-    <header id="beranda" class="bg-gradient-merek pt-16 pb-32 lg:pt-24 lg:pb-48 relative scroll-mt-20">
+    <header id="beranda" class="bg-gradient-merek pt-16 pb-20 lg:pt-24 lg:pb-48 relative scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                 <!-- Konten Teks -->
                 <div class="text-white z-10">
                     <h1 class="text-[28px] sm:text-4xl md:text-5xl lg:text-[40px] xl:text-5xl font-bold leading-tight mb-6">
                         <span class="whitespace-nowrap">Tabungan <span class="text-merek-kuning">Masa Depan</span></span><br>
-                        Dimulai dari Sini.
+                        Dimulai dari Sini
                     </h1>
                     <p class="text-base md:text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
                         Membangun kebiasaan finansial yang cerdas melalui pengalaman perbankan nyata di lingkungan sekolah yang aman dan edukatif.
@@ -117,7 +119,7 @@
 
                 <!-- Gambar Utama -->
                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl max-w-lg mx-auto lg:ml-auto -mt-4 lg:mt-0">
-                    <img src="{{ asset('img/kone.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px]">
+                    <img src="{{ asset('img/kone.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px] hidden lg:flex">
                     <!-- Lapisan bayangan untuk meniru efek desain -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-[#143657]/60 to-transparent"></div>
                 </div>
@@ -129,21 +131,21 @@
     <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-12 lg:-mt-40 z-20 mb-20 scroll-mt-24">
         <div class="bg-white rounded-[20px] shadow-xl overflow-hidden p-8 md:p-12">
             <div class="text-center mb-10">
-                <h2 class="text-3xl font-bold text-merek-biru">Apa Itu Bank Mini Sekolah?</h2>
+                <h2 class="text-2xl lg:text-3xl font-bold text-merek-biru">Apa Itu Bank Mini Sekolah?</h2>
             </div>
 
             <div class="grid md:grid-cols-12 gap-12 items-center">
                 <!-- Konten Kiri -->
                 <div class="md:col-span-7 flex flex-col justify-center">
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="{{ asset('img/icon/Bank Icon (1).png') }}" alt="Bank Icon" class="w-14 h-14 object-contain">
-                        <h3 class="text-2xl font-bold text-merek-hijau">Fasilitas Belajar Praktis</h3>
+                        <img src="{{ asset('img/icon/Bank Icon (1).png') }}" alt="Bank Icon" class="w-10 h-10 lg:w-14 lg:h-14 object-contain">
+                        <h3 class="text-1xl lg:text-2xl font-bold text-merek-hijau">Fasilitas Belajar Praktis</h3>
                     </div>
-                    <p class="text-gray-600 mb-8 leading-relaxed text-base">
+                    <p class="text-gray-600 mb-8 leading-relaxed text-justify text-sm lg:text-base">
                         Bank Mini Sekolah dirancang sebagai replika sistem perbankan profesional yang memberikan pengalaman nyata kepada siswa dalam memahami dunia perbankan. Melalui program ini, siswa tidak hanya belajar menabung, tetapi juga terlibat langsung dalam berbagai aktivitas operasional bank, seperti melayani nasabah sebagai teller, memberikan pelayanan sebagai customer service, hingga melakukan pencatatan keuangan di bidang akunting.
                     </p>
                     <div>
-                        <span class="inline-block bg-merek-hijau text-white text-sm font-bold px-5 py-2 rounded-full shadow-sm">
+                        <span class="inline-block bg-merek-hijau text-white text-xs lg:text-sm font-bold px-5 py-2 rounded-full shadow-sm">
                             100% Transaksi Aman
                         </span>
                     </div>
@@ -156,10 +158,10 @@
                         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
 
                         <div class="relative z-10 flex items-center gap-4 mb-4">
-                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
-                            <h3 class="text-2xl font-bold">Keamanan Terjamin</h3>
+                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-6 h-6 lg:w-10 lg:h-10 object-contain">
+                            <h3 class="text-sm lg:text-2xl font-bold">Keamanan Terjamin</h3>
                         </div>
-                        <p class="text-gray-300 text-base mb-8 leading-relaxed">
+                        <p class="text-gray-300 text-justify text-xs lg:text-base mb-8 leading-relaxed">
                             Setiap transaksi diawasi langsung oleh guru pembimbing dan sistem tercatat secara digital untuk transparansi penuh.
                         </p>
 
@@ -167,12 +169,12 @@
                         <div class="border-t border-white/10 mb-8"></div>
 
                         <ul class="space-y-4">
-                            <li class="flex items-center gap-4 text-sm font-medium text-gray-200">
-                                <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                            <li class="flex items-center gap-4 text-xs lg:text-sm font-medium text-gray-200">
+                                <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-3 h-3 lg:w-5 lg:h-5 object-contain">
                                 Audit Bulanan Berkala
                             </li>
-                            <li class="flex items-center gap-4 text-sm font-medium text-gray-200">
-                                <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
+                            <li class="flex items-center gap-4 text-xs lg:text-sm font-medium text-gray-200">
+                                <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-3 h-3 lg:w-5 lg:h-5 object-contain">
                                 Sistem Terenkripsi
                             </li>
                         </ul>
@@ -187,43 +189,43 @@
     <div id="alur-layanan" class="scroll-mt-20">
         <!-- Bagian Proses -->
         <section class="py-24 bg-merek-bg">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="mb-20 text-center md:text-left">
-                    <h2 class="text-4xl font-bold text-merek-biru mb-4">Proses Buka Buku Tabungan</h2>
-                    <p class="text-gray-600 text-lg">Proses pendaftaran yang mudah dan cepat.</p>
+            <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-20 text-left">
+                    <h2 class="text-2xl lg:text-4xl font-bold text-merek-biru mb-4">Proses Buka Buku Tabungan</h2>
+                    <p class="text-gray-600 text-sm lg:text-lg">Proses pendaftaran yang mudah dan cepat.</p>
                 </div>
 
                 <!-- Langkah-langkah -->
                 <div class="relative">
                     <!-- Garis Penghubung (Desktop) -->
-                    <div class="hidden md:block absolute top-10 left-[12%] right-[12%] h-[2px] bg-gray-300 -translate-y-1/2 z-0"></div>
+                    <div class="block absolute top-5 lg:top-10 left-[12%] right-[12%] h-[2px] bg-gray-300 -translate-y-1/2 z-0"></div>
 
-                    <div class="grid md:grid-cols-3 gap-12 text-center relative z-10">
+                    <div class="grid grid-cols-3 gap-12 text-center relative z-10">
                         <!-- Langkah 1 -->
                         <div class="flex flex-col items-center">
-                            <div class="w-20 h-20 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
+                            <div class="w-10 h-10 lg:w-20 lg:h-20 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center text-1xl lg:text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
                                 1
                             </div>
-                            <h3 class="text-2xl font-bold text-merek-biru mb-3">Registrasi</h3>
-                            <p class="text-gray-500 text-base max-w-xs leading-relaxed">Isi formulir pendaftaran digital di counter Bank Mini.</p>
+                            <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Registrasi</h3>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Isi formulir pendaftaran digital di counter Bank Mini.</p>
                         </div>
 
                         <!-- Langkah 2 -->
                         <div class="flex flex-col items-center">
-                            <div class="w-20 h-20 rounded-full bg-[#1A5B53] text-white flex items-center justify-center text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
+                            <div class="w-10 h-10 lg:w-20 lg:h-20 rounded-full bg-[#1A5B53] text-white flex items-center justify-center text-1xl lg:text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
                                 2
                             </div>
-                            <h3 class="text-2xl font-bold text-merek-biru mb-3">Verifikasi</h3>
-                            <p class="text-gray-500 text-base max-w-xs leading-relaxed">Tunjukkan Kartu Identitas kepada petugas untuk validasi data.</p>
+                            <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Verifikasi</h3>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Tunjukkan Kartu Identitas kepada petugas untuk validasi data.</p>
                         </div>
 
                         <!-- Langkah 3 -->
                         <div class="flex flex-col items-center">
-                            <div class="w-20 h-20 rounded-full bg-[#34B38A] text-white flex items-center justify-center text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
+                            <div class="w-10 h-10 lg:w-20 lg:h-20 rounded-full bg-[#34B38A] text-white flex items-center justify-center text-1xl lg:text-3xl font-bold mb-8 ring-[10px] ring-merek-bg shadow-md hover:scale-110 transition-transform duration-300 cursor-default">
                                 3
                             </div>
-                            <h3 class="text-2xl font-bold text-merek-biru mb-3">Terima Buku</h3>
-                            <p class="text-gray-500 text-base max-w-xs leading-relaxed">Dapatkan buku tabungan dan mulailah menabung.</p>
+                            <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Terima Buku</h3>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Dapatkan buku tabungan dan mulailah menabung.</p>
                         </div>
                     </div>
                 </div>
@@ -234,8 +236,8 @@
         <section class="py-24 bg-merek-bg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-16 text-center md:text-left">
-                    <h2 class="text-3xl font-bold text-merek-biru mb-4">Alur Transaksi Bank Mini</h2>
-                    <p class="text-gray-600 max-w-2xl">Langkah-langkah proses transaksi di Bank Mini, mulai dari menabung hingga transfer, yang disusun secara jelas dan mudah dipahami.</p>
+                    <h2 class="text-2xl lg:text-4xl font-bold text-merek-biru mb-4">Alur Transaksi Bank Mini</h2>
+                    <p class="text-gray-600 text-xs lg:text-base max-w-2xl">Langkah-langkah proses transaksi di Bank Mini, mulai dari menabung hingga transfer, yang disusun secara jelas dan mudah dipahami.</p>
                 </div>
 
                 <div class="grid lg:grid-cols-2 gap-8 items-stretch">
@@ -243,7 +245,7 @@
                     <div class="bg-white rounded-[20px] p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
                         <div class="flex items-center gap-4 mb-10">
                             <img src="{{ asset('img/icon/landingpage/cash-stack.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain">
-                            <h3 class="text-2xl font-bold text-[#1e3a5f]">Alur Nabung</h3>
+                            <h3 class="text-lg lg:text-2xl font-bold text-[#1e3a5f]">Alur Nabung</h3>
                         </div>
 
                         <div class="relative space-y-12 ml-4">
@@ -253,19 +255,19 @@
                             <!-- Langkah 1 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">1</div>
-                                <p class="text-gray-600 font-medium text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
                             </div>
 
                             <!-- Langkah 2 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#1A5B53] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">2</div>
-                                <p class="text-gray-600 font-medium text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
                             </div>
 
                             <!-- Langkah 3 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#34B38A] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">3</div>
-                                <p class="text-gray-600 font-medium text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
                             </div>
                         </div>
                     </div>
@@ -278,7 +280,7 @@
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-10 text-white">
                                 <img src="{{ asset('img/icon/landingpage/cash-stack-invert.png') }}" alt="Cash Icon" class="w-10 h-10 object-contain brightness-0 invert">
-                                <h3 class="text-2xl font-bold">Alur Tarik Tunai</h3>
+                                <h3 class="text-lg lg:text-2xl font-bold">Alur Tarik Tunai</h3>
                             </div>
 
                             <div class="relative space-y-12 ml-4">
@@ -288,19 +290,19 @@
                                 <!-- Langkah 1 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#B87333] text-white flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">1</div>
-                                    <p class="text-gray-100 font-medium text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
                                 </div>
 
                                 <!-- Langkah 2 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#D4A017] text-white flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">2</div>
-                                    <p class="text-gray-100 font-medium text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
                                 </div>
 
                                 <!-- Langkah 3 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#FFD700] text-[#1e3a5f] flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">3</div>
-                                    <p class="text-gray-100 font-medium text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
                                 </div>
                             </div>
                         </div>
@@ -318,10 +320,10 @@
                 <div class="lg:col-span-4 flex flex-col justify-between">
                     <!-- Header Bagian Form -->
                     <div class="mb-10 text-left">
-                        <h2 class="text-4xl font-bold text-white mb-6">
+                        <h2 class="text-2xl lg:text-4xl font-bold text-white mb-6">
                             Form Bukti <span class="text-merek-kuning">Transfer</span>
                         </h2>
-                        <p class="text-gray-300 text-sm leading-relaxed">
+                        <p class="text-gray-300 text-xs lg:text-sm leading-relaxed">
                             Kirim bukti transaksi Anda atau periksa status secara instan. Sistem kami memproses unggahan dalam beberapa menit selama jam operasional.
                         </p>
                     </div>
@@ -333,23 +335,23 @@
                         <div class="relative z-10">
                             <div class="flex items-center gap-4 mb-10 -mt-2 text-white">
                                 <img src="{{ asset('img/icon/landingpage/cash-stack-invert.png') }}" alt="Transfer Icon" class="w-10 h-10 object-contain brightness-0 invert">
-                                <h3 class="text-2xl font-bold">Alur Transfer</h3>
+                                <h3 class="text-lg lg:text-2xl font-bold">Alur Transfer</h3>
                             </div>
 
                             <div class="space-y-4">
-                                <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
+                                <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
                                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                                 </div>
-                                <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
+                                <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
                                     Sed do eiusmod tempor incididunt ut labore et dolore magna.
                                 </div>
-                                <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
+                                <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
                                     Ut enim ad minim veniam, quis nostrud exercitation ullamco.
                                 </div>
-                                <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
+                                <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
                                     Duis aute irure dolor in reprehenderit in voluptate velit.
                                 </div>
-                                <div class="bg-white/10 rounded-xl p-4 text-sm text-gray-200">
+                                <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
                                     Excepteur sint occaecat cupidatat non proident, sunt in culpa.
                                 </div>
                             </div>
@@ -514,7 +516,7 @@
                                 BAGIAN BACKEND: TOMBOL SUBMIT
                                 - Memicu pengiriman form ke server.
                             -->
-                            <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-md text-lg font-bold text-white bg-[#1A8F6A] hover:bg-opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-merek-hijau transition transform active:scale-[0.98]">
+                            <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-md text-lg font-bold text-white bg-button-gradient hover:bg-opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-merek-hijau transition transform active:scale-[0.98]">
                                 Kirim
                             </button>
                         </div>
@@ -525,21 +527,21 @@
     </section>
 
     <!-- Bagian Bawah (Footer) -->
-    <footer class="bg-white py-8">
+    <footer class="bg-white py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-[#f3f6f9] rounded-[20px] p-8 md:p-12 shadow-sm border border-gray-100">
                 <!-- Brand Title -->
                 <div class="flex items-center gap-3 mb-10">
-                    <img src="{{ asset('img/icon/landingpage/bank.png') }}" alt="Bank Icon" class="w-8 h-8 object-contain">
-                    <span class="font-bold text-2xl text-[#1e3a5f]">Bank Mini SMKN 1 Kawali</span>
+                    <img src="{{ asset('img/icon/landingpage/bank.png') }}" alt="Bank Icon" class="w-6 h-6 lg:w-8 lg:h-8 object-contain">
+                    <span class="font-bold text-base lg:text-2xl text-[#1e3a5f]">Bank Mini SMKN 1 Kawali</span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
 
                     <!-- Kolom Alamat -->
                     <div>
-                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Alamat</h5>
-                        <p class="text-gray-500 text-sm leading-relaxed">
+                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-base lg:text-lg">Alamat</h5>
+                        <p class="text-gray-500 text-xs lg:text-sm leading-relaxed">
                             SMKN 1 Kawali<br>
                             Jalan. Talagasari, No. 35, Kawalimukti, Kawali Ciamis 46253
                         </p>
@@ -547,8 +549,8 @@
 
                     <!-- Media Sosial -->
                     <div>
-                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Media Digital</h5>
-                        <ul class="space-y-2 text-sm text-gray-500">
+                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-base lg:text-lg">Media Digital</h5>
+                        <ul class="space-y-2 text-xs lg:text-sm text-gray-500">
                             <li>
                                 <span class="font-medium">Instagram :</span>
                                 <a href="https://instagram.com/smkn1kawali" target="_blank" class="hover:text-[#1e3a5f] hover:underline transition">@smkn1kawali</a>
@@ -566,8 +568,8 @@
 
                     <!-- Kontak -->
                     <div>
-                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-lg">Kontak Kami</h5>
-                        <ul class="space-y-2 text-sm text-gray-500">
+                        <h5 class="font-bold text-[#1e3a5f] mb-4 text-base lg:text-lg">Kontak Kami</h5>
+                        <ul class="space-y-2 text-xs lg:text-sm  text-gray-500">
                             <li>
                                 <span class="font-medium">Email :</span>
                                 <a href="mailto:sekolah@gmail.com" class="hover:text-[#1e3a5f] hover:underline transition">sekolah@gmail.com</a>
@@ -580,9 +582,9 @@
                     </div>
 
                     <!-- Logo Sekolah -->
-                    <div class="flex justify-center lg:justify-end lg:-mt-6">
-                        <div class="w-44 h-44 md:w-52 md:h-52">
-                            <img src="{{ asset('img/logosmk.png') }}" alt="Logo SMKN 1 Kawali" class="w-full h-full object-contain">
+                    <div class="flex justify-center lg:justify-end hidden lg:flex">
+                        <div class="w-32 h-32 ">
+                            <img src="{{ asset('img/logosmk.png') }}" alt="Logo SMKN 1 Kawali" class="w-full h-full object-contain ">
                         </div>
                     </div>
                 </div>
