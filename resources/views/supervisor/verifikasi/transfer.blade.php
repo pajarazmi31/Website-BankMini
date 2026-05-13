@@ -52,106 +52,48 @@
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                    <!-- Row 1 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">1.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Pajar Azmi Anugraha</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Salsabila Rosi Cahyani</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Rp. 200.000</td>
-                        <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Pajar Azmi Anugraha', 'Salsabila Rosi Cahyani', 'Rp. 200.000', '03-03-232410243', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 2 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">2.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Salsabila Rosi Cahyani</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Anisa Siti Nur Fajriyanti</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Rp. 10.000</td>
-                        <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Salsabila Rosi Cahyani', 'Anisa Siti Nur Fajriyanti', 'Rp. 10.000', '03-03-232410229', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 3 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">3.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Anisa Siti Nur Fajriyanti</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Yanto Supriyanto</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Rp. 5.000</td>
-                        <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Anisa Siti Nur Fajriyanti', 'Yanto Supriyanto', 'Rp. 5.000', '01-02-030081983', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 4 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">4.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Yanto Supriyanto</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Ali Mahendra</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Rp. 150.000</td>
-                        <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Yanto Supriyanto', 'Ali Mahendra', 'Rp. 150.000', '01-03-050081993', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 5 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">5.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Ali Mahendra</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Pajar Azmi Anugraha</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Rp. 25.000</td>
-                        <td class="py-4 px-2 border-b border-gray-50">081234567890</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Ali Mahendra', 'Pajar Azmi Anugraha', 'Rp. 25.000', '03-03-232410204', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
+                     @foreach ($bukti_tf as $item)
+                                <tr class="hover:bg-gray-50/50 transition-colors">
+                                    <td class="py-4 px-2 border-b border-gray-50">{{ $loop->iteration }}</td>
+                                    <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_pengirim }}</td>
+                                    <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_penerima }}</td>
+                                    <td class="py-4 px-2 border-b border-gray-50">{{ number_format($item->jumlah_transfer, 0, ',', '.') }}</td>
+                                    <td class="py-4 px-2 border-b border-gray-50">{{ $item->no_hp_pengirim }}</td>
+                                    @if ($item->status_verifikasi == 'pending')
+                                    <td class="py-4 px-2 border-b border-gray-50">
+                                        <span class="w-7 h-7 rounded-full bg-yellow-100 text-yellow-800 text-brand-blue flex items-center justify-center transition-colors shadow-sm">
+                                            <i class="ph ph-clock text-[20px]"  title="Pending"></i> 
+                                        </span>
+                                    </td>
+                                    @elseif($item->status_verifikasi == 'berhasil')
+                                    <td class="py-4 px-2 border-b border-gray-50">
+                                        <span class="w-7 h-7 rounded-full bg-green-100 text-green-800 text-brand-blue flex items-center justify-center transition-colors shadow-sm">
+                                            <i class="ph ph-check-circle text-[20px]"  title="Berhasil"></i>
+                                        </span>
+                                    </td>
+                                    @else
+                                    <td class="py-4 px-2 border-b border-gray-50">
+                                        <span class="w-7 h-7 rounded-full bg-red-100 text-red-800 text-brand-blue flex items-center justify-center transition-colors shadow-sm">
+                                            <i class="ph ph-x-circle text-[20px]"  title="Tolak"></i>
+                                        </span>
+                                    </td>
+                                    @endif
+                                    <td class="py-4 px-2 border-b border-gray-50">
+                                        <div class="flex items-center justify-center gap-2">
+                                            <!-- Tombol Lihat (Mata) memanggil view Form -->
+                                            <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->no_rekening_penerima }}',  '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                            
+                                            <!-- 
+                                                BAGIAN BACKEND: AKSI VERIFIKASI (SETUJUI / TOLAK)
+                                                - Tombol Setujui dan Tolak di bawah idealnya diubah menjadi <form> dengan method POST/PUT 
+                                                  yang mengirim status verifikasi ke controller, atau menggunakan request AJAX.
+                                            -->
+                                            <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
+                                            <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
                 </tbody>
             </table>
         </div>
@@ -169,7 +111,7 @@
 @section('scripts')
 <script>
     // Lihat Detail
-    function viewDetail(pengirim, penerima, nominal, rek, telp) {
+    function viewDetail(pengirim, penerima, nominal, rek, telp, catatan,  tgl_pengirim, bukti) {
         document.getElementById('detail_pengirim').value = pengirim;
         document.getElementById('detail_penerima').value = penerima;
         document.getElementById('detail_nominal').value = nominal;
@@ -177,8 +119,12 @@
         document.getElementById('detail_telepon').value = telp;
         
         // Dummy data untuk field tambahan
-        document.getElementById('detail_tanggal').value = '12 Mei 2024, 14:30';
-        document.getElementById('detail_catatan').value = 'Pembayaran uang praktikum RPL Semester Genap.';
+        document.getElementById('detail_tanggal').value = tgl_pengirim;
+        document.getElementById('detail_catatan').value = catatan;
+        document.getElementById('detail_bukti_img').src = bukti;
+        document.getElementById('detail_bukti_img').classList.remove('hidden');
+
+        document.getElementById('detail_bukti_container').classList.add('hidden');
         
         switchView('detail');
     }

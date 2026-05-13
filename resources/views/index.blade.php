@@ -375,7 +375,7 @@
                         - method="POST": Menggunakan POST untuk mengirim data sensitif secara aman.
                         - enctype="multipart/form-data": WAJIB ada karena form ini mengunggah file gambar (bukti transfer).
                     -->
-                    <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('bukti_tf.transfer_luar') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
 
                         <!--
                             BAGIAN BACKEND: CSRF TOKEN
@@ -404,10 +404,10 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
                                 <!-- BAGIAN BACKEND: INPUT NOMOR TELEPON -->
-                                <input type="tel" name="nomor_telepon" value="{{ old('nomor_telepon') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_telepon') ? 'border-red-500' : 'border-gray-200' }}"
+                                <input type="tel" name="no_hp_pengirim" value="{{ old('no_hp_pengirim') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_hp_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Contoh: 08123456789">
-                                @error('nomor_telepon')
+                                @error('no_hp_pengirim')
                                     <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
@@ -430,10 +430,10 @@
                             <div class="relative">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Transfer</label>
                                 <!-- BAGIAN BACKEND: INPUT TANGGAL TRANSFER -->
-                                <input type="date" name="tanggal_transfer" value="{{ old('tanggal_transfer') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition text-gray-500 appearance-none {{ $errors->has('tanggal_transfer') ? 'border-red-500' : 'border-gray-200' }}">
+                                <input type="date" name="datetime_tgl" value="{{ old('datetime_tgl') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition text-gray-500 appearance-none {{ $errors->has('datetime_tgl') ? 'border-red-500' : 'border-gray-200' }}">
                                 <i class="ph ph-caret-down absolute right-4 top-10 text-gray-400 pointer-events-none"></i>
-                                @error('tanggal_transfer')
+                                @error('datetime_tgl')
                                     <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
@@ -443,10 +443,10 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
-                                <input type="text" name="nomor_rekening_penerima" value="{{ old('nomor_rekening_penerima') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}"
+                                <input type="text" name="no_rekening_penerima" value="{{ old('no_rekening_penerima') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nomor rekening">
-                                @error('nomor_rekening_penerima')
+                                @error('no_rekening_penerima')
                                     <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
@@ -502,9 +502,9 @@
                                     - name="bukti_transfer": File gambar akan dikirim dengan key ini.
                                     - Backend perlu menyimpan file ini menggunakan fitur Storage Laravel.
                                 -->
-                                <input id="file-upload" name="bukti_transfer" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
+                                <input id="file-upload" name="bukti_foto" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
                             </div>
-                            @error('bukti_transfer')
+                            @error('bukti_foto')
                                 <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
                                 <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
                             @enderror

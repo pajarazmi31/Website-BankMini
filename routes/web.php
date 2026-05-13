@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\loginController;
+use App\Http\Controllers\Bukti_tfController;
 use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
@@ -14,6 +15,8 @@ use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 Route::get('/', function () {
     return view('index');
 });
+
+Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');
 
 
 // nasabah
@@ -54,9 +57,7 @@ Route::get('/supervisor/datapetugas', function () {
     return view('supervisor.datapetugas');
 })->name('supervisor.datapetugas');
 
-Route::get('/supervisor/verifikasi', function () {
-    return view('supervisor.verifikasi.transfer');
-})->name('supervisor.verifikasi');
+Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasi'])->name('supervisor.verifikasi');
 
 Route::get('/supervisor/verifikasi/registrasi', function () {
     return view('supervisor.verifikasi.registrasirekening');
