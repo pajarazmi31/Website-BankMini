@@ -1,7 +1,9 @@
 @extends('layouts.teller')
 
 @section('title', 'Teller - Data Setoran')
-@section('header_title', 'Selamat Datang, Teller!')
+@section('header_title')
+    Selamat Datang, {{ $teller->nama_petugas }}!
+@endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('styles')

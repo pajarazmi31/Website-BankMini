@@ -1,66 +1,50 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\loginController;
+use App\Http\Controllers\nasabahController;
+use App\Http\Controllers\tellerController;
+use App\Http\Controllers\superVisorController;
+use App\Http\Controllers\csController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
-//Landing Page
-
+//halaman utama
 Route::get('/', function () {
     return view('index');
 });
 
-//login dan logout
 
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+// nasabah
+Route::middleware(['role:nasabah'])->group(function () {
 
-Route::post('/logout', function () {
-    return redirect()->route('login');
-})->name('logout');
+Route::get('/nasabah/dashboard', [nasabahController::class, 'index'])->name('nasabah.dashboard');
+Route::get('/nasabah/transfer', [nasabahController::class, 'transfer'])->name('nasabah.transfer');
 
-//Nasabah
+});
+//teller
+Route::middleware(['role:teller'])->group(function () {
 
-Route::get('/nasabah/dashboard', function () {
-    return view('nasabah.dashboard');
-})->name('nasabah.dashboard');
+Route::get('/teller/dashboard', [tellerController::class, 'index'])->name('teller.dashboard');
+Route::get('/teller/setoran', [tellerController::class, 'setoran'])->name('teller.setoran');
+Route::get('/teller/penarikan', [tellerController::class, 'penarikan'])->name('teller.penarikan');
+Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('teller.transfer');
 
-Route::get('/nasabah/transfer', function () {
-    return view('nasabah.transfer');
-})->name('nasabah.transfer');
+});
 
-//Teller
+//customer service
+Route::middleware(['role:customerservice'])->group(function () {
 
-Route::get('/teller/dashboard', function () {
-    return view('teller.dashboard');
-})->name('teller.dashboard');
+route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
+Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
 
-Route::get('/teller/setoran', function () {
-    return view('teller.setoran');
-})->name('teller.setoran');
+});
 
-Route::get('/teller/penarikan', function () {
-    return view('teller.penarikan');
-})->name('teller.penarikan');
+//super visor
+Route::middleware(['role:supervisor'])->group(function () {
 
-Route::get('/teller/transfer', function () {
-    return view('teller.transfer');
-})->name('teller.transfer');
-
-//Customer Service
-
-Route::get('/costumerservice/dashboard', function () {
-    return view('costumerservice.dashboard');
-})->name('costumerservice.dashboard');
-
-Route::get('/costumerservice/keloladata', function () {
-    return view('costumerservice.keloladata');
-})->name('costumerservice.keloladata');
-
-//Supervisor
-
-Route::get('/supervisor/dashboard', function () {
-    return view('supervisor.dashboard');
-})->name('supervisor.dashboard');
+route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 
 Route::get('/supervisor/datanasabah', function () {
     return view('supervisor.datanasabah');
@@ -77,3 +61,24 @@ Route::get('/supervisor/verifikasi', function () {
 Route::get('/supervisor/verifikasi/registrasi', function () {
     return view('supervisor.verifikasi.registrasirekening');
 })->name('supervisor.verifikasi.registrasi');
+
+});
+/// logika login na
+
+//Halaman Login
+Route::get('/login', [loginController::class, 'index'])->name('login');
+
+//proses login
+Route::post('/login', [loginController::class, 'login'])->name('proses.login');
+
+//logout
+Route::post('/logout',[loginController::class, 'logout'])->name('logout');
+
+
+// Route::post('/logout', function () {
+//     return redirect()->route('login');
+// })->name('logout');
+
+// Route::post('/login', function () {
+//     return redirect()->route('nasabah.dashboard');
+// });

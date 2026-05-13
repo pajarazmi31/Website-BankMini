@@ -1,7 +1,9 @@
 @extends('layouts.cs')
 
 @section('title', 'Customer Service - Dashboard')
-@section('header_title', 'Selamat Datang, Costumer Service!')
+@section('header_title')
+    Selamat Datang, {{ $cs->nama_petugas }}!
+@endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('content')
@@ -50,7 +52,7 @@
             <h3 class="text-[20px] font-bold text-gray-800">Aktivitas Terkini</h3>
             <button onclick="switchView('history')" class="text-[12px] font-semibold text-gray-800 hover:text-brand-blue">Lihat Semua</button>
         </div>
-        
+
         <div class="flex flex-col gap-3">
             <!-- Item 1 -->
             <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
@@ -238,7 +240,7 @@
     function switchView(viewName) {
         const mainView = document.getElementById('viewMain');
         const historyView = document.getElementById('viewHistory');
-        
+
         if (viewName === 'history') {
             mainView.classList.remove('block');
             mainView.classList.add('hidden');
@@ -250,7 +252,7 @@
             mainView.classList.remove('hidden');
             mainView.classList.add('block');
         }
-        
+
         // Scroll top (karena di CS overflow auto ada di main content atau window)
         window.scrollTo({ top: 0, behavior: 'smooth' });
         const scrollableMain = document.querySelector('main');

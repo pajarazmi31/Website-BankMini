@@ -65,7 +65,7 @@
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-brand-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <div class="flex items-center gap-3 px-6 mb-10">
                 <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
                 <div>
@@ -80,7 +80,7 @@
 
             <nav class="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
                 @php $route = Route::currentRouteName(); @endphp
-                
+
                 <!-- Dashboard -->
                 <div class="relative">
                     @if($route == 'teller.dashboard')
@@ -126,13 +126,16 @@
                 </div>
                 <!-- Logout -->
                 <div class="px-6 mt-4">
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
+
+                        <button
+                            type="submit"
+                            class="bg-red-500 text-white px-4 py-2 rounded"
+                        >
+                            Logout
+                        </button>
                     </form>
-                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
                 </div>
             </nav>
         </div>
@@ -158,7 +161,7 @@
                     <h2 class="text-[22px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[12px] md:text-[14px]">@yield('header_subtitle', 'Kelola transaksi nasabah.')</p>
                 </div>
-                
+
                 <div class="flex items-center gap-6">
                     <!-- Search Bar -->
                     @if(Route::currentRouteName() != 'teller.dashboard')
@@ -172,10 +175,8 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[42px] text-brand-blue"></i>
                         <div class="flex flex-col">
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
-                            <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">Teller</p>
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
-                            <p class="text-[13px] text-gray-400 font-medium">teller@gmail.com</p>
+                            <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">{{ $teller->nama_petugas }}</p>
+                            <p class="text-[13px] text-gray-400 font-medium">{{ $user->email }}</p>
                         </div>
                     </div>
                 </div>

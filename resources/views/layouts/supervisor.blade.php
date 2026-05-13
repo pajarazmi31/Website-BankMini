@@ -67,7 +67,7 @@
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-brand-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <div class="flex items-center gap-3 px-6 mb-10">
                 <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
                 <div>
@@ -81,11 +81,11 @@
             </div>
 
             <nav class="flex-1 flex flex-col gap-1 w-full overflow-y-auto custom-scrollbar">
-                @php 
+                @php
                     $route = Route::currentRouteName();
                     $isKelolaData = str_contains($route, 'supervisor.datapetugas') || str_contains($route, 'supervisor.datanasabah');
                 @endphp
-                
+
                 <!-- Dashboard -->
                 <div class="relative">
                     @if($route == 'supervisor.dashboard')
@@ -128,14 +128,17 @@
 
                 <!-- Keluar -->
                 <div class="px-6 mt-4">
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    <form action="{{ route('logout') }}" method="POST">
                         @csrf
+
+                        <button
+                            type="submit"
+                            class="bg-red-500 text-white px-4 py-2 rounded"
+                        >
+                            Logout
+                        </button>
                     </form>
-                    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
-                </div> 
+                </div>
             </nav>
         </div>
     </aside>
@@ -160,23 +163,11 @@
                     <h2 class="text-[20px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[10px] md:text-[14px]">@yield('header_subtitle', 'Kelola pengawasan Bank Mini.')</p>
                 </div>
-                <div class="flex items-center gap-6">
-                    <!-- Search Bar (Standardized) -->
-                    @if(Route::currentRouteName() != 'supervisor.dashboard')
-                    <div id="searchBarContainer" class="relative hidden md:block">
-                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="text" placeholder="Cari data..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 transition-all">
-                    </div>
-                    @endif
-
-                    <div class="flex items-center gap-3">
-                        <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
-                        <div class="text-left">
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">Supervisor</p>
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
-                            <p class="text-[12px] text-gray-400 mt-0.5">supervisor@gmail.com</p>
-                        </div>
+                <div class="flex items-center gap-3">
+                    <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
+                    <div class="text-left">
+                        <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $super->nama_petugas }}</p>
+                        <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                     </div>
                 </div>
 

@@ -1,6 +1,8 @@
 @extends('layouts.supervisor')
 
-@section('title', 'Supervisor - Dashboard')
+@section('header_title')
+    Selamat Datang, {{ $super->nama_petugas }}!
+@endsection
 @section('header_title', 'Selamat Datang, Supervisor!')
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
@@ -46,7 +48,7 @@
             <h3 class="text-[20px] font-bold text-gray-800">Pending Verifikasi</h3>
             <button onclick="switchView('history')" class="text-[13px] font-bold text-gray-500 hover:text-brand-blue transition-colors">Lihat Semua</button>
         </div>
-        
+
         <div class="flex flex-col gap-3">
             <!-- Row 1 -->
             <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
@@ -210,7 +212,7 @@
     function switchView(viewName) {
         const mainView = document.getElementById('viewMain');
         const historyView = document.getElementById('viewHistory');
-        
+
         if (viewName === 'history') {
             mainView.classList.remove('block');
             mainView.classList.add('hidden');
@@ -222,7 +224,7 @@
             mainView.classList.remove('hidden');
             mainView.classList.add('block');
         }
-        
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>

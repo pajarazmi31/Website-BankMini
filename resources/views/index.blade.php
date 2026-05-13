@@ -157,9 +157,9 @@
                         <!-- Dekorasi Gradient Halus -->
                         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
 
-                        <div class="relative z-10 flex items-center gap-4 mb-4">
-                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-6 h-6 lg:w-10 lg:h-10 object-contain">
-                            <h3 class="text-sm lg:text-2xl font-bold">Keamanan Terjamin</h3>
+                        <div class="relative z-10">
+                        <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
+                            <h3 class="text-2xl font-bold">Keamanan Terjamin</h3>
                         </div>
                         <p class="text-gray-300 text-justify text-xs lg:text-base mb-8 leading-relaxed">
                             Setiap transaksi diawasi langsung oleh guru pembimbing dan sistem tercatat secara digital untuk transparansi penuh.
@@ -368,7 +368,7 @@
                     </div>
                     @endif
 
-                    <!-- 
+                    <!--
                         BAGIAN BACKEND: FORM TRANSFER (GUEST/UMUM)
                         - Form ini digunakan untuk mengirim data permohonan transfer tanpa login.
                         - action="#": Saat ini action kosong, backend dev perlu mengarahkannya ke route yang tepat (misal: route('guest.transfer.store')).
@@ -377,7 +377,7 @@
                     -->
                     <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
 
-                        <!-- 
+                        <!--
                             BAGIAN BACKEND: CSRF TOKEN
                             - Mencegah serangan CSRF. Wajib ada di setiap form POST di Laravel.
                         -->
@@ -386,7 +386,7 @@
                             <!-- Kolom: Nama Pengirim -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Pengirim</label>
-                                <!-- 
+                                <!--
                                     BAGIAN BACKEND: INPUT NAMA PENGIRIM
                                     - name="nama_pengirim": Key yang akan ditangkap oleh $request di backend.
                                     - value="{{ old('nama_pengirim') }}": Mempertahankan nilai input jika terjadi error validasi.
@@ -395,8 +395,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nama lengkap">
                                 @error('nama_pengirim')
-                                <!-- BAGIAN BACKEND: ERROR NAMA PENGIRIM -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR NAMA PENGIRIM -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -408,8 +408,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_telepon') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Contoh: 08123456789">
                                 @error('nomor_telepon')
-                                <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -421,8 +421,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Nama lengkap penerima">
                                 @error('nama_penerima')
-                                <!-- BAGIAN BACKEND: ERROR NAMA PENERIMA -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR NAMA PENERIMA -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -434,8 +434,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition text-gray-500 appearance-none {{ $errors->has('tanggal_transfer') ? 'border-red-500' : 'border-gray-200' }}">
                                 <i class="ph ph-caret-down absolute right-4 top-10 text-gray-400 pointer-events-none"></i>
                                 @error('tanggal_transfer')
-                                <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -447,8 +447,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nomor_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nomor rekening">
                                 @error('nomor_rekening_penerima')
-                                <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
 
@@ -467,8 +467,8 @@
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('jumlah_transfer') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="0">
                                 @error('jumlah_transfer')
-                                <!-- BAGIAN BACKEND: ERROR JUMLAH TRANSFER -->
-                                <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    <!-- BAGIAN BACKEND: ERROR JUMLAH TRANSFER -->
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
                         </div>
@@ -497,7 +497,7 @@
                                     </div>
                                 </div>
 
-                                <!-- 
+                                <!--
                                     BAGIAN BACKEND: INPUT FILE BUKTI TRANSFER
                                     - name="bukti_transfer": File gambar akan dikirim dengan key ini.
                                     - Backend perlu menyimpan file ini menggunakan fitur Storage Laravel.
@@ -505,14 +505,14 @@
                                 <input id="file-upload" name="bukti_transfer" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
                             </div>
                             @error('bukti_transfer')
-                            <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
-                            <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
+                                <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
+                                <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Tombol Kirim -->
                         <div>
-                            <!-- 
+                            <!--
                                 BAGIAN BACKEND: TOMBOL SUBMIT
                                 - Memicu pengiriman form ke server.
                             -->
@@ -536,7 +536,7 @@
                     <span class="font-bold text-base lg:text-2xl text-[#1e3a5f]">Bank Mini SMKN 1 Kawali</span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start">
 
                     <!-- Kolom Alamat -->
                     <div>
