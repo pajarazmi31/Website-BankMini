@@ -26,7 +26,7 @@
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Penarikan</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-6 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
             <i class="ph ph-plus text-base"></i> Tambah Data
         </button>
     </div>
@@ -69,7 +69,7 @@
                                 <button onclick="editData('{{ $d['nama'] }}', '{{ $d['rek'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
-                                <button class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
+                                <button onclick="openDeleteModal(() => showToast('Data Penarikan Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
                                     <i class="ph-fill ph-trash text-[15px]"></i>
                                 </button>
                             </div>
@@ -81,20 +81,8 @@
         </div>
 
         <!-- Pagination -->
-        <div class="flex items-center justify-end gap-1.5 mt-5 pt-2">
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-colors">
-                <i class="ph-bold ph-caret-left"></i>
-            </button>
-            <span class="w-[26px] h-[26px] flex items-center justify-center text-[13px] font-bold text-brand-blue">1</span>
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[13px] font-medium hover:bg-[#152a42] transition-colors">2</button>
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[13px] font-medium hover:bg-[#152a42] transition-colors">3</button>
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[13px] font-medium hover:bg-[#152a42] transition-colors">4</button>
-            <span class="w-[20px] flex items-center justify-center text-[13px] font-bold text-gray-500 tracking-widest">...</span>
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[13px] font-medium hover:bg-[#152a42] transition-colors">40</button>
-            <button class="w-[26px] h-[26px] rounded bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-colors">
-                <i class="ph-bold ph-caret-right"></i>
-            </button>
-        </div>
+        <x-pagination total="3" />
+
     </div>
 </div>
 

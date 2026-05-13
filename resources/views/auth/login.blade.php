@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
 </head>
-<body class="font-sans antialiased text-gray-800 bg-white min-h-screen flex flex-col lg:flex-row overflow-x-hidden">
+<body class="font-sans antialiased text-gray-800 bg-white min-h-screen flex flex-col-reverse lg:flex-row overflow-x-hidden">
 
     <!-- Custom Message Box (Pengganti alert) -->
     <div id="messageBox" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 hidden opacity-0 transition-opacity">
@@ -50,12 +50,6 @@
     <div class="w-full lg:w-1/2 min-h-screen lg:min-h-0 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative">
         <div class="w-full max-w-[360px]">
 
-            <div class="flex justify-center mb-8">
-                <a href="{{ url('/') }}">
-                    <img src="{{ asset('img/logosmk.png') }}" alt="Logo SMKN 1 Kawali" class="w-24 h-24 object-contain hover:scale-105 transition-transform">
-                </a>
-            </div>
-
             <h1 class="text-3xl lg:text-[32px] font-bold text-primary-blue mb-3 text-center tracking-tight">
                 Masuk
             </h1>
@@ -68,7 +62,7 @@
                 - Form menggunakan method POST ke route('login').
                 - Parameter input: 'email' dan 'password'.
             --}}
-            <form id="loginForm" method="post" action="{{ route('proses.login') }}" class="space-y-6">
+            <form id="loginForm" method="post" action="{{ route('login') }}" class="space-y-6">
                 @csrf
                 <!-- Input Email -->
                 <div>
