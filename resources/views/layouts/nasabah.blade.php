@@ -169,9 +169,9 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[40px] text-primary"></i>
                         <div class="text-left">
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
+                            
                             <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
+                            
                             <p class="text-xs text-textGray mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>

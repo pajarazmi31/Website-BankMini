@@ -1,9 +1,9 @@
 @extends('layouts.supervisor')
 
+@section('title','Supervisor Dashboard')
 @section('header_title')
-    Selamat Datang, {{ $super->nama_petugas }}!
+    Selamat Datang, {{ $supervisor->nama_petugas }}!
 @endsection
-@section('header_title', 'Selamat Datang, Supervisor!')
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('content')
@@ -42,7 +42,7 @@
 </section>
 
 <!-- Bottom Content -->
-<section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start mb-5">
     <div class="lg:col-span-2 flex flex-col gap-3.5">
         <div class="flex justify-between items-end mb-1 px-1">
             <h3 class="text-[20px] font-bold text-gray-800">Pending Verifikasi</h3>

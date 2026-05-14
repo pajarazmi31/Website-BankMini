@@ -3,12 +3,12 @@
         
         <!-- SECTION 1: DATA PENYETORAN -->
         <div class="mb-10">
-            <div class="flex justify-between items-start mb-8">
-                <div class="flex items-center gap-3">
+            <div class="lg:flex lg:justify-between items-start mb-8">
+                <div class="flex items-center gap-3 mb-3">
                     <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                     <h3 class="text-[20px] font-bold text-gray-800">Data Penyetoran</h3>
                 </div>
-                <div class="w-full max-w-[200px]">
+                <div class="w-full lg:max-w-[200px]">
                     <input type="text" placeholder="Petugas" class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50/30 focus:outline-none focus:border-[#c0860b] transition-all">
                 </div>
 
@@ -110,7 +110,7 @@
         </div>
 
         <!-- BUTTONS -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+        <div class="grid grid-cols-2 gap-4 mt-12">
             <button type="button" onclick="switchView('tabel')" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kembali</button>
             <button type="submit" class="w-full bg-button-gradient hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kirim</button>
         </div>

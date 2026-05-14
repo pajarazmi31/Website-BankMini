@@ -128,7 +128,7 @@
     </header>
 
     <!-- Bagian Tentang / Fitur (Tumpang Tindih) -->
-    <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-12 lg:-mt-40 z-20 mb-20 scroll-mt-24">
+    <section id="tentang" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-12 lg:-mt-40 z-20 mb-10 lg:mb-20 scroll-mt-24">
         <div class="bg-white rounded-[20px] shadow-xl overflow-hidden p-8 md:p-12">
             <div class="text-center mb-10">
                 <h2 class="text-2xl lg:text-3xl font-bold text-merek-biru">Apa Itu Bank Mini Sekolah?</h2>
@@ -188,7 +188,7 @@
     <!-- Pembungkus Bagian Proses untuk Alur Layanan -->
     <div id="alur-layanan" class="scroll-mt-20">
         <!-- Bagian Proses -->
-        <section class="py-24 bg-merek-bg">
+        <section class="py-10 lg:py-24 bg-merek-bg">
             <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-20 text-left">
                     <h2 class="text-2xl lg:text-4xl font-bold text-merek-biru mb-4">Proses Buka Buku Tabungan</h2>
@@ -233,7 +233,7 @@
         </section>
 
         <!-- Bagian Alur Transaksi -->
-        <section class="py-24 bg-merek-bg">
+        <section class="py-10 lg:py-24 bg-merek-bg">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="mb-16 text-center md:text-left">
                     <h2 class="text-2xl lg:text-4xl font-bold text-merek-biru mb-4">Alur Transaksi Bank Mini</h2>
@@ -313,7 +313,7 @@
     </div>
 
     <!-- Bagian Formulir Transfer -->
-    <section id="form-transfer" class="py-20 bg-gradient-merek relative scroll-mt-20">
+    <section id="form-transfer" class="py-10 lg:py-20 bg-gradient-merek relative scroll-mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-12 gap-8 items-stretch">
                 <!-- Info Kiri: Header & Alur Card -->
