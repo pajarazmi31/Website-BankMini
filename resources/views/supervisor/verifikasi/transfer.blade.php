@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,18 +44,21 @@
         body {
             background-color: #f8f9fb;
         }
-        
+
         /* Custom scrollbar untuk area utama */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
@@ -63,6 +67,7 @@
         .submenu-open {
             grid-template-rows: 1fr;
         }
+
         .submenu-closed {
             grid-template-rows: 0fr;
         }
@@ -71,12 +76,21 @@
         .fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body class="flex h-screen w-full overflow-hidden text-brand-textDark selection:bg-brand-blue selection:text-white relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -85,25 +99,25 @@
     <!-- Sidebar -->
     <aside id="sidebar" class="fixed lg:relative inset-y-0 left-0 w-[250px] h-full py-0 lg:py-5 pl-0 lg:pl-5 pr-0 flex-shrink-0 z-50 lg:z-20 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
         <div class="bg-white h-full lg:rounded-[24px] shadow-sidebar flex flex-col pt-8 pb-8 overflow-hidden relative">
-            
+
             <!-- Close Button (Mobile) -->
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-brand-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <!-- Logo Section -->
             <div class="flex items-center gap-3 px-6 mb-10">
                 <div class="text-brand-blue">
                     <!-- Custom Bank Icon SVG -->
                     <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 21h18"/>
-                        <path d="M3 10h18"/>
-                        <path d="M5 6l7-3 7 3"/>
-                        <path d="M4 10v11"/>
-                        <path d="M20 10v11"/>
-                        <path d="M8 14v3"/>
-                        <path d="M12 14v3"/>
-                        <path d="M16 14v3"/>
+                        <path d="M3 21h18" />
+                        <path d="M3 10h18" />
+                        <path d="M5 6l7-3 7 3" />
+                        <path d="M4 10v11" />
+                        <path d="M20 10v11" />
+                        <path d="M8 14v3" />
+                        <path d="M12 14v3" />
+                        <path d="M16 14v3" />
                     </svg>
                 </div>
                 <div>
@@ -119,7 +133,7 @@
 
             <!-- Navigation Links -->
             <nav class="flex-1 flex flex-col gap-1 w-full">
-                
+
                 <!-- Dashboard -->
                 <a href="{{ route('supervisor.dashboard') }}" class="flex items-center gap-3 px-6 py-3 text-[#a3a3a3] font-medium hover:bg-gray-50 transition-colors group">
                     <i class="ph ph-gauge text-[22px] group-hover:text-gray-600 transition-colors"></i>
@@ -153,15 +167,16 @@
 
                 <!-- Logout -->
                 <div class="px-6 mt-4">
-                    <!-- 
-                        BAGIAN BACKEND: LOGOUT
-                        - Saat ini berupa link #.
-                        - Idealnya menggunakan method POST ke route logout untuk menghapus session auth secara aman.
-                    -->
-                    <a href="#" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>
@@ -169,7 +184,7 @@
 
     <!-- Main Content Area -->
     <main class="flex-1 h-full px-4 lg:px-8 py-4 lg:py-6 flex flex-col justify-start overflow-y-auto custom-scrollbar w-full">
-        
+
         <!-- MOBILE TOP BAR -->
         <div class="lg:hidden flex items-center justify-between mb-6 bg-white p-4 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-50 sticky top-0 z-30">
             <div class="flex items-center gap-2 text-brand-blue">
@@ -182,14 +197,14 @@
         </div>
 
         <div class="max-w-[1050px] mx-auto w-full flex flex-col h-full mt-2 pb-10">
-            
+
             <!-- Global Header Section -->
             <header class="flex flex-col md:flex-row justify-between items-start mb-8 gap-4 md:gap-0">
                 <div>
                     <h2 class="text-[22px] md:text-[26px] font-bold text-gray-800 mb-0.5">Selamat Datang, Supervisor!</h2>
                     <p class="text-gray-500 text-[12px] md:text-[14px]">Lorem Ipsum is simply dummy text of the printing.</p>
                 </div>
-                
+
                 <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8 w-full md:w-auto">
                     <!-- Search Bar -->
                     <div id="searchBarContainer" class="relative w-full md:w-auto hidden md:block">
@@ -211,11 +226,11 @@
 
             <!-- ================= VIEW 1: TABEL PENDING VERIFIKASI (TRANSFER) ================= -->
             <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
-                
+
                 <!-- Section Title & Tabs -->
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 px-1 gap-4">
                     <h3 class="text-[24px] font-bold text-gray-800">Pending Verifikasi</h3>
-                    
+
                     <div class="flex bg-gray-100 p-1 rounded-xl w-full sm:w-[300px]">
                         <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Registrasi</a>
                         <a href="{{ route('supervisor.verifikasi') }}" class="flex-1 px-4 py-2 bg-white rounded-lg shadow-sm text-brand-blue font-bold text-[13px] text-center transition-all">Transfer</a>
@@ -253,7 +268,7 @@
                                         <div class="flex items-center justify-center gap-2">
                                             <!-- Tombol Lihat (Mata) memanggil view Form -->
                                             <button onclick="viewDetail('Pajar Azmi Anugraha', 'Salsabila Rosi Cahyani', 'Rp. 200.000', '03-03-232410243', '081234567890')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                            
+
                                             <!-- 
                                                 BAGIAN BACKEND: AKSI VERIFIKASI (SETUJUI / TOLAK)
                                                 - Tombol Setujui dan Tolak di bawah idealnya diubah menjadi <form> dengan method POST/PUT 
@@ -367,7 +382,7 @@
         function toggleSubmenu(submenuId, arrowId) {
             const submenu = document.getElementById(submenuId);
             const arrow = document.getElementById(arrowId);
-            
+
             if (submenu.classList.contains('submenu-open')) {
                 submenu.classList.remove('submenu-open');
                 submenu.classList.add('submenu-closed');
@@ -386,11 +401,11 @@
             document.getElementById('detail_nominal').value = nominal;
             document.getElementById('detail_rek_penerima').value = rek;
             document.getElementById('detail_telepon').value = telp;
-            
+
             // Dummy data untuk field tambahan
             document.getElementById('detail_tanggal').value = '12 Mei 2024, 14:30';
             document.getElementById('detail_catatan').value = 'Pembayaran uang praktikum RPL Semester Genap.';
-            
+
             switchView('detail');
         }
 
@@ -405,7 +420,7 @@
 
             // Sembunyikan semua view
             Object.values(views).forEach(v => {
-                if(v) {
+                if (v) {
                     v.classList.add('hidden');
                     v.classList.remove('flex', 'block');
                 }
@@ -417,15 +432,19 @@
                 activeView.classList.remove('hidden');
                 if (viewName === 'tabel') {
                     activeView.classList.add('flex');
-                    if(searchBar) searchBar.classList.remove('invisible');
+                    if (searchBar) searchBar.classList.remove('invisible');
                 } else {
                     activeView.classList.add('block');
-                    if(searchBar) searchBar.classList.add('invisible');
+                    if (searchBar) searchBar.classList.add('invisible');
                 }
             }
-            
-            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.querySelector('main').scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
+
 </html>

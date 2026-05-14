@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,18 +44,21 @@
         body {
             background-color: #f8f9fb;
         }
-        
+
         /* Custom scrollbar untuk area utama */
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: #cbd5e1;
             border-radius: 10px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
         }
@@ -63,6 +67,7 @@
         .submenu-open {
             grid-template-rows: 1fr;
         }
+
         .submenu-closed {
             grid-template-rows: 0fr;
         }
@@ -71,12 +76,21 @@
         .fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
+
 <body class="flex h-screen w-full overflow-hidden text-brand-textDark selection:bg-brand-blue selection:text-white relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -88,7 +102,7 @@
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-brand-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <!-- Logo Section -->
             <div class="flex items-center gap-3 px-6 mb-10">
                 <div class="text-brand-blue">
@@ -107,7 +121,7 @@
 
             <!-- Navigation Links -->
             <nav class="flex-1 flex flex-col gap-1 w-full">
-                
+
                 <!-- Inactive Item: Dashboard -->
                 <a href="{{ route('supervisor.dashboard') }}" class="flex items-center gap-3 px-6 py-3 text-[#a3a3a3] font-medium hover:bg-gray-50 transition-colors group">
                     <i class="ph ph-gauge text-[22px] group-hover:text-gray-600 transition-colors"></i>
@@ -117,12 +131,12 @@
                 <!-- ================= START DROPDOWN MENU ================= -->
                 <!-- Active Item Container: Kelola Data -->
                 <div class="flex flex-col w-full">
-                    
+
                     <!-- Main Toggle Button -->
                     <button onclick="toggleSubmenu('kelolaDataSubmenu', 'kelolaDataArrow')" class="relative flex items-center justify-between px-6 py-3 text-brand-textDark font-bold bg-gray-50/50 w-full hover:bg-gray-100 transition-colors">
                         <!-- Active Indicator Line -->
                         <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
-                        
+
                         <div class="flex items-center gap-3">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-blue">
                                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -160,10 +174,16 @@
 
                 <!-- Logout -->
                 <div class="px-6 mt-4">
-                    <a href="#" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>
@@ -183,14 +203,14 @@
         </div>
 
         <div class="max-w-[1050px] mx-auto w-full flex flex-col h-full mt-2 pb-10 px-6 lg:px-8">
-            
+
             <!-- Global Header Section -->
             <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center pt-6 mb-6 lg:mb-10 gap-4 lg:gap-0">
                 <div>
                     <h2 class="text-[26px] font-bold text-gray-800 mb-0.5">Selamat Datang, Supervisor!</h2>
                     <p class="text-gray-500 text-[14px]">Lorem Ipsum is simply dummy text of the printing.</p>
                 </div>
-                
+
                 <div class="flex flex-col lg:flex-row items-start lg:items-center gap-4 lg:gap-8 w-full lg:w-auto">
                     <!-- Search Bar -->
                     <div id="searchBarContainer" class="relative w-full lg:w-auto">
@@ -237,13 +257,13 @@
                             </thead>
                             <tbody class="text-[14px] text-gray-800 font-medium">
                                 @php
-                                    $petugasList = [
-                                        ['no' => 1, 'nama' => 'Pajar Azmi Anugraha', 'email' => 'user@gmail.com', 'role' => 'Teller'],
-                                        ['no' => 2, 'nama' => 'Salsabila Rosi Cahyani', 'email' => 'user@gmail.com', 'role' => 'Costumer Service'],
-                                        ['no' => 3, 'nama' => 'Anisa Siti Nur Fajriyanti', 'email' => 'user@gmail.com', 'role' => 'Teller'],
-                                        ['no' => 4, 'nama' => 'Yanto Supriyanto', 'email' => 'user@gmail.com', 'role' => 'Costumer Service'],
-                                        ['no' => 5, 'nama' => 'Ali Mahendra', 'email' => 'user@gmail.com', 'role' => 'Teller'],
-                                    ];
+                                $petugasList = [
+                                ['no' => 1, 'nama' => 'Pajar Azmi Anugraha', 'email' => 'user@gmail.com', 'role' => 'Teller'],
+                                ['no' => 2, 'nama' => 'Salsabila Rosi Cahyani', 'email' => 'user@gmail.com', 'role' => 'Costumer Service'],
+                                ['no' => 3, 'nama' => 'Anisa Siti Nur Fajriyanti', 'email' => 'user@gmail.com', 'role' => 'Teller'],
+                                ['no' => 4, 'nama' => 'Yanto Supriyanto', 'email' => 'user@gmail.com', 'role' => 'Costumer Service'],
+                                ['no' => 5, 'nama' => 'Ali Mahendra', 'email' => 'user@gmail.com', 'role' => 'Teller'],
+                                ];
                                 @endphp
                                 @foreach($petugasList as $p)
                                 <tr class="hover:bg-gray-50/50 transition-colors">
@@ -306,7 +326,7 @@
         function toggleSubmenu(submenuId, arrowId) {
             const submenu = document.getElementById(submenuId);
             const arrow = document.getElementById(arrowId);
-            
+
             if (submenu.classList.contains('submenu-open')) {
                 // Tutup
                 submenu.classList.remove('submenu-open');
@@ -325,7 +345,7 @@
             document.getElementById('detail_nama').value = nama;
             document.getElementById('detail_email').value = email;
             document.getElementById('detail_role_text').value = role;
-            
+
             switchView('detail');
         }
 
@@ -333,10 +353,10 @@
         function viewEdit(nama, email, role) {
             document.getElementById('edit_nama').value = nama;
             document.getElementById('edit_email').value = email;
-            
+
             let roleSelect = document.getElementById('edit_role');
-            for(let i=0; i<roleSelect.options.length; i++) {
-                if(roleSelect.options[i].text.toLowerCase() === role.toLowerCase()) {
+            for (let i = 0; i < roleSelect.options.length; i++) {
+                if (roleSelect.options[i].text.toLowerCase() === role.toLowerCase()) {
                     roleSelect.selectedIndex = i;
                     break;
                 }
@@ -357,7 +377,7 @@
 
             // Sembunyikan semua view
             Object.values(views).forEach(v => {
-                if(v) {
+                if (v) {
                     v.classList.add('hidden');
                     v.classList.remove('flex', 'block');
                 }
@@ -369,15 +389,19 @@
                 activeView.classList.remove('hidden');
                 if (viewName === 'tabel') {
                     activeView.classList.add('flex');
-                    if(searchBar) searchBar.classList.remove('invisible');
+                    if (searchBar) searchBar.classList.remove('invisible');
                 } else {
                     activeView.classList.add('block');
-                    if(searchBar) searchBar.classList.add('invisible');
+                    if (searchBar) searchBar.classList.add('invisible');
                 }
             }
-            
-            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+            document.querySelector('main').scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
+
 </html>

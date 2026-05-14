@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,14 +44,31 @@
         }
     </script>
     <style>
-        body { background-color: #f8f9fb; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body {
+            background-color: #f8f9fb;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         @yield('styles')
     </style>
 </head>
+
 <body class="flex h-screen w-full overflow-hidden text-brand-textDark selection:bg-brand-blue selection:text-white relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -83,7 +101,7 @@
                 <!-- Dashboard -->
                 <div class="relative">
                     @if($route == 'teller.dashboard')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('teller.dashboard') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'teller.dashboard' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'teller.dashboard' ? '-fill' : '' }} ph-gauge text-[22px] {{ $route == 'teller.dashboard' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -94,7 +112,7 @@
                 <!-- Setoran -->
                 <div class="relative">
                     @if($route == 'teller.setoran')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('teller.setoran') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'teller.setoran' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'teller.setoran' ? '-fill' : '' }} ph-money text-[22px] {{ $route == 'teller.setoran' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -105,7 +123,7 @@
                 <!-- Penarikan -->
                 <div class="relative">
                     @if($route == 'teller.penarikan')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('teller.penarikan') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'teller.penarikan' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'teller.penarikan' ? '-fill' : '' }} ph-wallet text-[22px] {{ $route == 'teller.penarikan' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -116,7 +134,7 @@
                 <!-- Transfer -->
                 <div class="relative">
                     @if($route == 'teller.transfer')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('teller.transfer') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'teller.transfer' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'teller.transfer' ? '-fill' : '' }} ph-arrows-left-right text-[22px] {{ $route == 'teller.transfer' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -130,9 +148,9 @@
 
                         <button
                             type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                            Logout
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
                         </button>
                     </form>
                 </div>
@@ -195,4 +213,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>

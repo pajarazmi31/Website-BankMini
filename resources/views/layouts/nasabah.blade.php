@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -43,10 +44,22 @@
     </script>
     <style>
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
 
         /* Remove number input arrows */
         input[type="number"]::-webkit-inner-spin-button,
@@ -57,6 +70,7 @@
     </style>
     @yield('styles')
 </head>
+
 <body class="bg-background text-textDark flex h-screen overflow-hidden relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -83,7 +97,7 @@
 
                 <!-- Indikator Aktif -->
                 <div class="absolute -left-8 w-2 h-10 bg-primary rounded-r-lg transition-all duration-300"
-                     style="top: {{ $route == 'nasabah.dashboard' ? '4px' : '52px' }}"></div>
+                    style="top: {{ $route == 'nasabah.dashboard' ? '4px' : '52px' }}"></div>
 
                 <li>
                     <a href="{{ route('nasabah.dashboard') }}" class="flex items-center gap-3 py-3 transition-colors {{ $route == 'nasabah.dashboard' ? 'text-textDark font-semibold' : 'text-[#a0aab8] font-medium hover:text-primary' }}">
@@ -98,16 +112,16 @@
                     </a>
                 </li>
                 <li class="mt-4">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
 
-                            <button
-                                type="submit"
-                                class="bg-red-500 text-white px-4 py-2 rounded"
-                            >
-                                Logout
-                            </button>
-                        </form>
+                        <button
+                            type="submit"
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -166,4 +180,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>

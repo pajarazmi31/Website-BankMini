@@ -149,15 +149,16 @@
 
                 <!-- Logout -->
                 <div class="px-6 mt-4">
-                    <!-- 
-                        BAGIAN BACKEND: LOGOUT
-                        - Saat ini berupa link #.
-                        - Idealnya menggunakan method POST ke route logout untuk menghapus session auth secara aman.
-                    -->
-                    <a href="#" class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
-                        <i class="ph ph-sign-out text-[22px]"></i>
-                        <span class="text-[14px]">Keluar</span>
-                    </a>
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>

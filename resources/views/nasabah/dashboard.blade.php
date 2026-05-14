@@ -102,9 +102,9 @@
 
                         <button
                             type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                            Logout
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
                         </button>
                     </form>
                 </li>
