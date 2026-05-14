@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Rekening;
 use Illuminate\Database\Eloquent\Model;
 
 class Nasabah extends Model
@@ -36,5 +36,9 @@ class Nasabah extends Model
 
     public function user() {
         $this->belongsTo(User::class);
+    }
+
+    public function rekening() {
+        return $this->HashOne(Rekening::class);
     }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
 use App\Http\Controllers\csController;
+use App\Http\Controllers\rekeningController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -38,6 +39,7 @@ Route::middleware(['role:customerservice'])->group(function () {
 
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
 Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
+Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
 
 });
 

@@ -1,0 +1,89 @@
+<?php
+
+namespace App\Http\Controllers;
+use App\Models\Nasabah;
+use App\Models\User;
+use App\Models\Rekening;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
+
+class rekeningController extends Controller
+{
+    public function store(Request $request) {
+        $request->validate([
+            'nama_lengkap' => 'required',
+            'nis_nip' => 'required',
+            'password' => 'required',
+            'jurusan' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'jenis_identitas' => 'required',
+            'rt_rw' => 'required',
+            'agama' => 'required',
+            'pendidikan' => 'required',
+            'jabatan' => 'required',
+            'no_hp' => 'required',
+            'email' => 'required',
+            'alamat' => 'required',
+            'kelurahan' => 'required',
+            'kecamatan' => 'required',
+            'kab_kota' => 'required',
+            'provinsi' => 'required',
+            'kode_pos' => 'required',
+            'nama_kontak_darurat' => 'required',
+            'nomor_kontak_darurat' => 'required',
+            'hubungan_kontak_darurat' => 'required',
+            'alamat_kontak_darurat' => 'required',
+            'no_rekening' => 'required',
+            'status_rekening' => 'required',
+        ]);
+
+        // $roleNasabah = Role::where('nama_role', 'nasabah')->first();
+
+        $userNasabah = User::create([
+            'name' => $request->nama_lengkap,
+            'role_id' => 1,
+            'password' => Hash::make($request->password),
+            'email' => $request->email,
+        ]);
+
+        $dataNasabah = Nasabah::create([
+            'user_id' => $userNasabah->id,
+            'nis_nip' => $request->nis_nip,
+            'nama_nasabah' => $request->nama_lengkap,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'jurusan' => $request->jurusan,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'pendidikan' => $request->pendidikan,
+            'rt_rw' => $request->rt_rw,
+            'kelurahan' => $request->kelurahan,
+            'kecamatan' => $request->kecamatan,
+            'kab_kota' => $request->kab_kota,
+            'provinsi' => $request->provinsi,
+            'kode_pos' => $request->kode_pos,
+            'email' => $request->email,
+            'agama' => $request->agama,
+            'no_hp' => $request->no_hp,
+            'password' => Hash::make($request->password),
+            'jabatan' => $request->jabatan,
+            'jenis_identitas' => $request->jenis_identitas,
+            'nama_kontak_darurat' => $request->nama_kontak_darurat,
+            'alamat_kontak_darurat' => $request->alamat_kontak_darurat,
+            'no_hp_kontak_darurat' => $request->nomor_kontak_darurat,
+            'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
+        ]);
+
+        Rekening::create([
+            'id' => $request->no_rekening,
+            'nasabah_id' => $dataNasabah->id,
+            'saldo_saat_ini' => 0,
+            'status_akun' => $request->status_rekening,
+        ]);
+
+        return redirect()->route('costumerservice.keloladata')->with('success','Data Rekening berhasil ditambah');
+
+    }
+}
