@@ -15,6 +15,8 @@ Route::get('/', function () {
     return view('index');
 });
 
+//login dan logout
+
 
 // nasabah
 Route::middleware(['role:nasabah'])->group(function () {

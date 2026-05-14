@@ -37,7 +37,10 @@
                         'sidebar': '4px 0 24px -4px rgba(0,0,0,0.02)'
                     },
                     backgroundImage: {
-                        'primary-gradient': 'linear-gradient(to right, #143657, #1E5081, #143657)',
+                        'primary-gradient': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
+                        'success-gradient': 'linear-gradient(to bottom, #008959, #1FB581, #008959)',
+                        'warning-gradient': 'linear-gradient(to bottom, #AC7500, #dd9700, #AC7500)',
+                        'button-gradient': 'linear-gradient(to right, #008959, #1E9F71, #008959)',
                     }
                 }
             }
@@ -82,9 +85,7 @@
             </button>
 
             <div class="flex items-center gap-3 px-6 mb-10">
-                <div class="text-brand-blue">
-                    <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
-                </div>
+                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
                 <div>
                     <h1 class="font-extrabold text-[16px] leading-tight tracking-tight text-gray-900">BANK MINI</h1>
                     <p class="text-[10px] text-gray-500 font-medium mt-0.5">SMKN 1 Kawali</p>
@@ -173,7 +174,7 @@
 
         <div class="max-w-[1050px] mx-auto w-full flex flex-col h-full mt-2 pb-10 px-6 lg:px-10">
             <!-- Header Section -->
-            <header class="flex flex-col md:flex-row justify-between items-start md:items-center py-6 lg:py-8 mb-4 gap-4 hidden lg:flex">
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 lg:py-8 mb-4 gap-4  hidden lg:flex">
                 <div class="flex-1">
                     <h2 class="text-[22px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[12px] md:text-[14px]">@yield('header_subtitle', 'Kelola transaksi nasabah.')</p>
@@ -203,12 +204,108 @@
         </div>
     </main>
 
+    <!-- Global Toast Notification -->
+    <div id="toastAlert" class="fixed top-8 left-1/2 -translate-x-1/2 z-[110] hidden opacity-0 transform -translate-y-4 transition-all duration-300">
+        <div class="bg-brand-blue text-white px-6 py-3.5 rounded-[18px] shadow-2xl flex items-center gap-3 border border-white/10 backdrop-blur-md">
+            <div id="toastIcon" class="flex items-center justify-center w-6 h-6 rounded-full bg-green-500/20">
+                <i class="ph-fill ph-check-circle text-green-400 text-xl"></i>
+            </div>
+            <span id="toastMessage" class="font-bold text-[14px] pr-2">Pesan berhasil disimpan!</span>
+        </div>
+    </div>
+
+    <!-- Global Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDeleteModal()"></div>
+        <div class="bg-white rounded-[28px] w-full max-w-[400px] p-8 shadow-2xl relative z-10 transform transition-all scale-95 opacity-0 duration-300" id="deleteModalContent">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mb-6">
+                    <i class="ph-fill ph-warning-circle text-[48px] text-red-500"></i>
+                </div>
+                <h3 class="text-[22px] font-bold text-gray-900 mb-2">Hapus Data?</h3>
+                <p class="text-gray-500 text-[14px] leading-relaxed mb-8">
+                    Apakah Anda yakin ingin menghapus data ini? Tindakan ini <span class="font-bold text-red-500">tidak dapat dibatalkan</span> dan data akan hilang permanen.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 w-full">
+                    <button onclick="closeDeleteModal()" class="flex-1 px-6 py-3.5 rounded-xl bg-gray-100 text-gray-700 font-bold text-[14px] hover:bg-gray-200 transition-colors">
+                        Batal
+                    </button>
+                    <button id="btnConfirmDelete" class="flex-1 px-6 py-3.5 rounded-xl bg-red-500 text-white font-bold text-[14px] hover:bg-red-600 transition-colors shadow-lg shadow-red-500/30">
+                        Ya, Hapus
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('sidebarOverlay');
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
+        }
+
+        // TOAST SYSTEM
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastAlert');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMsg.textContent = message;
+            
+            if (type === 'error') {
+                toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
+                toastIcon.classList.replace('bg-green-500/20', 'bg-red-500/20');
+            } else {
+                toastIcon.innerHTML = '<i class="ph-fill ph-check-circle text-green-400 text-xl"></i>';
+                toastIcon.classList.replace('bg-red-500/20', 'bg-green-500/20');
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.replace('opacity-0', 'opacity-100');
+                toast.classList.replace('-translate-y-4', 'translate-y-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.replace('opacity-100', 'opacity-0');
+                toast.classList.replace('translate-y-0', '-translate-y-4');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        // DELETE MODAL LOGIC
+        function openDeleteModal(onConfirm) {
+            const modal = document.getElementById('deleteModal');
+            const content = document.getElementById('deleteModalContent');
+            const confirmBtn = document.getElementById('btnConfirmDelete');
+
+            modal.classList.replace('hidden', 'flex');
+            
+            // Trigger animation
+            setTimeout(() => {
+                content.classList.replace('scale-95', 'scale-100');
+                content.classList.replace('opacity-0', 'opacity-100');
+            }, 10);
+
+            // Set action
+            confirmBtn.onclick = () => {
+                onConfirm();
+                closeDeleteModal();
+            };
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            const content = document.getElementById('deleteModalContent');
+
+            content.classList.replace('scale-100', 'scale-95');
+            content.classList.replace('opacity-100', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.replace('flex', 'hidden');
+            }, 300);
         }
     </script>
     @yield('scripts')

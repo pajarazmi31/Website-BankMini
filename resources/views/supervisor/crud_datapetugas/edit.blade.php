@@ -30,7 +30,7 @@
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
                 <button type="button" onclick="switchView('tabel')" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kembali</button>
-                <button type="button" class="w-full bg-brand-green hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] shadow-lg shadow-green-900/10">Simpan Perubahan</button>
+                <button type="button" class="w-full bg-button-gradient hover:bg-green-700 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] shadow-lg shadow-green-900/10">Simpan Perubahan</button>
             </div>
         </form>
     </div>

@@ -14,24 +14,27 @@
     <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Jumlah Tabungan</p>
+            {{-- BACKEND: {{ number_format($totalTabungan, 0, ',', '.') }} --}}
             <h3 class="text-[24px] font-bold">Rp. 1.100.500.000</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
 
     <!-- Setoran Hari Ini -->
-    <div class="bg-[#10a163] rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+    <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Setoran Hari Ini</p>
+            {{-- BACKEND: {{ number_format($setoranHariIni, 0, ',', '.') }} --}}
             <h3 class="text-[24px] font-bold">Rp. 500.000</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
 
     <!-- Penarikan Hari Ini -->
-    <div class="bg-[#bd8607] rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+    <div class="bg-warning-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-yellow-100/80 mb-2.5 uppercase">Penarikan Hari Ini</p>
+            {{-- BACKEND: {{ number_format($penarikanHariIni, 0, ',', '.') }} --}}
             <h3 class="text-[24px] font-bold">Rp. 1.000.000</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
@@ -83,7 +86,7 @@
     </div>
 
     <!-- Right Column: Aksi Cepat -->
-    <div class="lg:col-span-4 flex flex-col gap-3.5">
+    <div class="lg:col-span-4 flex flex-col gap-3.5 mb-5">
         <div class="mb-1 px-1"><h3 class="text-[20px] font-bold text-gray-800">Aksi Cepat</h3></div>
         <div class="flex flex-col gap-3">
             @php
@@ -112,51 +115,49 @@
 <!-- VIEW HISTORY: Semua Transaksi (10 Terakhir) -->
 <div id="viewHistory" class="fade-in hidden">
     <div class="bg-white rounded-[24px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-10">
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-8 md:mb-10">
-            <button onclick="switchView('main')" class="text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2 w-fit">
+        <div class="flex justify-between items-center gap-4 mb-8 md:mb-10">
+            <button onclick="switchView('main')" class="text-[10px] lg:text-[14px] font-bold text-gray-800 hover:text-brand-blue transition-colors flex items-center gap-2 w-fit">
                 <i class="ph ph-arrow-left"></i> Kembali
             </button>
-            <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Semua Transaksi</h3>
+            <h3 class="text-[12px] lg:text-[22px] font-bold text-gray-800">Semua Transaksi</h3>
         </div>
 
-        <div class="space-y-6">
-            <!--
-                BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG (TELLER)
-                - Lakukan looping foreach untuk 10 transaksi terakhir.
+        <div class="lg:space-y-5">
+            <!-- 
+                BAGIAN BACKEND: RIWAYAT TRANSAKSI (TELLER)
+                - Lakukan looping foreach untuk 5 transaksi terakhir per halaman.
             -->
             @php
-                $allTransactions10 = [
-                    ['name' => 'Pajar Azmi', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 50.000', 'color' => '#10a163', 'time' => '14:30', 'route' => 'teller.setoran'],
-                    ['name' => 'Anisa Siti', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 100.000', 'color' => '#ef4444', 'time' => '11:20', 'route' => 'teller.penarikan'],
-                    ['name' => 'Salsabila', 'action' => 'Transfer', 'amount' => 'Rp. 50.000', 'color' => '#1c3a5a', 'time' => '09:15', 'route' => 'teller.transfer', 'icon' => true],
-                    ['name' => 'Hamdan', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 200.000', 'color' => '#10a163', 'time' => 'Kemarin', 'route' => 'teller.setoran'],
-                    ['name' => 'Dinar', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 50.000', 'color' => '#ef4444', 'time' => 'Kemarin', 'route' => 'teller.penarikan'],
-                    ['name' => 'Rafka', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 500.000', 'color' => '#10a163', 'time' => 'Kemarin', 'route' => 'teller.setoran'],
-                    ['name' => 'Fakih', 'action' => 'Transfer', 'amount' => 'Rp. 150.000', 'color' => '#1c3a5a', 'time' => '2 Hari Lalu', 'route' => 'teller.transfer', 'icon' => true],
-                    ['name' => 'Aditya', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 300.000', 'color' => '#ef4444', 'time' => '2 Hari Lalu', 'route' => 'teller.penarikan'],
-                    ['name' => 'Yanto', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 1.000.000', 'color' => '#10a163', 'time' => '3 Hari Lalu', 'route' => 'teller.setoran'],
-                    ['name' => 'Ali', 'action' => 'Transfer', 'amount' => 'Rp. 25.000', 'color' => '#1c3a5a', 'time' => '3 Hari Lalu', 'route' => 'teller.transfer', 'icon' => true],
+                $allTransactions5 = [
+                    ['name' => 'Pajar Azmi', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 50.000', 'color' => '#10a163', 'time' => '14:30'],
+                    ['name' => 'Anisa Siti', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 100.000', 'color' => '#ef4444', 'time' => '11:20'],
+                    ['name' => 'Salsabila', 'action' => 'Transfer', 'amount' => 'Rp. 50.000', 'color' => '#1c3a5a', 'time' => '09:15', 'icon' => true],
+                    ['name' => 'Hamdan', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 200.000', 'color' => '#10a163', 'time' => 'Kemarin'],
+                    ['name' => 'Dinar', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 50.000', 'color' => '#ef4444', 'time' => 'Kemarin'],
                 ];
             @endphp
-            @foreach($allTransactions10 as $at)
-            <div class="flex justify-between items-center bg-white p-4 rounded-xl border border-gray-50 hover:border-gray-100 transition-all">
-                <div class="flex items-center gap-4">
+            @foreach($allTransactions5 as $at)
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+                <div class="flex items-center gap-2">
                     <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">{{ $at['name'] }}</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">{{ $at['action'] }} • {{ $at['time'] }}</p>
+                        <h4 class="font-bold text-[10px] lg:text-[15px] text-gray-800">{{ $at['name'] }}</h4>
+                        <p class="text-[8px] lg:text-[12px] text-gray-500 mt-0.5">{{ $at['action'] }} • {{ $at['time'] }}</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-4">
-                    <span class="font-bold text-[15px] text-[{{ $at['color'] }}] flex items-center gap-1.5">
-                        @if(isset($at['icon'])) <i class="ph ph-arrows-left-right text-[16px]"></i> @endif
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-[10px] lg:text-[15px] text-[{{ $at['color'] }}] flex items-center gap-1.5">
+                        @if(isset($at['icon'])) <i class="ph ph-arrows-left-right text-[10px] lg:text-[16px]"></i> @endif
                         {{ $at['amount'] }}
                     </span>
-                    <!-- Ikon mata dihapus -->
                 </div>
             </div>
             @endforeach
         </div>
+
+        <!-- Pagination -->
+        <x-pagination total="3" />
+
     </div>
 </div>
 @endsection
