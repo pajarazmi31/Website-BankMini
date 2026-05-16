@@ -18,10 +18,10 @@ return new class extends Migration
             $table->String('nama_nasabah');
             $table->String('tempat_lahir', 50);
             $table->Date('tanggal_lahir');
-            $table->Enum('jurusan',['TKRO','TJKT','PPLG','MP','DPIB','AKL','SK']);
+            $table->Enum('jurusan',['TKRO','TJKT','PPLG','MPLB','DPIB','AKL','SK']);
             $table->Enum('jenis_kelamin',['Laki-Laki','Perempuan']);
-            $table->Enum('pendidikan',['SD','SMP','SMA/K','S1','S2','S3','D1','D2','D3']);
-            $table->String('rt_rw',10);
+            $table->Enum('pendidikan',['SD','SMP','SMA','SMK','S1','S2','S3','D1','D2','D3']);
+            $table->Text('alamat');
             $table->String('kelurahan', 50);
             $table->String('kecamatan', 50);
             $table->String('kab_kota', 50);

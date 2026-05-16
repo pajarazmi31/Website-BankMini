@@ -9,17 +9,18 @@ class Nasabah extends Model
     protected $table = 'nasabah';
 
     protected $fillable = ([
-        'nis/nip',
+        'nis_nip',
         'nama_nasabah',
+        'user_id',
         'tempat_lahir',
         'tanggal_lahir',
         'jurusan',
         'jenis_kelamin',
         'pendidikan',
-        'rt/rw',
+        'alamat',
         'kelurahan',
         'kecamatan',
-        'kab/kota',
+        'kab_kota',
         'provinsi',
         'kode_pos',
         'email',
@@ -35,10 +36,10 @@ class Nasabah extends Model
     ]);
 
     public function user() {
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class);
     }
 
     public function rekening() {
-        return $this->HashOne(Rekening::class);
+        return $this->HasOne(Rekening::class);
     }
 }

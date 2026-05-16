@@ -32,9 +32,9 @@
                             <option value="TJKT">TJKT</option>
                             <option value="AKL">AKL</option>
                             <option value="MP">MPLB</option>
-                            <option value="TKRO">TKR</option>
+                            <option value="TKRO">TKRO</option>
                             <option value="DPIB">DPIB</option>
-                            <option value="SP">SP</option>
+                            <option value="SK">SP</option>
                         </select>
                     </div>
                     <div>
@@ -53,17 +53,20 @@
                                 onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
                         >
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
-                            <option value="laki-laki">Laki-laki</option>
-                            <option value="perempuan">Perempuan</option>
+                            <option value="Laki-Laki">Laki-laki</option>
+                            <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
-                    <div>
+                    {{-- <div>
                         <label for="rt_rw">Rt/Rw</label>
                         <input type="text" name="rt_rw">
-                    </div>
+                    </div> --}}
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Identitas Utama</label>
-                        <input type="text" name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <select name="jenis_identitas" id="">
+                            <option value="KTP">KTP</option>
+                            <option value="Akta">Akta</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
@@ -72,20 +75,35 @@
                         >
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam">Islam</option>
-                            <option value="Kristen">Kristen</option>
+                            <option value="Protestan">Protestan</option>
                             <option value="Katolik">Katolik</option>
                             <option value="Hindu">Hindu</option>
-                            <option value="Budha">Budha</option>
+                            <option value="Buddha">Buddha</option>
                             <option value="Khonghucu">Khonghucu</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
-                        <input type="text" name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <label for="pendidikan">Pendidikan</label>
+                        <select name="pendidikan" >
+                            <option value="SD">SD</option>
+                            <option value="SMP">SMP</option>
+                            <option value="SMK">SMK</option>
+                            <option value="SMA">SMA</option>
+                            <option value="D1">D1</option>
+                            <option value="D2">D2</option>
+                            <option value="D3">D3</option>
+                            <option value="S1">S1</option>
+                            <option value="S2">S2</option>
+                            <option value="S3">S3</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
-                        <input type="text" name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <select name="jabatan" id="">
+                            <option value="Siswa">Siswa</option>
+                            <option value="Guru">Guru</option>
+                            <option value="TU">TU</option>
+                        </select>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
@@ -163,10 +181,10 @@
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
                         <input type="number" name="no_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
-                    <div>
+                    {{-- <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
                         <input type="text" name="status_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 

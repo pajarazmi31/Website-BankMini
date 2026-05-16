@@ -40,6 +40,7 @@ Route::middleware(['role:customerservice'])->group(function () {
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
 Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
+Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah');
 
 });
 

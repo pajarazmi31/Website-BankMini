@@ -51,11 +51,12 @@
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
+                    @foreach ($allNasabah as $nasabah )
                     <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">1.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Pajar Azmi Anugraha</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-2 border-b border-gray-50">03-03-232410204</td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-center">1</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id}}</td>
                         <td class="py-4 px-4 border-b border-gray-50 text-left">
                             <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
                                 <i class="ph-bold ph-clock text-[15px]"></i>
@@ -63,9 +64,11 @@
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('Pajar Azmi Anugraha', '0103232410204', 'Siswa', '03-03-232410204', 'Pending')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
+                                <a href="{{ route('detail.nasabah',$nasabah->id) }}">
+                                    <button class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
+                                        <i class="ph-fill ph-eye text-[15px]"></i>
+                                    </button>
+                                </a>
                                 <button onclick="editData('Pajar Azmi Anugraha', '0103232410204', 'Siswa')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
@@ -75,106 +78,7 @@
                             </div>
                         </td>
                     </tr>
-                    <!-- Row 2 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">2.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Salsabila Rosi Cahyani</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-2 border-b border-gray-50">03-03-232410243</td>
-                        <td class="py-4 px-4 border-b border-gray-50 text-left">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('Salsabila Rosi Cahyani', '0103232410243', 'Siswa', '03-03-232410243', 'Pending')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('Salsabila Rosi Cahyani', '0103232410243', 'Siswa')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 3 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">3.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Anisa Siti Nur Fajriyanti</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-2 border-b border-gray-50">03-03-232410229</td>
-                        <td class="py-4 px-4 border-b border-gray-50 text-left">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('Anisa Siti Nur Fajriyanti', '0103232410229', 'Siswa', '03-03-232410229', 'Pending')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('Anisa Siti Nur Fajriyanti', '0103232410229', 'Siswa')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 4 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">4.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Yanto Supriyanto</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Guru</td>
-                        <td class="py-4 px-2 border-b border-gray-50">01-02-030081983</td>
-                        <td class="py-4 px-4 border-b border-gray-50 text-left">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('Yanto Supriyanto', '0102030081983', 'Guru', '01-02-030081983', 'Pending')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('Yanto Supriyanto', '0102030081983', 'Guru')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 5 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">5.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">Ali Mahendra</td>
-                        <td class="py-4 px-2 border-b border-gray-50">TU</td>
-                        <td class="py-4 px-2 border-b border-gray-50">01-03-050081993</td>
-                        <td class="py-4 px-4 border-b border-gray-50 text-left">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('Ali Mahendra', '0103050081993', 'TU', '01-03-050081993', 'Pending')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('Ali Mahendra', '0103050081993', 'TU')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

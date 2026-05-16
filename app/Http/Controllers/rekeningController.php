@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Rekening;
 use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class rekeningController extends Controller
@@ -20,7 +21,6 @@ class rekeningController extends Controller
             'tanggal_lahir' => 'required',
             'jenis_kelamin' => 'required',
             'jenis_identitas' => 'required',
-            'rt_rw' => 'required',
             'agama' => 'required',
             'pendidikan' => 'required',
             'jabatan' => 'required',
@@ -37,7 +37,6 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
             'no_rekening' => 'required',
-            'status_rekening' => 'required',
         ]);
 
         // $roleNasabah = Role::where('nama_role', 'nasabah')->first();
@@ -58,7 +57,7 @@ class rekeningController extends Controller
             'jurusan' => $request->jurusan,
             'jenis_kelamin' => $request->jenis_kelamin,
             'pendidikan' => $request->pendidikan,
-            'rt_rw' => $request->rt_rw,
+            'alamat' => $request->alamat,
             'kelurahan' => $request->kelurahan,
             'kecamatan' => $request->kecamatan,
             'kab_kota' => $request->kab_kota,
@@ -80,10 +79,49 @@ class rekeningController extends Controller
             'id' => $request->no_rekening,
             'nasabah_id' => $dataNasabah->id,
             'saldo_saat_ini' => 0,
-            'status_akun' => $request->status_rekening,
+            'status_akun' => 'non-aktif',
         ]);
 
         return redirect()->route('costumerservice.keloladata')->with('success','Data Rekening berhasil ditambah');
 
     }
+
+    public function edit(String $id) {
+        $user = Auth::user();
+        $cs = $user->petugas;
+        return view('costumerservice.crudnasabah.edit', compact('user','cs','allNasabah'));
+    }
+
+    public function update(Request $request, String $id) {
+
+        $request->validate([
+            'nama_lengkap' => 'required',
+            'nis_nip' => 'required',
+            'password' => 'required',
+            'jurusan' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required',
+            'jenis_kelamin' => 'required',
+            'jenis_identitas' => 'required',
+            'agama' => 'required',
+            'pendidikan' => 'required',
+            'jabatan' => 'required',
+            'no_hp' => 'required',
+            'email' => 'required',
+            'alamat' => 'required',
+            'kelurahan' => 'required',
+            'kecamatan' => 'required',
+            'kab_kota' => 'required',
+            'provinsi' => 'required',
+            'kode_pos' => 'required',
+            'nama_kontak_darurat' => 'required',
+            'nomor_kontak_darurat' => 'required',
+            'hubungan_kontak_darurat' => 'required',
+            'alamat_kontak_darurat' => 'required',
+            'no_rekening' => 'required',
+        ]);
+
+    }
+
+
 }
