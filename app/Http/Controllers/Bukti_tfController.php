@@ -12,7 +12,7 @@ class Bukti_tfController extends Controller
         'nama_pengirim' => 'required',
         'no_hp_pengirim' => 'required',
         'no_rekening_penerima' => 'required',
-        'jumlah_transfer' => 'required',
+        'jumlah_transfer' => 'required|numeric|min:500',
         'bukti_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         'nama_penerima' => 'required',
         'datetime_tgl' => 'required',

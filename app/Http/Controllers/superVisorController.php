@@ -23,4 +23,20 @@ class superVisorController extends Controller
 
         return view('supervisor.verifikasi.transfer.detail', compact('data'));
     }
+
+    public function verifikasiTf(Request $request, $id){
+            $data = Bukti_Tf::findOrFail($id);
+
+            // LOGIKA KUNCI: Cek apakah status sudah pernah diproses
+            if ($data->status_verifikasi !== 'pending') {
+                return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya dan tidak bisa diubah lagi.');
+            }
+
+            // Jika masih pending, maka lanjutkan update
+            $data->update([
+                'status_verifikasi' => $request->status_verifikasi // 'disetujui' atau 'tolak'
+            ]);
+
+            return redirect()->back()->with('success', 'Status berhasil diperbarui!');
+    }
 }

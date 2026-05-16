@@ -57,7 +57,11 @@ Route::get('/supervisor/datapetugas', function () {
     return view('supervisor.datapetugas');
 })->name('supervisor.datapetugas');
 
+//View Verifikasi Tf
 Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasi'])->name('supervisor.verifikasi');
+
+// logika verifikasi Tf
+Route::patch('/supervisor/verifikasi/status{id}', [superVisorController::class, 'verifikasiTf'])->name('supervisor.verifikasiTf');
 
 Route::get('/supervisor/verifikasi/registrasi', function () {
     return view('supervisor.verifikasi.registrasirekening');

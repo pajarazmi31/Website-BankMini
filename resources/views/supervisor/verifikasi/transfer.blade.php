@@ -57,7 +57,7 @@
                                     <td class="py-4 px-2 border-b border-gray-50">{{ $loop->iteration }}</td>
                                     <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_pengirim }}</td>
                                     <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_penerima }}</td>
-                                    <td class="py-4 px-2 border-b border-gray-50">{{ number_format($item->jumlah_transfer, 0, ',', '.') }}</td>
+                                    <td class="py-4 px-2 border-b border-gray-50"> Rp{{ number_format($item->jumlah_transfer, 0, ',', '.') }}</td>
                                     <td class="py-4 px-2 border-b border-gray-50">{{ $item->no_hp_pengirim }}</td>
                                     @if ($item->status_verifikasi == 'pending')
                                     <td class="py-4 px-2 border-b border-gray-50">
@@ -88,8 +88,31 @@
                                                 - Tombol Setujui dan Tolak di bawah idealnya diubah menjadi <form> dengan method POST/PUT 
                                                   yang mengirim status verifikasi ke controller, atau menggunakan request AJAX.
                                             -->
-                                            <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                            <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
+                                            @if($item->status_verifikasi == 'pending')
+                                                    <!-- Tombol Aksi Hanya Muncul Jika Status Masih Pending -->
+                                                    <form action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline" onsubmit="alert('Data Berhasil Diubah')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status_verifikasi" value="berhasil">
+                                                        <button onclick="return confirm('Apakah Anda yakin ingin menyetujui transaksi ini?')" type="submit" class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui">
+                                                            <i class="ph-bold ph-check-circle text-[16px]"></i>
+                                                        </button>
+                                                    </form>
+
+                                                    <form action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline" onsubmit="alert('Data Berhasil Diubah')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="hidden" name="status_verifikasi" value="gagal">
+                                                        <button onclick="return confirm('Apakah Anda yakin ingin membatalkan transaksi ini?')" type="submit" class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak">
+                                                            <i class="ph-bold ph-x-circle text-[16px]"></i>
+                                                        </button>
+                                                    </form>
+                                                @else
+                                                    <!-- Tampilkan indikator bahwa aksi sudah terkunci -->
+                                                    <span class="text-[9px] text-gray-400 font-italic">
+                                                        <i class="ph ph-lock"></i> Telah Diverifikasi
+                                                    </span>
+                                                @endif
                                         </div>
                                     </td>
                                 </tr>
