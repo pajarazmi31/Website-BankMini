@@ -69,9 +69,11 @@
                                         <i class="ph-fill ph-eye text-[15px]"></i>
                                     </button>
                                 </a>
-                                <button onclick="editData('Pajar Azmi Anugraha', '0103232410204', 'Siswa')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
+                                <a href="{{ route('edit.nasabah', $nasabah->user_id) }}">
+                                <button class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
+                                </a>
                                 <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
                                     <i class="ph-fill ph-trash text-[15px]"></i>
                                 </button>

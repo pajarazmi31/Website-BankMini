@@ -89,7 +89,8 @@ class rekeningController extends Controller
     public function edit(String $id) {
         $user = Auth::user();
         $cs = $user->petugas;
-        return view('costumerservice.crudnasabah.edit', compact('user','cs','allNasabah'));
+        $userNasabah = User::with('nasabah')->FindOrFail($id);
+        return view('costumerservice.crudnasabah.edit', compact('user','cs','userNasabah'));
     }
 
     public function update(Request $request, String $id) {
@@ -118,8 +119,51 @@ class rekeningController extends Controller
             'nomor_kontak_darurat' => 'required',
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
-            'no_rekening' => 'required',
+            // 'no_rekening' => 'required',
         ]);
+
+        $user = User::FindOrFail($id);
+        $nasabah = Nasabah::where('user_id',$user->id)->first();
+        // $rekening = Rekening::where('nasabah_id',$nasabah->id)->first();
+
+        $user->update([
+            'name' => $request->nama_lengkap,
+            'role_id' => 1,
+            'email' => $request->email,
+        ]);
+
+        $nasabah->update([
+            'nis_nip' => $request->nis_nip,
+            'nama_nasabah' => $request->nama_lengkap,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'jurusan' => $request->jurusan,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'pendidikan' => $request->pendidikan,
+            'alamat' => $request->alamat,
+            'kelurahan' => $request->kelurahan,
+            'kecamatan' => $request->kecamatan,
+            'kab_kota' => $request->kab_kota,
+            'provinsi' => $request->provinsi,
+            'kode_pos' => $request->kode_pos,
+            'email' => $request->email,
+            'agama' => $request->agama,
+            'no_hp' => $request->no_hp,
+            'password' => Hash::make($request->password),
+            'jabatan' => $request->jabatan,
+            'jenis_identitas' => $request->jenis_identitas,
+            'nama_kontak_darurat' => $request->nama_kontak_darurat,
+            'alamat_kontak_darurat' => $request->alamat_kontak_darurat,
+            'no_hp_kontak_darurat' => $request->nomor_kontak_darurat,
+            'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
+        ]);
+
+        // $rekening->update([
+        //     'id' => $request->no_rekening,
+        //     'nasabah_id' => $dataNasabah->id,
+        //     'saldo_saat_ini' => 0,
+        //     'status_akun' => 'non-aktif',
+        // ]);
 
     }
 

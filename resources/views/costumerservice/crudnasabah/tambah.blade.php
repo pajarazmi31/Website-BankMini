@@ -31,7 +31,7 @@
                             <option value="PPLG">PPLG</option>
                             <option value="TJKT">TJKT</option>
                             <option value="AKL">AKL</option>
-                            <option value="MP">MPLB</option>
+                            <option value="MPLB">MPLB</option>
                             <option value="TKRO">TKRO</option>
                             <option value="DPIB">DPIB</option>
                             <option value="SK">SP</option>

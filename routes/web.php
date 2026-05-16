@@ -41,6 +41,8 @@ route::get('/customerservice/dashboard', [csController::class, 'index'])->name('
 Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
 Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah');
+Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
+Route::post('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
 
 });
 
