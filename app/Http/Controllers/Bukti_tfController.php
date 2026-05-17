@@ -19,7 +19,7 @@ class Bukti_tfController extends Controller
         'catatan' => 'required',
     ]);
 
-     $buktiPath = $request->file('bukti_foto')->store('bukti_fotos', 'public');
+    $buktiPath = $request->file('bukti_foto')->store('bukti_fotos', 'public');
 
     Bukti_Tf::create([
         'nama_pengirim' => $request->nama_pengirim,

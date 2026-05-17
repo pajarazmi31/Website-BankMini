@@ -51,7 +51,7 @@
                         <i class="ph ph-image text-4xl"></i>
                         <p class="text-[12px]">Bukti transfer belum diunggah</p>
                     </div>
-                    <img id="detail_bukti_img" src="{{ asset('storage/' . $item->bukti_foto) }}" alt="Bukti Transfer" class="hidden w-full h-full object-contain">
+                    <img id="detail_bukti_img" src="#" alt="Bukti Transfer" class="hidden w-full h-full object-contain">
                 </div>
             </div>
 

@@ -4,13 +4,21 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
+use App\Models\User;
 
 class superVisorController extends Controller
 {
     public function index() {
         $user = Auth::user();
         $super = $user->petugas;
-        return view('supervisor.dashboard', compact('user','super'));
+
+        // Total Nasabah
+        $nasabahTf = Bukti_Tf::all();
+        $nasabahTfPending = Bukti_Tf::where('status_verifikasi', 'pending')->get();
+        $totalNasabah = User::where('role_id', 1)->get()->count();
+
+        $totalPending = Bukti_Tf::where('status_verifikasi', 'pending')->count();
+        return view('supervisor.dashboard', compact('user','super', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending'));
     }
 
     public function verifikasi(){

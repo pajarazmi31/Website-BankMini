@@ -375,7 +375,7 @@
                         - method="POST": Menggunakan POST untuk mengirim data sensitif secara aman.
                         - enctype="multipart/form-data": WAJIB ada karena form ini mengunggah file gambar (bukti transfer).
                     -->
-                    <form action="{{ route('bukti_tf.transfer_luar') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+                    <form action="{{ route('bukti_tf.transfer_luar') }}" method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="alert('Data Berhasil Diinput')">
 
                         <!--
                             BAGIAN BACKEND: CSRF TOKEN

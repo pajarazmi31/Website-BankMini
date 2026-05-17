@@ -16,8 +16,9 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');
+// Logic Tf Luar
 
+Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');
 
 // nasabah
 Route::middleware(['role:nasabah'])->group(function () {
