@@ -11,6 +11,14 @@ use Illuminate\Http\Request;
 
 class rekeningController extends Controller
 {
+
+    public function keloladata() {
+        $user = Auth::user();
+        $cs = $user->petugas;
+        $allNasabah = Nasabah::with('rekening')->get();
+        return view('costumerservice.keloladata', compact('user','cs','allNasabah'));
+    }
+
     public function store(Request $request) {
         $request->validate([
             'nama_lengkap' => 'required',
@@ -89,7 +97,7 @@ class rekeningController extends Controller
     public function edit(String $id) {
         $user = Auth::user();
         $cs = $user->petugas;
-        $userNasabah = User::with('nasabah')->FindOrFail($id);
+        $userNasabah = User::with('nasabah.rekening')->findOrFail($id);
         return view('costumerservice.crudnasabah.edit', compact('user','cs','userNasabah'));
     }
 
@@ -98,7 +106,6 @@ class rekeningController extends Controller
         $request->validate([
             'nama_lengkap' => 'required',
             'nis_nip' => 'required',
-            'password' => 'required',
             'jurusan' => 'required',
             'tempat_lahir' => 'required',
             'tanggal_lahir' => 'required',
@@ -119,12 +126,12 @@ class rekeningController extends Controller
             'nomor_kontak_darurat' => 'required',
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
-            // 'no_rekening' => 'required',
+            'no_rekening' => 'required',
         ]);
 
         $user = User::FindOrFail($id);
         $nasabah = Nasabah::where('user_id',$user->id)->first();
-        // $rekening = Rekening::where('nasabah_id',$nasabah->id)->first();
+        $rekening = Rekening::where('nasabah_id',$nasabah->id)->first();
 
         $user->update([
             'name' => $request->nama_lengkap,
@@ -158,13 +165,25 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
         ]);
 
-        // $rekening->update([
-        //     'id' => $request->no_rekening,
-        //     'nasabah_id' => $dataNasabah->id,
-        //     'saldo_saat_ini' => 0,
-        //     'status_akun' => 'non-aktif',
-        // ]);
+        $rekening->update([
+            'id' => $request->no_rekening,
+        ]);
 
+        return redirect()->route('costumerservice.keloladata')->with('success','data nasabah berhasil di ubah');
+
+    }
+
+    public function destroy(String $id) {
+        $nasabah = Nasabah::FindOrFail($id);
+        $user = User::where('id', $nasabah->user_id)->first();
+        $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
+
+        $rekening->delete();
+        $nasabah->delete();
+        $user->delete();
+
+
+        return redirect()->route('costumerservice.keloladata')->with('success','data nasabah berhasil di hapus');
     }
 
 

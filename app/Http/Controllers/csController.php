@@ -15,12 +15,6 @@ class csController extends Controller
         return view('costumerservice.dashboard', compact('user','cs'));
     }
 
-    public function keloladata() {
-        $user = Auth::user();
-        $cs = $user->petugas;
-        $allNasabah = Nasabah::with('rekening')->get();
-        return view('costumerservice.keloladata', compact('user','cs','allNasabah'));
-    }
 
     public function detail(String $id) {
         $user = Auth::user();

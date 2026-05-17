@@ -25,13 +25,13 @@
         <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </div>
 
-    
+
     <!-- Section Title & Tabs -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 px-1 gap-4">
         <h3 class="text-[24px] font-bold text-gray-800">Pending Verifikasi</h3>
-        
+
         <div class="flex bg-gray-100 p-1 rounded-xl w-full sm:w-[300px]">
-            <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Registrasi</a>
+            <a href="{{ route('verifikasi.rekening') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Registrasi</a>
             <a href="{{ route('supervisor.verifikasi') }}" class="flex-1 px-4 py-2 bg-white rounded-lg shadow-sm text-brand-blue font-bold text-[13px] text-center transition-all">Transfer</a>
         </div>
     </div>
@@ -175,11 +175,11 @@
         document.getElementById('detail_nominal').value = nominal;
         document.getElementById('detail_rek_penerima').value = rek;
         document.getElementById('detail_telepon').value = telp;
-        
+
         // Dummy data untuk field tambahan
         document.getElementById('detail_tanggal').value = '12 Mei 2024, 14:30';
         document.getElementById('detail_catatan').value = 'Pembayaran uang praktikum RPL Semester Genap.';
-        
+
         switchView('detail');
     }
 
@@ -208,7 +208,7 @@
                 activeView.classList.add('block');
             }
         }
-        
+
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>

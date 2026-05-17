@@ -74,9 +74,13 @@
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
                                 </a>
-                                <button onclick="openDeleteModal(() => showToast('Data Nasabah Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
+                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                        <button class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
+                                            <i class="ph-fill ph-trash text-[15px]"></i>
+                                        </button>
+                                </form>
                             </div>
                         </td>
                     </tr>

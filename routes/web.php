@@ -38,11 +38,12 @@ Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('tel
 Route::middleware(['role:customerservice'])->group(function () {
 
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
-Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
+Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
 Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah');
 Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
-Route::post('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
+Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
+Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
 
 });
 
@@ -62,10 +63,9 @@ Route::get('/supervisor/datapetugas', function () {
 Route::get('/supervisor/verifikasi', function () {
     return view('supervisor.verifikasi.transfer');
 })->name('supervisor.verifikasi');
-
-Route::get('/supervisor/verifikasi/registrasi', function () {
-    return view('supervisor.verifikasi.registrasirekening');
-})->name('supervisor.verifikasi.registrasi');
+Route::delete('/supervisor/hapus/{id}', [superVisorController::class, 'destroy'])->name('hapus.nasabah.super');
+Route::post('/supervisor/aktif/{id}', [superVisorController::class, 'aktif'])->name('rekening.aktif');
+Route::get('/supervisor/verifikasi/rekening/', [superVisorController::class, 'verifikasi'])->name('verifikasi.rekening');
 
 });
 /// logika login na
