@@ -122,10 +122,10 @@
             <h3 class="text-[12px] lg:text-[22px] font-bold text-gray-800">Semua Transaksi</h3>
         </div>
 
-        <div class="space-y-6">
-            <!--
-                BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG (TELLER)
-                - Lakukan looping foreach untuk 10 transaksi terakhir.
+        <div class="lg:space-y-5">
+            <!-- 
+                BAGIAN BACKEND: RIWAYAT TRANSAKSI (TELLER)
+                - Lakukan looping foreach untuk 5 transaksi terakhir per halaman.
             -->
             @php
                 $allTransactions5 = [

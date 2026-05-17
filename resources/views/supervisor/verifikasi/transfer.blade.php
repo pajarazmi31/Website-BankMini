@@ -1,7 +1,9 @@
 @extends('layouts.supervisor')
 
-@section('title', 'Supervisor - Verifikasi Transfer')
-@section('header_title', 'Selamat Datang, Supervisor!')
+@section('title','Supervisor Dashboard')
+@section('header_title')
+    Selamat Datang, {{ $supervisor->nama_petugas }}!
+@endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('styles')
@@ -37,7 +39,7 @@
     </div>
 
     <!-- Table Card -->
-    <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
+    <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col mb-5">
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>

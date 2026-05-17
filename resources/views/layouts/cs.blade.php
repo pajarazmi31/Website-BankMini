@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,14 +47,31 @@
         }
     </script>
     <style>
-        body { background-color: #f8f9fb; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        body {
+            background-color: #f8f9fb;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         @yield('styles')
     </style>
 </head>
+
 <body class="flex h-screen w-full overflow-hidden text-brand-textDark selection:bg-brand-blue selection:text-white relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -82,19 +100,19 @@
                 @php $route = Route::currentRouteName(); @endphp
                 <!-- Dashboard -->
                 <div class="relative">
-                    @if($route == 'costumerservice.dashboard')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    @if($route == 'cs.dashboard')
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
-                    <a href="{{ route('cs.dashboard') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'costumerservice.dashboard' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
-                        <i class="ph{{ $route == 'costumerservice.dashboard' ? '-fill' : '' }} ph-gauge text-[22px] {{ $route == 'costumerservice.dashboard' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
-                        <span class="text-[14px] {{ $route == 'costumerservice.dashboard' ? '' : 'group-hover:text-gray-600' }}">Dashboard</span>
+                    <a href="{{ route('cs.dashboard') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'cs.dashboard' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
+                        <i class="ph{{ $route == 'cs.dashboard' ? '-fill' : '' }} ph-gauge text-[22px] {{ $route == 'cs.dashboard' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
+                        <span class="text-[14px] {{ $route == 'cs.dashboard' ? '' : 'group-hover:text-gray-600' }}">Dashboard</span>
                     </a>
                 </div>
 
                 <!-- Kelola Data -->
                 <div class="relative">
                     @if($route == 'costumerservice.keloladata')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('costumerservice.keloladata') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'costumerservice.keloladata' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'costumerservice.keloladata' ? '-fill' : '' }} ph-identification-card text-[22px] {{ $route == 'costumerservice.keloladata' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -104,16 +122,16 @@
 
                 <!-- Keluar -->
                 <div class="px-6 mt-4">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
 
-                            <button
-                                type="submit"
-                                class="bg-red-500 text-white px-4 py-2 rounded"
-                            >
-                                Logout
-                            </button>
-                        </form>
+                        <button
+                            type="submit"
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
+                        </button>
+                    </form>
                 </div>
             </nav>
         </div>
@@ -262,4 +280,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>

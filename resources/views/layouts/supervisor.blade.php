@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -46,16 +47,39 @@
         }
     </script>
     <style>
-        body { background-color: #f8f9fb; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        .submenu-open { grid-template-rows: 1fr; }
-        .submenu-closed { grid-template-rows: 0fr; }
+        body {
+            background-color: #f8f9fb;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .submenu-open {
+            grid-template-rows: 1fr;
+        }
+
+        .submenu-closed {
+            grid-template-rows: 0fr;
+        }
+
         @yield('styles')
     </style>
 </head>
+
 <body class="flex h-screen w-full overflow-hidden text-brand-textDark selection:bg-brand-blue selection:text-white relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -82,14 +106,14 @@
 
             <nav class="flex-1 flex flex-col gap-1 w-full overflow-y-auto custom-scrollbar">
                 @php
-                    $route = Route::currentRouteName();
-                    $isKelolaData = str_contains($route, 'supervisor.datapetugas') || str_contains($route, 'supervisor.datanasabah');
+                $route = Route::currentRouteName();
+                $isKelolaData = str_contains($route, 'supervisor.datapetugas') || str_contains($route, 'supervisor.datanasabah');
                 @endphp
 
                 <!-- Dashboard -->
                 <div class="relative">
                     @if($route == 'supervisor.dashboard')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('supervisor.dashboard') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'supervisor.dashboard' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ $route == 'supervisor.dashboard' ? '-fill' : '' }} ph-gauge text-[22px] {{ $route == 'supervisor.dashboard' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -118,7 +142,7 @@
                 <!-- Verifikasi -->
                 <div class="relative">
                     @if($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi')
-                        <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
                     <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex items-center gap-3 px-6 py-3 {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
                         <i class="ph{{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? '-fill' : '' }} ph-folder text-[22px] {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
@@ -133,9 +157,9 @@
 
                         <button
                             type="submit"
-                            class="bg-red-500 text-white px-4 py-2 rounded"
-                        >
-                            Logout
+                            class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
+                            <span class="text-[14px]">Keluar</span>
                         </button>
                     </form>
                 </div>
@@ -163,11 +187,23 @@
                     <h2 class="text-[20px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[10px] md:text-[14px]">@yield('header_subtitle', 'Kelola pengawasan Bank Mini.')</p>
                 </div>
-                <div class="flex items-center gap-3">
-                    <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
-                    <div class="text-left">
-                        <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ auth()->user()->nama_petugas }}</p>
-                        <p class="text-[12px] text-gray-400 mt-0.5">{{  auth()->user()->email }}</p>
+                <div class="flex items-center gap-6">
+                    <!-- Search Bar (Standardized) -->
+                    @if(Route::currentRouteName() != 'supervisor.dashboard')
+                    <div id="searchBarContainer" class="relative hidden md:block">
+                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" placeholder="Cari data..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 transition-all">
+                    </div>
+                    @endif
+
+                    <div class="flex items-center gap-3">
+                        <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
+                        <div class="text-left">
+                            
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $supervisor->nama_petugas }}</p>
+                            
+                            <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -296,4 +332,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>
