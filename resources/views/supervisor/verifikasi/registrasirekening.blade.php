@@ -64,7 +64,9 @@
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50">
                             <div class="flex items-center justify-center gap-2">
-                                <button onclick="viewDetail('Pajar Azmi Anugraha', 'Siswa', '03-03-232410204', '0103232410204')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
+                                <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                </a>
                                 <form action="{{ route('rekening.aktif', $nasabah->rekening->id ) }}" method="post">
                                     @csrf
                                     <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>

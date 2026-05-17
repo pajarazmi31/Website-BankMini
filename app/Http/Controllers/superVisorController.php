@@ -50,4 +50,9 @@ class superVisorController extends Controller
 
         return redirect()->route('verifikasi.rekening')->with('success','data nasabah berhasil di hapus');
     }
+
+    public function detail(String $id) {
+        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+        return view('supervisor.verifikasi.registrasirekening.detail', compact('nasabah'));
+    }
 }

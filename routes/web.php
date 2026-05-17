@@ -63,6 +63,8 @@ Route::get('/supervisor/datapetugas', function () {
 Route::get('/supervisor/verifikasi', function () {
     return view('supervisor.verifikasi.transfer');
 })->name('supervisor.verifikasi');
+
+Route::get('/supervisor/detail/rekening/{id}', [superVisorController::class, 'detail'])->name('detail.rekening.super');
 Route::delete('/supervisor/hapus/{id}', [superVisorController::class, 'destroy'])->name('hapus.nasabah.super');
 Route::post('/supervisor/aktif/{id}', [superVisorController::class, 'aktif'])->name('rekening.aktif');
 Route::get('/supervisor/verifikasi/rekening/', [superVisorController::class, 'verifikasi'])->name('verifikasi.rekening');
