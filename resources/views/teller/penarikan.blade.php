@@ -40,42 +40,116 @@
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">No. Rekening</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nominal Rupiah</th>
+                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Tanggal</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Petugas</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-36 border-b border-gray-100">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                    @php
-                        $data = [
-                            ['no' => 1, 'nama' => 'Pajar Azmi Anugraha', 'rek' => '03-03-232410204', 'nominal' => 'Rp. 200.000', 'petugas' => 'Aditya'],
-                            ['no' => 2, 'nama' => 'Salsabila Rosi Cahyani', 'rek' => '03-03-232410243', 'nominal' => 'Rp. 10.000', 'petugas' => 'Dinar'],
-                            ['no' => 3, 'nama' => 'Anisa Siti Nur Fajriyanti', 'rek' => '03-03-232410229', 'nominal' => 'Rp. 150.000', 'petugas' => 'Fakih'],
-                            ['no' => 4, 'nama' => 'Yanto Supriyanto', 'rek' => '01-02-030081983', 'nominal' => 'Rp. 50.000', 'petugas' => 'Ali'],
-                            ['no' => 5, 'nama' => 'Ali Mahendra', 'rek' => '01-03-050081993', 'nominal' => 'Rp. 300.000', 'petugas' => 'Dinar'],
-                        ];
-                    @endphp
-                    @foreach($data as $d)
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['no'] }}.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['nama'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['rek'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-gray-800">{{ $d['nominal'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['petugas'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('{{ $d['nama'] }}', '{{ $d['rek'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('{{ $d['nama'] }}', '{{ $d['rek'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Penarikan Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
+                   @forelse($data as $index => $d)
+
+            <tr class="hover:bg-gray-50/50 transition-colors">
+
+                <td class="py-4 px-2 border-b border-gray-50">
+                    {{ $index + 1 }}.
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50">
+                    {{ $d->nama_penarik }}
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50">
+                    {{ $d->id_rekening }}
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
+                    Rp. {{ number_format($d->jumlah_penarikan, 0, ',', '.') }}
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50">
+                    {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y H:i') }}
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50">
+                    {{ $teller->nama_petugas }}
+                </td>
+
+                <td class="py-4 px-2 border-b border-gray-50 text-center">
+
+                    <div class="flex items-center justify-center gap-2">
+
+                        <button
+                            onclick="showDetail(
+                                '{{ $d->nama_penarik }}',
+                                '{{ $d->id_rekening }}',
+                                '{{ number_format($d->jumlah_penarikan,0,",",".") }}',
+                                '{{ $teller->nama_petugas }}'
+                            )"
+
+                            class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                            title="Lihat Detail">
+
+                            <i class="ph-fill ph-eye text-[15px]"></i>
+
+                        </button>
+
+                        <button
+                            onclick="editData(
+                                '{{ $d->id }}',
+                                '{{ $d->nama_penarik }}',
+                                '{{ $d->id_rekening }}',
+                                '{{ $d->jumlah_penarikan }}',
+                                '{{ $teller->nama_petugas }}'
+                            )"
+
+                            class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                            title="Edit">
+
+                            <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+
+                        </button>
+
+                <form
+                    action="{{ route('penarikan.delete', $d->id) }}"
+                    method="POST"
+                    onsubmit="return confirm('Yakin hapus data ini?')"
+                >
+
+                    @csrf
+                    @method('DELETE')
+
+                    <button
+                        type="submit"
+                        class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
+                        title="Hapus"
+                    >
+
+                        <i class="ph-fill ph-trash text-[15px]"></i>
+
+                    </button>
+
+                </form>
+
+                    </div>
+
+                </td>
+
+            </tr>
+
+            @empty
+
+            <tr>
+
+                <td colspan="6"
+                    class="py-8 text-center text-gray-400">
+
+                    Belum ada data penarikan
+
+                </td>
+
+            </tr>
+
+            @endforelse
                 </tbody>
             </table>
         </div>
@@ -123,19 +197,22 @@
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function showDetail(nama, rek, nominal, petugas) {
+    function showDetail(nama, rek, nominal, petugas){
         document.getElementById('detail_nama').value = nama;
         document.getElementById('detail_rek').value = rek;
-        document.getElementById('detail_nominal').value = nominal;
-        document.getElementById('detail_petugas').value = petugas;
+        document.getElementById('detail_nominal').value ='Rp. ' + nominal;
+        document.getElementById('detail_petugas').value =petugas;
         switchView('detail');
     }
 
-    function editData(nama, rek, nominal, petugas) {
+    function editData(id, nama, rek, nominal, petugas)
+    {
+        document.getElementById('edit_id').value = id;
         document.getElementById('edit_nama').value = nama;
         document.getElementById('edit_rek').value = rek;
         document.getElementById('edit_nominal').value = nominal;
         document.getElementById('edit_petugas').value = petugas;
+        document.getElementById('editForm').action = '/penarikan/update/' + id;
         switchView('edit');
     }
 </script>

@@ -25,14 +25,28 @@ Route::get('/nasabah/dashboard', [nasabahController::class, 'index'])->name('nas
 Route::get('/nasabah/transfer', [nasabahController::class, 'transfer'])->name('nasabah.transfer');
 
 });
+
 //teller
 Route::middleware(['role:teller'])->group(function () {
-
 Route::get('/teller/dashboard', [tellerController::class, 'index'])->name('teller.dashboard');
+//setoran
 Route::get('/teller/setoran', [tellerController::class, 'setoran'])->name('teller.setoran');
+Route::post('/teller/setoran/store', [tellerController::class, 'storeSetoran'])
+->name('setoran.store');
+Route::put('/setoran/{id}', [tellerController::class, 'updateSetoran'])
+->name('setoran.update');
+Route::delete('/setoran/{id}', [tellerController::class, 'destroySetoran'])
+->name('setoran.destroy');
+//penarikan
 Route::get('/teller/penarikan', [tellerController::class, 'penarikan'])->name('teller.penarikan');
+Route::post('/penarikan/store',[tellerController::class, 'storePenarikan'])
+->name('penarikan.store');
+Route::put('/penarikan/update/{id}',[tellerController::class, 'updatePenarikan'])
+->name('penarikan.update');
+Route::delete('/penarikan/delete/{id}',[tellerController::class, 'destroyPenarikan'])
+->name('penarikan.delete');
+//transfer
 Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('teller.transfer');
-
 });
 
 //customer service

@@ -40,42 +40,117 @@
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">No. Rekening</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nominal Rupiah</th>
+                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Tanggal</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Petugas</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-36 border-b border-gray-100">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                    @php
-                        $data = [
-                            ['no' => 1, 'nama' => 'Pajar Azmi Anugraha', 'rek' => '03-03-232410204', 'nominal' => 'Rp. 200.000', 'petugas' => 'Aditya'],
-                            ['no' => 2, 'nama' => 'Salsabila Rosi Cahyani', 'rek' => '03-03-232410243', 'nominal' => 'Rp. 10.000', 'petugas' => 'Dinar'],
-                            ['no' => 3, 'nama' => 'Anisa Siti Nur Fajriyanti', 'rek' => '03-03-232410229', 'nominal' => 'Rp. 50.000', 'petugas' => 'Fakih'],
-                            ['no' => 4, 'nama' => 'Yanto Supriyanto', 'rek' => '01-02-030081983', 'nominal' => 'Rp. 1.000.000', 'petugas' => 'Ali'],
-                            ['no' => 5, 'nama' => 'Ali Mahendra', 'rek' => '01-03-050081993', 'nominal' => 'Rp. 25.000', 'petugas' => 'Dinar'],
-                        ];
-                    @endphp
-                    @foreach($data as $d)
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['no'] }}.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['nama'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['rek'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-gray-800">{{ $d['nominal'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['petugas'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('{{ $d['nama'] }}', '{{ $d['rek'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('{{ $d['nama'] }}', '{{ $d['rek'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Setoran Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
+        @forelse($data as $index => $d)
+        <tr class="hover:bg-gray-50/50 transition-colors">
+
+            <td class="py-4 px-2 border-b border-gray-50">
+                {{ $index + 1 }}.
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50">
+                {{ $d->nama_lengkap }}
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50">
+                {{ $d->id_rekening }}
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
+                Rp. {{ number_format($d->jumlah_penyetoran, 0, ',', '.') }}
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50">
+                {{ \Carbon\Carbon::parse($d->datetime_tgl)->format('d/m/Y H:i') }}
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50">
+                {{ $teller->nama_petugas }}
+            </td>
+
+            <td class="py-4 px-2 border-b border-gray-50 text-center">
+
+                <div class="flex items-center justify-center gap-2">
+
+                    <button
+                        onclick="showDetail(
+                            '{{ $teller->nama_petugas }}',
+                            '{{ $d->nama_lengkap }}',
+                            '{{ $d->id_rekening }}',
+                            '{{ $d->setoran }}',
+                            '{{ $d->mata_uang }}',
+                            '{{ $d->jumlah_penyetoran }}',
+                            '{{ $d->uang_terbilang }}',
+                            '{{ $d->nama_penyetor }}',
+                            '{{ $d->no_hp_penyetor }}',
+                            '{{ $d->alamat_penyetor }}',
+                            '{{ $d->biaya_transaksi }}',
+                            '{{ $d->total_biaya }}',
+                            '{{ $d->catatan }}'
+                            )"
+                        class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                        title="Lihat Detail">
+
+                        <i class="ph-fill ph-eye text-[15px]"></i>
+
+                    </button>
+
+                <button
+                    onclick='editData(
+                        "{{ $d->id }}",
+                        "{{ $d->nama_lengkap }}",
+                        "{{ $d->id_rekening }}",
+                        "{{ $d->setoran }}",
+                        "{{ $d->mata_uang }}",
+                        "{{ $d->jumlah_penyetoran }}",
+                        "{{ $d->uang_terbilang }}",
+                        "{{ $d->nama_penyetor }}",
+                        "{{ $d->no_hp_penyetor }}",
+                        "{{ $d->alamat_penyetor }}",
+                        "{{ $d->biaya_transaksi }}",
+                        "{{ $d->total_biaya }}",
+                        "{{ $d->catatan }}",
+                        "{{ $teller->nama_petugas }}"
+                    )'
+                    class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                    title="Edit">
+
+                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+
+                </button>
+
+                <form action="{{ route('setoran.destroy', $d->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+
+                    <button
+                        type="submit"
+                        onclick="return confirm('Yakin ingin menghapus data ini?')"
+                        class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
+                        title="Hapus">
+
+                        <i class="ph-fill ph-trash text-[15px]"></i>
+
+                    </button>
+                </form>
+
+                </div>
+
+            </td>
+
+        </tr>
+                    @empty
+            <tr>
+                <td colspan="7" class="py-10 text-center text-gray-400 font-medium">
+                    Tidak ada data setoran
+                </td>
+            </tr>
+            @endforelse
                 </tbody>
             </table>
         </div>
@@ -123,20 +198,87 @@
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function showDetail(nama, rek, nominal, petugas) {
-        document.getElementById('detail_nama').value = nama;
-        document.getElementById('detail_rek').value = rek;
-        document.getElementById('detail_nominal').value = nominal;
-        document.getElementById('detail_petugas').value = petugas;
-        switchView('detail');
+    function showDetail(petugas, namalengkap, rek, setoran, mataUang, nominal, terbilang, namapenyetor, noHp, alamat, totaltransaksi, totalbiaya, catatan) {
+
+    const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val;
+    };
+
+    //data penyetoran
+    setVal('detail_petugas', petugas);
+    setVal('detail_nama_lengkap', namalengkap);
+    setVal('detail_rek', rek);
+    setVal('detail_setoran', setoran);
+    setVal('detail_mata_uang', mataUang);
+    setVal('detail_nominal', nominal);
+    setVal('detail_terbilang', terbilang);
+    
+    //data penyetor
+    setVal('detail_nama_penyetor', namapenyetor);
+    setVal('detail_no_hp', noHp);
+    setVal('detail_alamat', alamat);
+
+    //data transaksi
+    setVal('detail_biaya_transaksi', totaltransaksi);
+    setVal('detail_total_biaya', totalbiaya);
+    setVal('detail_catatan', catatan);
+    switchView('detail');
     }
 
-    function editData(nama, rek, nominal, petugas) {
-        document.getElementById('edit_nama').value = nama;
-        document.getElementById('edit_rek').value = rek;
-        document.getElementById('edit_nominal').value = nominal;
-        document.getElementById('edit_petugas').value = petugas;
-        switchView('edit');
-    }
+        function editData(
+            id,
+            nama,
+            rek,
+            setoran,
+            mataUang,
+            nominal,
+            terbilang,
+            namaPenyetor,
+            noHp,
+            alamat,
+            biaya,
+            totalBiaya,
+            catatan,
+            petugas
+        ) {
+
+            const setVal = (id, value) => {
+                const el = document.getElementById(id);
+
+                if (el) {
+                    el.value = value ?? '';
+                }
+            };
+
+            // action form
+            const form = document.getElementById('editForm');
+
+            if (form) {
+                form.action = `/setoran/${id}`;
+            }
+
+            // data utama
+            setVal('edit_id', id);
+            setVal('edit_nama', nama);
+            setVal('edit_rek', rek);
+            setVal('edit_setoran', setoran);
+            setVal('edit_mata_uang', mataUang);
+            setVal('edit_nominal', nominal);
+            setVal('edit_terbilang', terbilang);
+            setVal('edit_petugas', petugas);
+
+            // penyetor
+            setVal('edit_penyetor', namaPenyetor);
+            setVal('edit_nohp', noHp);
+            setVal('edit_alamat', alamat);
+
+            // transaksi
+            setVal('edit_biaya', biaya);
+            setVal('edit_total', totalBiaya);
+            setVal('edit_catatan', catatan);
+
+            switchView('edit');
+        }
 </script>
 @endsection
