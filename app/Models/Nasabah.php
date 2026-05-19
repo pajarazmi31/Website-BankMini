@@ -2,6 +2,7 @@
 
 namespace App\Models;
 use App\Models\Rekening;
+use App\Models\Jurusan;
 use Illuminate\Database\Eloquent\Model;
 
 class Nasabah extends Model
@@ -41,5 +42,9 @@ class Nasabah extends Model
 
     public function rekening() {
         return $this->HasOne(Rekening::class);
+    }
+
+    public function jurusan() {
+        return $this->belongsTo(Jurusan::class);
     }
 }

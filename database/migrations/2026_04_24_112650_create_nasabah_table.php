@@ -18,7 +18,7 @@ return new class extends Migration
             $table->String('nama_nasabah');
             $table->String('tempat_lahir', 50);
             $table->Date('tanggal_lahir');
-            $table->Enum('jurusan',['TKRO','TJKT','PPLG','MPLB','DPIB','AKL','SK']);
+            $table->Enum('jurusan',['1','2','3','4','5','6','7']);
             $table->Enum('jenis_kelamin',['Laki-Laki','Perempuan']);
             $table->Enum('pendidikan',['SD','SMP','SMA','SMK','S1','S2','S3','D1','D2','D3']);
             $table->Text('alamat');

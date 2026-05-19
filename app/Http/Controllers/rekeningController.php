@@ -8,6 +8,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class rekeningController extends Controller
 {
@@ -44,7 +45,7 @@ class rekeningController extends Controller
             'nomor_kontak_darurat' => 'required',
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
-            'no_rekening' => 'required',
+            // 'no_rekening' => 'required',
         ]);
 
         // $roleNasabah = Role::where('nama_role', 'nasabah')->first();
@@ -83,8 +84,25 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
         ]);
 
+
+        if ( $request->jabatan == 'Siswa' ) {
+            $no_rekening = 03 . $request->jurusan . $request->nis_nip;
+        }
+
+        if ( $request->jabatan == 'Guru' ) {
+            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+            $urutan = Nasabah::where('jabatan', 'Guru')->count() + 1;
+            $no_rekening = 01 . $urutan . $tanggal;
+        }
+
+        if ( $request->jabatan == 'TU' ) {
+            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+            $urutan = Nasabah::where('jabatan', 'TU')->count() + 1;
+            $no_rekening = 02 . $urutan . $tanggal;
+        }
+
         Rekening::create([
-            'id' => $request->no_rekening,
+            'id' => $no_rekening,
             'nasabah_id' => $dataNasabah->id,
             'saldo_saat_ini' => 0,
             'status_akun' => 'non-aktif',

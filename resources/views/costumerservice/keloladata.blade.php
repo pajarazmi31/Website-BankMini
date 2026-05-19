@@ -98,7 +98,9 @@
 <!-- ================= CRUD VIEWS (Separated Files) ================= -->
 @include('costumerservice.crudnasabah.tambah')
 @include('costumerservice.crudnasabah.edit')
-@include('costumerservice.crudnasabah.detail')
+@if(isset($nasabah))
+    @include('costumerservice.crudnasabah.detail')
+@endif
 
 @endsection
 

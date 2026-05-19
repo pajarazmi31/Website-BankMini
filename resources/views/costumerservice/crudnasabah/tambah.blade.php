@@ -28,13 +28,13 @@
                                 onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
                         >
                             <option value="" disabled selected>Pilih Jurusan</option>
-                            <option value="PPLG">PPLG</option>
-                            <option value="TJKT">TJKT</option>
-                            <option value="AKL">AKL</option>
-                            <option value="MPLB">MPLB</option>
-                            <option value="TKRO">TKRO</option>
-                            <option value="DPIB">DPIB</option>
-                            <option value="SK">SP</option>
+                            <option value="1">TKRO</option>
+                            <option value="2">TJKT</option>
+                            <option value="3">PPLG</option>
+                            <option value="4">DPIB</option>
+                            <option value="5">MPLB</option>
+                            <option value="6">AKL</option>
+                            <option value="7">SK</option>
                         </select>
                     </div>
                     <div>
@@ -171,7 +171,7 @@
             </div>
 
             <!-- SECTION 3: DATA REKENING -->
-            <div class="mb-10">
+            {{-- <div class="mb-10">
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                     <h3 class="text-[20px] font-bold text-gray-800">Data Rekening</h3>
@@ -181,12 +181,12 @@
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
                         <input type="number" name="no_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
-                    {{-- <div>
+                    <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
                         <input type="text" name="status_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div> --}}
+                    </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- BUTTONS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">

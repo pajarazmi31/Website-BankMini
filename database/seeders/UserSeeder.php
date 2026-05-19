@@ -41,7 +41,7 @@ class UserSeeder extends Seeder
             'nama_nasabah' => 'Budi',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
+            'jurusan' => '3',
             'jenis_kelamin' => 'Laki-Laki',
             'pendidikan' => 'SMA',
             'alamat' => 'sindangraja',
