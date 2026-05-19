@@ -22,8 +22,10 @@ class superVisorController extends Controller
     }
 
     public function verifikasi(){
+        $user = Auth::user();
+        $super = $user->petugas;
         $bukti_tf = Bukti_Tf::all();
-        return view('supervisor.verifikasi.transfer', compact('bukti_tf'));
+        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super'));
     }
 
     public function detail($id){
@@ -47,4 +49,26 @@ class superVisorController extends Controller
 
             return redirect()->back()->with('success', 'Status berhasil diperbarui!');
     }
+
+    public function registrasiRekening(){
+        $user = Auth::user();
+        $super = $user->petugas;
+
+        return view('supervisor.verifikasi.registrasirekening', compact('user' ,'super'));
+    }
+
+        public function dataPetugas(){
+        $user = Auth::user();
+        $super = $user->petugas;
+
+        return view('supervisor.datapetugas', compact('user' ,'super'));
+    }
+
+        public function dataNasabah(){
+        $user = Auth::user();
+        $super = $user->petugas;
+
+        return view('supervisor.datanasabah', compact('user' ,'super'));
+    }
+
 }

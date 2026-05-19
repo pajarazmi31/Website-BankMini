@@ -50,23 +50,15 @@ Route::middleware(['role:supervisor'])->group(function () {
 
 route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 
-Route::get('/supervisor/datanasabah', function () {
-    return view('supervisor.datanasabah');
-})->name('supervisor.datanasabah');
-
-Route::get('/supervisor/datapetugas', function () {
-    return view('supervisor.datapetugas');
-})->name('supervisor.datapetugas');
+Route::get('/supervisor/datapetugas', [superVisorController::class, 'dataPetugas'])->name('supervisor.datapetugas');
+Route::get('/supervisor/datanasabah', [superVisorController::class, 'dataNasabah'])->name('supervisor.datanasabah');
 
 //View Verifikasi Tf
 Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasi'])->name('supervisor.verifikasi');
-
 // logika verifikasi Tf
 Route::patch('/supervisor/verifikasi/status{id}', [superVisorController::class, 'verifikasiTf'])->name('supervisor.verifikasiTf');
 
-Route::get('/supervisor/verifikasi/registrasi', function () {
-    return view('supervisor.verifikasi.registrasirekening');
-})->name('supervisor.verifikasi.registrasi');
+Route::get('/supervisor/verifikasi/registrasi', [superVisorController::class, 'registrasiRekening'])->name('supervisor.verifikasi.registrasi');
 
 });
 /// logika login na

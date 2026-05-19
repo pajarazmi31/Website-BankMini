@@ -200,7 +200,7 @@
                         <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                         <div class="text-left">
                             
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $supervisor->nama_petugas }}</p>
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $super->nama_petugas }}</p>
                             
                             <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                         </div>
