@@ -443,10 +443,10 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
-                                <input type="text" name="no_rekening_penerima" value="{{ old('no_rekening_penerima') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_rekening_penerima') ? 'border-red-500' : 'border-gray-200' }}"
+                                <input type="text" name="id_rekening" value="{{ old('id_rekening') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('id_rekening') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nomor rekening">
-                                @error('no_rekening_penerima')
+                                @error('id_rekening')
                                     <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
@@ -462,8 +462,8 @@
                             <!-- Kolom: Jumlah Transfer -->
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Jumlah Transfer</label>
-                                <!-- BAGIAN BACKEND: INPUT JUMLAH TRANSFER -->
-                                <input type="number" name="jumlah_transfer" value="{{ old('jumlah_transfer') }}"
+                                <!-- BAGIAN BACKEND: INPUT JUMLAH TRANSFER (Diubah ke type="text" & ditambah id) -->
+                                <input type="text" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('jumlah_transfer') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="0">
                                 @error('jumlah_transfer')
@@ -689,6 +689,37 @@
                     }
                 });
             });
+        });
+
+        const inputTransfer = document.getElementById('jumlah_transfer');
+
+        // Fungsi untuk memformat angka menjadi format ribuan dengan titik
+        function formatRupiah(angka) {
+            // Hapus semua karakter selain angka
+            let numberString = angka.replace(/[^,\d]/g, '').toString();
+            let split = numberString.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        }
+
+        // Event saat pengguna mengetik
+        inputTransfer.addEventListener('keyup', function(e) {
+            this.value = formatRupiah(this.value);
+        });
+
+        // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (inputTransfer.value) {
+                inputTransfer.value = formatRupiah(inputTransfer.value);
+            }
         });
     </script>
 </body>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
+use App\Models\Rekening;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
 class superVisorController extends Controller
@@ -13,12 +15,13 @@ class superVisorController extends Controller
         $super = $user->petugas;
 
         // Total Nasabah
+        $totalNasabah = User::where('role_id', 1)->get()->count();
         $nasabahTf = Bukti_Tf::all();
         $nasabahTfPending = Bukti_Tf::where('status_verifikasi', 'pending')->get();
-        $totalNasabah = User::where('role_id', 1)->get()->count();
+        $totalSaldoTabungan = Bukti_Tf::where('status_verifikasi', 'berhasil')->sum('jumlah_transfer');
 
         $totalPending = Bukti_Tf::where('status_verifikasi', 'pending')->count();
-        return view('supervisor.dashboard', compact('user','super', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending'));
+        return view('supervisor.dashboard', compact('user','super', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan'));
     }
 
     public function verifikasi(){
@@ -34,22 +37,56 @@ class superVisorController extends Controller
         return view('supervisor.verifikasi.transfer.detail', compact('data'));
     }
 
-    public function verifikasiTf(Request $request, $id){
-            $data = Bukti_Tf::findOrFail($id);
+    public function verifikasiTf(Request $request, $id)
+    {
+        // 1. Cari data bukti transfer berdasarkan ID-nya
+        $data = Bukti_Tf::findOrFail($id);
 
-            // LOGIKA KUNCI: Cek apakah status sudah pernah diproses
-            if ($data->status_verifikasi !== 'pending') {
-                return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya dan tidak bisa diubah lagi.');
-            }
+        // 2. Kunci Status: Jika sudah 'berhasil' atau 'gagal', jangan diproses lagi
+        if ($data->status_verifikasi !== 'pending') {
+            return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
+        }
 
-            // Jika masih pending, maka lanjutkan update
-            $data->update([
-                'status_verifikasi' => $request->status_verifikasi // 'disetujui' atau 'tolak'
-            ]);
+        // 3. Validasi input tombol (berhasil/gagal)
+        $request->validate([
+            'status_verifikasi' => 'required|in:berhasil,gagal'
+        ]);
 
-            return redirect()->back()->with('success', 'Status berhasil diperbarui!');
+        try {
+            // Jalankan Database Transaction untuk keamanan mutasi saldo
+            DB::transaction(function () use ($request, $data) {
+                
+                if ($request->status_verifikasi === 'berhasil') {
+                    
+                    // MENCARI REKENING:
+                    // Kita tembak kolom 'id' di tabel rekening menggunakan nilai yang tersimpan 
+                    // di kolom 'no_rekening_penerima' pada tabel Bukti_Tf.
+                    $rekening = Rekening::where('id', $data->id_rekening)->first();
+
+                    if (!$rekening) {
+                        throw new \Exception('Nomor rekening tujuan (' . $data->id_rekening . ') tidak ditemukan di sistem.');
+                    }
+
+                    // Tambahkan saldo ke kolom 'saldo_saat_ini' di tabel rekening
+                    $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+                }
+
+                // 4. Update status verifikasi transaksi menjadi 'berhasil' atau 'gagal'
+                $data->status_verifikasi = $request->status_verifikasi;
+                $data->save();
+            });
+
+            $pesan = $request->status_verifikasi === 'berhasil' 
+                ? 'Transaksi berhasil disetujui, saldo masuk ke rekening tujuan!' 
+                : 'Transaksi telah ditolak.';
+
+            return redirect()->back()->with('success', $pesan);
+
+        } catch (\Exception $e) {
+            // Jika ada eror di dalam blok DB::transaction, saldo batal bertambah
+            return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
+        }
     }
-
     public function registrasiRekening(){
         $user = Auth::user();
         $super = $user->petugas;
