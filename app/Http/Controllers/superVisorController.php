@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
 use App\Models\Rekening;
+use App\Exports\BuktiTfExport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 
@@ -42,6 +44,12 @@ class superVisorController extends Controller
         })->get();
 
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
+    }
+
+    public function exportExcel() 
+    {
+    // Mengunduh file dengan nama 'laporan-transfer-supervisor.xlsx'
+    return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
     }
 
     public function detail($id){
@@ -100,6 +108,7 @@ class superVisorController extends Controller
             return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
         }
     }
+
     public function registrasiRekening(){
         $user = Auth::user();
         $super = $user->petugas;

@@ -40,6 +40,16 @@
 
         <!-- Table Card -->
         <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col mb-5">
+            @if ($bukti_tf->isNotEmpty())            
+            <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-50">
+                <span class="text-[14px] text-gray-500 font-medium"></span>
+                
+                <a href="{{ route('supervisor.exportTransfer') }}" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[12px] font-semibold rounded-lg shadow-sm transition-all">
+                    <i class="ph ph-file-arrow-up text-base"></i>
+                    Export Excel
+                </a>
+            </div>
+            @endif
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
