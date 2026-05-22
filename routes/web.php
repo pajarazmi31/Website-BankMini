@@ -18,7 +18,6 @@ Route::get('/', function () {
 });
 
 // Logic Tf Luar
-
 Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');
 
 // nasabah
@@ -61,6 +60,11 @@ Route::get('/supervisor/datanasabah', [superVisorController::class, 'dataNasabah
 
 //View Verifikasi Tf
 Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasi'])->name('supervisor.verifikasi');
+Route::get('/admin/produk/search', [superVisorController::class, 'searchData'])->name('supervisor.searchData');
+
+// Export Data Tf
+Route::get('/supervisor/export-transfer', [superVisorController::class, 'exportExcel'])->name('supervisor.exportTransfer');
+
 // logika verifikasi Tf
 Route::patch('/supervisor/verifikasi/status{id}', [superVisorController::class, 'verifikasiTf'])->name('supervisor.verifikasiTf');
 

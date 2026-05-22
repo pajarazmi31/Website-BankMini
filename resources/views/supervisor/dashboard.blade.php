@@ -14,8 +14,8 @@
     <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Tabungan</p>
-            {{-- BACKEND: {{ number_format($totalSaldo, 0, ',', '.') }} --}}
-            <h3 class="text-[24px] md:text-[28px] font-bold">Rp. 1.100.500.000</h3>
+            {{-- BACKEND:  --}}
+            <h3 class="text-[24px] md:text-[28px] font-bold">Rp. {{ number_format($totalSaldoTabungan, 0, ',', '.') }}</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
@@ -44,8 +44,11 @@
     <div class="lg:col-span-2 flex flex-col gap-3.5">
         <div class="flex justify-between items-end mb-1 px-1">
             <h3 class="text-[20px] font-bold text-gray-800">Pending Verifikasi</h3>
+            @if ($nasabahTfPending->isNotEmpty())
             <button onclick="switchView('history')" class="text-[13px] font-bold text-gray-500 hover:text-brand-blue transition-colors">Lihat Semua</button>
+            @endif
         </div>
+            
 
       <div class="flex flex-col gap-3">
     @forelse ($nasabahTfPending as $item)
@@ -84,7 +87,7 @@
 
         <div class="flex flex-col gap-7">
             <!-- Item 1 -->
-            <div class="flex items-center justify-between group cursor-pointer" onclick="window.location.href='{{ route('supervisor.verifikasi') }}'">
+            <div class="flex items-center justify-between group cursor-pointer" onclick="window.location.href='{{ route('supervisor.verifikasi.registrasi') }}'">
                 <div class="flex items-center gap-5">
                     <div class="w-2.5 h-2.5 rounded-full bg-[#dc2626] shadow-[0_0_8px_rgba(220,38,38,0.4)]"></div>
                     <div>
