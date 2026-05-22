@@ -2,7 +2,7 @@
 
 @section('title', 'Customer Service - Kelola Data')
 @section('header_title')
-    selamat datang {{ $cs->nama_petugas }}!
+    selamat datang {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 

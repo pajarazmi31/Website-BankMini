@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'nasabah_id',
         'petugas_id',
-        'role',
+        'role_id',
         'email',
         'password',
     ];

@@ -193,7 +193,7 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[42px] text-brand-blue"></i>
                         <div class="flex flex-col">
-                            <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">{{ $teller->nama_petugas }}</p>
+                            <p class="font-bold text-[15px] text-gray-800 leading-none mb-1">{{ $user->name }}</p>
                             <p class="text-[13px] text-gray-400 font-medium">{{ $user->email }}</p>
                         </div>
                     </div>

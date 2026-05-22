@@ -163,7 +163,7 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                         <div class="text-left">
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $cs->nama_petugas }}</p>
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $user->name }}</p>
                             <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
 
 @section('title', 'Customer Service - Dashboard')
 @section('header_title')
-    Selamat Datang, {{ $cs->nama_petugas }}!
+    Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 

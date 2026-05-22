@@ -199,9 +199,9 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                         <div class="text-left">
-                            
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $super->nama_petugas }}</p>
-                            
+
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $user->name }}</p>
+
                             <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>
@@ -246,7 +246,7 @@
             </div>
         </div>
     </div>
-
+    <script src="{{ asset('js/datapetugas/edit.js') }}"></script>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -272,9 +272,9 @@
             const toast = document.getElementById('toastAlert');
             const toastMsg = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
-            
+
             toastMsg.textContent = message;
-            
+
             // Set colors based on type
             if (type === 'error') {
                 toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
@@ -304,7 +304,7 @@
             const confirmBtn = document.getElementById('btnConfirmDelete');
 
             modal.classList.replace('hidden', 'flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 content.classList.replace('scale-95', 'scale-100');
@@ -318,13 +318,25 @@
             };
         }
 
+        function hapusPetugas(id) {
+
+            // Ambil form delete
+            const form = document.getElementById('formDeletePetugas');
+
+            // Set action sesuai ID
+            form.action = `/datapetugas/delete/${id}`;
+
+            // Submit form
+            form.submit();
+        }
+
         function closeDeleteModal() {
             const modal = document.getElementById('deleteModal');
             const content = document.getElementById('deleteModalContent');
 
             content.classList.replace('scale-100', 'scale-95');
             content.classList.replace('opacity-100', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.replace('flex', 'hidden');
             }, 300);

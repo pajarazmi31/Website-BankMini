@@ -7,6 +7,7 @@ use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
 use App\Http\Controllers\csController;
+use App\Http\Controllers\supervisor\DataPetugasController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -45,12 +46,17 @@ Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->
 
 });
 
-//super visor
+    //ROLE SUPERVISOR
 Route::middleware(['role:supervisor'])->group(function () {
 
 route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 
-Route::get('/supervisor/datapetugas', [superVisorController::class, 'dataPetugas'])->name('supervisor.datapetugas');
+// data petugas
+Route::get('/supervisor/datapetugas', [DataPetugasController::class, 'index'])->name('supervisor.datapetugas');
+Route::post('/datapetugas/store', [DataPetugasController::class, 'store'])->name('datapetugas.store');
+Route::put('/datapetugas/update/{id}', [DataPetugasController::class, 'update'])->name('datapetugas.update');
+Route::delete('/datapetugas/delete/{id}', [DataPetugasController::class, 'destroy'])->name('datapetugas.destroy');
+
 Route::get('/supervisor/datanasabah', [superVisorController::class, 'dataNasabah'])->name('supervisor.datanasabah');
 
 //View Verifikasi Tf
