@@ -189,11 +189,21 @@
                 </div>
                 <div class="flex items-center gap-6">
                     <!-- Search Bar (Standardized) -->
-                    @if(Route::currentRouteName() != 'supervisor.dashboard')
-                    <div id="searchBarContainer" class="relative hidden md:block">
-                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="text" placeholder="Cari data..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 transition-all">
-                    </div>
+                    @if(Route::currentRouteName('supervisor.searchData') != 'supervisor.dashboard')
+                        <div class="hidden md:flex items-center gap-2">
+                            <form action="{{ route('supervisor.searchData') }}" method="get" class="flex gap-2 items-center">
+                                <div class="relative">
+                                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                                    <input type="text" placeholder="Cari data..."
+                                        value="{{ request('keyword') }}" name="keyword"
+                                        class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                                </div>
+                                
+                                <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                                    <i class="ph ph-magnifying-glass text-lg"></i>
+                                </button>
+                            </form>
+                        </div>
                     @endif
 
                     <div class="flex items-center gap-3">

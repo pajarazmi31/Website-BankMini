@@ -21,7 +21,8 @@ class Bukti_Tf extends Model
         'catatan',
     ]);
 
-    public function buktiTf(){
+    public function buktiTf()
+    {
         return $this->belongsTo(Rekening::class, 'id_rekening', 'id');
     }
 }

@@ -120,7 +120,7 @@
                                     </tr>
                                     @empty 
                                     <tr class="hover:bg-gray-50/50 transition-colors">
-                                        <td class="py-4 px-2 border-b text-gray-500 text-center border-gray-50" colspan="7">Maaf Data Kosong</td>
+                                        <td class="py-4 px-2 border-b text-gray-500 border-gray-50" colspan="7">Maaf Data Kosong</td>
                                     </tr>
                                     @endforelse
                     </tbody>

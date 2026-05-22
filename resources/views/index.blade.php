@@ -375,7 +375,7 @@
                         - method="POST": Menggunakan POST untuk mengirim data sensitif secara aman.
                         - enctype="multipart/form-data": WAJIB ada karena form ini mengunggah file gambar (bukti transfer).
                     -->
-                    <form action="{{ route('bukti_tf.transfer_luar') }}" method="POST" enctype="multipart/form-data" class="space-y-6" onsubmit="alert('Data Berhasil Diinput')">
+                    <form action="{{ route('bukti_tf.transfer_luar') }}" method="POST" enctype="multipart/form-data" class="space-y-6" id="form-transfer">
 
                         <!--
                             BAGIAN BACKEND: CSRF TOKEN
@@ -417,7 +417,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nama Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT NAMA PENERIMA -->
-                                <input type="text" name="nama_penerima" value="{{ old('nama_penerima') }}"
+                                <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_penerima') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Nama lengkap penerima">
                                 @error('nama_penerima')
@@ -443,7 +443,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
                                 <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
-                                <input type="text" name="id_rekening" value="{{ old('id_rekening') }}"
+                                <input type="text" id="id_rekening" name="id_rekening" value="{{ old('id_rekening') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('id_rekening') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Masukkan nomor rekening">
                                 @error('id_rekening')
@@ -516,7 +516,7 @@
                                 BAGIAN BACKEND: TOMBOL SUBMIT
                                 - Memicu pengiriman form ke server.
                             -->
-                            <button type="submit" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-md text-lg font-bold text-white bg-button-gradient hover:bg-opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-merek-hijau transition transform active:scale-[0.98]">
+                            <button type="submit" id="btn-kirim" name="btn_kirim" class="w-full flex justify-center py-4 px-4 border border-transparent rounded-xl shadow-md text-lg font-bold text-white bg-button-gradient hover:bg-opacity-95 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-merek-hijau transition transform active:scale-[0.98]">
                                 Kirim
                             </button>
                         </div>

@@ -16,7 +16,7 @@ class superVisorController extends Controller
 
         // Total Nasabah
         $totalNasabah = User::where('role_id', 1)->get()->count();
-        $nasabahTf = Bukti_Tf::all();
+        $nasabahTf = Bukti_Tf::latest()->get();
         $nasabahTfPending = Bukti_Tf::where('status_verifikasi', 'pending')->get();
         $totalSaldoTabungan = Bukti_Tf::where('status_verifikasi', 'berhasil')->sum('jumlah_transfer');
 
@@ -24,11 +24,24 @@ class superVisorController extends Controller
         return view('supervisor.dashboard', compact('user','super', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan'));
     }
 
+    
     public function verifikasi(){
         $user = Auth::user();
         $super = $user->petugas;
-        $bukti_tf = Bukti_Tf::all();
+        $bukti_tf = Bukti_Tf::latest()->get();
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super'));
+        }
+
+    public function searchData(Request $request){
+        $user = Auth::user();
+        $super = $user->petugas;
+        $keyword = $request->keyword;
+        $bukti_tf = Bukti_Tf::when($keyword, function ($query, $keyword) {
+            return $query->where('nama_penerima', 'LIKE', '%' . $keyword . '%')
+                                ->orWhere('id_rekening', 'like', '%' . $keyword .'%');;
+        })->get();
+
+        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
     }
 
     public function detail($id){

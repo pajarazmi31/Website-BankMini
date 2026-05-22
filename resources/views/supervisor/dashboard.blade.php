@@ -15,7 +15,7 @@
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Tabungan</p>
             {{-- BACKEND:  --}}
-            <h3 class="text-[24px] md:text-[28px] font-bold">{{ number_format($totalSaldoTabungan, 0, ',', '.') }}</h3>
+            <h3 class="text-[24px] md:text-[28px] font-bold">Rp. {{ number_format($totalSaldoTabungan, 0, ',', '.') }}</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>

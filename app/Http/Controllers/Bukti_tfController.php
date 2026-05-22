@@ -8,7 +8,6 @@ use App\Models\Bukti_Tf;
 class Bukti_tfController extends Controller
 {
     public function transfer_luar(Request $request){
-
     if ($request->has('jumlah_transfer')) {
         $cleanValue = str_replace('.', '', $request->jumlah_transfer);
         $request->merge(['jumlah_transfer' => $cleanValue]);
@@ -17,12 +16,16 @@ class Bukti_tfController extends Controller
     $request->validate([
         'nama_pengirim' => 'required',
         'no_hp_pengirim' => 'required',
-        'id_rekening' => 'required',
+        'id_rekening' => 'required|exists:rekening,id',
         'jumlah_transfer' => 'required|numeric|min:500',
         'bukti_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         'nama_penerima' => 'required',
         'datetime_tgl' => 'required',
         'catatan' => 'required',
+        ], [
+        // Tulis pesan kustom kamu di sini:
+        'id_rekening.exists' => 'Maaf, nomor rekening tidak terdaftar di sistem kami.',
+        'id_rekening.required' => 'Nomor rekening wajib diisi.',
     ]);
 
     $buktiPath = $request->file('bukti_foto')->store('bukti_fotos', 'public');
@@ -39,6 +42,6 @@ class Bukti_tfController extends Controller
         'catatan' => $request->catatan
     ]);
 
-    return redirect()->back()->with('succsses', 'data berhasil ditambahkan');
+    return redirect()->back()->with('success', 'data berhasil ditambahkan');
     }
 }
