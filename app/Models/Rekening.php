@@ -24,4 +24,23 @@ class Rekening extends Model
     {
         return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
     }
+
+    // Mengambil semua riwayat dana yang MASUK ke rekening ini
+    public function transferMasuk()
+    {
+        return $this->hasMany(RiwayatTf::class, 'id_penerima', 'id');
+    }
+
+    // Mengambil semua riwayat dana yang KELUAR dari rekening ini
+    public function transferKeluar()
+    {
+        return $this->hasMany(RiwayatTf::class, 'id_pengirim', 'id');
+    }
+
+    public function user()
+{
+    // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
+    // Parameter ke-3: primary key di tabel users ('id')
+    return $this->belongsTo(User::class, 'nasabah_id', 'id');
+}
 }

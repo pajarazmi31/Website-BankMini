@@ -63,4 +63,11 @@ class User extends Authenticatable
     {
         return $this->hasOne(Petugas::class);
     }
+
+public function rekening()
+{
+    // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
+    // Parameter ke-3: primary key di tabel users ('id')
+    return $this->hasOne(Rekening::class, 'nasabah_id', 'id');
+}
 }

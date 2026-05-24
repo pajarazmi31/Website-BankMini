@@ -28,7 +28,7 @@
                 <div class="flex items-center gap-3 mb-2">
                     <p class="text-xs font-medium tracking-widest text-gray-200 uppercase">Total Saldo Terkumpul</p>
                 </div>
-                <h3 class="text-3xl lg:text-4xl font-bold mt-4 mb-4 lg:mb-6 lg:mt-6 tracking-tight">Rp. 10.500.000</h3>
+                <h3 class="text-3xl lg:text-4xl font-bold mt-4 mb-4 lg:mb-6 lg:mt-6 tracking-tight">Rp. {{number_format($rekening->saldo_saat_ini), ',', '.' }}</h3>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                     <!-- Pemasukan -->

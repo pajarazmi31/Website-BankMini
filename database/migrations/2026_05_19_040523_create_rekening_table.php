@@ -15,7 +15,7 @@ return new class extends Migration
 
             // nomor rekening manual
             $table->string('id')->primary();
-            $table->unsignedBigInteger('nasabah_id');
+            $table->foreignId('nasabah_id')->constrained('users')->onDelete('cascade');
             $table->decimal('saldo_saat_ini', 15, 2)
                   ->default(0);
             $table->enum('status_akun', ['aktif', 'nonaktif'])
