@@ -126,21 +126,21 @@ class RekeningSeeder extends Seeder
             'id' => 242510190,
            'nasabah_id' => $userNasabah1->id,
            'saldo_saat_ini' => 0,
-           'status_akun' => 'nonaktif' 
+           'status_akun' => 'aktif' 
         ]);
 
         Rekening::create([
             'id' => 242510191,
            'nasabah_id' => $userNasabah2->id,
            'saldo_saat_ini' => 0,
-           'status_akun' => 'nonaktif' 
+           'status_akun' => 'aktif' 
         ]);
 
         Rekening::create([
             'id' => 242510192,
            'nasabah_id' => $userNasabah3->id,
            'saldo_saat_ini' => 0,
-           'status_akun' => 'nonaktif' 
+           'status_akun' => 'aktif' 
         ]);
     }
 }
