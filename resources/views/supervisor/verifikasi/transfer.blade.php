@@ -22,10 +22,6 @@
     @section('content')
     <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
         <!-- Search Bar Mobile -->
-        <div class="md:hidden relative mb-5">
-            <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-            <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-        </div>
 
         
         <!-- Section Title & Tabs -->
@@ -40,16 +36,28 @@
 
         <!-- Table Card -->
         <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col mb-5">
+            <div class="flex justify-between items-center mb-1 border-b border-gray-50">
+                    <form action="{{ route('supervisor.searchData') }}" method="get" class="flex gap-2 items-center">
+                        <div class="relative">
+                            <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                            <input type="text" placeholder="Cari data..."
+                                value="{{ request('keyword') }}" name="keyword"
+                                class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                        </div>
+                            
+                        <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                            <i class="ph ph-magnifying-glass text-lg"></i>
+                        </button>
+                    </form>
             @if ($bukti_tf->isNotEmpty())            
-            <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-50">
                 <span class="text-[14px] text-gray-500 font-medium"></span>
                 
                 <a href="{{ route('supervisor.exportTransfer') }}" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[12px] font-semibold rounded-lg shadow-sm transition-all">
                     <i class="ph ph-file-arrow-up text-base"></i>
                     Export Excel
                 </a>
+                @endif
             </div>
-            @endif
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
