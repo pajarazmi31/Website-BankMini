@@ -28,7 +28,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-gray-300 uppercase mb-2">TOTAL SALDO DITERIMA</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. 10.500.000</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. {{ number_format($totalDiterima, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-gray-300">
                         <i class="ph ph-clock-counter-clockwise opacity-60"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-textGray uppercase mb-2">TOTAL SALDO TERKIRIM</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. 500.000</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. {{ number_format($totalTerkirim, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-textGray">
                         <i class="ph ph-clock-counter-clockwise opacity-40"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -106,7 +106,7 @@
                             BAGIAN BACKEND: INPUT NOMINAL
                             - Ditangkap sebagai $request->nominal di controller.
                         -->
-                        <input type="number" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Catatan (Opsional)</label>
@@ -161,7 +161,7 @@
                                         @if ($item->id_pengirim == auth()->user()->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->nasabah->nama_nasabah ?? 'Pengirim Misterius' }} 
+                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
@@ -199,28 +199,38 @@
                     BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG
                     - Lakukan looping foreach untuk 10 transaksi terakhir (khusus transfer).
                 -->
-                @php
-                    $history5 = [
-                        ['name' => 'Pajar Azmi', 'date' => '25 Desember 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
-                        ['name' => 'Anisa Siti', 'date' => '10 Desember 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                        ['name' => 'Ramdan', 'date' => '05 Desember 2026', 'amount' => '- Rp. 200.000', 'color' => '#ef4444'],
-                        ['name' => 'Pajar Azmi', 'date' => '25 November 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
-                        ['name' => 'Anisa Siti', 'date' => '10 November 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                    ];
-                @endphp
-                @foreach($history5 as $item)
 
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-4">
-                        <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
-                        <div>
-                            <p class="font-bold text-[12px] lg:text-[16px] text-gray-800">{{ $item['name'] }}</p>
-                            <p class="text-[8px] lg:text-[12px] text-gray-500 mt-0.5">{{ $item['date'] }}</p>
+                    @if($riwayatTransfer->isEmpty())
+                        <div class="text-center py-6 text-gray-500 text-[13px]">
+                            <p>Belum ada riwayat transaksi.</p>
                         </div>
-                    </div>
-                    <p class="font-bold text-[10px] lg:text-[15px] text-[{{ $item['color'] }}]">{{ $item['amount'] }}</p>
-                </div>
-                @endforeach
+                    @endif
+                        @foreach( $riwayatTransfer as $item)
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
+                                <div>
+                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                        @if ($item->id_pengirim == auth()->user()->rekening->id)
+                                            {{ $item->nama_penerima }}
+                                        @else
+                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            @endif
+                                    </p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                </div>
+                            </div>
+                            @if ($item->id_pengirim == auth()->user()->rekening->id)
+                                <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
+                                    - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @else
+                                <p class="font-bold text-[12px] lg:text-[13px] text-green-500">
+                                    + Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @endif
+                        </div>
+                        @endforeach
             </div>
 
             <!-- Pagination -->
@@ -253,5 +263,36 @@
         // Scroll top
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    const inputTransfer = document.getElementById('jumlah_transfer');
+
+        // Fungsi untuk memformat angka menjadi format ribuan dengan titik
+        function formatRupiah(angka) {
+            // Hapus semua karakter selain angka
+            let numberString = angka.replace(/[^,\d]/g, '').toString();
+            let split = numberString.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        }
+
+        // Event saat pengguna mengetik
+        inputTransfer.addEventListener('keyup', function(e) {
+            this.value = formatRupiah(this.value);
+        });
+
+        // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (inputTransfer.value) {
+                inputTransfer.value = formatRupiah(inputTransfer.value);
+            }
+        });
 </script>
 @endsection

@@ -34,12 +34,12 @@
                     <!-- Pemasukan -->
                     <div class="bg-primaryLight/70 rounded-xl p-4 lg:p-5 backdrop-blur-sm">
                         <p class="text-[10px] lg:text-xs font-bold tracking-widest text-gray-200 uppercase mb-1 lg:mb-2">Pemasukan Bulan Ini</p>
-                        <p class="text-lg lg:text-xl font-bold">+ Rp 1.500.000</p>
+                        <p class="text-lg lg:text-xl font-bold">+ Rp {{ number_format($totalDiterima, 0, ',', '.') }}</p>
                     </div>
                     <!-- Pengeluaran -->
                     <div class="bg-primaryLight/70 rounded-xl p-4 lg:p-5 backdrop-blur-sm">
                         <p class="text-[10px] lg:text-xs font-bold tracking-widest text-gray-200 uppercase mb-1 lg:mb-2">Pengeluaran Bulan Ini</p>
-                        <p class="text-lg lg:text-xl font-bold">- Rp 500.000</p>
+                        <p class="text-lg lg:text-xl font-bold">- Rp {{ number_format($totalTerkirim, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>

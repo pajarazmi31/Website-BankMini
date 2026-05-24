@@ -8,6 +8,7 @@ use App\Models\RiwayatTf;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 
 class nasabahController extends Controller
 {
@@ -15,31 +16,81 @@ class nasabahController extends Controller
         $user = Auth::user();
         $nasabah = $user->nasabah;
         $rekening = Rekening::where('nasabah_id', $user->id)->first();
-        return view('nasabah.dashboard', compact('user','nasabah', 'rekening'));
+        if ($rekening) {
+                $nomorRekening = $rekening->id; 
+
+                // 1. Ambil semua riwayat seperti biasa
+                $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                            ->orWhere('id_penerima', $nomorRekening)
+                                            ->orderBy('created_at', 'desc')
+                                            ->get();
+
+                // Ambil bulan dan tahun saat ini menggunakan Carbon
+                $bulanIni = Carbon::now()->month;
+                $tahunIni = Carbon::now()->year;
+
+                // 2. TOTAL SALDO DITERIMA (Hanya Bulan Ini)
+                $totalDiterima = RiwayatTf::where('id_penerima', $nomorRekening)
+                                            ->whereMonth('created_at', $bulanIni)
+                                            ->whereYear('created_at', $tahunIni)
+                                            ->sum('jumlah_transfer');
+
+                // 3. TOTAL SALDO TERKIRIM (Hanya Bulan Ini)
+                $totalTerkirim = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                            ->whereMonth('created_at', $bulanIni)
+                                            ->whereYear('created_at', $tahunIni)
+                                            ->sum('jumlah_transfer');
+
+            } else {
+                $riwayatTransfer = collect(); 
+                $totalDiterima = 0;
+                $totalTerkirim = 0;
+    }
+        return view('nasabah.dashboard', compact('user','nasabah','riwayatTransfer', 'rekening', 'totalDiterima', 'totalTerkirim'));
     }
 
     public function transfer() {
         $user = Auth::user();
         $nasabah = $user->nasabah;
         $rekening = Rekening::where('nasabah_id', $user->id)->first();
-    if  ($rekening) {
-        // Ambil nomor rekeningnya (Misal: 242510191)
-        $nomorRekening = $rekening->id; 
+        if ($rekening) {
+                $nomorRekening = $rekening->id; 
 
-        // 3. Cari riwayat transfer berdasarkan NOMOR REKENING tersebut
-        $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
-                                    ->orWhere('id_penerima', $nomorRekening)
-                                    ->orderBy('created_at', 'desc')
-                                    ->get();
-    } else {
-        // Jika user belum punya rekening, set menjadi array kosong
-        $riwayatTransfer = collect(); 
+                // 1. Ambil semua riwayat seperti biasa
+                $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                            ->orWhere('id_penerima', $nomorRekening)
+                                            ->orderBy('created_at', 'desc')
+                                            ->get();
+
+                // Ambil bulan dan tahun saat ini menggunakan Carbon
+                $bulanIni = Carbon::now()->month;
+                $tahunIni = Carbon::now()->year;
+
+                // 2. TOTAL SALDO DITERIMA (Hanya Bulan Ini)
+                $totalDiterima = RiwayatTf::where('id_penerima', $nomorRekening)
+                                            ->whereMonth('created_at', $bulanIni)
+                                            ->whereYear('created_at', $tahunIni)
+                                            ->sum('jumlah_transfer');
+
+                // 3. TOTAL SALDO TERKIRIM (Hanya Bulan Ini)
+                $totalTerkirim = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                            ->whereMonth('created_at', $bulanIni)
+                                            ->whereYear('created_at', $tahunIni)
+                                            ->sum('jumlah_transfer');
+            } else {
+                $riwayatTransfer = collect(); 
+                $totalDiterima = 0;
+                $totalTerkirim = 0;
     }
-        return view('nasabah.transfer', compact('user','nasabah','riwayatTransfer'));
+        return view('nasabah.transfer', compact('user','nasabah','riwayatTransfer', 'totalDiterima', 'totalTerkirim'));
     }
 
  public function transferLogic(Request $request)
     {
+        if ($request->has('jumlah_transfer')) {
+        $cleanValue = str_replace('.', '', $request->jumlah_transfer);
+        $request->merge(['jumlah_transfer' => $cleanValue]);
+    }
         // 1. Validasi Input dari Form
         $request->validate([
             'id_penerima' => 'required|string',

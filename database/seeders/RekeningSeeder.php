@@ -88,14 +88,46 @@ class RekeningSeeder extends Seeder
             'hubungan_kontak_darurat' => 'Ayah',
         ]);
 
+        $userNasabah3 = User::create([
+            'name' => 'Dida',
+            'role_id' => $roleNasabah->id,
+            'email' => 'dida@gmail.com',
+            'password' => Hash::make('123456'),
+            ]);
+
+            Nasabah::create([
+            'user_id' => $userNasabah3->id,
+            'nis_nip' => '242510192',
+            'nama_nasabah' => 'dida',
+            'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => '2005-01-01',
+            'jurusan' => 'PPLG',
+            'jenis_kelamin' => 'Laki-Laki',
+            'pendidikan' => 'SMA/K',
+            'rt_rw' => '01/02',
+            'kelurahan' => 'Cibaduyut',
+            'kecamatan' => 'Bojongloa',
+            'kab_kota' => 'Bandung',
+            'provinsi' => 'Jawa Barat',
+            'kode_pos' => '40236',
+            'email' => 'dida@gmail.com',
+            'agama' => 'Islam',
+            'no_hp' => '08123456785',
+            'password' => Hash::make('123456'),
+            'jabatan' => 'Siswa',
+            'jenis_identitas' => 'KTP',
+            'nama_kontak_darurat' => 'Ayah dida',
+            'alamat_kontak_darurat' => 'Bandung',
+            'no_hp_kontak_darurat' => '08111101112',
+            'hubungan_kontak_darurat' => 'Ayah',
+        ]);
+
         Rekening::create([
             'id' => 242510190,
            'nasabah_id' => $userNasabah1->id,
            'saldo_saat_ini' => 0,
            'status_akun' => 'nonaktif' 
         ]);
-
-    
 
         Rekening::create([
             'id' => 242510191,
@@ -104,5 +136,11 @@ class RekeningSeeder extends Seeder
            'status_akun' => 'nonaktif' 
         ]);
 
+        Rekening::create([
+            'id' => 242510192,
+           'nasabah_id' => $userNasabah3->id,
+           'saldo_saat_ini' => 0,
+           'status_akun' => 'nonaktif' 
+        ]);
     }
 }
