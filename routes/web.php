@@ -25,6 +25,7 @@ Route::middleware(['role:nasabah'])->group(function () {
 
 Route::get('/nasabah/dashboard', [nasabahController::class, 'index'])->name('nasabah.dashboard');
 Route::get('/nasabah/transfer', [nasabahController::class, 'transfer'])->name('nasabah.transfer');
+Route::get('/cek-rekening/{id}', [nasabahController::class, 'cekRekening']);
 Route::post('/transferProses', [nasabahController::class, 'transferLogic'])->name('transfer.proses');
 
 });

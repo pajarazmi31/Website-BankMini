@@ -64,7 +64,6 @@
                     <div class="w-1.5 h-7 bg-accentYellow rounded-full"></div>
                     <h3 class="text-lg lg:text-2xl font-bold text-textDark">Formulir Transfer</h3>
                 </div>
-
                 <!-- 
                     BAGIAN BACKEND: FORM TRANSFER (NASABAH)
                     - action="#": Perlu diisi dengan route transfer untuk nasabah login (misal: route('nasabah.transfer.store')).
@@ -75,14 +74,42 @@
                         BAGIAN BACKEND: CSRF TOKEN
                     -->
                     @csrf
-                    @if($errors->any())
-                        <div class="bg-red-50 text-red-500 p-4 rounded-xl text-sm border border-red-100">
-                            <ul class="list-disc pl-4">@foreach($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>
-                        </div>
-                    @endif
-                    @if(session('success'))
-                        <div class="bg-green-50 text-green-600 p-4 rounded-xl text-sm border border-green-100">{{ session('success') }}</div>
-                    @endif
+                    <div class="space-y-3 mb-4">
+                        {{-- 1. ALERT UNTUK LOGIKA ERROR / PROSES GAGAL --}}
+                        @if (session('error'))
+                            <div class="flex items-center gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
+                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0"></i>
+                                <div class="font-medium">
+                                    {{ session('error') }}
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- 2. ALERT UNTUK VALIDASI FORM YANG SALAH --}}
+                        @if ($errors->any())
+                            <div class="flex gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
+                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="font-bold block mb-1">Periksa kembali inputan Anda:</span>
+                                    <ul class="list-disc list-inside space-y-0.5 pl-1 opacity-90">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- BONUS: ALERT UNTUK NOTIFIKASI SUKSES (Biar serasi) --}}
+                        @if (session('success'))
+                            <div class="flex items-center gap-3 p-4 text-[13px] text-green-800 border border-green-200 rounded-xl bg-green-50" role="alert">
+                                <i class="ph-bold ph-check-circle text-xl flex-shrink-0"></i>
+                                <div class="font-medium">
+                                    {{ session('success') }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">No Rekening Penerima</label>
@@ -98,7 +125,7 @@
                             BAGIAN BACKEND: INPUT PENERIMA
                             - Ditangkap sebagai $request->nama_penerima di controller.
                         -->
-                        <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}" required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}" readonly required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nominal Transfer (Rp)</label>
@@ -118,21 +145,6 @@
                     </div>
                     <button type="submit" class="w-full bg-success-gradient hover:bg-green-700 text-white font-bold text-sm py-4 rounded-xl transition-colors mt-2 shadow-sm">Kirim</button>
                 </form>
-                @if (session('error'))
-                    <div style="color: red;">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div style="color: red;">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
             </div>
 
             <!-- RIWAYAT TERBARU (Kanan) -->
@@ -218,6 +230,7 @@
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">Catatan: {{$item->catatan}}</p>
                                 </div>
                             </div>
                             @if ($item->id_pengirim == auth()->user()->rekening->id)
@@ -232,7 +245,6 @@
                         </div>
                         @endforeach
             </div>
-
             <!-- Pagination -->
             <x-pagination total="3" />
         </div>
@@ -263,6 +275,35 @@
         // Scroll top
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    document.getElementById('id_penerima').addEventListener('input', function() {
+        let noRekening = this.value;
+        let inputNama = document.getElementById('nama_penerima');
+
+        // Jika panjang nomor rekening sudah pas (misal minimal 9 digit seperti di DB kamu)
+        if (noRekening.length >= 9) { 
+            inputNama.value = 'Mencari nama...';
+
+            // Panggil Route API Laravel tadi
+            fetch(`/cek-rekening/${noRekening}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Jika ketemu, masukkan namanya ke inputan
+                        inputNama.value = data.nama;
+                    } else {
+                        // Jika tidak ketemu
+                        inputNama.value = 'Rekening Tidak Dikenal';
+                    }
+                })
+                .catch(error => {
+                    inputNama.value = 'Gagal memuat data';
+                });
+        } else {
+            // Jika inputan dihapus atau kurang dari 9 digit, kosongkan nama
+            inputNama.value = '';
+        }
+        });
 
     const inputTransfer = document.getElementById('jumlah_transfer');
 
