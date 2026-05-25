@@ -60,7 +60,7 @@
                             </td>
                             <td class="py-4 px-2 border-b border-gray-50 text-center">
                                 <div class="flex items-center justify-center">
-                                    <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
+                                    <a href="{{ route('detail.nasabah', $nasabah->id) }}">
                                         <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
                                     </a>
                                 </div>
@@ -77,48 +77,4 @@
     </div>
 </div>
 
-<!-- ================= CRUD VIEWS (Separated Files) ================= -->
-@include('supervisor.crud_datanasabah.detail')
-@endsection
-
-@section('scripts')
-<script>
-    // Lihat Detail
-    function viewDetail(nama, nip, jabatan, rek) {
-        document.getElementById('detail_nama').value = nama;
-        document.getElementById('detail_nip').value = nip;
-        document.getElementById('detail_jabatan').value = jabatan;
-        document.getElementById('detail_rek').value = rek;
-        switchView('detail');
-    }
-
-    // Pindah antara Tabel Data dan View CRUD
-    function switchView(viewName) {
-        const views = {
-            'tabel': document.getElementById('viewTabelData'),
-            'detail': document.getElementById('viewDetailData')
-        };
-
-        // Sembunyikan semua view
-        Object.values(views).forEach(v => {
-            if(v) {
-                v.classList.add('hidden');
-                v.classList.remove('flex', 'block');
-            }
-        });
-
-        // Tampilkan view yang dipilih
-        const activeView = views[viewName];
-        if (activeView) {
-            activeView.classList.remove('hidden');
-            if (viewName === 'tabel') {
-                activeView.classList.add('flex');
-            } else {
-                activeView.classList.add('block');
-            }
-        }
-
-        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
-    }
-</script>
 @endsection

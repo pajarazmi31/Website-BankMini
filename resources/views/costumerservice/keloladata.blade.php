@@ -16,7 +16,7 @@
 @section('header_actions')
 <div id="searchBarContainer" class="relative w-full md:w-auto hidden md:block transition-all">
     <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-    <input type="text" placeholder="Search" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400">
+    <input type="text" id="searchInput" placeholder="Search" class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400">
 </div>
 @endsection
 
@@ -26,7 +26,7 @@
     <!-- Search Bar Mobile -->
     <div class="md:hidden relative mb-5">
         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" placeholder="Cari nama atau no. rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+        <input type="text" id="searchMobile" placeholder="Cari nama atau no. rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </div>
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
@@ -52,8 +52,8 @@
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
                     @foreach ($allNasabah as $nasabah )
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">1</td>
+                    <tr class="hover:bg-gray-50/50 transition-colors nasabah-row">
+                        <td class="row-number py-4 px-2 border-b border-gray-50 text-center"></td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id}}</td>
@@ -127,17 +127,14 @@
             </table>
         </div>
 
-        <!-- Pagination -->
-        <x-pagination total="3" />
+        <!-- Pagination Container -->
+        <div id="paginationContainer"></div>
 
     </div>
 </div>
 
 <!-- ================= CRUD VIEWS (Separated Files) ================= -->
 @include('costumerservice.crudnasabah.tambah')
-@if (isset($userNasabah))
-@include('costumerservice.crudnasabah.edit')
-@endif
 @if(isset($nasabah))
     @include('costumerservice.crudnasabah.detail')
 @endif
@@ -182,79 +179,32 @@
         }
     });
 
-    function showDetail(nama, nis, jurusan, rek, status) {
-        document.getElementById('detail_nama').value = nama;
-        document.getElementById('detail_nis').value = nis;
-        document.getElementById('detail_jurusan').value = jurusan;
-        document.getElementById('detail_rekening').value = rek;
-        document.getElementById('detail_status').value = status;
-        switchView('detail');
-    }
-
-    function editData(nama, nis, jurusan) {
-        document.getElementById('edit_nama').value = nama;
-        document.getElementById('edit_nis').value = nis;
-        document.getElementById('edit_jurusan').value = jurusan;
-        switchView('edit');
-    }
-
-
-
-function switchView(viewName) {
-
-    const views = {
-        tabel: document.getElementById('viewTabelData'),
-        tambah: document.getElementById('viewTambahData'),
-        edit: document.getElementById('viewEditData'),
-        detail: document.getElementById('viewDetailData')
-    };
-
-    Object.values(views).forEach(view => {
-        if(view){
-            view.classList.add('hidden');
-            view.classList.remove('block','flex');
-        }
-    });
-
-    if(views[viewName]){
-        views[viewName].classList.remove('hidden');
-
-        if(viewName === 'tabel'){
-            views[viewName].classList.add('flex');
-        } else {
-            views[viewName].classList.add('block');
-        }
-    }
-}
-
-
     function showDetail(
-    nama,
-    nis,
-    jurusan,
-    tempat_lahir,
-    tanggal_lahir,
-    jenis_kelamin,
-    identitas,
-    agama,
-    pendidikan,
-    jabatan,
-    telepon,
-    email,
-    alamat,
-    kelurahan,
-    kecamatan,
-    kab_kota,
-    provinsi,
-    kode_pos,
-    kontak_nama,
-    kontak_telepon,
-    kontak_hubungan,
-    kontak_alamat,
-    rekening,
-    status
-    ){
-
+        nama,
+        nis,
+        jurusan,
+        tempat_lahir,
+        tanggal_lahir,
+        jenis_kelamin,
+        identitas,
+        agama,
+        pendidikan,
+        jabatan,
+        telepon,
+        email,
+        alamat,
+        kelurahan,
+        kecamatan,
+        kab_kota,
+        provinsi,
+        kode_pos,
+        kontak_nama,
+        kontak_telepon,
+        kontak_hubungan,
+        kontak_alamat,
+        rekening,
+        status
+    ) {
         document.getElementById('detail_nama').value = nama;
         document.getElementById('detail_nis').value = nis;
         document.getElementById('detail_jurusan').value = jurusan;
@@ -285,71 +235,141 @@ function switchView(viewName) {
         switchView('detail');
     }
 
+    // Client-side Search and Pagination
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchMobile = document.getElementById('searchMobile');
+        const tableBody = document.querySelector('table tbody');
+        const rows = Array.from(tableBody.querySelectorAll('.nasabah-row'));
+        const paginationContainer = document.getElementById('paginationContainer');
+        
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let filteredRows = [...rows];
 
-function showEdit(
-id,
-nama,
-nis,
-jurusan,
-tempat_lahir,
-tanggal_lahir,
-jenis_kelamin,
-identitas,
-agama,
-pendidikan,
-jabatan,
-telepon,
-email,
-alamat,
-kelurahan,
-kecamatan,
-kab_kota,
-provinsi,
-kode_pos,
-kontak_nama,
-kontak_telepon,
-kontak_hubungan,
-kontak_alamat,
-rekening,
-status
-){
+        function updateTable() {
+            const totalItems = filteredRows.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+            
+            if (currentPage > totalPages) {
+                currentPage = totalPages;
+            }
 
-    // isi form edit
-    document.getElementById('edit_nama').value = nama;
-    document.getElementById('edit_nis').value = nis;
-    document.getElementById('edit_jurusan').value = jurusan;
-    document.getElementById('edit_tempat_lahir').value = tempat_lahir;
-    document.getElementById('edit_tanggal_lahir').value = tanggal_lahir;
-    document.getElementById('edit_jenis_kelamin').value = jenis_kelamin;
-    document.getElementById('edit_identitas').value = identitas;
-    document.getElementById('edit_agama').value = agama;
-    document.getElementById('edit_pendidikan').value = pendidikan;
-    document.getElementById('edit_jabatan').value = jabatan;
-    document.getElementById('edit_telepon').value = telepon;
-    document.getElementById('edit_email').value = email;
-    document.getElementById('edit_alamat').value = alamat;
-    document.getElementById('edit_kelurahan').value = kelurahan;
-    document.getElementById('edit_kecamatan').value = kecamatan;
-    document.getElementById('edit_kab_kota').value = kab_kota;
-    document.getElementById('edit_provinsi').value = provinsi;
-    document.getElementById('edit_kode_pos').value = kode_pos;
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
 
-    document.getElementById('edit_kontak_nama').value = kontak_nama;
-    document.getElementById('edit_kontak_telepon').value = kontak_telepon;
-    document.getElementById('edit_kontak_hubungan').value = kontak_hubungan;
-    document.getElementById('edit_kontak_alamat').value = kontak_alamat;
+            // Hide all rows first
+            rows.forEach(row => row.style.display = 'none');
+            
+            // Show only rows for current page and update numbers
+            filteredRows.slice(startIndex, endIndex).forEach((row, index) => {
+                row.style.display = '';
+                const numCell = row.querySelector('.row-number');
+                if (numCell) {
+                    numCell.textContent = (startIndex + index + 1) + '.';
+                }
+            });
 
-    document.getElementById('edit_rekening').value = rekening;
-    document.getElementById('edit_status').value = status;
+            renderPagination(totalPages);
+        }
 
-    // ubah action form
-    document.getElementById('nasabahFormEdit').action =
-        '/update-nasabah/' + id;
+        function renderPagination(totalPages) {
+            if (!paginationContainer) return;
+            
+            let html = `<div class="flex items-center justify-end gap-1.5 mt-5 pt-2">`;
+            
+            // Prev Button
+            html += `
+                <button type="button" id="prevPageBtn" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="ph-bold ph-caret-left"></i>
+                </button>
+            `;
 
-    // pindah view
-    switchView('edit');
-}
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html += `
+                        <span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">${i}</span>
+                    `;
+                } else {
+                    html += `
+                        <button type="button" class="page-num-btn w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md" data-page="${i}">
+                            ${i}
+                        </button>
+                    `;
+                }
 
+                if (totalPages > 5 && i === 3 && totalPages > i + 1) {
+                    html += `<span class="w-[20px] flex items-center justify-center text-[13px] font-bold text-gray-400 tracking-widest">...</span>`;
+                    i = totalPages - 1;
+                }
+            }
 
+            // Next Button
+            html += `
+                <button type="button" id="nextPageBtn" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="ph-bold ph-caret-right"></i>
+                </button>
+            `;
+            
+            html += `</div>`;
+            paginationContainer.innerHTML = html;
+
+            // Page navigation event handlers
+            const prevBtn = document.getElementById('prevPageBtn');
+            if (prevBtn && currentPage > 1) {
+                prevBtn.onclick = () => {
+                    currentPage--;
+                    updateTable();
+                };
+            }
+
+            const nextBtn = document.getElementById('nextPageBtn');
+            if (nextBtn && currentPage < totalPages) {
+                nextBtn.onclick = () => {
+                    currentPage++;
+                    updateTable();
+                };
+            }
+
+            const numBtns = paginationContainer.getElementsByClassName('page-num-btn');
+            Array.from(numBtns).forEach(btn => {
+                btn.onclick = function() {
+                    currentPage = parseInt(this.getAttribute('data-page'));
+                    updateTable();
+                };
+            });
+        }
+
+        function handleSearch(keyword) {
+            keyword = keyword.toLowerCase().trim();
+            
+            filteredRows = rows.filter(row => {
+                const nama = row.cells[1]?.textContent.toLowerCase() || '';
+                const jabatan = row.cells[2]?.textContent.toLowerCase() || '';
+                const rekening = row.cells[3]?.textContent.toLowerCase() || '';
+                return nama.includes(keyword) || jabatan.includes(keyword) || rekening.includes(keyword);
+            });
+
+            currentPage = 1;
+            updateTable();
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                if (searchMobile) searchMobile.value = this.value;
+                handleSearch(this.value);
+            });
+        }
+
+        if (searchMobile) {
+            searchMobile.addEventListener('input', function() {
+                if (searchInput) searchInput.value = this.value;
+                handleSearch(this.value);
+            });
+        }
+
+        // Initial render
+        updateTable();
+    });
 </script>
 @endsection

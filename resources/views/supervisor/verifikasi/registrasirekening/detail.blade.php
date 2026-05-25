@@ -1,4 +1,22 @@
-<div id="viewDetailData" class="fade-in hidden flex-1 mt-4">
+@extends('layouts.supervisor')
+
+@section('title', 'Supervisor - Detail Verifikasi Rekening')
+
+@section('header_title')
+    Detail Verifikasi Registrasi Rekening
+@endsection
+
+@section('header_subtitle', 'Informasi pendaftaran rekening nasabah.')
+
+@section('styles')
+<style>
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+@endsection
+
+@section('content')
+<div id="viewDetailData" class="fade-in flex-1 mt-4">
     <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50 overflow-y-auto custom-scrollbar">
         <form>
             <!-- SECTION 1: DATA PRIBADI -->
@@ -21,7 +39,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                            <input type="text" value="{{ $nasabah->jurusan->nama_jurusan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->jurusan->nama_jurusan ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
 
@@ -37,7 +55,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                            <input type="text" value="{{ $nasabah->tanggal_lahir }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->jenis_kelamin }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
 
@@ -82,11 +100,11 @@
                         <div class="flex flex-col gap-5">
                             <div>
                                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan</label>
-                                <input type="text" value="{{ $nasabah->desa->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                                <input type="text" value="{{ $nasabah->desa->name ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                             </div>
                             <div>
                                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                                <input type="text" value="{{ $nasabah->kecamatan->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                                <input type="text" value="{{ $nasabah->kecamatan->name ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                             </div>
                         </div>
                     </div>
@@ -95,15 +113,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
-                            <input type="text" value="{{ $nasabah->kabupaten->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->kabupaten->name ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                            <input type="text" value="{{ $nasabah->provinsi->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->provinsi->name ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                            <input type="text" value="{{$nasabah->kode_pos}}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->kode_pos }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
                 </div>
@@ -148,19 +166,20 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                        <input type="text" value="{{ $nasabah->rekening->id }}" id="detail_rek" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none font-bold" readonly>
+                        <input type="text" value="{{ $nasabah->rekening->id ?? '-' }}" id="detail_rek" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none font-bold" readonly>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
-                        <input type="text" value="{{ $nasabah->rekening->status_akun }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none font-bold" readonly>
+                        <input type="text" value="{{ $nasabah->rekening->status_akun ?? '-' }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none font-bold" readonly>
                     </div>
                 </div>
             </div>
 
             <!-- BUTTONS -->
             <div class="flex justify-center mt-12">
-                <button type="button" onclick="switchView('tabel')" class="w-full md:w-[400px] bg-[#797979] hover:bg-gray-600 text-white font-bold py-4 rounded-xl transition-colors text-[15px]">Kembali</button>
+                <a href="{{ route('verifikasi.rekening') }}" class="w-full md:w-[400px] bg-[#797979] hover:bg-gray-600 text-white font-bold py-4 rounded-xl transition-colors text-[15px] flex items-center justify-center">Kembali</a>
             </div>
         </form>
     </div>
 </div>
+@endsection

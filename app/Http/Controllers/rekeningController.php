@@ -18,21 +18,9 @@ class rekeningController extends Controller
         $user = Auth::user();
         $cs = $user->petugas;
         $provinsi = DB::table('provinsi')->get();
-        $allNasabah = Nasabah::with('rekening')->get();
-        $data = DB::table('nasabah')
-            ->leftJoin('provinsi', 'nasabah.provinsi_id', '=', 'provinsi.id')
-            ->leftJoin('kabupaten', 'nasabah.kab_kota_id', '=', 'kabupaten.id')
-            ->leftJoin('kecamatan', 'nasabah.kecamatan_id', '=', 'kecamatan.id')
-            ->leftJoin('desa', 'nasabah.kelurahan_id', '=', 'desa.id')
-            ->select(
-                'nasabah.*',
-                'provinsi.name as provinsi',
-                'kabupaten.name as kabupaten',
-                'kecamatan.name as kecamatan',
-                'desa.name as desa'
-            )
-            ->get();
-        return view('costumerservice.keloladata', compact('user','cs','provinsi','allNasabah'));
+        $allNasabah = Nasabah::with('rekening', 'jurusan')->get();
+        
+        return view('costumerservice.keloladata', compact('user', 'cs', 'provinsi', 'allNasabah'));
     }
 
 
@@ -146,8 +134,14 @@ class rekeningController extends Controller
     public function edit(String $id) {
         $user = Auth::user();
         $cs = $user->petugas;
-        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
-        return view('costumerservice.crudnasabah.edit', compact('user','cs','nasabah'));
+        $nasabah = Nasabah::with('rekening')->findOrFail($id);
+        
+        $provinsi = DB::table('provinsi')->get();
+        $kabupaten = DB::table('kabupaten')->where('provinsi_id', $nasabah->provinsi_id)->get();
+        $kecamatan = DB::table('kecamatan')->where('kabupaten_id', $nasabah->kab_kota_id)->get();
+        $desa = DB::table('desa')->where('kecamatan_id', $nasabah->kecamatan_id)->get();
+
+        return view('costumerservice.crudnasabah.edit', compact('user', 'cs', 'nasabah', 'provinsi', 'kabupaten', 'kecamatan', 'desa'));
     }
 
     public function update(Request $request, String $id) {
@@ -178,9 +172,9 @@ class rekeningController extends Controller
             'no_rekening' => 'required',
         ]);
 
-        $user = User::FindOrFail($id);
-        $nasabah = Nasabah::where('user_id',$user->id)->first();
-        $rekening = Rekening::where('nasabah_id',$nasabah->id)->first();
+        $nasabah = Nasabah::findOrFail($id);
+        $user = User::findOrFail($nasabah->user_id);
+        $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
 
         $user->update([
             'name' => $request->nama_lengkap,
@@ -193,19 +187,18 @@ class rekeningController extends Controller
             'nama_nasabah' => $request->nama_lengkap,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
-            'jurusan' => $request->jurusan,
+            'jurusan_id' => $request->jurusan,
             'jenis_kelamin' => $request->jenis_kelamin,
             'pendidikan' => $request->pendidikan,
             'alamat' => $request->alamat,
-            'kelurahan' => $request->kelurahan,
-            'kecamatan' => $request->kecamatan,
-            'kab_kota' => $request->kab_kota,
-            'provinsi' => $request->provinsi,
+            'kelurahan_id' => $request->kelurahan,
+            'kecamatan_id' => $request->kecamatan,
+            'kab_kota_id' => $request->kab_kota,
+            'provinsi_id' => $request->provinsi,
             'kode_pos' => $request->kode_pos,
             'email' => $request->email,
             'agama' => $request->agama,
             'no_hp' => $request->no_hp,
-            'password' => Hash::make($request->password),
             'jabatan' => $request->jabatan,
             'jenis_identitas' => $request->jenis_identitas,
             'nama_kontak_darurat' => $request->nama_kontak_darurat,
@@ -214,12 +207,14 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
         ]);
 
-        $rekening->update([
-            'id' => $request->no_rekening,
-        ]);
+        if ($rekening) {
+            $rekening->update([
+                'id' => $request->no_rekening,
+            ]);
+        }
 
 
-        return redirect()->route('costumerservice.keloladata')->with('success','data nasabah berhasil di ubah');
+        return redirect()->route('costumerservice.keloladata')->with('success', 'data nasabah berhasil di ubah');
 
     }
 

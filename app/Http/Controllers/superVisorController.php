@@ -57,7 +57,7 @@ class superVisorController extends Controller
     }
 
     public function detail(String $id) {
-        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+        $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
         return view('supervisor.verifikasi.registrasirekening.detail', compact('nasabah'));
     }
 
@@ -67,7 +67,7 @@ class superVisorController extends Controller
     }
 
     public function detailNasabah(String $id) {
-        $nasabah = Nasabah::with('rekening', 'jurusan')->FindOrFail($id);
+        $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
         return view('supervisor.crud_datanasabah.detail', compact('nasabah'));
     }
 
