@@ -19,6 +19,7 @@ Route::get('/', function () {
 
 // Logic Tf Luar
 Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');
+Route::get('/cek-rekening/{id}', [Bukti_tfController::class, 'cekRekening']);
 
 // nasabah
 Route::middleware(['role:nasabah'])->group(function () {

@@ -162,10 +162,17 @@
                 </div>
     
                 <div class="flex items-center gap-6">
+                    @if ($rekening->status_akun == 'aktif')             
                     <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                         <i class="ph-fill ph-check-circle text-[16px]"></i>
                         Rekening Aktif
                     </div>
+                    @else
+                    <div class="flex items-center gap-2 bg-[#f4d1d1] text-[#7d0d0d] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
+                        <i class="ph-fill ph-check-circle text-[16px]"></i>
+                        Rekening Non-aktif
+                    </div>
+                    @endif
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[40px] text-primary"></i>
                         <div class="text-left">

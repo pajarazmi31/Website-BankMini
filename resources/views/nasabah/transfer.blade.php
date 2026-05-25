@@ -28,7 +28,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-gray-300 uppercase mb-2">TOTAL SALDO DITERIMA</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. {{ number_format($totalDiterima, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. {{ number_format($totalPemasukanBulanIni, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-gray-300">
                         <i class="ph ph-clock-counter-clockwise opacity-60"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-textGray uppercase mb-2">TOTAL SALDO TERKIRIM</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. {{ number_format($totalTerkirim, 0, ',', '.') }}</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. {{ number_format($totalPengeluaranBulanIni, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-textGray">
                         <i class="ph ph-clock-counter-clockwise opacity-40"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -278,32 +278,50 @@
 
     document.getElementById('id_penerima').addEventListener('input', function() {
         let noRekening = this.value;
+        let inputNoRekening = this;
         let inputNama = document.getElementById('nama_penerima');
 
-        // Jika panjang nomor rekening sudah pas (misal minimal 9 digit seperti di DB kamu)
+        // Fungsi pembantu untuk reset warna ke normal (ganti border-gray-300 sesuai class bawaanmu)
+        function resetStyle() {
+            inputNoRekening.classList.remove('border-red-500', 'text-red-500', 'focus:ring-red-500');
+            inputNama.classList.remove('border-red-500', 'text-red-500', 'bg-red-50');
+        }
+
+        // Fungsi pembantu untuk mengubah warna jadi merah saat error
+        function setErrorAlertStyle() {
+            inputNoRekening.classList.add('border-red-500', 'text-red-500', 'focus:ring-red-500');
+            inputNama.classList.add('border-red-500', 'text-red-500', 'bg-red-50');
+        }
+
+        // Jika panjang nomor rekening sudah pas (minimal 9 digit)
         if (noRekening.length >= 9) { 
             inputNama.value = 'Mencari nama...';
+            resetStyle();
 
-            // Panggil Route API Laravel tadi
+            // Panggil Route API Laravel
             fetch(`/cek-rekening/${noRekening}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Jika ketemu, masukkan namanya ke inputan
+                        // Jika REKENING ADA -> Masukkan nama & pastikan style normal
                         inputNama.value = data.nama;
+                        resetStyle();
                     } else {
-                        // Jika tidak ketemu
-                        inputNama.value = 'Rekening Tidak Dikenal';
+                        // Jika REKENING TIDAK ADA -> Tulisan jadi peringatan & border MERAH
+                        inputNama.value = 'No Rekening Tidak Ditemukan!';
+                        setErrorAlertStyle();
                     }
                 })
                 .catch(error => {
                     inputNama.value = 'Gagal memuat data';
+                    setErrorAlertStyle();
                 });
         } else {
-            // Jika inputan dihapus atau kurang dari 9 digit, kosongkan nama
+            // Jika inputan dihapus atau kurang dari 9 digit, kosongkan nama dan reset warna
             inputNama.value = '';
+            resetStyle();
         }
-        });
+    });
 
     const inputTransfer = document.getElementById('jumlah_transfer');
 

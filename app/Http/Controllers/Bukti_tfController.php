@@ -4,9 +4,27 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
+use App\Models\Rekening;
 
 class Bukti_tfController extends Controller
 {
+        public function cekRekening($id){
+        // Cari rekening beserta data user-nya
+        $rekening = Rekening::with('user')->find($id);
+
+        if ($rekening && $rekening->user) {
+            return response()->json([
+                'success' => true,
+                'nama' => $rekening->user->name
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'pesan' => 'Rekening tidak ditemukan'
+        ]);
+    }
+
     public function transfer_luar(Request $request){
     if ($request->has('jumlah_transfer')) {
         $cleanValue = str_replace('.', '', $request->jumlah_transfer);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Nasabah;
+use App\Models\Bukti_Tf;
 use App\Models\Rekening;
 use App\Models\RiwayatTf;
 use Illuminate\Support\Facades\DB;
@@ -16,73 +17,88 @@ class nasabahController extends Controller
         $user = Auth::user();
         $nasabah = $user->nasabah;
         $rekening = Rekening::where('nasabah_id', $user->id)->first();
-        if ($rekening) {
-                $nomorRekening = $rekening->id; 
+if ($rekening) {
+        $nomorRekening = $rekening->id;
 
-                // 1. Ambil semua riwayat seperti biasa
-                $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
-                                            ->orWhere('id_penerima', $nomorRekening)
-                                            ->orderBy('created_at', 'desc')
-                                            ->get();
+        // Ambil waktu bulan dan tahun sekarang
+        $bulanIni = Carbon::now()->month;
+        $tahunIni = Carbon::now()->year;
 
-                // Ambil bulan dan tahun saat ini menggunakan Carbon
-                $bulanIni = Carbon::now()->month;
-                $tahunIni = Carbon::now()->year;
+        // 1. HITUNG PEMASUKAN SESAMA REKENING (Uang Masuk dari user lain)
+        $pemasukanSesama = RiwayatTf::where('id_penerima', $nomorRekening)
+                                    ->whereMonth('created_at', $bulanIni)
+                                    ->whereYear('created_at', $tahunIni)
+                                    ->sum('jumlah_transfer');
 
-                // 2. TOTAL SALDO DITERIMA (Hanya Bulan Ini)
-                $totalDiterima = RiwayatTf::where('id_penerima', $nomorRekening)
-                                            ->whereMonth('created_at', $bulanIni)
-                                            ->whereYear('created_at', $tahunIni)
-                                            ->sum('jumlah_transfer');
+        // 2. HITUNG PEMASUKAN DARI TRANSFER LUAR (Tabel bukti_tf yang sudah diverifikasi)
+        // Kolom penentu: id_rekening cocok dengan nomor rekening, dan status sudah diverifikasi
+        $pemasukanLuar = Bukti_Tf::where('id_rekening', $nomorRekening)
+                                  ->where('status_verifikasi', 'berhasil') // Sesuaikan nama status di DB-mu (misal: 'sukses', 'approved', atau 1)
+                                  ->whereMonth('created_at', $bulanIni) // Pastikan tabel bukti_tf punya kolom created_at atau datetime_tgl
+                                  ->whereYear('created_at', $tahunIni)
+                                  ->sum('jumlah_transfer');
 
-                // 3. TOTAL SALDO TERKIRIM (Hanya Bulan Ini)
-                $totalTerkirim = RiwayatTf::where('id_pengirim', $nomorRekening)
-                                            ->whereMonth('created_at', $bulanIni)
-                                            ->whereYear('created_at', $tahunIni)
-                                            ->sum('jumlah_transfer');
+        // 3. JUMBLAHKAN TOTAL PEMASUKAN BULAN INI
+        // Jika ada transaksi tipe lain seperti "Setor Tunai langsung lewat Teller", silakan ikut dijumlahkan di sini
+        $totalPemasukanBulanIni = $pemasukanSesama + $pemasukanLuar;
 
-            } else {
-                $riwayatTransfer = collect(); 
-                $totalDiterima = 0;
-                $totalTerkirim = 0;
+        // --- Logika Pengeluaran Bulan Ini (Tetap biarkan yang sudah kamu buat) ---
+        $totalPengeluaranBulanIni = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                             ->whereMonth('created_at', $bulanIni)
+                                             ->whereYear('created_at', $tahunIni)
+                                             ->sum('jumlah_transfer');
+    } else {
+        $totalPemasukanBulanIni = 0;
+        $totalPengeluaranBulanIni = 0;
     }
-        return view('nasabah.dashboard', compact('user','nasabah','riwayatTransfer', 'rekening', 'totalDiterima', 'totalTerkirim'));
+        return view('nasabah.dashboard', compact('user','nasabah', 'rekening', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
     }
 
     public function transfer() {
         $user = Auth::user();
         $nasabah = $user->nasabah;
         $rekening = Rekening::where('nasabah_id', $user->id)->first();
-        if ($rekening) {
-                $nomorRekening = $rekening->id; 
+if ($rekening) {
+        $nomorRekening = $rekening->id;
 
-                // 1. Ambil semua riwayat seperti biasa
-                $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+        $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
                                             ->orWhere('id_penerima', $nomorRekening)
                                             ->orderBy('created_at', 'desc')
                                             ->get();
 
-                // Ambil bulan dan tahun saat ini menggunakan Carbon
-                $bulanIni = Carbon::now()->month;
-                $tahunIni = Carbon::now()->year;
+        // Ambil waktu bulan dan tahun sekarang
+        $bulanIni = Carbon::now()->month;
+        $tahunIni = Carbon::now()->year;
 
-                // 2. TOTAL SALDO DITERIMA (Hanya Bulan Ini)
-                $totalDiterima = RiwayatTf::where('id_penerima', $nomorRekening)
-                                            ->whereMonth('created_at', $bulanIni)
-                                            ->whereYear('created_at', $tahunIni)
-                                            ->sum('jumlah_transfer');
+        // 1. HITUNG PEMASUKAN SESAMA REKENING (Uang Masuk dari user lain)
+        $pemasukanSesama = RiwayatTf::where('id_penerima', $nomorRekening)
+                                    ->whereMonth('created_at', $bulanIni)
+                                    ->whereYear('created_at', $tahunIni)
+                                    ->sum('jumlah_transfer');
 
-                // 3. TOTAL SALDO TERKIRIM (Hanya Bulan Ini)
-                $totalTerkirim = RiwayatTf::where('id_pengirim', $nomorRekening)
-                                            ->whereMonth('created_at', $bulanIni)
-                                            ->whereYear('created_at', $tahunIni)
-                                            ->sum('jumlah_transfer');
-            } else {
-                $riwayatTransfer = collect(); 
-                $totalDiterima = 0;
-                $totalTerkirim = 0;
+        // 2. HITUNG PEMASUKAN DARI TRANSFER LUAR (Tabel bukti_tf yang sudah diverifikasi)
+        // Kolom penentu: id_rekening cocok dengan nomor rekening, dan status sudah diverifikasi
+        $pemasukanLuar = Bukti_Tf::where('id_rekening', $nomorRekening)
+                                  ->where('status_verifikasi', 'berhasil') // Sesuaikan nama status di DB-mu (misal: 'sukses', 'approved', atau 1)
+                                  ->whereMonth('created_at', $bulanIni) // Pastikan tabel bukti_tf punya kolom created_at atau datetime_tgl
+                                  ->whereYear('created_at', $tahunIni)
+                                  ->sum('jumlah_transfer');
+
+        // 3. JUMBLAHKAN TOTAL PEMASUKAN BULAN INI
+        // Jika ada transaksi tipe lain seperti "Setor Tunai langsung lewat Teller", silakan ikut dijumlahkan di sini
+        $totalPemasukanBulanIni = $pemasukanSesama + $pemasukanLuar;
+
+        // --- Logika Pengeluaran Bulan Ini (Tetap biarkan yang sudah kamu buat) ---
+        $totalPengeluaranBulanIni = RiwayatTf::where('id_pengirim', $nomorRekening)
+                                             ->whereMonth('created_at', $bulanIni)
+                                             ->whereYear('created_at', $tahunIni)
+                                             ->sum('jumlah_transfer');
+    } else {
+        $riwayatTransfer = collect();
+        $totalPemasukanBulanIni = 0;
+        $totalPengeluaranBulanIni = 0;
     }
-        return view('nasabah.transfer', compact('user','nasabah','riwayatTransfer', 'totalDiterima', 'totalTerkirim'));
+        return view('nasabah.transfer', compact('user', 'rekening','nasabah','riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
     }
 
         public function cekRekening($id){

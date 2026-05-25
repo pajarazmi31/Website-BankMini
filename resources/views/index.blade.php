@@ -402,16 +402,17 @@
 
                             <!-- Kolom: Nomor Telepon -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
-                                <!-- BAGIAN BACKEND: INPUT NOMOR TELEPON -->
-                                <input type="tel" name="no_hp_pengirim" value="{{ old('no_hp_pengirim') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_hp_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
-                                    placeholder="Contoh: 08123456789">
-                                @error('no_hp_pengirim')
-                                    <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
+                                <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
+                                <input type="text" id="id_rekening" name="id_rekening" value="{{ old('id_rekening') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('id_rekening') ? 'border-red-500' : 'border-gray-200' }}"
+                                    placeholder="Masukkan nomor rekening">
+                                @error('id_rekening')
+                                    <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
+
 
                             <!-- Kolom: Nama Penerima -->
                             <div>
@@ -419,7 +420,7 @@
                                 <!-- BAGIAN BACKEND: INPUT NAMA PENERIMA -->
                                 <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('nama_penerima') ? 'border-red-500' : 'border-gray-200' }}"
-                                    placeholder="Nama lengkap penerima">
+                                    placeholder="Nama lengkap penerima" readonly>
                                 @error('nama_penerima')
                                     <!-- BAGIAN BACKEND: ERROR NAMA PENERIMA -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
@@ -441,13 +442,13 @@
 
                             <!-- Kolom: Nomor Rekening Penerima -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Rekening Penerima</label>
-                                <!-- BAGIAN BACKEND: INPUT REKENING PENERIMA -->
-                                <input type="text" id="id_rekening" name="id_rekening" value="{{ old('id_rekening') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('id_rekening') ? 'border-red-500' : 'border-gray-200' }}"
-                                    placeholder="Masukkan nomor rekening">
-                                @error('id_rekening')
-                                    <!-- BAGIAN BACKEND: ERROR REKENING PENERIMA -->
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                                <!-- BAGIAN BACKEND: INPUT NOMOR TELEPON -->
+                                <input type="tel" name="no_hp_pengirim" value="{{ old('no_hp_pengirim') }}"
+                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_hp_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
+                                    placeholder="Contoh: 08123456789">
+                                @error('no_hp_pengirim')
+                                    <!-- BAGIAN BACKEND: ERROR NOMOR TELEPON -->
                                     <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -721,6 +722,56 @@
                 inputTransfer.value = formatRupiah(inputTransfer.value);
             }
         });
+
+    // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
+    let delayTimer;
+
+    document.getElementById('id_rekening').addEventListener('input', function() {
+        let noRekening = this.value;
+        let inputNoRekening = this;
+        let inputNama = document.getElementById('nama_penerima');
+
+        // 1. KELOLA INPUT KOSONG
+        if (noRekening.trim() === '') {
+            clearTimeout(delayTimer); // batalkan pencarian jika dihapus semua
+            inputNama.value = '';
+            inputNoRekening.style.borderColor = '#e5e7eb';
+            inputNama.style.borderColor = '#e5e7eb';
+            return;
+        }
+
+        // Tampilkan status "Mencari..." agar user tahu sistem sedang bekerja
+        inputNama.value = 'Mencari data...';
+
+        // 2. TEKNIK DEBOUNCE: Hapus timer yang lama jika user masih mengetik
+        clearTimeout(delayTimer);
+
+        // Set timer baru: Tunggu 500ms (0.5 detik) setelah ketikan terakhir berhenti
+        delayTimer = setTimeout(function() {
+            
+            // Panggil Route API Laravel setelah user BERHENTI mengetik
+            fetch(`/cek-rekening/${noRekening}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // REKENING ADA
+                        inputNama.value = data.nama;
+                        inputNoRekening.style.borderColor = '#10b981'; // Hijau halus
+                        inputNama.style.borderColor = '#10b981';
+                    } else {
+                        // REKENING TIDAK ADA
+                        inputNama.value = 'Rekening Tidak Ditemukan!';
+                        inputNoRekening.style.borderColor = '#ef4444'; // Merah halus
+                        inputNama.style.borderColor = '#ef4444';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetch:', error);
+                    inputNama.value = 'Gagal memuat data internet';
+                });
+
+        }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
+    });
     </script>
 </body>
 </html>
