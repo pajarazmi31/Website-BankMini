@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('rekening', function (Blueprint $table) {
-            $table->unsignedBigInteger('id')->primary();
-            $table->foreignId('nasabah_id')->constrained('nasabah');
-            $table->integer('saldo_saat_ini');
-            $table->Enum('status_akun', ['aktif','non-aktif','pending','revisi']);
+        Schema::create('kabupaten', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('provinsi_id');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('rekening');
+        Schema::dropIfExists('kabupaten');
     }
 };

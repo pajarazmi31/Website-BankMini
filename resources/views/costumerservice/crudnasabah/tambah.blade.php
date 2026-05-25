@@ -15,8 +15,8 @@
                         <input type="text" name="nama_lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
-                        <label for="password">Password</label>
-                        <input type="text" name="password">
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Password</label>
+                        <input type="password" name="password" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
@@ -43,7 +43,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors text-gray-400"
+                        <input type="date" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
                                 onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')"
                         >
                     </div>
@@ -57,15 +57,11 @@
                             <option value="Perempuan">Perempuan</option>
                         </select>
                     </div>
-                    {{-- <div>
-                        <label for="rt_rw">Rt/Rw</label>
-                        <input type="text" name="rt_rw">
-                    </div> --}}
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Identitas Utama</label>
-                        <select name="jenis_identitas" id="">
+                        <select name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="KTP">KTP</option>
-                            <option value="Akta">Akta</option>
+                            <option value="Kartu Keluarga">Kartu Keluarga</option>
                         </select>
                     </div>
                     <div>
@@ -83,8 +79,8 @@
                         </select>
                     </div>
                     <div>
-                        <label for="pendidikan">Pendidikan</label>
-                        <select name="pendidikan" >
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
+                        <select name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
                             <option value="SMK">SMK</option>
@@ -99,7 +95,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
-                        <select name="jabatan" id="">
+                        <select name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="Siswa">Siswa</option>
                             <option value="Guru">Guru</option>
                             <option value="TU">TU</option>
@@ -107,7 +103,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                        <input type="number" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="tel" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Email</label>
@@ -119,25 +115,38 @@
                     </div>
                     <div class="col-span-1 flex flex-col gap-5">
                         <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan</label>
-                            <input type="text" name="kelurahan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
+                            <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                                <option value="">Pilih Provinsi</option>
+                                @foreach ($provinsi as $prov)
+                                    <option value="{{ $prov->id }}">
+                                        {{ $prov->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kabupaten/Kota</label>
+                            <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                                <option value="">Pilih Kabupaten</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                            <input type="text" name="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                                <option value="">Pilih Kecamatan</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
+                            <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                                <option value="">Pilih Desa</option>
+                            </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
-                        <input type="text" name="kab_kota" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                        <input type="text" name="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                        <input type="number" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                 </div>
             </div>
@@ -156,7 +165,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                            <input type="number" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input type="tel" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>
@@ -170,24 +179,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 3: DATA REKENING -->
-            {{-- <div class="mb-10">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
-                    <h3 class="text-[20px] font-bold text-gray-800">Data Rekening</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-                    <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                        <input type="number" name="no_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
-                        <input type="text" name="status_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                </div>
-            </div> --}}
-
             <!-- BUTTONS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-12">
                 <button type="button" onclick="switchView('tabel')" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px]">Kembali</button>
@@ -196,3 +187,72 @@
         </form>
     </div>
 </div>
+
+<script>
+@if (session('success'))
+    alert('{{ session('success') }}')
+@endif
+
+@if ( session('failed') )
+    alert('{{ session('failed') }}')
+@endif
+</script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<script>
+$('#provinsi').change(function(){
+    let id_provinsi = $(this).val();
+    if(!id_provinsi) return;
+
+    $.ajax({
+        url: '/get-kabupaten/' + id_provinsi,
+        type: 'GET',
+        success:function(data){
+            $('#kabupaten').empty();
+            $('#kabupaten').append(`<option value="">Pilih Kabupaten</option>`);
+            data.forEach(function(item){
+                $('#kabupaten').append(`<option value="${item.id}">${item.name}</option>`);
+            });
+        }
+    });
+});
+</script>
+
+<script>
+$('#kabupaten').change(function(){
+    let id_kabupaten = $(this).val();
+    if(!id_kabupaten) return;
+
+    $.ajax({
+        url: '/get-kecamatan/' + id_kabupaten,
+        type: 'GET',
+        success:function(data){
+            $('#kecamatan').empty();
+            $('#kecamatan').append(`<option value="">Pilih Kecamatan</option>`);
+            data.forEach(function(item){
+                $('#kecamatan').append(`<option value="${item.id}">${item.name}</option>`);
+            });
+        }
+    });
+});
+</script>
+
+<script>
+$('#kecamatan').change(function(){
+    let id_kecamatan = $(this).val();
+    if(!id_kecamatan) return;
+
+    $.ajax({
+        url: '/get-desa/' + id_kecamatan,
+        type: 'GET',
+        success:function(data){
+            $('#desa').empty();
+            $('#desa').append(`<option value="">Pilih Desa</option>`);
+            data.forEach(function(item){
+                $('#desa').append(`<option value="${item.id}">${item.name}</option>`);
+            });
+        }
+    });
+});
+</script>

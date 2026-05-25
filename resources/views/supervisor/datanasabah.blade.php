@@ -26,7 +26,7 @@
         <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </div>
 
-    
+
     <div class="mb-4 px-1">
         <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Nasabah</h3>
     </div>
@@ -47,82 +47,26 @@
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 pl-4">1.</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Pajar Azmi Anugraha</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-4 border-b border-gray-50">03-03-232410204</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <div class="flex items-center justify-center">
-                                <button onclick="viewDetail('Pajar Azmi Anugraha', '0103232410204', 'Siswa', '03-03-232410204')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Row 2 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 pl-4">2.</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Salsabila Rosi Cahyani</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-4 border-b border-gray-50">03-03-232410243</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button onclick="viewDetail('Salsabila Rosi Cahyani', '03-03-232410243', 'Siswa', '03-03-232410243')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue inline-flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                        </td>
-                    </tr>
-                    <!-- Row 3 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 pl-4">3.</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Anisa Siti Nur Fajriyanti</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Siswa</td>
-                        <td class="py-4 px-4 border-b border-gray-50">03-03-232410229</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button onclick="viewDetail('Anisa Siti Nur Fajriyanti', '03-03-232410229', 'Siswa', '03-03-232410229')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue inline-flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                        </td>
-                    </tr>
-                    <!-- Row 4 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 pl-4">4.</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Yanto Supriyanto</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Guru</td>
-                        <td class="py-4 px-4 border-b border-gray-50">01-02-030081983</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button onclick="viewDetail('Yanto Supriyanto', '01-02-030081983', 'Guru', '01-02-030081983')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue inline-flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                        </td>
-                    </tr>
-                    <!-- Row 5 -->
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50 pl-4">5.</td>
-                        <td class="py-4 px-4 border-b border-gray-50">Ali Mahendra</td>
-                        <td class="py-4 px-4 border-b border-gray-50">TU</td>
-                        <td class="py-4 px-4 border-b border-gray-50">01-03-050081993</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button onclick="viewDetail('Ali Mahendra', '01-03-050081993', 'TU', '01-03-050081993')" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue inline-flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                        </td>
-                    </tr>
+                    @foreach ( $userNasabah as $nasabah )
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-4 px-2 border-b border-gray-50 pl-4">1.</td>
+                            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->nama_nasabah}}</td>
+                            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>
+                            <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                    <i class="ph-bold ph-clock text-[15px]"></i>
+                                </button>
+                            </td>
+                            <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                <div class="flex items-center justify-center">
+                                    <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
+                                        <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -173,7 +117,7 @@
                 activeView.classList.add('block');
             }
         }
-        
+
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>

@@ -76,6 +76,11 @@
                                 @method('DELETE')
                                 <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
                                 </form>
+                                <a href="{{ route('halaman.revisi', $nasabah->id) }}">
+                                    <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center hover:bg-[#fde68a] transition-colors" title="Revisi">
+                                        <i class="ph-bold ph-arrow-counter-clockwise text-[16px]"></i>
+                                    </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
@@ -91,7 +96,9 @@
 </div>
 
 <!-- ================= CRUD VIEWS (Separated Files) ================= -->
+@if(isset($nasabah))
 @include('supervisor.verifikasi.registrasirekening.detail')
+@endif
 @endsection
 
 @section('scripts')

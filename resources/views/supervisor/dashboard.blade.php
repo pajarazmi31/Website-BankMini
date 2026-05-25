@@ -51,38 +51,25 @@
 
         <div class="flex flex-col gap-3">
             <!-- Row 1 -->
-            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
+            @foreach ($nasabah as $nsbh )
+            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
                 <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+                    <i class="ph-fill ph-user-circle text-[30px] lg:text-[40px] text-brand-blue"></i>
                     <div>
-                        <h4 class="font-bold text-[16px] text-gray-800">Pajar Azmi</h4>
-                        <p class="text-[12px] text-gray-400 font-medium">Registrasi Akun Baru</p>
+                        <h4 class="font-bold text-[13px] lg:text-[15px] text-gray-800">{{ $nsbh->nama_nasabah }}</h4>
+                        <p class="text-[10px] lg:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru • </p>
                     </div>
                 </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
-            </div>
-            <!-- Row 2 -->
-            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
-                <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
-                    <div>
-                        <h4 class="font-bold text-[16px] text-gray-800">Anisa Siti</h4>
-                        <p class="text-[12px] text-gray-400 font-medium">Transfer Masuk</p>
-                    </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
+                        <i class="ph-fill ph-eye text-[16px]"></i>
+                    </button>
+                    <button class="w-[32px] h-[32px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                        <i class="ph-bold ph-clock text-[16px]"></i>
+                    </button>
                 </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
             </div>
-            <!-- Row 3 -->
-            <div class="bg-white rounded-[20px] p-4 px-6 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.02)] border border-gray-50">
-                <div class="flex items-center gap-4">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
-                    <div>
-                        <h4 class="font-bold text-[16px] text-gray-800">Rafka</h4>
-                        <p class="text-[12px] text-gray-400 font-medium">Transfer Masuk</p>
-                    </div>
-                </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat"><i class="ph-fill ph-eye text-[18px]"></i></button>
-            </div>
+            @endforeach
         </div>
     </div>
 

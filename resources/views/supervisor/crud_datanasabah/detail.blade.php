@@ -1,27 +1,27 @@
 <div id="viewDetailData" class="fade-in hidden flex-1 mt-4">
     <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
-        
+
         <!-- SECTION 1: DATA PRIBADI -->
         <div class="mb-12">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                 <h3 class="text-[20px] font-bold text-gray-800">Data Pribadi</h3>
             </div>
-            
+
             <div class="space-y-5">
                 <!-- Row 1 -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                        <input type="text" id="detail_nama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                        <input type="text" id="detail_nama" value="{{ $nasabah->nama_nasabah }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                        <input type="text" id="detail_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                        <input type="text" value="{{ $nasabah->nis_nip }}"  id="detail_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                        <input type="text" value="RPL" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                        <input type="text" value="{{ $nasabah->jurusan->nama_jurusan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                 <h3 class="text-[20px] font-bold text-gray-800">Data Pihak yang Dapat Dihubungi</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 <div class="space-y-5">
                     <div>
@@ -144,7 +144,7 @@
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                 <h3 class="text-[20px] font-bold text-gray-800">Data Rekening</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>

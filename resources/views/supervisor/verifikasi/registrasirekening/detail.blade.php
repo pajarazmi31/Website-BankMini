@@ -17,11 +17,11 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                            <input type="text" id="detail_nip" value="{{ $nasabah->nis_nip }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->nis_nip }}" id="detail_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                            <input type="text" value="{{ $nasabah->jurusan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->jurusan->nama_jurusan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
 
@@ -37,7 +37,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                            <input type="text" value="{{ $nasabah->jenis_kelamin }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->tanggal_lahir }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
 
@@ -49,7 +49,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                            <input type="text" value="{{ $nasabah->agama }} class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->agama }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
@@ -82,11 +82,11 @@
                         <div class="flex flex-col gap-5">
                             <div>
                                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan</label>
-                                <input type="text" value="{{ $nasabah->kelurahan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                                <input type="text" value="{{ $nasabah->desa->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                             </div>
                             <div>
                                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                                <input type="text" value="{{ $nasabah->kecamatan }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                                <input type="text" value="{{ $nasabah->kecamatan->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                             </div>
                         </div>
                     </div>
@@ -95,15 +95,15 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
-                            <input type="text" value="{{ $nasabah->kab_kota }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->kabupaten->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                            <input type="text" value="{{ $nasabah->provinsi }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{ $nasabah->provinsi->name }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                            <input type="text" value="{{ $nasabah->kode_pos }}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                            <input type="text" value="{{$nasabah->kode_pos}}" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                         </div>
                     </div>
                 </div>

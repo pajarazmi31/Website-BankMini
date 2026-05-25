@@ -142,10 +142,8 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                         <div class="text-left">
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">Customer Service</p>
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
-                            <p class="text-[12px] text-gray-400 mt-0.5">c.service@gmail.com</p>
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{$cs->nama_petugas}}</p>
+                            <p class="text-[12px] text-gray-400 mt-0.5">{{ $cs->email }}</p>
                         </div>
                     </div>
                 </div>

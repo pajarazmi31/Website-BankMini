@@ -3,6 +3,11 @@
 namespace App\Models;
 use App\Models\Rekening;
 use App\Models\Jurusan;
+use App\Models\Desa;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Provinsi;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Nasabah extends Model
@@ -15,14 +20,14 @@ class Nasabah extends Model
         'user_id',
         'tempat_lahir',
         'tanggal_lahir',
-        'jurusan',
+        'jurusan_id',
         'jenis_kelamin',
         'pendidikan',
         'alamat',
-        'kelurahan',
-        'kecamatan',
-        'kab_kota',
-        'provinsi',
+        'kelurahan_id',
+        'kecamatan_id',
+        'kab_kota_id',
+        'provinsi_id',
         'kode_pos',
         'email',
         'agama',
@@ -33,7 +38,8 @@ class Nasabah extends Model
         'nama_kontak_darurat',
         'alamat_kontak_darurat',
         'no_hp_kontak_darurat',
-        'hubungan_kontak_darurat'
+        'hubungan_kontak_darurat',
+        'pesan'
     ]);
 
     public function user() {
@@ -47,4 +53,25 @@ class Nasabah extends Model
     public function jurusan() {
         return $this->belongsTo(Jurusan::class);
     }
+
+        public function provinsi()
+        {
+            return $this->belongsTo(Provinsi::class);
+        }
+
+        public function kabupaten()
+        {
+            return $this->belongsTo(Kabupaten::class, 'kab_kota_id');
+        }
+
+        public function kecamatan()
+        {
+            return $this->belongsTo(Kecamatan::class);
+        }
+
+        public function desa()
+        {
+            return $this->belongsTo(Desa::class, 'kelurahan_id');
+        }
+
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
 use App\Http\Controllers\csController;
 use App\Http\Controllers\rekeningController;
+use App\Http\Controllers\alamatController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -40,7 +41,7 @@ Route::middleware(['role:customerservice'])->group(function () {
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
 Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
-Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah');
+Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
 Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
 Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
 Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
@@ -51,10 +52,7 @@ Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destro
 Route::middleware(['role:supervisor'])->group(function () {
 
 route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
-
-Route::get('/supervisor/datanasabah', function () {
-    return view('supervisor.datanasabah');
-})->name('supervisor.datanasabah');
+Route::get('/supervisor/datanasabah', [superVisorController::class, 'nasabah'])->name('nasabah.supervisor');
 
 Route::get('/supervisor/datapetugas', function () {
     return view('supervisor.datapetugas');
@@ -64,6 +62,10 @@ Route::get('/supervisor/verifikasi', function () {
     return view('supervisor.verifikasi.transfer');
 })->name('supervisor.verifikasi');
 
+
+Route::get('/supervisor/revisi/{id}', [superVisorController::class, 'halamanRevisi'])->name('halaman.revisi');
+Route::put('/supervisor/revisi/{id}', [superVisorController::class, 'revisi'])->name('proses.revisi');
+Route::get('/supervisor/dataNasabah/{id}', [superVisorController::class, 'detailNasabah'])->name('detail.nasabah');
 Route::get('/supervisor/detail/rekening/{id}', [superVisorController::class, 'detail'])->name('detail.rekening.super');
 Route::delete('/supervisor/hapus/{id}', [superVisorController::class, 'destroy'])->name('hapus.nasabah.super');
 Route::post('/supervisor/aktif/{id}', [superVisorController::class, 'aktif'])->name('rekening.aktif');
@@ -89,3 +91,8 @@ Route::post('/logout',[loginController::class, 'logout'])->name('logout');
 // Route::post('/login', function () {
 //     return redirect()->route('nasabah.dashboard');
 // });
+
+/// alamat
+Route::get('/get-kabupaten/{id}', [alamatController::class, 'getKabupaten']);
+Route::get('/get-kecamatan/{id}', [alamatController::class, 'getKecamatan']);
+Route::get('/get-desa/{id}', [alamatController::class, 'getDesa']);

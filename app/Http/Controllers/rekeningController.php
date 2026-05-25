@@ -8,6 +8,7 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 class rekeningController extends Controller
@@ -16,9 +17,24 @@ class rekeningController extends Controller
     public function keloladata() {
         $user = Auth::user();
         $cs = $user->petugas;
+        $provinsi = DB::table('provinsi')->get();
         $allNasabah = Nasabah::with('rekening')->get();
-        return view('costumerservice.keloladata', compact('user','cs','allNasabah'));
+        $data = DB::table('nasabah')
+            ->leftJoin('provinsi', 'nasabah.provinsi_id', '=', 'provinsi.id')
+            ->leftJoin('kabupaten', 'nasabah.kab_kota_id', '=', 'kabupaten.id')
+            ->leftJoin('kecamatan', 'nasabah.kecamatan_id', '=', 'kecamatan.id')
+            ->leftJoin('desa', 'nasabah.kelurahan_id', '=', 'desa.id')
+            ->select(
+                'nasabah.*',
+                'provinsi.name as provinsi',
+                'kabupaten.name as kabupaten',
+                'kecamatan.name as kecamatan',
+                'desa.name as desa'
+            )
+            ->get();
+        return view('costumerservice.keloladata', compact('user','cs','provinsi','allNasabah'));
     }
+
 
     public function store(Request $request) {
         $request->validate([
@@ -48,75 +64,90 @@ class rekeningController extends Controller
             // 'no_rekening' => 'required',
         ]);
 
+        $dataSiswa = DB::table('data_siswa')
+            ->where('nis', $request->nis_nip)
+            ->where('kode_pos', $request->kode_pos)
+            ->first();
+
+        $dataEmail = Nasabah::where('email', $request->email)->first();
+
         // $roleNasabah = Role::where('nama_role', 'nasabah')->first();
+    if (!$dataEmail) {
+        if ( $dataSiswa ) {
 
-        $userNasabah = User::create([
-            'name' => $request->nama_lengkap,
-            'role_id' => 1,
-            'password' => Hash::make($request->password),
-            'email' => $request->email,
-        ]);
+                    $userNasabah = User::create([
+                        'name' => $request->nama_lengkap,
+                        'role_id' => 1,
+                        'password' => Hash::make($request->password),
+                        'email' => $request->email,
+                    ]);
 
-        $dataNasabah = Nasabah::create([
-            'user_id' => $userNasabah->id,
-            'nis_nip' => $request->nis_nip,
-            'nama_nasabah' => $request->nama_lengkap,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'jurusan' => $request->jurusan,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'pendidikan' => $request->pendidikan,
-            'alamat' => $request->alamat,
-            'kelurahan' => $request->kelurahan,
-            'kecamatan' => $request->kecamatan,
-            'kab_kota' => $request->kab_kota,
-            'provinsi' => $request->provinsi,
-            'kode_pos' => $request->kode_pos,
-            'email' => $request->email,
-            'agama' => $request->agama,
-            'no_hp' => $request->no_hp,
-            'password' => Hash::make($request->password),
-            'jabatan' => $request->jabatan,
-            'jenis_identitas' => $request->jenis_identitas,
-            'nama_kontak_darurat' => $request->nama_kontak_darurat,
-            'alamat_kontak_darurat' => $request->alamat_kontak_darurat,
-            'no_hp_kontak_darurat' => $request->nomor_kontak_darurat,
-            'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
-        ]);
+                    $dataNasabah = Nasabah::create([
+                        'user_id' => $userNasabah->id,
+                        'nis_nip' => $request->nis_nip,
+                        'nama_nasabah' => $request->nama_lengkap,
+                        'tempat_lahir' => $request->tempat_lahir,
+                        'tanggal_lahir' => $request->tanggal_lahir,
+                        'jurusan_id' => $request->jurusan,
+                        'jenis_kelamin' => $request->jenis_kelamin,
+                        'pendidikan' => $request->pendidikan,
+                        'alamat' => $request->alamat,
+                        'kelurahan_id' => $request->kelurahan,
+                        'kecamatan_id' => $request->kecamatan,
+                        'kab_kota_id' => $request->kab_kota,
+                        'provinsi_id' => $request->provinsi,
+                        'kode_pos' => $request->kode_pos,
+                        'email' => $request->email,
+                        'agama' => $request->agama,
+                        'no_hp' => $request->no_hp,
+                        'password' => Hash::make($request->password),
+                        'jabatan' => $request->jabatan,
+                        'jenis_identitas' => $request->jenis_identitas,
+                        'nama_kontak_darurat' => $request->nama_kontak_darurat,
+                        'alamat_kontak_darurat' => $request->alamat_kontak_darurat,
+                        'no_hp_kontak_darurat' => $request->nomor_kontak_darurat,
+                        'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
+                        'pesan' => 'belum ada pesan',
+                    ]);
 
 
-        if ( $request->jabatan == 'Siswa' ) {
-            $no_rekening = 03 . $request->jurusan . $request->nis_nip;
-        }
 
-        if ( $request->jabatan == 'Guru' ) {
-            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
-            $urutan = Nasabah::where('jabatan', 'Guru')->count() + 1;
-            $no_rekening = 01 . $urutan . $tanggal;
-        }
+                    if ( $request->jabatan == 'Siswa' ) {
+                        $no_rekening = '03' . $request->jurusan . $request->nis_nip;
+                    }
 
-        if ( $request->jabatan == 'TU' ) {
-            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
-            $urutan = Nasabah::where('jabatan', 'TU')->count() + 1;
-            $no_rekening = 02 . $urutan . $tanggal;
-        }
+                    if ( $request->jabatan == 'Guru' ) {
+                        $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+                        $urutan = Nasabah::where('jabatan', 'Guru')->count() + 1;
+                        $no_rekening = '01' . $urutan . $tanggal;
+                    }
 
-        Rekening::create([
-            'id' => $no_rekening,
-            'nasabah_id' => $dataNasabah->id,
-            'saldo_saat_ini' => 0,
-            'status_akun' => 'non-aktif',
-        ]);
+                    if ( $request->jabatan == 'TU' ) {
+                        $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+                        $urutan = Nasabah::where('jabatan', 'TU')->count() + 1;
+                        $no_rekening = '02' . $urutan . $tanggal;
+                    }
 
-        return redirect()->route('costumerservice.keloladata')->with('success','Data Rekening berhasil ditambah');
+                    Rekening::create([
+                        'id' => $no_rekening,
+                        'nasabah_id' => $dataNasabah->id,
+                        'saldo_saat_ini' => 0,
+                        'status_akun' => 'non-aktif',
+                    ]);
 
+                    return redirect()->route('costumerservice.keloladata')->with('success','Data Rekening berhasil ditambah');
+                }
     }
+    return redirect()->route('costumerservice.keloladata')->with('failed','Data Rekening gagal ditambah');
+}
+
+
 
     public function edit(String $id) {
         $user = Auth::user();
         $cs = $user->petugas;
-        $userNasabah = User::with('nasabah.rekening')->findOrFail($id);
-        return view('costumerservice.crudnasabah.edit', compact('user','cs','userNasabah'));
+        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+        return view('costumerservice.crudnasabah.edit', compact('user','cs','nasabah'));
     }
 
     public function update(Request $request, String $id) {
@@ -186,6 +217,7 @@ class rekeningController extends Controller
         $rekening->update([
             'id' => $request->no_rekening,
         ]);
+
 
         return redirect()->route('costumerservice.keloladata')->with('success','data nasabah berhasil di ubah');
 

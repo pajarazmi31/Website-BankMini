@@ -58,22 +58,60 @@
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id}}</td>
                         <td class="py-4 px-4 border-b border-gray-50 text-left">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
+                            @if ($nasabah->rekening->status_akun == 'aktif')
+                                <span class="w-7 h-7 rounded-full bg-green-100 text-green-800 text-brand-blue flex items-center justify-center transition-colors shadow-sm">
+                                    <i class="ph ph-check-circle text-[20px]"  title="Aktif"></i>
+                                </span>
+                            @elseif( $nasabah->rekening->status_akun == 'non-aktif' )
+                                <span class="w-7 h-7 rounded-full bg-red-100 text-red-800 text-brand-blue flex items-center justify-center transition-colors shadow-sm">
+                                    <i class="ph ph-x-circle text-[20px]"  title="Non Aktif"></i>
+                                </span>
+                            @elseif ( $nasabah->rekening->status_akun == 'revisi')
+                                <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                    <i class="ph-bold ph-warning-circle text-[15px]"></i>
+                                </button>
+                            @endif
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50">
                             <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('detail.nasabah',$nasabah->id) }}">
-                                    <button class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                        <i class="ph-fill ph-eye text-[15px]"></i>
-                                    </button>
-                                </a>
-                                <a href="{{ route('edit.nasabah', $nasabah->user_id) }}">
-                                <button class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                </a>
+                        <button
+                        onclick="showDetail(
+                        '{{ $nasabah->nama_nasabah }}',
+                        '{{ $nasabah->nis_nip }}',
+                        '{{ $nasabah->jurusan->nama_jurusan }}',
+                        '{{ $nasabah->tempat_lahir }}',
+                        '{{ $nasabah->tanggal_lahir }}',
+                        '{{ $nasabah->jenis_kelamin }}',
+                        '{{ $nasabah->jenis_identitas }}',
+                        '{{ $nasabah->agama }}',
+                        '{{ $nasabah->pendidikan }}',
+                        '{{ $nasabah->jabatan }}',
+                        '{{ $nasabah->no_hp }}',
+                        '{{ $nasabah->email }}',
+                        '{{ $nasabah->alamat }}',
+                        '{{ $nasabah->desa->name }}',
+                        '{{ $nasabah->kecamatan->name }}',
+                        '{{ $nasabah->kabupaten->name }}',
+                        '{{ $nasabah->provinsi->name }}',
+                        '{{ $nasabah->kode_pos }}',
+                        '{{ $nasabah->nama_kontak_darurat }}',
+                        '{{ $nasabah->no_hp_kontak_darurat }}',
+                        '{{ $nasabah->hubungan_kontak_darurat }}',
+                        '{{ $nasabah->alamat_kontak_darurat }}',
+                        '{{ $nasabah->rekening->id }}',
+                        '{{ $nasabah->rekening->status_akun }}'
+                        )"
+                        class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                        title="Lihat Detail">
+
+                        <i class="ph-fill ph-eye text-[15px]"></i>
+                        </button>
+                        <a href="{{ route('edit.nasabah', $nasabah->id) }}">
+                        <button  class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                        title="Edit">
+                        <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+                        </button>
+                        </a>
                                 <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post">
                                     @csrf
                                     @method('DELETE')
@@ -97,7 +135,9 @@
 
 <!-- ================= CRUD VIEWS (Separated Files) ================= -->
 @include('costumerservice.crudnasabah.tambah')
+@if (isset($userNasabah))
 @include('costumerservice.crudnasabah.edit')
+@endif
 @if(isset($nasabah))
     @include('costumerservice.crudnasabah.detail')
 @endif
@@ -157,5 +197,159 @@
         document.getElementById('edit_jurusan').value = jurusan;
         switchView('edit');
     }
+
+
+
+function switchView(viewName) {
+
+    const views = {
+        tabel: document.getElementById('viewTabelData'),
+        tambah: document.getElementById('viewTambahData'),
+        edit: document.getElementById('viewEditData'),
+        detail: document.getElementById('viewDetailData')
+    };
+
+    Object.values(views).forEach(view => {
+        if(view){
+            view.classList.add('hidden');
+            view.classList.remove('block','flex');
+        }
+    });
+
+    if(views[viewName]){
+        views[viewName].classList.remove('hidden');
+
+        if(viewName === 'tabel'){
+            views[viewName].classList.add('flex');
+        } else {
+            views[viewName].classList.add('block');
+        }
+    }
+}
+
+
+    function showDetail(
+    nama,
+    nis,
+    jurusan,
+    tempat_lahir,
+    tanggal_lahir,
+    jenis_kelamin,
+    identitas,
+    agama,
+    pendidikan,
+    jabatan,
+    telepon,
+    email,
+    alamat,
+    kelurahan,
+    kecamatan,
+    kab_kota,
+    provinsi,
+    kode_pos,
+    kontak_nama,
+    kontak_telepon,
+    kontak_hubungan,
+    kontak_alamat,
+    rekening,
+    status
+    ){
+
+        document.getElementById('detail_nama').value = nama;
+        document.getElementById('detail_nis').value = nis;
+        document.getElementById('detail_jurusan').value = jurusan;
+        document.getElementById('detail_tempat_lahir').value = tempat_lahir;
+        document.getElementById('detail_tanggal_lahir').value = tanggal_lahir;
+        document.getElementById('detail_jenis_kelamin').value = jenis_kelamin;
+        document.getElementById('detail_identitas').value = identitas;
+        document.getElementById('detail_agama').value = agama;
+        document.getElementById('detail_pendidikan').value = pendidikan;
+        document.getElementById('detail_jabatan').value = jabatan;
+        document.getElementById('detail_telepon').value = telepon;
+        document.getElementById('detail_email').value = email;
+        document.getElementById('detail_alamat').value = alamat;
+        document.getElementById('detail_kelurahan').value = kelurahan;
+        document.getElementById('detail_kecamatan').value = kecamatan;
+        document.getElementById('detail_kab_kota').value = kab_kota;
+        document.getElementById('detail_provinsi').value = provinsi;
+        document.getElementById('detail_kode_pos').value = kode_pos;
+
+        document.getElementById('detail_kontak_nama').value = kontak_nama;
+        document.getElementById('detail_kontak_telepon').value = kontak_telepon;
+        document.getElementById('detail_kontak_hubungan').value = kontak_hubungan;
+        document.getElementById('detail_kontak_alamat').value = kontak_alamat;
+
+        document.getElementById('detail_rekening').value = rekening;
+        document.getElementById('detail_status').value = status;
+
+        switchView('detail');
+    }
+
+
+function showEdit(
+id,
+nama,
+nis,
+jurusan,
+tempat_lahir,
+tanggal_lahir,
+jenis_kelamin,
+identitas,
+agama,
+pendidikan,
+jabatan,
+telepon,
+email,
+alamat,
+kelurahan,
+kecamatan,
+kab_kota,
+provinsi,
+kode_pos,
+kontak_nama,
+kontak_telepon,
+kontak_hubungan,
+kontak_alamat,
+rekening,
+status
+){
+
+    // isi form edit
+    document.getElementById('edit_nama').value = nama;
+    document.getElementById('edit_nis').value = nis;
+    document.getElementById('edit_jurusan').value = jurusan;
+    document.getElementById('edit_tempat_lahir').value = tempat_lahir;
+    document.getElementById('edit_tanggal_lahir').value = tanggal_lahir;
+    document.getElementById('edit_jenis_kelamin').value = jenis_kelamin;
+    document.getElementById('edit_identitas').value = identitas;
+    document.getElementById('edit_agama').value = agama;
+    document.getElementById('edit_pendidikan').value = pendidikan;
+    document.getElementById('edit_jabatan').value = jabatan;
+    document.getElementById('edit_telepon').value = telepon;
+    document.getElementById('edit_email').value = email;
+    document.getElementById('edit_alamat').value = alamat;
+    document.getElementById('edit_kelurahan').value = kelurahan;
+    document.getElementById('edit_kecamatan').value = kecamatan;
+    document.getElementById('edit_kab_kota').value = kab_kota;
+    document.getElementById('edit_provinsi').value = provinsi;
+    document.getElementById('edit_kode_pos').value = kode_pos;
+
+    document.getElementById('edit_kontak_nama').value = kontak_nama;
+    document.getElementById('edit_kontak_telepon').value = kontak_telepon;
+    document.getElementById('edit_kontak_hubungan').value = kontak_hubungan;
+    document.getElementById('edit_kontak_alamat').value = kontak_alamat;
+
+    document.getElementById('edit_rekening').value = rekening;
+    document.getElementById('edit_status').value = status;
+
+    // ubah action form
+    document.getElementById('nasabahFormEdit').action =
+        '/update-nasabah/' + id;
+
+    // pindah view
+    switchView('edit');
+}
+
+
 </script>
 @endsection

@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                    <input type="text" value="{{ $nasabah->jurusan }}" id="detail_jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+                    <input type="text" value="{{ $nasabah->jurusan->nama_jurusan }}" id="detail_jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
                 </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tempat Lahir</label>
@@ -80,7 +80,7 @@
                 </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                    <input type="text" value="{{ $nasabah->provinsi }}" id="detail_kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+                    <input type="text" value="{{ $nasabah->kode_pos }}" id="detail_kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
                 </div>
             </div>
         </div>
@@ -108,7 +108,7 @@
                 </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Alamat</label>
-                    <textarea id="detail_kontak_alamat" class="w-full h-[225px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none bg-gray-50 focus:outline-none" readonly> {{ $nasabah->alamat_kontak_darurat }}</textarea>
+                    <textarea id="detail_kontak_alamat" class="w-full h-[225px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none bg-gray-50 focus:outline-none" readonly>{{ $nasabah->alamat_kontak_darurat }}</textarea>
                 </div>
             </div>
         </div>
@@ -122,13 +122,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                    <input type="text" value="{{ $nasabah->rekening->id }}" id="detail_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+                    <input type="text" value="{{ $nasabah->rekening->no_rekening ?? '' }}" id="detail_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
                 </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
                     <input type="text" value="{{ $nasabah->rekening->status_akun }}" id="detail_status" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
                 </div>
             </div>
+
+            <!-- PESAN REVISI - DIPERBAIKI -->
+            @if( $nasabah->rekening->status_akun == 'revisi')
+            <div class="mt-6">
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">📝 Pesan Revisi</label>
+                <div class="w-full border border-amber-200 rounded-lg px-4 py-3 text-[14px] text-gray-700 bg-amber-50 resize-none">
+                    {{ $nasabah->pesan}}
+                </div>
+            </div>
+            @endif
         </div>
 
         <!-- BUTTONS -->

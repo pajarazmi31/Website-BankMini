@@ -109,7 +109,7 @@
                     <div id="kelolaDataSubmenu" class="grid transition-all duration-300 {{ $isKelolaData ? 'submenu-open' : 'submenu-closed' }}">
                         <div class="overflow-hidden flex flex-col">
                             <a href="{{ route('supervisor.datapetugas') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.datapetugas' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Data Petugas</a>
-                            <a href="{{ route('supervisor.datanasabah') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.datanasabah' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Data Nasabah</a>
+                            <a href="{{ route('nasabah.supervisor') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.datanasabah' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Data Nasabah</a>
                             <div class="h-2"></div>
                         </div>
                     </div>
