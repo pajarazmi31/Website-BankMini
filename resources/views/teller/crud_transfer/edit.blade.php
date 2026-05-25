@@ -32,11 +32,19 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-10">
             <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nominal Transfer (Rp)</label>
-                <input type="number" id="edit_nominal" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
+                <input type="text" id="edit_nominal" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
             </div>
             <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Catatan (Opsional)</label>
-                <input type="text" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
+                <input type="text" id="edit_catatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
+            </div>
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Transaksi (Rp)</label>
+                <input type="text" id="edit_biaya_transaksi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
+            </div>
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Total Biaya (Rp)</label>
+                <input type="text" id="edit_total_biaya" readonly class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none transition-all">
             </div>
         </div>
 
@@ -47,3 +55,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function() {
+        const editNominal = document.getElementById('edit_nominal');
+        const editBiaya = document.getElementById('edit_biaya_transaksi');
+        const editTotal = document.getElementById('edit_total_biaya');
+
+        function cleanNumber(value) {
+            return parseInt(value.replace(/\D/g, '')) || 0;
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('id-ID').format(num);
+        }
+
+        function calculateEditTotal() {
+            const nominal = cleanNumber(editNominal.value);
+            const biaya = cleanNumber(editBiaya.value);
+            const total = nominal > 0 ? (nominal + biaya) : 0;
+            editTotal.value = total > 0 ? formatNumber(total) : '';
+        }
+
+        editNominal.addEventListener('input', function () {
+            let val = cleanNumber(this.value);
+            this.value = this.value === '' ? '' : formatNumber(val);
+            calculateEditTotal();
+        });
+
+        editBiaya.addEventListener('input', function () {
+            let val = cleanNumber(this.value);
+            this.value = this.value === '' ? '' : formatNumber(val);
+            calculateEditTotal();
+        });
+
+        // Expose calculateEditTotal to window so we can trigger it when setting values in editData
+        window.calculateEditTotal = calculateEditTotal;
+    })();
+</script>

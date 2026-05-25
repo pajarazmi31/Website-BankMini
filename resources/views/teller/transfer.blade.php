@@ -15,7 +15,6 @@
 
 @section('content')
 
-
 <!-- ================= VIEW 1: TABEL DATA TRANSFER ================= -->
 <div id="viewTabelData" class="fade-in block flex-1 flex flex-col justify-start">
     <!-- Search Bar Mobile -->
@@ -26,8 +25,8 @@
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Transfer</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5    rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Data
+        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+            <i class="ph ph-plus text-base"></i> Tambah Transfer
         </button>
     </div>
 
@@ -37,56 +36,84 @@
                 <thead>
                     <tr>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] w-12 border-b border-gray-100">No</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Pengirim</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Penerima</th>
+                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Norek. Pengirim</th>
+                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Norek. Penerima</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nominal Rupiah</th>
+                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Tanggal</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Petugas</th>
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-36 border-b border-gray-100">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                    @php
-                        $data = [
-                            ['no' => 1, 'pengirim' => 'Pajar Azmi Anugraha', 'penerima' => 'Salsabila Rosi Cahyani', 'nominal' => 'Rp. 200.000', 'petugas' => 'Aditya'],
-                            ['no' => 2, 'pengirim' => 'Anisa Siti', 'penerima' => 'Hamdan', 'nominal' => 'Rp. 50.000', 'petugas' => 'Fakih'],
-                            ['no' => 3, 'pengirim' => 'Salsabila', 'penerima' => 'Dinar', 'nominal' => 'Rp. 100.000', 'petugas' => 'Ali'],
-                            ['no' => 4, 'pengirim' => 'Rafka', 'penerima' => 'Fakih', 'nominal' => 'Rp. 150.000', 'petugas' => 'Dinar'],
-                            ['no' => 5, 'pengirim' => 'Yanto', 'penerima' => 'Ali', 'nominal' => 'Rp. 25.000', 'petugas' => 'Aditya'],
-                        ];
-                    @endphp
-                    @foreach($data as $d)
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['no'] }}.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['pengirim'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['penerima'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-gray-800">{{ $d['nominal'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d['petugas'] }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <div class="flex items-center justify-center gap-2">
-                                <button onclick="showDetail('{{ $d['pengirim'] }}', '{{ $d['penerima'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
-                                    <i class="ph-fill ph-eye text-[15px]"></i>
-                                </button>
-                                <button onclick="editData('{{ $d['pengirim'] }}', '{{ $d['penerima'] }}', '{{ $d['nominal'] }}', '{{ $d['petugas'] }}')" class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
-                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                                </button>
-                                <button onclick="openDeleteModal(() => showToast('Data Transfer Berhasil Dihapus!'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
+                @forelse($data as $index => $d)
+                <tr class="hover:bg-gray-50/50 transition-colors">
+                    <td class="py-4 px-2 border-b border-gray-50">{{ $index + 1 }}.</td>
+                    <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_pengirim }}</td>
+                    <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_penerima }}</td>
+                    <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
+                        Rp. {{ number_format($d->jumlah_transfer, 0, ',', '.') }}
+                    </td>
+                    <td class="py-4 px-2 border-b border-gray-50">
+                        {{ $d->created_at->format('d-m-Y') }}
+                    </td>
+                   <td class="py-4 px-2 border-b border-gray-50">{{ $d->petugas->nama_petugas ?? 'Teller' }}</td>
+                    <td class="py-4 px-2 border-b border-gray-50 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button type="button" 
+                                    onclick="tampilkanDetail(this)"
+                                    data-petugas="{{ $d->petugas->nama_petugas ?? 'Teller' }}"
+                                    data-pengirim="{{ $d->rekeningPengirim->nama_nasabah ?? $d->id_rekening_pengirim }}"
+                                    data-penerima="{{ $d->rekeningPenerima->nama_nasabah ?? $d->id_rekening_penerima }}"
+                                    data-nominal="{{ number_format($d->jumlah_transfer, 0, ',', '.') }}"
+                                    data-biaya="{{ number_format(($d->total_biaya - $d->jumlah_transfer), 0, ',', '.') }}"
+                                    data-total="{{ number_format($d->total_biaya, 0, ',', '.') }}"
+                                    data-catatan="{{ $d->catatan ?? '-' }}"
+                                    class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                                    title="Lihat Detail">
+                                <i class="ph-fill ph-eye text-[15px]"></i>
+                            </button>
+
+                            <button
+                                type="button"
+                                onclick='editData(
+                                    "{{ $d->id }}",
+                                    "{{ $d->id_rekening_pengirim }}",
+                                    "{{ $d->id_rekening_penerima }}",
+                                    "{{ $d->jumlah_transfer }}",
+                                    "{{ $teller->nama_petugas }}",
+                                    "{{ $d->catatan }}"
+                                )'
+                                class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                                title="Edit">
+                                <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+                            </button>
+
+                            <form action="{{ route('transfer.delete', $d->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    type="submit"
+                                    onclick="return confirm('Yakin ingin menghapus data ini?')"
+                                    class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors">
                                     <i class="ph-fill ph-trash text-[15px]"></i>
                                 </button>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="6" class="py-10 text-center text-gray-400 font-medium">Tidak ada data transfer</td>
+                </tr>
+                @endforelse
                 </tbody>
             </table>
         </div>
-
-        <!-- Pagination -->
         <x-pagination />
-
     </div>
 </div>
 
-<!-- ================= CRUD VIEWS (Separated Files) ================= -->
+<!-- ================= CRUD VIEWS MODULAR ================= -->
 @include('teller.crud_transfer.tambah')
 @include('teller.crud_transfer.detail')
 @include('teller.crud_transfer.edit')
@@ -95,6 +122,11 @@
 
 @section('scripts')
 <script>
+    // Tarik data konfigurasi master dari DB lewat controller bray
+    const BIAYA_ADMIN_MASTER = parseInt("{{ $transaksi->nominal ?? 0 }}") || 0;
+    const MASTER_TRANSAKSI_ID = "{{ $transaksi->id ?? '' }}";
+
+    // Kunci Pengendali Halaman (Switch View)
     function switchView(viewName) {
         const views = {
             'tabel': document.getElementById('viewTabelData'),
@@ -103,40 +135,158 @@
             'detail': document.getElementById('viewDetailData')
         };
 
-        Object.values(views).forEach(v => {
-            if(v) v.classList.add('hidden');
-        });
+        Object.values(views).forEach(v => { if(v) v.classList.add('hidden'); });
 
         const activeView = views[viewName];
-        const searchBar = document.getElementById('searchBarContainer');
-
         if (activeView) {
             activeView.classList.remove('hidden');
             if (viewName === 'tabel') {
                 activeView.classList.add('flex');
-                if (searchBar) searchBar.classList.remove('md:hidden');
             } else {
                 activeView.classList.add('block');
-                if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
-        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function showDetail(pengirim, penerima, nominal, petugas) {
-        document.getElementById('detail_pengirim').value = pengirim;
-        document.getElementById('detail_penerima').value = penerima;
-        document.getElementById('detail_nominal').value = nominal;
-        document.getElementById('detail_petugas').value = petugas;
+    // --- LOGIKA UTILITY ANGKA ---
+    function cleanNumber(value) {
+        return parseInt(value.toString().replace(/\D/g, '')) || 0;
+    }
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat('id-ID').format(num);
+    }
+
+    function hitungBiaya(prefix) {
+        const inputNominal = document.getElementById(`${prefix}_jumlah_transfer`);
+        const inputAdmin   = document.getElementById(`${prefix}_biaya_transaksi`);
+        const inputTotal   = document.getElementById(`${prefix}_total_biaya`);
+        const inputTotalView = document.getElementById(`${prefix}_total_biaya_view`);
+
+        if (!inputNominal) return;
+
+        let nominal = cleanNumber(inputNominal.value);
+        let total   = nominal + BIAYA_ADMIN_MASTER;
+
+        if (inputAdmin) inputAdmin.value = BIAYA_ADMIN_MASTER;
+        if (inputTotal) inputTotal.value = total;
+        if (inputTotalView) inputTotalView.value = 'Rp. ' + formatNumber(total);
+    }
+
+        function tampilkanDetail(button) {
+        // Pastikan semua atribut menggunakan prefix 'data-'
+        const petugas  = button.getAttribute('data-petugas');
+        const pengirim = button.getAttribute('data-pengirim');
+        const penerima = button.getAttribute('data-penerima');
+        const nominal  = button.getAttribute('data-nominal');
+        const biaya    = button.getAttribute('data-biaya');
+        const total    = button.getAttribute('data-total');
+        const catatan  = button.getAttribute('data-catatan');
+
+        // Masukkan ke input (tambahkan pengecekan agar tidak error jika elemen tidak ditemukan)
+        const setVal = (id, val) => {
+            const el = document.getElementById(id);
+            if (el) el.value = val;
+        };
+
+        setVal('detail_petugas', petugas);
+        setVal('detail_pengirim', pengirim);
+        setVal('detail_penerima', penerima);
+        setVal('detail_nominal', "Rp. " + nominal);
+        setVal('detail_biaya_transaksi', "Rp. " + biaya);
+        setVal('detail_total_biaya', "Rp. " + total);
+        setVal('detail_catatan', catatan);
+
         switchView('detail');
     }
-
-    function editData(pengirim, penerima, nominal, petugas) {
-        document.getElementById('edit_pengirim').value = pengirim;
-        document.getElementById('edit_penerima').value = penerima;
-        document.getElementById('edit_nominal').value = nominal;
-        document.getElementById('edit_petugas').value = petugas;
+    // --- VIEW EDIT & INJEKSI DATA ---
+    function editData(id, pengirim, penerima, nominal, petugas, catatan) {
+        document.getElementById('edit_id').value = id;
+        document.getElementById('edit_id_rekening_pengirim').value = pengirim;
+        document.getElementById('edit_id_rekening_penerima').value = penerima;
+        document.getElementById('edit_jumlah_transfer').value = formatNumber(nominal);
+        document.getElementById('edit_catatan').value = catatan || '';
+        
+        if(document.getElementById('edit_transaksi_id')) {
+            document.getElementById('edit_transaksi_id').value = MASTER_TRANSAKSI_ID;
+        }
+        
+        hitungBiaya('edit');
+        
+        const formEdit = document.getElementById('editForm');
+        if(formEdit) formEdit.action = `/teller/transfer/update/${id}`; 
+        
         switchView('edit');
     }
+
+    // --- AJAX DETEKSI PEMILIK REKENING (TAMBAH / EDIT) ---
+    function cekRekening(prefix, jenis) {
+        const inputNorek = document.getElementById(`${prefix}_id_rekening_${jenis}`);
+        const infoLabel  = document.getElementById(`${prefix}_info_${jenis}`);
+        
+        if(!inputNorek || !infoLabel) return;
+        let norek = inputNorek.value.trim();
+
+        if (norek.length < 3) {
+            infoLabel.innerText = '';
+            return;
+        }
+
+        infoLabel.innerText = 'Memeriksa...';
+        infoLabel.className = 'text-xs text-gray-400 mt-1';
+
+        fetch(`/teller/cari-rekening/${norek}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    infoLabel.innerText = `✓ Nama: ${data.nama} | Saldo: Rp. ${formatNumber(data.saldo)}`;
+                    infoLabel.className = 'text-xs text-green-600 font-semibold mt-1';
+                } else {
+                    infoLabel.innerText = 'Nomor Rekening Tidak Ditemukan!';
+                    infoLabel.className = 'text-xs text-red-500 font-semibold mt-1';
+                }
+            })
+            .catch(() => {
+                infoLabel.innerText = 'Gagal memverifikasi data';
+                infoLabel.className = 'text-xs text-red-500 mt-1';
+            });
+    }
+
+    // --- INITIALIZE EVENT LISTENERS (ANTI BENTROK) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const tambahNominal = document.getElementById('tambah_jumlah_transfer');
+        if (tambahNominal) {
+            tambahNominal.addEventListener('input', function() {
+                let val = this.value.replace(/\D/g, '');
+                this.value = val ? formatNumber(val) : '';
+                hitungBiaya('tambah');
+            });
+        }
+
+        const editNominal = document.getElementById('edit_jumlah_transfer');
+        if (editNominal) {
+            editNominal.addEventListener('input', function() {
+                let val = this.value.replace(/\D/g, '');
+                this.value = val ? formatNumber(val) : '';
+                hitungBiaya('edit');
+            });
+        }
+
+        // SANITASI DATA SEBELUM SUBMIT (Kunci utama data sukses tersimpan bray!)
+        const formTambah = document.getElementById('tambahPenarikanForm') || document.querySelector('#viewTambahData form');
+        if (formTambah) {
+            formTambah.addEventListener('submit', function() {
+                if(tambahNominal) tambahNominal.value = cleanNumber(tambahNominal.value);
+            });
+        }
+
+        const formEdit = document.getElementById('editForm');
+        if (formEdit) {
+            formEdit.addEventListener('submit', function() {
+                if(editNominal) editNominal.value = cleanNumber(editNominal.value);
+            });
+        }
+    });
 </script>
 @endsection

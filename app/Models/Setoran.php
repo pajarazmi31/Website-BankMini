@@ -16,7 +16,7 @@ class Setoran extends Model
         'catatan',
         'jumlah_penyetoran',
         'setoran',
-        'biaya_transaksi',
+        'transaksi_id',
         'nama_lengkap',
         'nama_penyetor',
         'alamat_penyetor',
@@ -28,5 +28,15 @@ class Setoran extends Model
     public function rekening()
     {
         return $this->belongsTo(Rekening::class, 'id_rekening', 'id');
+    }
+
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'transaksi_id');
+    }
+    
+    public function petugas()
+    {
+        return $this->belongsTo(Petugas::class, 'id_petugas');
     }
 }

@@ -27,7 +27,7 @@
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Penarikan</h3>
         <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Data
+            <i class="ph ph-plus text-base"></i> Tambah Penarikan
         </button>
     </div>
 
@@ -67,72 +67,67 @@
                 </td>
 
                 <td class="py-4 px-2 border-b border-gray-50">
-                    {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y H:i') }}
+                    {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
                 </td>
 
                 <td class="py-4 px-2 border-b border-gray-50">
                     {{ $teller->nama_petugas }}
                 </td>
 
-                <td class="py-4 px-2 border-b border-gray-50 text-center">
+            <td class="py-4 px-2 border-b border-gray-50 text-center">
+                <div class="flex items-center justify-center gap-2">
 
-                    <div class="flex items-center justify-center gap-2">
-
-                        <button
-                            onclick="showDetail(
-                                '{{ $d->nama_penarik }}',
-                                '{{ $d->id_rekening }}',
-                                '{{ number_format($d->jumlah_penarikan,0,",",".") }}',
-                                '{{ $teller->nama_petugas }}'
-                            )"
-
-                            class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
-                            title="Lihat Detail">
-
-                            <i class="ph-fill ph-eye text-[15px]"></i>
-
-                        </button>
-
-                        <button
-                            onclick="editData(
-                                '{{ $d->id }}',
-                                '{{ $d->nama_penarik }}',
-                                '{{ $d->id_rekening }}',
-                                '{{ $d->jumlah_penarikan }}',
-                                '{{ $teller->nama_petugas }}'
-                            )"
-
-                            class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
-                            title="Edit">
-
-                            <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-
-                        </button>
-
-                <form
-                    action="{{ route('penarikan.delete', $d->id) }}"
-                    method="POST"
-                    onsubmit="return confirm('Yakin hapus data ini?')"
-                >
-
-                    @csrf
-                    @method('DELETE')
-
+                    <!-- Tombol Detail di dalam baris tabel lu -->
                     <button
-                        type="submit"
-                        class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
-                        title="Hapus"
-                    >
-
-                        <i class="ph-fill ph-trash text-[15px]"></i>
-
+                        type="button"
+                        onclick="showDetail(
+                            '{{ $d->nama_penarik }}',
+                            '{{ $d->id_rekening }}',
+                            '{{ $d->jumlah_penarikan }}', 
+                            '{{ $teller->nama_petugas }}',
+                            '{{ $d->transaksi->nominal ?? 0 }}'
+                        )"
+                        class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                        title="Lihat Detail">
+                        <i class="ph-fill ph-eye text-[15px]"></i>
                     </button>
 
-                </form>
+                    <!-- 2. TOMBOL EDIT (Sudah ditambahkan type="button" agar tidak memicu submit apa pun) -->
+                    <button
+                        type="button"
+                        onclick="editData(
+                            '{{ $d->id }}',
+                            '{{ $d->nama_penarik }}',
+                            '{{ $d->id_rekening }}',
+                            '{{ $d->jumlah_penarikan }}',
+                            '{{ $teller->nama_petugas }}',
+                            '{{ $d->transaksi->nominal ?? 0 }}'
+                        )"
+                        class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                        title="Edit">
+                        <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+                    </button>
 
-                    </div>
+                    <!-- 3. FORM & TOMBOL HAPUS (Dibuat inline-block agar tidak memakan space tombol edit) -->
+                    <form
+                        action="{{ route('penarikan.delete', $d->id) }}"
+                        method="POST"
+                        onsubmit="return confirm('Yakin hapus data ini?')"
+                        class="inline-block m-0 p-0"
+                    >
+                        @csrf
+                        @method('DELETE')
+                        <button
+                            type="submit"
+                            class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
+                            title="Hapus"
+                        >
+                            <i class="ph-fill ph-trash text-[15px]"></i>
+                        </button>
+                    </form>
 
-                </td>
+                </div>
+            </td>
 
             </tr>
 
@@ -171,49 +166,215 @@
 <script>
     function switchView(viewName) {
         const views = {
-            'tabel': document.getElementById('viewTabelData'),
-            'tambah': document.getElementById('viewTambahData'),
-            'edit': document.getElementById('viewEditData'),
-            'detail': document.getElementById('viewDetailData')
+            tabel: document.getElementById('viewTabelData'),
+            tambah: document.getElementById('viewTambahData'),
+            edit: document.getElementById('viewEditData'),
+            detail: document.getElementById('viewDetailData')
         };
 
         Object.values(views).forEach(v => {
-            if(v) v.classList.add('hidden');
+            if (v) {
+                v.classList.add('hidden');
+                v.classList.remove('flex', 'block');
+            }
         });
 
         const activeView = views[viewName];
-        const searchBar = document.getElementById('searchBarContainer');
 
         if (activeView) {
             activeView.classList.remove('hidden');
+
             if (viewName === 'tabel') {
                 activeView.classList.add('flex');
-                if (searchBar) searchBar.classList.remove('md:hidden');
             } else {
                 activeView.classList.add('block');
-                if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
-        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+        document.querySelector('main')
+            .scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function showDetail(nama, rek, nominal, petugas){
-        document.getElementById('detail_nama').value = nama;
+    // =========================
+    // FORMAT HELPER
+    // =========================
+
+    function formatRibuan(num) {
+        return new Intl.NumberFormat('id-ID').format(num);
+    }
+
+    function bersihAngka(txt) {
+        return parseInt(txt.toString().replace(/\D/g, '')) || 0;
+    }
+
+    // =========================
+    // DETAIL
+    // =========================
+
+    function showDetail(nama, rek, nominal, petugas, biaya) {
+
+        let angkaNominal = parseInt(nominal) || 0;
+        let angkaBiaya   = parseInt(biaya) || 0;
+        let angkaTotal   = angkaNominal + angkaBiaya;
+
+        document.getElementById('detail_petugas').value = petugas;
         document.getElementById('detail_rek').value = rek;
-        document.getElementById('detail_nominal').value ='Rp. ' + nominal;
-        document.getElementById('detail_petugas').value =petugas;
+        document.getElementById('detail_nama').value = nama;
+
+        document.getElementById('detail_nominal').value =
+            'Rp. ' + formatRibuan(angkaNominal);
+
+        document.getElementById('detail_biaya').value =
+            'Rp. ' + formatRibuan(angkaBiaya);
+
+        document.getElementById('detail_total').value =
+            'Rp. ' + formatRibuan(angkaTotal);
+
         switchView('detail');
     }
 
-    function editData(id, nama, rek, nominal, petugas)
-    {
-        document.getElementById('edit_id').value = id;
-        document.getElementById('edit_nama').value = nama;
-        document.getElementById('edit_rek').value = rek;
-        document.getElementById('edit_nominal').value = nominal;
-        document.getElementById('edit_petugas').value = petugas;
-        document.getElementById('editForm').action = '/penarikan/update/' + id;
-        switchView('edit');
+   // =========================
+// EDIT
+// =========================
+
+function jalankanKalkulatorEdit() {
+
+    const nominal = bersihAngka(
+        document.getElementById('edit_jumlah_penarikan').value
+    );
+
+    const biaya = bersihAngka(
+        document.getElementById('edit_biaya_transaksi').value
+    );
+
+    const total = nominal + biaya;
+
+    document.getElementById('edit_total').value = total;
+
+    document.getElementById('edit_total_biaya').value =
+        'Rp. ' + formatRibuan(total);
+}
+
+document.getElementById('edit_jumlah_penarikan')
+    ?.addEventListener('input', function () {
+
+        let val = this.value.replace(/\D/g, '');
+
+        this.value = val
+            ? formatRibuan(val)
+            : '';
+
+        jalankanKalkulatorEdit();
+    });
+
+
+// =====================================
+// FUNCTION CARI NAMA REKENING
+// =====================================
+async function cariNamaRekening() {
+
+    const rekeningInput =
+        document.getElementById('edit_id_rekening');
+
+    const namaInput =
+        document.getElementById('edit_nama_penarik');
+
+    let rekening = rekeningInput.value.trim();
+
+    namaInput.value = '';
+
+    if (rekening.length === 0) return;
+
+    try {
+
+        let response =
+            await fetch(`/cari-rekening/${rekening}`);
+
+        let data =
+            await response.json();
+
+        console.log(data);
+
+        if (data.success) {
+
+            namaInput.value = data.nama;
+
+        } else {
+
+            namaInput.value = 'Rekening tidak ditemukan';
+
+        }
+
+    } catch (err) {
+
+        console.error('Gagal cari rekening:', err);
+
+    }
+
+    document.getElementById('edit_id_rekening')
+    ?.addEventListener('input', cariNamaRekening);
+
+}
+
+
+function editData(id, nama, rek, nominal, petugas, biaya) {
+
+    document.getElementById('edit_id').value = id;
+
+    document.getElementById('edit_nama_penarik').value = nama;
+
+    document.getElementById('edit_id_rekening').value = rek;
+
+    // INI PENTING
+    cariNamaRekening();
+
+    document.getElementById('edit_petugas').value = petugas;
+
+    let biayaMurni = parseInt(biaya) || 0;
+
+    document.getElementById('edit_biaya_transaksi').value =
+        formatRibuan(biayaMurni);
+
+    document.getElementById('edit_biaya').value =
+        biayaMurni;
+
+    document.getElementById('edit_jumlah_penarikan').value =
+        formatRibuan(nominal);
+
+    document.getElementById('editPenarikanForm').action =
+        '/penarikan/update/' + id;
+
+    jalankanKalkulatorEdit();
+
+    switchView('edit');
+}
+
+    const nominalTambah =
+        document.getElementById('jumlah_penarikan');
+
+    if (nominalTambah) {
+
+        nominalTambah.addEventListener('input', function () {
+
+            let val = this.value.replace(/\D/g, '');
+
+            this.value = val
+                ? formatRibuan(val)
+                : '';
+
+            const selected =
+                transaksiSelect.options[
+                    transaksiSelect.selectedIndex
+                ];
+
+            const biaya =
+                parseInt(selected.dataset.biaya) || 0;
+
+            const total =
+                bersihAngka(val) + biaya;
+
+            document.getElementById('total_biaya').value =
+                'Rp. ' + formatRibuan(total);
+        });
     }
 </script>
-@endsection

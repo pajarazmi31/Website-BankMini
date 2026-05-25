@@ -12,19 +12,57 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
-            <div>
-                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                <input type="text" id="detail_nama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
-            </div>
-            <div>
-                <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                <input type="text" id="detail_rek" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
-            </div>
-        </div>
 
-        <div class="mb-10">
-            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nominal Penarikan</label>
-            <input type="text" id="detail_nominal" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+            <!-- BARIS 1 KIRI: NO REKENING -->
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    No. Rekening
+                </label>
+                <input type="text" id="detail_rek"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
+            <!-- BARIS 1 KANAN: NAMA LENGKAP -->
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    Nama Lengkap
+                </label>
+                <input type="text" id="detail_nama"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
+            <!-- BARIS 2: NOMINAL PENARIKAN (FULL WIDTH - TENGAH PANJANG) -->
+            <div class="md:col-span-2">
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    Nominal Penarikan
+                </label>
+                <input type="text" id="detail_nominal"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
+            <!-- BARIS 3 KIRI: BIAYA TRANSAKSI -->
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    Biaya Transaksi
+                </label>
+                <input type="text" id="detail_biaya"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
+            <!-- BARIS 3 KANAN: TOTAL POTONGAN (Pindah ke dalam grid biar sejajar bray!) -->
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    Total Biaya
+                </label>
+                <input type="text" id="detail_total"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
         </div>
 
         <!-- BUTTONS -->

@@ -29,7 +29,15 @@
             </div>
             <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Catatan</label>
-                <input type="text" value="-" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+                <input type="text" id="detail_catatan" value="-" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+            </div>
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Transaksi (Rp)</label>
+                <input type="text" id="detail_biaya_transaksi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+            </div>
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Total Biaya (Rp)</label>
+                <input type="text" id="detail_total_biaya" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
             </div>
         </div>
 

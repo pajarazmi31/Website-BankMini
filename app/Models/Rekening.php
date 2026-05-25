@@ -25,4 +25,9 @@ class Rekening extends Model
     {
         return $this->hasMany(Setoran::class, 'id_rekening', 'id');
     }
+
+    public function nasabah()
+    {
+        return $this->belongsTo(Nasabah::class, 'nasabah_id');
+    }
 }
