@@ -107,7 +107,7 @@
                 <p class="text-xs font-semibold text-gray-400 mb-4 tracking-wider">MENU</p>
                 <ul class="space-y-1 relative">
                     @php $route = Route::currentRouteName(); @endphp
-                    
+                    @if ($rekening->status_akun == 'aktif')               
                     <li class="relative">
                         @if($route == 'nasabah.dashboard')
                             <div class="absolute left-[-32px] top-1/2 -translate-y-1/2 w-[5px] h-8 bg-primary rounded-r-lg"></div>
@@ -126,6 +126,17 @@
                             <span class="text-[14px]">Transfer</span>
                         </a>
                     </li>
+                    @else 
+                    <li class="relative">
+                        @if($route == 'nasabah.dashboard')
+                            <div class="absolute left-[-32px] top-1/2 -translate-y-1/2 w-[5px] h-8 bg-primary rounded-r-lg"></div>
+                        @endif
+                        <a href="{{ route('nasabah.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ $route == 'nasabah.dashboard' ? 'bg-gray-50 text-textDark font-bold' : 'text-[#a0aab8] font-medium hover:bg-gray-50 hover:text-primary' }}">
+                            <img src="{{ asset('img/icon/sidebar/dashboard.png') }}" alt="Dashboard" class="w-5 h-5 {{ $route == 'nasabah.dashboard' ? '' : 'opacity-40' }}">
+                            <span class="text-[14px]">Dashboard</span>
+                        </a>
+                    </li>
+                    @endif
                     <li class="pt-4 px-4">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf

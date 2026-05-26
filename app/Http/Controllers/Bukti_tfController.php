@@ -8,9 +8,11 @@ use App\Models\Rekening;
 
 class Bukti_tfController extends Controller
 {
-        public function cekRekening($id){
-        // Cari rekening beserta data user-nya
-        $rekening = Rekening::with('user')->find($id);
+    public function cekRekening($id)
+    {
+        // Cari ke tabel rekening berdasarkan NOMOR REKENING-nya (kolom 'id' di tabel rekening kamu)
+        // Gunakan ->where() agar pencarian string nomor rekening akurat
+        $rekening = Rekening::with('user')->where('id', $id)->first();
 
         if ($rekening && $rekening->user) {
             return response()->json([

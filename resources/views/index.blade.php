@@ -750,7 +750,7 @@
         delayTimer = setTimeout(function() {
             
             // Panggil Route API Laravel setelah user BERHENTI mengetik
-            fetch(`/cek-rekening/${noRekening}`)
+            fetch(window.location.origin + '/cek-rekening/' + noRekening)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
