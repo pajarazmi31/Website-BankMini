@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,10 +56,22 @@
     </script>
     <style>
         /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
 
         /* Remove number input arrows */
         input[type="number"]::-webkit-inner-spin-button,
@@ -69,6 +82,7 @@
     </style>
     @yield('styles')
 </head>
+
 <body class="bg-background text-textDark flex h-screen overflow-hidden relative">
 
     <!-- OVERLAY (Mobile) -->
@@ -147,6 +161,7 @@
                     <p class="text-gray-500 text-[12px] md:text-[14px]">@yield('header_subtitle', 'Kelola transaksi nasabah.')</p>
                 </div>
 
+
                 <div class="flex items-center gap-6">
                     <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                         <i class="ph-fill ph-check-circle text-[16px]"></i>
@@ -155,10 +170,10 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[40px] text-primary"></i>
                         <div class="text-left">
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->name }} --}}
-                            <p class="text-sm font-bold text-textDark leading-tight">Nasabah Demo</p>
-                            {{-- BACKEND: Ganti dengan {{ auth()->user()->email }} --}}
-                            <p class="text-xs text-textGray mt-0.5">nasabah@email.com</p>
+
+                            <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
+
+                            <p class="text-xs text-textGray mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>
                 </div>
@@ -181,4 +196,5 @@
     </script>
     @yield('scripts')
 </body>
+
 </html>

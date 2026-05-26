@@ -1,7 +1,9 @@
 @extends('layouts.supervisor')
 
-@section('title', 'Supervisor - Verifikasi Registrasi Rekening')
-@section('header_title', 'Selamat Datang, Supervisor!')
+@section('title','Supervisor Dashboard')
+@section('header_title')
+    Selamat Datang, {{ $supervisor->nama_petugas }}!
+@endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('styles')

@@ -54,13 +54,9 @@ Route::middleware(['role:supervisor'])->group(function () {
 route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 Route::get('/supervisor/datanasabah', [superVisorController::class, 'nasabah'])->name('nasabah.supervisor');
 
-Route::get('/supervisor/datapetugas', function () {
-    return view('supervisor.datapetugas');
-})->name('supervisor.datapetugas');
+Route::get('/supervisor/datapetugas', [superVisorController::class, 'datapetugas'])->name('supervisor.datapetugas');
 
-Route::get('/supervisor/verifikasi', function () {
-    return view('supervisor.verifikasi.transfer');
-})->name('supervisor.verifikasi');
+Route::get('/supervisor/verifikasi', [superVisorController::class, 'transfer'])->name('supervisor.verifikasi');
 
 
 Route::get('/supervisor/revisi/{id}', [superVisorController::class, 'halamanRevisi'])->name('halaman.revisi');

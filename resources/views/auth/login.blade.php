@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
 </head>
-<body class="font-sans antialiased text-gray-800 bg-white min-h-screen flex flex-col-reverse lg:flex-row overflow-x-hidden">
+<body class="font-sans antialiased text-gray-800 bg-white min-h-full lg:min-h-screen flex flex-col-reverse lg:flex-row overflow-x-hidden">
 
     <!-- Custom Message Box (Pengganti alert) -->
     <div id="messageBox" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 hidden opacity-0 transition-opacity">
@@ -110,7 +110,7 @@
     </div>
 
     <!-- Sisi Kanan (Banner Halo) -->
-    <div class="w-full lg:w-1/2 bg-gradient-merek lg:rounded-l-[4.5rem] flex items-center justify-center p-10 py-20 lg:p-16 relative overflow-hidden">
+    <div class="w-full lg:w-1/2 bg-gradient-merek lg:rounded-l-[4.5rem] flex items-center justify-center p-10 py-10 lg:p-16 relative overflow-hidden">
 
 
         <div class="text-center text-white max-w-[460px] z-10">
