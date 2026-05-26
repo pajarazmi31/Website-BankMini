@@ -21,7 +21,7 @@ return new class extends Migration
             $table->String('nama_penerima',100);
             $table->enum('status_verifikasi',['pending','berhasil','gagal'])->default('pending');
             $table->date('datetime_tgl');
-            $table->String('catatan');
+            $table->String('catatan')->nullable();
             $table->timestamps();
         });
     }

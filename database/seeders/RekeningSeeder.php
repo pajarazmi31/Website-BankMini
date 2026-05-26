@@ -21,7 +21,7 @@ class RekeningSeeder extends Seeder
         $roleNasabah = Role::where('nama_role', 'nasabah')->first();
 
         $userNasabah1 = User::create([
-            'name' => 'Dika',
+            'name' => 'Dika Gunawan',
             'role_id' => $roleNasabah->id,
             'email' => 'dika@gmail.com',
             'password' => Hash::make('123456'),
@@ -30,7 +30,7 @@ class RekeningSeeder extends Seeder
             Nasabah::create([
             'user_id' => $userNasabah1->id,
             'nis_nip' => '242510190',
-            'nama_nasabah' => 'dika',
+            'nama_nasabah' => 'Dika Gunawan',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
             'jurusan' => 'PPLG',
@@ -55,7 +55,7 @@ class RekeningSeeder extends Seeder
         ]);
             
             $userNasabah2 = User::create([
-                'name' => 'Dini',
+                'name' => 'Dini Andini Nur Hasanah',
                 'role_id' => $roleNasabah->id,
                 'email' => 'dini@gmail.com',
                 'password' => Hash::make('123456'),
@@ -64,7 +64,7 @@ class RekeningSeeder extends Seeder
             Nasabah::create([
             'user_id' => $userNasabah2->id,
             'nis_nip' => '242510190',
-            'nama_nasabah' => 'dini',
+            'nama_nasabah' => 'Dini Andini Nur Hasanah',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
             'jurusan' => 'PPLG',
@@ -89,7 +89,7 @@ class RekeningSeeder extends Seeder
         ]);
 
         $userNasabah3 = User::create([
-            'name' => 'Dida',
+            'name' => 'Dida Halimawan',
             'role_id' => $roleNasabah->id,
             'email' => 'dida@gmail.com',
             'password' => Hash::make('123456'),
@@ -98,7 +98,7 @@ class RekeningSeeder extends Seeder
             Nasabah::create([
             'user_id' => $userNasabah3->id,
             'nis_nip' => '242510192',
-            'nama_nasabah' => 'dida',
+            'nama_nasabah' => 'Dida Halimawan',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
             'jurusan' => 'PPLG',

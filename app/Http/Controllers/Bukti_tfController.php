@@ -41,7 +41,7 @@ class Bukti_tfController extends Controller
         'bukti_foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         'nama_penerima' => 'required',
         'datetime_tgl' => 'required',
-        'catatan' => 'required',
+        'catatan' => 'nullable',
         ], [
         // Tulis pesan kustom kamu di sini:
         'id_rekening.exists' => 'Maaf, nomor rekening tidak terdaftar di sistem kami.',
