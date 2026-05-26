@@ -22,13 +22,14 @@
             @csrf
             @method('PUT')
 
+            <input type="hidden" value="non-aktif" name="status_akun">;
             <!-- SECTION 1: DATA PRIBADI -->
             <div class="mb-10">
                 <div class="flex items-center gap-3 mb-8">
                     <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                     <h3 class="text-[20px] font-bold text-gray-800">Edit Data Nasabah</h3>
                 </div>
-                
+
                 @if ($errors->any())
                     <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
                         <ul class="list-disc pl-5">

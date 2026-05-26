@@ -19,7 +19,7 @@ class rekeningController extends Controller
         $cs = $user->petugas;
         $provinsi = DB::table('provinsi')->get();
         $allNasabah = Nasabah::with('rekening', 'jurusan')->get();
-        
+
         return view('costumerservice.keloladata', compact('user', 'cs', 'provinsi', 'allNasabah'));
     }
 
@@ -135,7 +135,7 @@ class rekeningController extends Controller
         $user = Auth::user();
         $cs = $user->petugas;
         $nasabah = Nasabah::with('rekening')->findOrFail($id);
-        
+
         $provinsi = DB::table('provinsi')->get();
         $kabupaten = DB::table('kabupaten')->where('provinsi_id', $nasabah->provinsi_id)->get();
         $kecamatan = DB::table('kecamatan')->where('kabupaten_id', $nasabah->kab_kota_id)->get();
@@ -170,6 +170,7 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
             'no_rekening' => 'required',
+            'status_akun' => 'required',
         ]);
 
         $nasabah = Nasabah::findOrFail($id);
@@ -210,6 +211,7 @@ class rekeningController extends Controller
         if ($rekening) {
             $rekening->update([
                 'id' => $request->no_rekening,
+                'status_akun' => $request->status_akun,
             ]);
         }
 

@@ -135,7 +135,7 @@
             <div class="mt-6">
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">📝 Pesan Revisi</label>
                 <div class="w-full border border-amber-200 rounded-lg px-4 py-3 text-[14px] text-gray-700 bg-amber-50 resize-none">
-                    {{ $nasabah->pesan}}
+                    {{$nasabah->pesan}}
                 </div>
             </div>
             @endif

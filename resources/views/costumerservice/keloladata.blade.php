@@ -99,7 +99,8 @@
                         '{{ $nasabah->hubungan_kontak_darurat }}',
                         '{{ $nasabah->alamat_kontak_darurat }}',
                         '{{ $nasabah->rekening->id }}',
-                        '{{ $nasabah->rekening->status_akun }}'
+                        '{{ $nasabah->rekening->status_akun }}',
+                        '{{ $nasabah->pesan }}'
                         )"
                         class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                         title="Lihat Detail">
@@ -203,7 +204,8 @@
         kontak_hubungan,
         kontak_alamat,
         rekening,
-        status
+        status,
+        pesan
     ) {
         document.getElementById('detail_nama').value = nama;
         document.getElementById('detail_nis').value = nis;
@@ -231,6 +233,7 @@
 
         document.getElementById('detail_rekening').value = rekening;
         document.getElementById('detail_status').value = status;
+        // document.getElementById('detail_pesan').value = pesan;
 
         switchView('detail');
     }
@@ -242,7 +245,7 @@
         const tableBody = document.querySelector('table tbody');
         const rows = Array.from(tableBody.querySelectorAll('.nasabah-row'));
         const paginationContainer = document.getElementById('paginationContainer');
-        
+
         let currentPage = 1;
         const itemsPerPage = 5;
         let filteredRows = [...rows];
@@ -250,7 +253,7 @@
         function updateTable() {
             const totalItems = filteredRows.length;
             const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
-            
+
             if (currentPage > totalPages) {
                 currentPage = totalPages;
             }
@@ -260,7 +263,7 @@
 
             // Hide all rows first
             rows.forEach(row => row.style.display = 'none');
-            
+
             // Show only rows for current page and update numbers
             filteredRows.slice(startIndex, endIndex).forEach((row, index) => {
                 row.style.display = '';
@@ -275,9 +278,9 @@
 
         function renderPagination(totalPages) {
             if (!paginationContainer) return;
-            
+
             let html = `<div class="flex items-center justify-end gap-1.5 mt-5 pt-2">`;
-            
+
             // Prev Button
             html += `
                 <button type="button" id="prevPageBtn" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" ${currentPage === 1 ? 'disabled' : ''}>
@@ -310,7 +313,7 @@
                     <i class="ph-bold ph-caret-right"></i>
                 </button>
             `;
-            
+
             html += `</div>`;
             paginationContainer.innerHTML = html;
 
@@ -342,7 +345,7 @@
 
         function handleSearch(keyword) {
             keyword = keyword.toLowerCase().trim();
-            
+
             filteredRows = rows.filter(row => {
                 const nama = row.cells[1]?.textContent.toLowerCase() || '';
                 const jabatan = row.cells[2]?.textContent.toLowerCase() || '';

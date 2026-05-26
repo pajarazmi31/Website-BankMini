@@ -54,9 +54,33 @@
                             <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                             <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>
                             <td class="py-4 px-2 border-b border-gray-50 text-center">
-                                <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                    <i class="ph-bold ph-clock text-[15px]"></i>
+                            @if ($nasabah->rekening->status_akun == 'aktif')
+                                <button
+                                    class="w-[28px] h-[28px] rounded-full bg-green-100 text-green-700 inline-flex items-center justify-center cursor-default"
+                                    title="Aktif"
+                                    type="button"
+                                >
+                                    <i class="ph ph-check-circle text-[20px]"></i>
                                 </button>
+
+                            @elseif ($nasabah->rekening->status_akun == 'non-aktif')
+                                <button
+                                    class="w-[28px] h-[28px] rounded-full bg-red-100 text-red-700 inline-flex items-center justify-center cursor-default"
+                                    title="Non Aktif"
+                                    type="button"
+                                >
+                                    <i class="ph ph-x-circle text-[20px]"></i>
+                                </button>
+
+                            @elseif ($nasabah->rekening->status_akun == 'revisi')
+                                <button
+                                    class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default"
+                                    title="Pending"
+                                    type="button"
+                                >
+                                    <i class="ph-bold ph-warning-circle text-[20px]"></i>
+                                </button>
+                            @endif
                             </td>
                             <td class="py-4 px-2 border-b border-gray-50 text-center">
                                 <div class="flex items-center justify-center">
