@@ -61,9 +61,15 @@ class superVisorController extends Controller
         return view('supervisor.verifikasi.registrasirekening.detail', compact('nasabah'));
     }
 
+    public function datapetugas(){
+        $user = Auth::user();
+        return view('supervisor.datapetugas', compact( 'user'));
+    }
+
     public function nasabah() {
         $userNasabah = Nasabah::with('rekening')->get();
-        return view('supervisor.datanasabah', compact('userNasabah'));
+        $user = Auth::user();
+        return view('supervisor.datanasabah', compact('userNasabah', 'user'));
     }
 
     public function detailNasabah(String $id) {

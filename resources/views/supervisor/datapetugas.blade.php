@@ -2,7 +2,7 @@
 
 @section('title','Supervisor Dashboard')
 @section('header_title')
-    Selamat Datang, {{ $supervisor->nama_petugas }}!
+    Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
@@ -101,7 +101,7 @@
         document.getElementById('detail_nama').value = nama;
         document.getElementById('detail_email').value = email;
         document.getElementById('detail_role_text').value = role;
-        
+
         switchView('detail');
     }
 
@@ -109,7 +109,7 @@
     function viewEdit(nama, email, role) {
         document.getElementById('edit_nama').value = nama;
         document.getElementById('edit_email').value = email;
-        
+
         let roleSelect = document.getElementById('edit_role');
         for(let i=0; i<roleSelect.options.length; i++) {
             if(roleSelect.options[i].text.toLowerCase() === role.toLowerCase()) {
@@ -147,7 +147,7 @@
                 activeView.classList.add('block');
             }
         }
-        
+
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 </script>
