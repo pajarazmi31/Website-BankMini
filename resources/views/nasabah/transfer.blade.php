@@ -276,82 +276,54 @@
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+       // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
+    let delayTimer;
+
     document.getElementById('id_penerima').addEventListener('input', function() {
         let noRekening = this.value;
         let inputNoRekening = this;
         let inputNama = document.getElementById('nama_penerima');
 
-        // Fungsi pembantu untuk reset warna ke normal (ganti border-gray-300 sesuai class bawaanmu)
-        function resetStyle() {
-            inputNoRekening.classList.remove('border-red-500', 'text-red-500', 'focus:ring-red-500');
-            inputNama.classList.remove('border-red-500', 'text-red-500', 'bg-red-50');
+        // 1. KELOLA INPUT KOSONG
+        if (noRekening.trim() === '') {
+            clearTimeout(delayTimer); // batalkan pencarian jika dihapus semua
+            inputNama.value = '';
+            inputNoRekening.style.borderColor = '#e5e7eb';
+            inputNama.style.borderColor = '#e5e7eb';
+            return;
         }
 
-        // Fungsi pembantu untuk mengubah warna jadi merah saat error
-        function setErrorAlertStyle() {
-            inputNoRekening.classList.add('border-red-500', 'text-red-500', 'focus:ring-red-500');
-            inputNama.classList.add('border-red-500', 'text-red-500', 'bg-red-50');
-        }
+        // Tampilkan status "Mencari..." agar user tahu sistem sedang bekerja
+        inputNama.value = 'Mencari data...';
 
-        // Jika panjang nomor rekening sudah pas (minimal 9 digit)
-        if (noRekening.length >= 9) { 
-            inputNama.value = 'Mencari nama...';
-            resetStyle();
+        // 2. TEKNIK DEBOUNCE: Hapus timer yang lama jika user masih mengetik
+        clearTimeout(delayTimer);
 
-            // Panggil Route API Laravel
-            fetch(`/cek-rekening/${noRekening}`)
+        // Set timer baru: Tunggu 500ms (0.5 detik) setelah ketikan terakhir berhenti
+        delayTimer = setTimeout(function() {
+            
+            // Panggil Route API Laravel setelah user BERHENTI mengetik
+            fetch(window.location.origin + '/cek-rekening/' + noRekening)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        // Jika REKENING ADA -> Masukkan nama & pastikan style normal
+                        // REKENING ADA
                         inputNama.value = data.nama;
-                        resetStyle();
+                        inputNoRekening.style.borderColor = '#10b981'; // Hijau halus
+                        inputNama.style.borderColor = '#10b981';
                     } else {
-                        // Jika REKENING TIDAK ADA -> Tulisan jadi peringatan & border MERAH
-                        inputNama.value = 'No Rekening Tidak Ditemukan!';
-                        setErrorAlertStyle();
+                        // REKENING TIDAK ADA
+                        inputNama.value = 'Rekening Tidak Ditemukan!';
+                        inputNoRekening.style.borderColor = '#ef4444'; // Merah halus
+                        inputNama.style.borderColor = '#ef4444';
                     }
                 })
                 .catch(error => {
-                    inputNama.value = 'Gagal memuat data';
-                    setErrorAlertStyle();
+                    console.error('Error fetch:', error);
+                    inputNama.value = 'Gagal memuat data internet';
                 });
-        } else {
-            // Jika inputan dihapus atau kurang dari 9 digit, kosongkan nama dan reset warna
-            inputNama.value = '';
-            resetStyle();
-        }
+
+        }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
     });
-
-    const inputTransfer = document.getElementById('jumlah_transfer');
-
-        // Fungsi untuk memformat angka menjadi format ribuan dengan titik
-        function formatRupiah(angka) {
-            // Hapus semua karakter selain angka
-            let numberString = angka.replace(/[^,\d]/g, '').toString();
-            let split = numberString.split(',');
-            let sisa = split[0].length % 3;
-            let rupiah = split[0].substr(0, sisa);
-            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-            if (ribuan) {
-                let separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
-        }
-
-        // Event saat pengguna mengetik
-        inputTransfer.addEventListener('keyup', function(e) {
-            this.value = formatRupiah(this.value);
-        });
-
-        // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
-        window.addEventListener('DOMContentLoaded', function() {
-            if (inputTransfer.value) {
-                inputTransfer.value = formatRupiah(inputTransfer.value);
-            }
-        });
 </script>
 @endsection
