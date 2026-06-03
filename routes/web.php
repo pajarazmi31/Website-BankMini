@@ -8,6 +8,8 @@ use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
 use App\Http\Controllers\csController;
 use App\Http\Controllers\supervisor\DataPetugasController;
+use App\Http\Controllers\rekeningController;
+use App\Http\Controllers\alamatController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -42,15 +44,36 @@ Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('tel
 //customer service
 Route::middleware(['role:customerservice'])->group(function () {
     
-    route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
-    Route::get('/customerservice/keloladata', [csController::class, 'keloladata'])->name('costumerservice.keloladata');
-    
+route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
+Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
+Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
+Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
+Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
+Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
+Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
+
     });
     
     //ROLE SUPERVISOR
     Route::middleware(['role:supervisor'])->group(function () {
-        
         route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
+
+        Route::get('/supervisor/datanasabah', [superVisorController::class, 'nasabah'])->name('supervisor.datanasabah');
+
+        Route::get('/supervisor/datapetugas', [superVisorController::class, 'datapetugas'])->name('supervisor.datapetugas');
+
+        Route::get('/supervisor/verifikasi', [superVisorController::class, 'transfer'])->name('supervisor.verifikasi');
+
+
+        Route::get('/supervisor/revisi/{id}', [superVisorController::class, 'halamanRevisi'])->name('halaman.revisi');
+        Route::put('/supervisor/revisi/{id}', [superVisorController::class, 'revisi'])->name('proses.revisi');
+        Route::get('/supervisor/dataNasabah/{id}', [superVisorController::class, 'detailNasabah'])->name('detail.nasabah');
+        Route::get('/supervisor/detail/rekening/{id}', [superVisorController::class, 'detail'])->name('detail.rekening.super');
+        Route::delete('/supervisor/hapus/{id}', [superVisorController::class, 'destroy'])->name('hapus.nasabah.super');
+        Route::post('/supervisor/aktif/{id}', [superVisorController::class, 'aktif'])->name('rekening.aktif');
+        Route::get('/supervisor/verifikasi/rekening/', [superVisorController::class, 'verifikasiNasabah'])->name('verifikasi.rekening');
+
+        
         
         // data petugas
         Route::get('/supervisor/datapetugas', [DataPetugasController::class, 'index'])->name('supervisor.datapetugas');
@@ -58,10 +81,9 @@ Route::middleware(['role:customerservice'])->group(function () {
         Route::put('/datapetugas/update/{id}', [DataPetugasController::class, 'update'])->name('datapetugas.update');
         Route::delete('/datapetugas/delete/{id}', [DataPetugasController::class, 'destroy'])->name('datapetugas.destroy');
         
-        Route::get('/supervisor/datanasabah', [superVisorController::class, 'dataNasabah'])->name('supervisor.datanasabah');
         
         //View Verifikasi Tf
-        Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasi'])->name('supervisor.verifikasi');
+        Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasiTFF'])->name('supervisor.verifikasi');
         Route::get('/admin/produk/search', [superVisorController::class, 'searchData'])->name('supervisor.searchData');
 
 // Export Data Tf
@@ -70,8 +92,7 @@ Route::get('/supervisor/export-transfer', [superVisorController::class, 'exportE
 // logika verifikasi Tf
 Route::patch('/supervisor/verifikasi/status{id}', [superVisorController::class, 'verifikasiTf'])->name('supervisor.verifikasiTf');
 
-Route::get('/supervisor/verifikasi/registrasi', [superVisorController::class, 'registrasiRekening'])->name('supervisor.verifikasi.registrasi');
-
+Route::get('/supervisor/verifikasi/registrasi', [superVisorController::class, 'verifikasiNasabah'])->name('supervisor.verifikasi.registrasi');
 });
 /// logika login na
 
@@ -94,3 +115,7 @@ Route::post('/logout',[loginController::class, 'logout'])->name('logout');
 // });
 
 Route::get('/cek-rekening/{id}', [Bukti_tfController::class, 'cekRekening']);
+/// alamat
+Route::get('/get-kabupaten/{id}', [alamatController::class, 'getKabupaten']);
+Route::get('/get-kecamatan/{id}', [alamatController::class, 'getKecamatan']);
+Route::get('/get-desa/{id}', [alamatController::class, 'getDesa']);

@@ -62,7 +62,7 @@
         <div class="flex justify-between items-center mb-6">
             <h3 class="text-lg lg:text-xl font-bold text-gray-800">Riwayat Transaksi</h3>
             <button onclick="switchView('history')" class="text-xs font-semibold text-gray-400 hover:text-active-blue transition-colors">Lihat Semua</button>
-        </div> 
+        </div>
 
         <div class="bg-transparent space-y-4">
             <!-- Item Statis 1 -->

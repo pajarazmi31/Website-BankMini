@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Role extends Model
+class Jurusan extends Model
 {
-    protected $table = 'roles';
+    protected $table = 'jurusan';
 
     protected $fillable = ([
-        'nama_role',
+        'jurusan',
+        'singkatan',
     ]);
-
     public function users()
     {
         return $this->hasMany(User::class);

@@ -4,12 +4,27 @@
             <div class="w-[6px] h-7 bg-brand-green rounded-full"></div>
             Tambah Data Petugas
         </h3>
+        @if(session('error'))
+        <div class="mb-6 bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+            {{ session('error') }}
+        </div>
+        @endif
+
+        @if ($errors->any())
+        <div class="mb-6 bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded-lg">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
         <form action="{{ route('datapetugas.store') }}" method="POST">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Nama Petugas</label>
-                    <input type="text" name="name" placeholder="Masukkan nama petugas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                    <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama petugas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
@@ -17,7 +32,12 @@
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Email</label>
-                    <input type="email" name="email" placeholder="contoh@gmail.com" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                    <input type="email" name="email" value="{{ old('email') }}" placeholder="contoh@gmail.com" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                    @error('email')
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
+                    @enderror
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role</label>

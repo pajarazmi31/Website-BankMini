@@ -16,7 +16,7 @@ class nasabahController extends Controller
     public function index() {
         $user = Auth::user();
         $nasabah = $user->nasabah;
-        $rekening = Rekening::where('nasabah_id', $user->id)->first();
+        $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
 if ($rekening) {
         $nomorRekening = $rekening->id;
 
@@ -57,7 +57,7 @@ if ($rekening) {
     public function transfer() {
         $user = Auth::user();
         $nasabah = $user->nasabah;
-        $rekening = Rekening::where('nasabah_id', $user->id)->first();
+        $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
 if ($rekening) {
         $nomorRekening = $rekening->id;
 

@@ -95,9 +95,9 @@
     @include('supervisor.crud_datapetugas.detail')
 
     <form id="formDeletePetugas" method="POST" class="hidden">
-    @csrf
-    @method('DELETE')
-</form>
+        @csrf
+        @method('DELETE')
+    </form>
 
     @endsection
 
@@ -112,23 +112,23 @@
             switchView('detail');
         }
 
-    // Edit Data
-    function viewEdit(id, nama, email, roleId) {
+        // Edit Data
+        function viewEdit(id, nama, email, roleId) {
 
-        // ambil form
-        const form = document.getElementById('formEditPetugas');
+            // ambil form
+            const form = document.getElementById('formEditPetugas');
 
-        // set action form
-        form.action = `/datapetugas/update/${id}`;
+            // set action form
+            form.action = `/datapetugas/update/${id}`;
 
-        // isi input
-        document.getElementById('edit_nama').value = nama;
-        document.getElementById('edit_email').value = email;
-        document.getElementById('edit_role').value = roleId;
+            // isi input
+            document.getElementById('edit_nama').value = nama;
+            document.getElementById('edit_email').value = email;
+            document.getElementById('edit_role').value = roleId;
 
-        // tampilkan view edit
-        switchView('edit');
-    }
+            // tampilkan view edit
+            switchView('edit');
+        }
 
         // Pindah antara Tabel Data dan Form Input
         function switchView(viewName) {
@@ -161,6 +161,13 @@
             document.querySelector('main').scrollTo({
                 top: 0,
                 behavior: 'smooth'
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+
+                @if(session('active_view') == 'tambah')
+                switchView('tambah');
+                @endif
+
             });
         }
     </script>

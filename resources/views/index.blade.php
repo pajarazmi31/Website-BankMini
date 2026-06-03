@@ -27,7 +27,7 @@
                         'gradient-merek': 'linear-gradient(to bottom, #143657, #1E5081, #143657)',
 
                         'gradient-tombol': 'linear-gradient(to right, #143657, #1E5081)',
-                        
+
                         'button-gradient': 'linear-gradient(to right, #008959, #1E9F71, #008959)',
                     },
                     colors: {

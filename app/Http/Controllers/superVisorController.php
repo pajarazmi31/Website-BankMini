@@ -5,10 +5,13 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
 use App\Models\Rekening;
-use App\Exports\BuktiTfExport;
+use app\Exports\BuktiTfExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Nasabah;
+use App\Models\Petugas;
+
 
 class superVisorController extends Controller
 {
@@ -21,13 +24,18 @@ class superVisorController extends Controller
         $nasabahTf = Bukti_Tf::latest()->get();
         $nasabahTfPending = Bukti_Tf::where('status_verifikasi', 'pending')->get();
         $totalSaldoTabungan = Bukti_Tf::where('status_verifikasi', 'berhasil')->sum('jumlah_transfer');
-
-        $totalPending = Bukti_Tf::where('status_verifikasi', 'pending')->count();
-        return view('supervisor.dashboard', compact('user','super', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan'));
+        $nasabahPending = Nasabah::with('rekening')
+        ->whereHas('rekening', function ($query) {
+            $query->where('status_akun', 'non-aktif');
+        })->get();
+        $totalPendingRegistrasi = $nasabahPending->count();
+$totalPendingTransfer = $nasabahTfPending->count();
+$totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
+        return view('supervisor.dashboard', compact('user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
     }
 
     
-    public function verifikasi(){
+    public function verifikasiTFF(){
         $user = Auth::user();
         $super = $user->petugas;
         $bukti_tf = Bukti_Tf::latest()->get();
@@ -53,7 +61,7 @@ class superVisorController extends Controller
     return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
     }
 
-    public function detail($id){
+    public function detailTf($id){
         $data = Bukti_Tf::find($id);
 
         return view('supervisor.verifikasi.transfer.detail', compact('data'));
@@ -110,25 +118,88 @@ class superVisorController extends Controller
         }
     }
 
-    public function registrasiRekening(){
+    public function verifikasiNasabah() {
         $user = Auth::user();
         $super = $user->petugas;
-
-        return view('supervisor.verifikasi.registrasirekening', compact('user' ,'super'));
+        $allNasabah = Nasabah::with('rekening')
+            ->whereHas('rekening', function ($query) {
+                $query->where('status_akun', 'non-aktif');
+            })
+            ->get();
+        return view('supervisor.verifikasi.registrasirekening', compact('user','super','allNasabah'));
     }
 
-        public function dataPetugas(){
+    public function aktif(String $id) {
+        $rekening = Rekening::FindOrFail($id);
+
+        $rekening->status_akun = 'aktif';
+
+        $rekening->save();
+
+        return redirect()->route('verifikasi.rekening')->with('success','Rekening Telah Aktif');
+    }
+
+
+    public function destroy(String $id) {
+        $nasabah = Nasabah::FindOrFail($id);
+        $user = User::where('id', $nasabah->user_id)->first();
+        $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
+
+        $rekening->delete();
+        $nasabah->delete();
+        $user->delete();
+
+
+        return redirect()->route('verifikasi.rekening')->with('success','data nasabah berhasil di hapus');
+    }
+
+    public function detail(String $id) {
+        $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
+        return view('supervisor.verifikasi.registrasirekening.detail', compact('nasabah'));
+    }
+
+    public function datapetugas(){
         $user = Auth::user();
         $super = $user->petugas;
-
-        return view('supervisor.datapetugas', compact('user' ,'super'));
+        return view('supervisor.datapetugas', compact( 'user','super'));
     }
 
-        public function dataNasabah(){
+    public function nasabah() {
+        $userNasabah = Nasabah::with('rekening')->get();
         $user = Auth::user();
-        $super = $user->petugas;
-
-        return view('supervisor.datanasabah', compact('user' ,'super'));
+        return view('supervisor.datanasabah', compact('userNasabah', 'user'));
     }
+
+    public function detailNasabah(String $id) {
+        $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
+        return view('supervisor.crud_datanasabah.detail', compact('nasabah'));
+    }
+
+    public function revisi(String $id, Request $request) {
+        $request->validate([
+            'pesan' => 'required',
+            'status_akun' => 'required',
+        ]);
+
+        $nasabah = Nasabah::FindOrFAil($id);
+        $nasabah->update([
+            'pesan' => $request->pesan,
+        ]);
+
+        $rekening = Rekening::where('nasabah_id', $nasabah->id);
+        $rekening->update([
+            'status_akun' => $request->status_akun,
+        ]);
+
+        return redirect()->route('verifikasi.rekening')->with('success','data revisi berhasil di kirim');
+    }
+
+    public function halamanRevisi(String $id) {
+        $user = Auth::user();
+        $nasabah = Nasabah::FindOrFail($id);
+        $rekening = Rekening::where('nasabah_id', $nasabah->id);
+        return view('supervisor.verifikasi.registrasirekening.revisi', compact('nasabah','rekening', 'user'));
+    }
+
 
 }

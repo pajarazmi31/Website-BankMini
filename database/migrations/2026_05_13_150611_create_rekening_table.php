@@ -12,14 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('rekening', function (Blueprint $table) {
-
-            // nomor rekening manual
-            $table->string('id')->primary();
-            $table->foreignId('nasabah_id')->constrained('users')->onDelete('cascade');
-            $table->decimal('saldo_saat_ini', 15, 2)
-                  ->default(0);
-            $table->enum('status_akun', ['aktif', 'nonaktif'])
-                  ->default('aktif');
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('nasabah_id')->constrained('nasabah');
+            $table->integer('saldo_saat_ini');
+            $table->Enum('status_akun', ['aktif','non-aktif','pending','revisi']);
             $table->timestamps();
         });
     }

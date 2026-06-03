@@ -221,9 +221,9 @@
             const toast = document.getElementById('toastAlert');
             const toastMsg = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
-            
+
             toastMsg.textContent = message;
-            
+
             if (type === 'error') {
                 toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
                 toastIcon.classList.replace('bg-green-500/20', 'bg-red-500/20');
@@ -252,7 +252,7 @@
             const confirmBtn = document.getElementById('btnConfirmDelete');
 
             modal.classList.replace('hidden', 'flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 content.classList.replace('scale-95', 'scale-100');
@@ -272,7 +272,7 @@
 
             content.classList.replace('scale-100', 'scale-95');
             content.classList.replace('opacity-100', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.replace('flex', 'hidden');
             }, 300);

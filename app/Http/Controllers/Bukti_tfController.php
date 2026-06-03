@@ -12,12 +12,12 @@ class Bukti_tfController extends Controller
     {
         // Cari ke tabel rekening berdasarkan NOMOR REKENING-nya (kolom 'id' di tabel rekening kamu)
         // Gunakan ->where() agar pencarian string nomor rekening akurat
-        $rekening = Rekening::with('user')->where('id', $id)->first();
+        $rekening = Rekening::with('nasabah')->where('id', $id)->first();
 
-        if ($rekening && $rekening->user) {
+        if ($rekening && $rekening->nasabah) {
             return response()->json([
                 'success' => true,
-                'nama' => $rekening->user->name
+                'nama' => $rekening->nasabah->nama_nasabah
             ]);
         }
 

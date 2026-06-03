@@ -38,9 +38,15 @@ class Rekening extends Model
     }
 
     public function user()
-{
-    // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
-    // Parameter ke-3: primary key di tabel users ('id')
-    return $this->belongsTo(User::class, 'nasabah_id', 'id');
-}
+    {
+        // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
+        // Parameter ke-3: primary key di tabel users ('id')
+        return $this->belongsTo(User::class, 'nasabah_id', 'id');
+    }
+
+    // relasi ke tabel nasabah
+    public function nasabah()
+    {
+        return $this->belongsTo(Nasabah::class, 'nasabah_id', 'id');
+    }
 }
