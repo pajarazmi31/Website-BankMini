@@ -6,6 +6,7 @@ use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
 use App\Http\Controllers\csController;
+use App\Http\Controllers\transferController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -37,17 +38,26 @@ Route::put('/setoran/{id}', [tellerController::class, 'updateSetoran'])
 ->name('setoran.update');
 Route::delete('/setoran/{id}', [tellerController::class, 'destroySetoran'])
 ->name('setoran.destroy');
+
 //penarikan
 Route::get('/teller/penarikan', [tellerController::class, 'penarikan'])->name('teller.penarikan');
-Route::post('/penarikan/store',[tellerController::class, 'storePenarikan'])
-->name('penarikan.store');
-Route::put('/penarikan/update/{id}',[tellerController::class, 'updatePenarikan'])
-->name('penarikan.update');
-Route::delete('/penarikan/delete/{id}',[tellerController::class, 'destroyPenarikan'])
-->name('penarikan.delete');
+Route::post('/penarikan/store',[tellerController::class, 'storePenarikan'])->name('penarikan.store');
+Route::put('/penarikan/update/{id}',[tellerController::class, 'updatePenarikan'])->name('penarikan.update');
+Route::delete('/penarikan/delete/{id}',[tellerController::class, 'destroyPenarikan'])->name('penarikan.delete');
+
+
 //transfer
 Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('teller.transfer');
+Route::post('/transfer/store', [tellerController::class, 'storeTransfer'])->name('transfer.store');
+Route::put('/transfer/update/{id}', [tellerController::class, 'updateTransfer'])->name('transfer.update');
+Route::delete('/transfer/delete/{id}', [tellerController::class, 'destroyTransfer'])->name('transfer.delete');
+
+//cari nama si norek
+Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
 });
+
+
+
 
 //customer service
 Route::middleware(['role:customerservice'])->group(function () {

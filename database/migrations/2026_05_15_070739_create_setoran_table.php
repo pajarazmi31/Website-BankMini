@@ -12,63 +12,55 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('setoran', function (Blueprint $table) {
-
             $table->id();
 
-            // nomor rekening dari tb_rekening.id
-            $table->string('id_rekening');
-
-            // id user login / petugas
-            $table->unsignedBigInteger('id_petugas');
-
-            // jenis setoran
-            $table->enum('setoran', ['tunai', 'warkat']);
-
-            // mata uang
-            $table->string('mata_uang')->default('rupiah');
-
-            // nominal setoran
-            $table->decimal('jumlah_penyetoran', 15, 2);
-
-            // hasil terbilang
-            $table->string('uang_terbilang')->nullable();
-
-            // biaya admin/transaksi
-            $table->decimal('biaya_transaksi', 15, 2)
-                  ->default(0);
-
-            // total setelah biaya
-            $table->decimal('total_biaya', 15, 2);
-
-            // data penyetoran
-            $table->string('nama_lengkap');
-                  
-            // data penyetor
-            $table->string('nama_penyetor')
-                  ->nullable();
-
-            $table->text('alamat_penyetor')
-                  ->nullable();
-
-            $table->string('no_hp_penyetor')
-                  ->nullable();
-
-            // catatan transaksi
-            $table->text('catatan')
-                  ->nullable();
-
-            // tanggal transaksi
-            $table->dateTime('datetime_tgl');
-
-            $table->timestamps();
-
-            // foreign key rekening
-            $table->foreign('id_rekening')
-                  ->references('id')
-                  ->on('rekening')
+            // 1. Diubah jadi foreignId agar tipenya klop dengan rekening.id (Unsigned Big Int)
+            $table->foreignId('id_rekening')
+                  ->constrained('rekening')
                   ->onDelete('cascade')
                   ->onUpdate('cascade');
 
+            // 2. Diubah jadi foreignId agar mengunci resmi ke tabel petugas
+            $table->foreignId('id_petugas')
+                  ->constrained('petugas')
+                  ->onDelete('cascade');
+
+            // Jenis setoran
+            $table->enum('setoran', ['tunai', 'warkat']);
+
+            // Mata uang
+            $table->string('mata_uang')->default('rupiah');
+
+            // Nominal setoran
+            $table->decimal('jumlah_penyetoran', 15, 2);
+
+            // Hasil terbilang
+            $table->string('uang_terbilang')->nullable();
+
+            // 3. Dikunci resmi ke master tabel transaksi untuk mencatat id master biaya admin
+            $table->foreignId('transaksi_id')
+                  ->nullable()
+                  ->constrained('transaksi')
+                  ->onDelete('set null');
+
+            // Total setelah biaya
+            $table->decimal('total_biaya', 15, 2);
+
+            // Data penyetoran
+            $table->string('nama_lengkap');
+                  
+            // Data penyetor
+            $table->string('nama_penyetor')->nullable();
+            $table->text('alamat_penyetor')->nullable();
+            $table->string('no_hp_penyetor')->nullable();
+
+            // Catatan transaksi
+            $table->text('catatan')->nullable();
+
+            // Tanggal transaksi
+            $table->dateTime('datetime_tgl');
+
+            $table->timestamps();
         });
     }
 

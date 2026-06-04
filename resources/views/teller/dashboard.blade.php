@@ -14,8 +14,9 @@
     <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Jumlah Tabungan</p>
-            {{-- BACKEND: {{ number_format($totalTabungan, 0, ',', '.') }} --}}
-            <h3 class="text-[24px] font-bold">Rp. 1.100.500.000</h3>
+<h3 class="text-[24px] font-bold">
+    Rp. {{ number_format($totalTabungan, 0, ',', '.') }}
+</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
@@ -25,7 +26,7 @@
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Setoran Hari Ini</p>
             {{-- BACKEND: {{ number_format($setoranHariIni, 0, ',', '.') }} --}}
-            <h3 class="text-[24px] font-bold">Rp. 500.000</h3>
+            <h3 class="text-[24px] font-bold">Rp. {{ number_format($setoranHariIni, 0, ',', '.') }}</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
@@ -35,7 +36,7 @@
         <div class="relative z-10">
             <p class="text-[11px] font-semibold tracking-[0.08em] text-yellow-100/80 mb-2.5 uppercase">Penarikan Hari Ini</p>
             {{-- BACKEND: {{ number_format($penarikanHariIni, 0, ',', '.') }} --}}
-            <h3 class="text-[24px] font-bold">Rp. 1.000.000</h3>
+            <h3 class="text-[24px] font-bold">Rp. {{ number_format($penarikanHariIni, 0, ',', '.') }}</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
     </div>
@@ -51,38 +52,37 @@
             <button onclick="switchView('history')" class="text-[12px] font-semibold text-gray-800 hover:text-brand-blue">Lihat Semua</button>
         </div>
 
-        <div class="flex flex-col gap-3">
-            <!--
-                BAGIAN BACKEND: TRANSAKSI TERBARU
-                - Data $transactions di bawah ini hanya data statis untuk preview UI.
-                - Backend dev perlu mengambil data transaksi terbaru (setor, tarik, transfer) dari database.
-            -->
-            @php
-                $transactions = [
-                    ['name' => 'Pajar Azmi', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 50.000', 'color' => '#10a163', 'route' => 'teller.setoran'],
-                    ['name' => 'Anisa Siti', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 100.000', 'color' => '#ef4444', 'route' => 'teller.penarikan'],
-                    ['name' => 'Pajar Azmi', 'action' => 'Transfer', 'amount' => 'Rp. 50.000', 'color' => '#1c3a5a', 'icon' => true, 'route' => 'teller.transfer'],
-                ];
-            @endphp
-            @foreach($transactions as $t)
-            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
-                <div class="flex items-center gap-3.5">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
-                    <div>
-                        <h4 class="font-bold text-[15px] text-gray-800">{{ $t['name'] }}</h4>
-                        <p class="text-[12px] text-gray-500 mt-0.5">{{ $t['action'] }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <span class="font-bold text-[15px] text-[{{ $t['color'] }}] flex items-center gap-1.5">
-                        @if(isset($t['icon'])) <i class="ph ph-arrows-left-right text-[16px]"></i> @endif
-                        {{ $t['amount'] }}
-                    </span>
-                    <!-- Ikon mata dihapus -->
-                </div>
+<div class="flex flex-col gap-3">
+    @foreach($transactions as $t)
+    @php
+        // Cek apakah data ini adalah Setoran atau Penarikan
+        $isSetor = $t instanceof \App\Models\Setoran;
+        
+        // Ambil data yang spesifik
+        $namaNasabah = $t->rekening->nasabah->nama_nasabah ?? '-';
+        $jenis = $isSetor ? 'Setor Tunai' : 'Tarik Tunai';
+        $nominal = $isSetor ? $t->jumlah_penyetoran : $t->jumlah_penarikan;
+        
+        // Warna dan simbol
+        $color = $isSetor ? 'text-[#10a163]' : 'text-[#ef4444]';
+        $prefix = $isSetor ? '+ ' : '- ';
+    @endphp
+    <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
+        <div class="flex items-center gap-3.5">
+            <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+            <div>
+                <h4 class="font-bold text-[15px] text-gray-800">{{ $namaNasabah }}</h4>
+                <p class="text-[12px] text-gray-500 mt-0.5">{{ $jenis }}</p>
             </div>
-            @endforeach
         </div>
+        <div class="flex items-center gap-4">
+            <span class="font-bold text-[15px] {{ $color }}">
+                {{ $prefix }} Rp. {{ number_format($nominal, 0, ',', '.') }}
+            </span>
+        </div>
+    </div>
+    @endforeach
+</div>
     </div>
 
     <!-- Right Column: Aksi Cepat -->
@@ -123,40 +123,35 @@
         </div>
 
         <div class="lg:space-y-5">
-            <!-- 
-                BAGIAN BACKEND: RIWAYAT TRANSAKSI (TELLER)
-                - Lakukan looping foreach untuk 5 transaksi terakhir per halaman.
-            -->
-            @php
-                $allTransactions5 = [
-                    ['name' => 'Pajar Azmi', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 50.000', 'color' => '#10a163', 'time' => '14:30'],
-                    ['name' => 'Anisa Siti', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 100.000', 'color' => '#ef4444', 'time' => '11:20'],
-                    ['name' => 'Salsabila', 'action' => 'Transfer', 'amount' => 'Rp. 50.000', 'color' => '#1c3a5a', 'time' => '09:15', 'icon' => true],
-                    ['name' => 'Hamdan', 'action' => 'Setor Tunai', 'amount' => '+ Rp. 200.000', 'color' => '#10a163', 'time' => 'Kemarin'],
-                    ['name' => 'Dinar', 'action' => 'Tarik Tunai', 'amount' => '- Rp. 50.000', 'color' => '#ef4444', 'time' => 'Kemarin'],
-                ];
-            @endphp
-            @foreach($allTransactions5 as $at)
-            <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
-                <div class="flex items-center gap-2">
-                    <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
-                    <div>
-                        <h4 class="font-bold text-[10px] lg:text-[15px] text-gray-800">{{ $at['name'] }}</h4>
-                        <p class="text-[8px] lg:text-[12px] text-gray-500 mt-0.5">{{ $at['action'] }} • {{ $at['time'] }}</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-2">
-                    <span class="font-bold text-[10px] lg:text-[15px] text-[{{ $at['color'] }}] flex items-center gap-1.5">
-                        @if(isset($at['icon'])) <i class="ph ph-arrows-left-right text-[10px] lg:text-[16px]"></i> @endif
-                        {{ $at['amount'] }}
-                    </span>
-                </div>
+    @foreach($transactions as $at)
+    @php
+        $isSetor = $at instanceof \App\Models\Setoran;
+        $nominal = $isSetor ? $at->jumlah_penyetoran : $at->jumlah_penarikan;
+        $color = $isSetor ? '#10a163' : '#ef4444';
+    @endphp
+    <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50">
+        <div class="flex items-center gap-2">
+            <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
+            <div>
+                <h4 class="font-bold text-[10px] lg:text-[15px] text-gray-800">
+                    {{ $at->rekening->nasabah->nama_nasabah ?? '-' }}
+                </h4>
+                <p class="text-[8px] lg:text-[12px] text-gray-500 mt-0.5">
+                    {{ $isSetor ? 'Setor Tunai' : 'Tarik Tunai' }} • {{ $at->created_at->format('H:i') }}
+                </p>
             </div>
-            @endforeach
         </div>
+        <div class="flex items-center gap-2">
+            <span class="font-bold text-[10px] lg:text-[15px]" style="color: {{ $color }}">
+                {{ $isSetor ? '+' : '-' }} Rp. {{ number_format($nominal, 0, ',', '.') }}
+            </span>
+        </div>
+    </div>
+    @endforeach
+</div>
 
         <!-- Pagination -->
-        <x-pagination total="3" />
+        <x-pagination total="3" />  
 
     </div>
 </div>
