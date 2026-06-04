@@ -170,7 +170,7 @@
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
                                     <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
-                                        @if ($item->id_pengirim == auth()->user()->rekening->id)
+                                        @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
                                             {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
@@ -179,7 +179,7 @@
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
                                 </div>
                             </div>
-                            @if ($item->id_pengirim == auth()->user()->rekening->id)
+                            @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                 <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
                                     - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
                                 </p>
@@ -223,7 +223,7 @@
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
                                     <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
-                                        @if ($item->id_pengirim == auth()->user()->rekening->id)
+                                        @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
                                             {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
@@ -233,7 +233,7 @@
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">Catatan: {{$item->catatan}}</p>
                                 </div>
                             </div>
-                            @if ($item->id_pengirim == auth()->user()->rekening->id)
+                            @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                 <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
                                     - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
                                 </p>

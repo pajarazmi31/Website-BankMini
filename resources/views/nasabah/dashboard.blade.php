@@ -64,34 +64,64 @@
             <button onclick="switchView('history')" class="text-xs font-semibold text-gray-400 hover:text-active-blue transition-colors">Lihat Semua</button>
         </div>
 
-        <div class="bg-transparent space-y-4">
-            <!-- Item Statis 1 -->
-            <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-50">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-[#ccf0dd] flex items-center justify-center">
-                        <img src="{{ asset('img/icon/dashboard/income.png') }}" alt="Income" class="w-6 h-6">
-                    </div>
-                    <div>
-                        <p class="font-bold text-base lg:text-lg text-textDark">Setor Tunai</p>
-                        <p class="text-xs text-textGray mt-0.5">25 Oktober 2026</p>
-                    </div>
+<div class="bg-transparent space-y-4">
+
+    @forelse($riwayatTransfer as $item)
+
+        @php
+            $isKeluar = $item->id_pengirim == $rekening->id;
+        @endphp
+
+        <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-50">
+
+            <div class="flex items-center gap-4">
+
+                <div class="w-12 h-12 rounded-full flex items-center justify-center
+                    {{ $isKeluar ? 'bg-red-100' : 'bg-green-100' }}">
+
+                    <i class="ph-bold {{ $isKeluar ? 'ph-arrow-up' : 'ph-arrow-down' }}"></i>
+
                 </div>
-                <p class="font-bold text-sm lg:text-lg text-[#1fae62]">+ Rp. 50.000</p>
-            </div>
-            <!-- Item Statis 2 -->
-            <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-50">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-full bg-[#fbd4d4] flex items-center justify-center">
-                        <img src="{{ asset('img/icon/dashboard/expense.png') }}" alt="Expense" class="w-6 h-6">
-                    </div>
-                    <div>
-                        <p class="font-bold text-base lg:text-lg text-textDark">Tarik Tunai</p>
-                        <p class="text-xs text-textGray mt-0.5">20 Oktober 2026</p>
-                    </div>
+
+                <div>
+
+                    @if($isKeluar)
+                        <p class="font-bold text-base text-textDark">
+                            Transfer ke {{ $item->nama_penerima }}
+                        </p>
+                    @else
+                        <p class="font-bold text-base text-textDark">
+                            Transfer Masuk
+                        </p>
+                    @endif
+
+                    <p class="text-xs text-textGray">
+                        {{ $item->created_at->format('d M Y H:i') }}
+                    </p>
+
                 </div>
-                <p class="font-bold text-sm lg:text-lg text-[#e22f2f]">- Rp. 20.000</p>
+
             </div>
+
+            <p class="font-bold text-sm lg:text-lg
+                {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
+
+                {{ $isKeluar ? '-' : '+' }}
+                Rp {{ number_format($item->jumlah_transfer,0,',','.') }}
+
+            </p>
+
         </div>
+
+    @empty
+
+        <div class="text-center py-5 text-gray-500">
+            Belum ada riwayat transfer
+        </div>
+
+    @endforelse
+
+</div>
     </div>
 
     <!-- BOTTOM SECTION: Banner Info -->
@@ -131,29 +161,57 @@
         </div>
 
         <div class="space-y-6">
-            @php
-            $history5 = [
-            ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '25 Oktober 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
-            ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
-            ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
-            ['type' => 'income', 'title' => 'Setor Tunai', 'date' => '16 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#1fae62', 'bg' => '#ccf0dd'],
-            ['type' => 'expense', 'title' => 'Tarik Tunai', 'date' => '20 Oktober 2026', 'amount' => '- Rp. 50.000', 'color' => '#e22f2f', 'bg' => '#fbd4d4'],
-            ];
-            @endphp
-            @foreach($history5 as $item)
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
-                <div class="flex items-center gap-4">
-                    <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full bg-[{{ $item['bg'] }}] flex items-center justify-center">
-                        <img src="{{ asset('img/icon/dashboard/' . $item['type'] . '.png') }}" alt="{{ $item['type'] }}" class="w-3 h-3 lg:w-6 lg:h-6">
-                    </div>
-                    <div>
-                        <p class="font-bold text-sm lg:text-lg text-textDark">{{ $item['title'] }}</p>
-                        <p class="text-[8px] lg:text-[11px] text-textGray mt-0.5">{{ $item['date'] }}</p>
-                    </div>
-                </div>
-                <p class="font-bold text-xs lg:text-lg text-[{{ $item['color'] }}]">{{ $item['amount'] }}</p>
+@forelse($riwayatTransfer as $item)
+
+    @php
+        $isKeluar = $item->id_pengirim == $rekening->id;
+    @endphp
+
+    <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+
+        <div class="flex items-center gap-4">
+
+            <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
+                {{ $isKeluar ? 'bg-red-100' : 'bg-green-100' }}">
+
+                <i class="ph-bold {{ $isKeluar ? 'ph-arrow-up' : 'ph-arrow-down' }}"></i>
+
             </div>
-            @endforeach
+
+            <div>
+
+                <p class="font-bold text-sm lg:text-lg text-textDark">
+                    {{ $isKeluar ? 'Transfer Keluar' : 'Transfer Masuk' }}
+                </p>
+
+                <p class="text-[8px] lg:text-[11px] text-textGray mt-0.5">
+                    {{ $item->created_at->format('d M Y H:i') }}
+                </p>
+
+                @if($item->catatan)
+                    <p class="text-[8px] lg:text-[10px] text-gray-400">
+                        {{ $item->catatan }}
+                    </p>
+                @endif
+
+            </div>
+
+        </div>
+
+        <p class="font-bold text-xs lg:text-lg {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
+            {{ $isKeluar ? '-' : '+' }}
+            Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+        </p>
+
+    </div>
+
+@empty
+
+    <div class="text-center py-8 text-gray-500">
+        Belum ada riwayat transaksi.
+    </div>
+
+@endforelse
         </div>
 
         <!-- Pagination -->
