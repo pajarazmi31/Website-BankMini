@@ -163,7 +163,7 @@
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[38px] text-brand-blue"></i>
                         <div class="text-left">
-                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $cs->nama_petugas }}</p>
+                            <p class="font-bold text-[14px] text-gray-800 leading-tight">{{ $user->name }}</p>
                             <p class="text-[12px] text-gray-400 mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>
@@ -221,9 +221,9 @@
             const toast = document.getElementById('toastAlert');
             const toastMsg = document.getElementById('toastMessage');
             const toastIcon = document.getElementById('toastIcon');
-            
+
             toastMsg.textContent = message;
-            
+
             if (type === 'error') {
                 toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-red-400 text-xl"></i>';
                 toastIcon.classList.replace('bg-green-500/20', 'bg-red-500/20');
@@ -252,7 +252,7 @@
             const confirmBtn = document.getElementById('btnConfirmDelete');
 
             modal.classList.replace('hidden', 'flex');
-            
+
             // Trigger animation
             setTimeout(() => {
                 content.classList.replace('scale-95', 'scale-100');
@@ -272,7 +272,7 @@
 
             content.classList.replace('scale-100', 'scale-95');
             content.classList.replace('opacity-100', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.replace('flex', 'hidden');
             }, 300);

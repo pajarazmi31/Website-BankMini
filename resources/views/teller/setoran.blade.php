@@ -2,7 +2,7 @@
 
 @section('title', 'Teller - Data Setoran')
 @section('header_title')
-    Selamat Datang, {{ $teller->nama_petugas }}!
+    Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Sistem Administrasi Data Transaksi Penyetoran Kas.')
 

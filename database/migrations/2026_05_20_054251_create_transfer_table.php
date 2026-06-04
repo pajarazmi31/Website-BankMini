@@ -15,9 +15,13 @@ return new class extends Migration
 
             $table->id();
 
-            $table->string('id_rekening_pengirim', 20);
+            $table->foreignId('id_rekening_pengirim')
+                ->constrained('rekening')
+                ->cascadeOnDelete();
 
-            $table->string('id_rekening_penerima', 20);
+            $table->foreignId('id_rekening_penerima')
+                ->constrained('rekening')
+                ->cascadeOnDelete();
 
             $table->decimal('jumlah_transfer', 15, 2);
 
@@ -36,16 +40,6 @@ return new class extends Migration
                 ->cascadeOnDelete();
 
             $table->timestamps();
-
-            $table->foreign('id_rekening_pengirim')
-                ->references('id')
-                ->on('rekening')
-                ->cascadeOnDelete();
-
-            $table->foreign('id_rekening_penerima')
-                ->references('id')
-                ->on('rekening')
-                ->cascadeOnDelete();
         });
     }
 

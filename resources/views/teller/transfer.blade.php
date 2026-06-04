@@ -2,7 +2,7 @@
 
 @section('title', 'Teller - Data Transfer')
 @section('header_title')
-    Selamat Datang, {{ $teller->nama_petugas }}!
+    Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
@@ -56,12 +56,12 @@
                     <td class="py-4 px-2 border-b border-gray-50">
                         {{ $d->created_at->format('d-m-Y') }}
                     </td>
-                   <td class="py-4 px-2 border-b border-gray-50">{{ $d->petugas->nama_petugas ?? 'Teller' }}</td>
+                   <td class="py-4 px-2 border-b border-gray-50">{{ $user->name ?? 'Teller' }}</td>
                     <td class="py-4 px-2 border-b border-gray-50 text-center">
                         <div class="flex items-center justify-center gap-2">
                             <button type="button" 
                                     onclick="tampilkanDetail(this)"
-                                    data-petugas="{{ $d->petugas->nama_petugas ?? 'Teller' }}"
+                                    data-petugas="{{ $user->name ?? 'Teller' }}"
                                     data-pengirim="{{ $d->rekeningPengirim->nama_nasabah ?? $d->id_rekening_pengirim }}"
                                     data-penerima="{{ $d->rekeningPenerima->nama_nasabah ?? $d->id_rekening_penerima }}"
                                     data-nominal="{{ number_format($d->jumlah_transfer, 0, ',', '.') }}"
@@ -80,7 +80,7 @@
                                     "{{ $d->id_rekening_pengirim }}",
                                     "{{ $d->id_rekening_penerima }}",
                                     "{{ $d->jumlah_transfer }}",
-                                    "{{ $teller->nama_petugas }}",
+                                    "{{ $user->name }}",
                                     "{{ $d->catatan }}"
                                 )'
                                 class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"

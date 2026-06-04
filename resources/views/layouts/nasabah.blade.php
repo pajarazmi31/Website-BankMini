@@ -94,7 +94,7 @@
             <button class="lg:hidden absolute top-4 right-4 text-gray-400 hover:text-textDark" onclick="toggleSidebar()">
                 <i class="ph ph-x text-2xl"></i>
             </button>
-            
+
             <div class="px-8 mb-10 flex items-center gap-3">
                 <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-10 h-10 object-contain">
                 <div>
@@ -107,7 +107,7 @@
                 <p class="text-xs font-semibold text-gray-400 mb-4 tracking-wider">MENU</p>
                 <ul class="space-y-1 relative">
                     @php $route = Route::currentRouteName(); @endphp
-                    
+                    @if ($rekening->status_akun == 'aktif')               
                     <li class="relative">
                         @if($route == 'nasabah.dashboard')
                             <div class="absolute left-[-32px] top-1/2 -translate-y-1/2 w-[5px] h-8 bg-primary rounded-r-lg"></div>
@@ -126,6 +126,17 @@
                             <span class="text-[14px]">Transfer</span>
                         </a>
                     </li>
+                    @else 
+                    <li class="relative">
+                        @if($route == 'nasabah.dashboard')
+                            <div class="absolute left-[-32px] top-1/2 -translate-y-1/2 w-[5px] h-8 bg-primary rounded-r-lg"></div>
+                        @endif
+                        <a href="{{ route('nasabah.dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl transition-all {{ $route == 'nasabah.dashboard' ? 'bg-gray-50 text-textDark font-bold' : 'text-[#a0aab8] font-medium hover:bg-gray-50 hover:text-primary' }}">
+                            <img src="{{ asset('img/icon/sidebar/dashboard.png') }}" alt="Dashboard" class="w-5 h-5 {{ $route == 'nasabah.dashboard' ? '' : 'opacity-40' }}">
+                            <span class="text-[14px]">Dashboard</span>
+                        </a>
+                    </li>
+                    @endif
                     <li class="pt-4 px-4">
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
@@ -160,18 +171,26 @@
                     <h2 class="text-[22px] md:text-[26px] font-bold text-gray-800 mb-0.5">@yield('header_title', 'Selamat Datang!')</h2>
                     <p class="text-gray-500 text-[12px] md:text-[14px]">@yield('header_subtitle', 'Kelola transaksi nasabah.')</p>
                 </div>
-    
+
+
                 <div class="flex items-center gap-6">
+                    @if ($rekening->status_akun == 'aktif')             
                     <div class="flex items-center gap-2 bg-[#d1f4e0] text-[#0d7d42] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
                         <i class="ph-fill ph-check-circle text-[16px]"></i>
                         Rekening Aktif
                     </div>
+                    @else
+                    <div class="flex items-center gap-2 bg-[#f4d1d1] text-[#7d0d0d] px-4 py-2 rounded-full text-sm font-semibold shadow-sm">
+                        <i class="ph-fill ph-check-circle text-[16px]"></i>
+                        Rekening Non-aktif
+                    </div>
+                    @endif
                     <div class="flex items-center gap-3">
                         <i class="ph-fill ph-user-circle text-[40px] text-primary"></i>
                         <div class="text-left">
-                            
+
                             <p class="text-sm font-bold text-textDark leading-tight">{{ $nasabah->nama_nasabah }}</p>
-                            
+
                             <p class="text-xs text-textGray mt-0.5">{{ $user->email }}</p>
                         </div>
                     </div>

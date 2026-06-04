@@ -2,7 +2,7 @@
 
 @section('title', 'Teller - Data Penarikan')
 @section('header_title')
-    Selamat Datang, {{ $teller->nama_petugas }}!
+    Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
@@ -71,7 +71,7 @@
                 </td>
 
                 <td class="py-4 px-2 border-b border-gray-50">
-                    {{ $teller->nama_petugas }}
+                    {{ $user->name }}
                 </td>
 
             <td class="py-4 px-2 border-b border-gray-50 text-center">
@@ -84,7 +84,7 @@
                             '{{ $d->nama_penarik }}',
                             '{{ $d->id_rekening }}',
                             '{{ $d->jumlah_penarikan }}', 
-                            '{{ $teller->nama_petugas }}',
+                            '{{ $user->name }}',
                             '{{ $d->transaksi->nominal ?? 0 }}'
                         )"
                         class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
@@ -99,7 +99,7 @@
                         '{{ $d->nama_penarik }}',
                         '{{ $d->id_rekening }}',
                         '{{ $d->jumlah_penarikan }}',
-                        '{{ $teller->nama_petugas }}',
+                        '{{ $user->name }}',
                         '{{ $d->transaksi->nominal ?? 0 }}',
                         '{{ $d->transaksi_id }}'
                     )"

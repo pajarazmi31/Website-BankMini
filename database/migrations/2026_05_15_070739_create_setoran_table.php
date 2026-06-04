@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->id();
 
-            $table->string('id_rekening');
+            $table->unsignedBigInteger('id_rekening');
 
             $table->foreignId('id_petugas');
 

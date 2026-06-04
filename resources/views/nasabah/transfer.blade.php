@@ -28,7 +28,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-gray-300 uppercase mb-2">TOTAL SALDO DITERIMA</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. 10.500.000</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight">Rp. {{ number_format($totalPemasukanBulanIni, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-gray-300">
                         <i class="ph ph-clock-counter-clockwise opacity-60"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="relative z-10">
                     <p class="text-[10px] lg:text-xs font-semibold tracking-widest text-textGray uppercase mb-2">TOTAL SALDO TERKIRIM</p>
-                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. 500.000</h3>
+                    <h3 class="text-2xl lg:text-4xl font-bold mb-3 lg:mb-6 tracking-tight text-primary">Rp. {{ number_format($totalPengeluaranBulanIni, 0, ',', '.') }}</h3>
                     <div class="flex items-center gap-2 text-xs lg:text-sm text-textGray">
                         <i class="ph ph-clock-counter-clockwise opacity-40"></i>
                         <p>Akumulasi Transaksi Bulan Ini</p>
@@ -64,33 +64,68 @@
                     <div class="w-1.5 h-7 bg-accentYellow rounded-full"></div>
                     <h3 class="text-lg lg:text-2xl font-bold text-textDark">Formulir Transfer</h3>
                 </div>
-
                 <!-- 
                     BAGIAN BACKEND: FORM TRANSFER (NASABAH)
                     - action="#": Perlu diisi dengan route transfer untuk nasabah login (misal: route('nasabah.transfer.store')).
                     - method="POST": Menggunakan metode POST untuk transaksi.
                 -->
-                <form action="#" method="POST" class="space-y-6">
+                <form action="{{ route('transfer.proses') }}" method="POST" class="space-y-6">
                     <!-- 
                         BAGIAN BACKEND: CSRF TOKEN
                     -->
                     @csrf
-                    @if($errors->any())
-                        <div class="bg-red-50 text-red-500 p-4 rounded-xl text-sm border border-red-100">
-                            <ul class="list-disc pl-4">@foreach($errors->all() as $error) <li>{{ $error }}</li> @endforeach</ul>
-                        </div>
-                    @endif
-                    @if(session('success'))
-                        <div class="bg-green-50 text-green-600 p-4 rounded-xl text-sm border border-green-100">{{ session('success') }}</div>
-                    @endif
+                    <div class="space-y-3 mb-4">
+                        {{-- 1. ALERT UNTUK LOGIKA ERROR / PROSES GAGAL --}}
+                        @if (session('error'))
+                            <div class="flex items-center gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
+                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0"></i>
+                                <div class="font-medium">
+                                    {{ session('error') }}
+                                </div>
+                            </div>
+                        @endif
 
+                        {{-- 2. ALERT UNTUK VALIDASI FORM YANG SALAH --}}
+                        @if ($errors->any())
+                            <div class="flex gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
+                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0 mt-0.5"></i>
+                                <div>
+                                    <span class="font-bold block mb-1">Periksa kembali inputan Anda:</span>
+                                    <ul class="list-disc list-inside space-y-0.5 pl-1 opacity-90">
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- BONUS: ALERT UNTUK NOTIFIKASI SUKSES (Biar serasi) --}}
+                        @if (session('success'))
+                            <div class="flex items-center gap-3 p-4 text-[13px] text-green-800 border border-green-200 rounded-xl bg-green-50" role="alert">
+                                <i class="ph-bold ph-check-circle text-xl flex-shrink-0"></i>
+                                <div class="font-medium">
+                                    {{ session('success') }}
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-textGray mb-2">No Rekening Penerima</label>
+                        <!-- 
+                            BAGIAN BACKEND: INPUT PENERIMA
+                            - Ditangkap sebagai $request->id_penerima di controller.
+                        -->
+                        <input type="text" name="id_penerima" id="id_penerima" value="{{ old('id_penerima') }}" required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                    </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nama Penerima</label>
                         <!-- 
                             BAGIAN BACKEND: INPUT PENERIMA
                             - Ditangkap sebagai $request->nama_penerima di controller.
                         -->
-                        <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}" required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}" readonly required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nominal Transfer (Rp)</label>
@@ -98,7 +133,7 @@
                             BAGIAN BACKEND: INPUT NOMINAL
                             - Ditangkap sebagai $request->nominal di controller.
                         -->
-                        <input type="number" name="nominal" id="nominal" value="{{ old('nominal') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Catatan (Opsional)</label>
@@ -124,28 +159,37 @@
                         BAGIAN BACKEND: RIWAYAT TERBARU
                         - Data statis di bawah perlu diganti dengan data dari database (misal: mengambil 6 transaksi terakhir).
                     -->
-                    @php
-                        $recentHistory = [
-                            ['name' => 'Pajar Azmi', 'date' => '25 Desember 2026', 'amount' => '+ Rp. 50.000', 'color' => '#10a163'],
-                            ['name' => 'Anisa Siti', 'date' => '10 Desember 2026', 'amount' => '- Rp. 100.000', 'color' => '#ef4444'],
-                            ['name' => 'Ramdan', 'date' => '01 Desember 2026', 'amount' => '- Rp. 1.000.000', 'color' => '#ef4444'],
-                            ['name' => 'Dinar', 'date' => '28 November 2026', 'amount' => '+ Rp. 500.000', 'color' => '#10a163'],
-                            ['name' => 'Aditya', 'date' => '20 November 2026', 'amount' => '- Rp. 10.000', 'color' => '#ef4444'],
-                            ['name' => 'Rafka', 'date' => '16 November 2026', 'amount' => '+ Rp. 50.000', 'color' => '#10a163'],
-                        ];
-                    @endphp
-                    @foreach($recentHistory as $item)
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-2">
-                            <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
-                            <div>
-                                <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">{{ $item['name'] }}</p>
-                                <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item['date'] }}</p>
-                            </div>
+                    @if($riwayatTransfer->isEmpty())
+                        <div class="text-center py-6 text-gray-500 text-[13px]">
+                            <p>Belum ada riwayat transaksi.</p>
                         </div>
-                        <p class="font-bold text-[12px] lg:text-[13px] text-[{{ $item['color'] }}]">{{ $item['amount'] }}</p>
-                    </div>
-                    @endforeach
+                    @endif
+                        @foreach( $riwayatTransfer as $item)
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
+                                <div>
+                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                        @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
+                                            {{ $item->nama_penerima }}
+                                        @else
+                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            @endif
+                                    </p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                </div>
+                            </div>
+                            @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
+                                <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
+                                    - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @else
+                                <p class="font-bold text-[12px] lg:text-[13px] text-green-500">
+                                    + Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @endif
+                        </div>
+                        @endforeach
                 </div>
             </div>
         </div>
@@ -167,30 +211,40 @@
                     BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG
                     - Lakukan looping foreach untuk 10 transaksi terakhir (khusus transfer).
                 -->
-                @php
-                    $history5 = [
-                        ['name' => 'Pajar Azmi', 'date' => '25 Desember 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
-                        ['name' => 'Anisa Siti', 'date' => '10 Desember 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                        ['name' => 'Ramdan', 'date' => '05 Desember 2026', 'amount' => '- Rp. 200.000', 'color' => '#ef4444'],
-                        ['name' => 'Pajar Azmi', 'date' => '25 November 2026', 'amount' => '- Rp. 50.000', 'color' => '#ef4444'],
-                        ['name' => 'Anisa Siti', 'date' => '10 November 2026', 'amount' => '+ Rp. 100.000', 'color' => '#10a163'],
-                    ];
-                @endphp
-                @foreach($history5 as $item)
 
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-4">
-                        <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
-                        <div>
-                            <p class="font-bold text-[12px] lg:text-[16px] text-gray-800">{{ $item['name'] }}</p>
-                            <p class="text-[8px] lg:text-[12px] text-gray-500 mt-0.5">{{ $item['date'] }}</p>
+                    @if($riwayatTransfer->isEmpty())
+                        <div class="text-center py-6 text-gray-500 text-[13px]">
+                            <p>Belum ada riwayat transaksi.</p>
                         </div>
-                    </div>
-                    <p class="font-bold text-[10px] lg:text-[15px] text-[{{ $item['color'] }}]">{{ $item['amount'] }}</p>
-                </div>
-                @endforeach
+                    @endif
+                        @foreach( $riwayatTransfer as $item)
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
+                                <div>
+                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                        @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
+                                            {{ $item->nama_penerima }}
+                                        @else
+                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            @endif
+                                    </p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">Catatan: {{$item->catatan}}</p>
+                                </div>
+                            </div>
+                            @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
+                                <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
+                                    - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @else
+                                <p class="font-bold text-[12px] lg:text-[13px] text-green-500">
+                                    + Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                                </p>
+                            @endif
+                        </div>
+                        @endforeach
             </div>
-
             <!-- Pagination -->
             <x-pagination total="3" />
         </div>
@@ -221,5 +275,55 @@
         // Scroll top
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+       // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
+    let delayTimer;
+
+    document.getElementById('id_penerima').addEventListener('input', function() {
+        let noRekening = this.value;
+        let inputNoRekening = this;
+        let inputNama = document.getElementById('nama_penerima');
+
+        // 1. KELOLA INPUT KOSONG
+        if (noRekening.trim() === '') {
+            clearTimeout(delayTimer); // batalkan pencarian jika dihapus semua
+            inputNama.value = '';
+            inputNoRekening.style.borderColor = '#e5e7eb';
+            inputNama.style.borderColor = '#e5e7eb';
+            return;
+        }
+
+        // Tampilkan status "Mencari..." agar user tahu sistem sedang bekerja
+        inputNama.value = 'Mencari data...';
+
+        // 2. TEKNIK DEBOUNCE: Hapus timer yang lama jika user masih mengetik
+        clearTimeout(delayTimer);
+
+        // Set timer baru: Tunggu 500ms (0.5 detik) setelah ketikan terakhir berhenti
+        delayTimer = setTimeout(function() {
+            
+            // Panggil Route API Laravel setelah user BERHENTI mengetik
+            fetch(window.location.origin + '/cek-rekening/' + noRekening)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // REKENING ADA
+                        inputNama.value = data.nama;
+                        inputNoRekening.style.borderColor = '#10b981'; // Hijau halus
+                        inputNama.style.borderColor = '#10b981';
+                    } else {
+                        // REKENING TIDAK ADA
+                        inputNama.value = 'Rekening Tidak Ditemukan!';
+                        inputNoRekening.style.borderColor = '#ef4444'; // Merah halus
+                        inputNama.style.borderColor = '#ef4444';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetch:', error);
+                    inputNama.value = 'Gagal memuat data internet';
+                });
+
+        }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
+    });
 </script>
 @endsection

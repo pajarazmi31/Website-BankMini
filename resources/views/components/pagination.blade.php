@@ -32,15 +32,9 @@
             <span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">{{ $i }}</span>
         @else
             <!-- Other Pages (Buttons) -->
-            @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
-                <a href="{{ $paginator->url($i) }}" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
-                    {{ $i }}
-                </a>
-            @else
-                <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
-                    {{ $i }}
-                </button>
-            @endif
+            <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
+                {{ $i }}
+            </button>
         @endif
 
         {{-- Add ellipsis if there are many pages --}}
@@ -51,20 +45,7 @@
     @endfor
     
     <!-- Next Button -->
-    @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
-        @if (!$paginator->hasMorePages())
-            <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] opacity-50 cursor-not-allowed" disabled>
-                <i class="ph-bold ph-caret-right"></i>
-            </button>
-        @else
-            <a href="{{ $paginator->nextPageUrl() }}" 
-               class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
-                <i class="ph-bold ph-caret-right"></i>
-            </a>
-        @endif
-    @else
-        <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" {{ $current == $total ? 'disabled' : '' }}>
-            <i class="ph-bold ph-caret-right"></i>
-        </button>
-    @endif
+    <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" {{ $current == $total ? 'disabled' : '' }}>
+        <i class="ph-bold ph-caret-right"></i>
+    </button>
 </div>

@@ -22,7 +22,7 @@
 
                 <div class="w-full lg:max-w-[200px]">
                     <input type="text"
-                        value="{{ $teller->nama_petugas }}"
+                        value="{{ $user->name }}"
                         class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50"
                         readonly>
                 </div>
