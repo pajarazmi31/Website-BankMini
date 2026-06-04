@@ -62,6 +62,40 @@ class UserSeeder extends Seeder
             'hubungan_kontak_darurat' => 'Ayah',
         ]);
 
+        $userNasabah = User::create([
+            'name' => 'Agus',
+            'role_id' => $roleNasabah->id,
+            'email' => 'agus@gmail.com',
+            'password' => Hash::make('123456'),
+        ]);
+
+        Nasabah::create([
+            'user_id' => $userNasabah->id,
+            'nis_nip' => '11223344',
+            'nama_nasabah' => 'Agus',
+            'tempat_lahir' => 'Bandung',
+            'tanggal_lahir' => '2005-01-01',
+            'jurusan' => 'PPLG',
+            'jenis_kelamin' => 'Laki-Laki',
+            'pendidikan' => 'SMA/K',
+            'rt_rw' => '01/02',
+            'kelurahan' => 'Cibaduyut',
+            'kecamatan' => 'Bojongloa',
+            'kab_kota' => 'Bandung',
+            'provinsi' => 'Jawa Barat',
+            'kode_pos' => '40236',
+            'email' => 'agus@gmail.com',
+            'agama' => 'Islam',
+            'no_hp' => '08123456789',
+            'password' => Hash::make('123456'),
+            'jabatan' => 'Siswa',
+            'jenis_identitas' => 'KTP',
+            'nama_kontak_darurat' => 'Ayah Agus',
+            'alamat_kontak_darurat' => 'Bandung',
+            'no_hp_kontak_darurat' => '08111111111',
+            'hubungan_kontak_darurat' => 'Ayah',
+        ]);
+
         // USER TELLER
 
         $userTeller = User::create([

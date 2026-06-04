@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('rekening', function (Blueprint $table) {
 
-            // nomor rekening manual
             $table->string('id')->primary();
 
-            $table->unsignedBigInteger('nasabah_id');
+            $table->foreignId('nasabah_id')
+                ->constrained('nasabah');
 
             $table->decimal('saldo_saat_ini', 15, 2)
-                  ->default(0);
+                ->default(0);
 
-            $table->enum('status_akun', ['aktif', 'nonaktif'])
-                  ->default('aktif');
+            $table->enum('status_akun', [
+                'aktif',
+                'nonaktif'
+            ])->default('aktif');
 
             $table->timestamps();
         });

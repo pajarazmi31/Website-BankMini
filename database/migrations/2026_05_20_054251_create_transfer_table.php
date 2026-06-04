@@ -9,53 +9,45 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up(): void
-{
-    Schema::create('transfer', function (Blueprint $table) {
-        $table->id();
+    public function up(): void
+    {
+        Schema::create('transfer', function (Blueprint $table) {
 
-        // 1. Relasi Rekening Pengirim & Penerima
-        $table->string('id_rekening_pengirim', 20);
-        $table->string('id_rekening_penerima', 20);
+            $table->id();
 
-        // 2. Data Nominal Transfer
-        $table->decimal('jumlah_transfer', 15, 2);
-        
-        // 3. Tambahan: Biaya admin transfer (Biar sinkron dengan total_biaya, bray!)
-        $table->decimal('biaya_transaksi', 15, 2)->default(0);
-        
-        // 4. Total saldo yang didebet dari pengirim (jumlah_transfer + biaya_transaksi)
-        $table->decimal('total_biaya', 15, 2);
+            $table->string('id_rekening_pengirim', 20);
 
-        // 5. Relasi ke master transaksi utama (Foreign Key ke tabel transaksi)
-        $table->foreignId('transaksi_id')->nullable()->constrained('transaksi')->onDelete('set null');
+            $table->string('id_rekening_penerima', 20);
 
-        // 6. Metadata waktu & catatan
-        $table->dateTime('datetime');
-        $table->string('catatan', 255)->nullable();
+            $table->decimal('jumlah_transfer', 15, 2);
 
-        // 7. Relasi ke Petugas yang memproses
-        $table->unsignedBigInteger('id_petugas');
+            $table->foreignId('transaksi_id')
+                ->nullable();
 
-        // ==================== Foreign Key Constraints ====================
-        $table->foreign('id_rekening_pengirim')
-              ->references('id')
-              ->on('rekening')
-              ->onDelete('cascade');
+            $table->decimal('total_biaya', 15, 2);
 
-        $table->foreign('id_rekening_penerima')
-              ->references('id')
-              ->on('rekening')
-              ->onDelete('cascade');
+            $table->dateTime('datetime');
 
-        $table->foreign('id_petugas')
-              ->references('id')
-              ->on('petugas')
-              ->onDelete('cascade');
+            $table->string('catatan')
+                ->nullable();
 
-        $table->timestamps();
-    });
-}
+            $table->foreignId('id_petugas')
+                ->constrained('petugas')
+                ->cascadeOnDelete();
+
+            $table->timestamps();
+
+            $table->foreign('id_rekening_pengirim')
+                ->references('id')
+                ->on('rekening')
+                ->cascadeOnDelete();
+
+            $table->foreign('id_rekening_penerima')
+                ->references('id')
+                ->on('rekening')
+                ->cascadeOnDelete();
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -64,5 +56,4 @@ public function up(): void
     {
         Schema::dropIfExists('transfer');
     }
-
 };

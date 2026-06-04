@@ -118,7 +118,6 @@ class tellerController extends Controller
                 'nama_penyetor'     => $request->nama_penyetor,
                 'alamat_penyetor'   => $request->alamat_penyetor,
                 'no_hp_penyetor'    => $request->no_hp_penyetor,
-                'datetime_tgl'      => now(),
             ]);
 
             DB::commit();

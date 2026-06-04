@@ -76,8 +76,8 @@
                         readonly
                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none">
  
-                    <input type="hidden" id="tambah_biaya_transaksi" value="{{ $transaksi->nominal }}">
-                    <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
+                    <input type="hidden" id="tambah_biaya_transaksi" value="{{ $transaksi->nominal ?? '0' }}">
+                    <input type="hidden" name="transaksi_id" value="{{ $transaksi->id ?? '' }}">
                 </div>
 
                 <!-- BARIS 3 KANAN: TOTAL BIAYA -->

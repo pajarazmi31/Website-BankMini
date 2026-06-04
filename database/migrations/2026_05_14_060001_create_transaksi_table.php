@@ -14,11 +14,9 @@ return new class extends Migration
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
 
-            // Di-set unique biar nama jenis transaksinya tidak dobel-dobel di database bray
-            $table->string('jenis_transaksi')->unique();
-            
-            // Diubah ke decimal biar presisi dan sinkron dengan modul transfer/penarikan
-            $table->decimal('nominal', 15, 2);
+            $table->string('jenis_transaksi');
+
+            $table->bigInteger('nominal');
 
             $table->timestamps();
         });
