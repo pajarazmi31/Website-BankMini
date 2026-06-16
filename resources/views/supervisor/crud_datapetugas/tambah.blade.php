@@ -27,6 +27,25 @@
                     <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama petugas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
                 </div>
                 <div>
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Kelas</label>
+                    <select name="kelas"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+
+                        <option value="">Pilih Kelas</option>
+
+                        <option value="X AK 1" {{ old('kelas') == 'X AK 1' ? 'selected' : '' }}>X AK 1</option>
+                        <option value="X AK 2" {{ old('kelas') == 'X AK 2' ? 'selected' : '' }}>X AK 2</option>
+                        <option value="XI AK 1" {{ old('kelas') == 'XI AK 1' ? 'selected' : '' }}>XI AK 1</option>
+                        <option value="XI AK 2" {{ old('kelas') == 'XI AK 2' ? 'selected' : '' }}>XI AK 2</option>
+                        <option value="XII AK 1" {{ old('kelas') == 'XII AK 1' ? 'selected' : '' }}>XII AK 1</option>
+                        <option value="XII AK 2" {{ old('kelas') == 'XII AK 2' ? 'selected' : '' }}>XII AK 2</option>
+                    </select>
+
+                    @error('kelas')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
                     <input type="password" name="password" placeholder="********" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
                 </div>

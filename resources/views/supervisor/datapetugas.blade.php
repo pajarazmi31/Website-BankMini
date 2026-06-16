@@ -54,6 +54,7 @@
                         <tr>
                             <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] w-16 border-b border-gray-100 pl-4">No</th>
                             <th class="py-4 px-4 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Petugas</th>
+                            <th class="py-4 px-4 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Kelas </th>
                             <th class="py-4 px-4 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100 hidden md:table-cell">Email</th>
                             <th class="py-4 px-4 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Role</th>
                             <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-36 border-b border-gray-100">Aksi</th>
@@ -63,17 +64,19 @@
                         @foreach($petugas as $index => $p)
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">{{ $index + 1 }}.</td>
-                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->name }}</td>
-                            <td class="py-4 px-4 border-b border-gray-50 hidden md:table-cell text-gray-700 font-medium">{{ $p->email }}</td>
-                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->role->nama_role }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->user->name }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->kelas }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50 hidden md:table-cell text-gray-700 font-medium">{{ $p->user->email }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->user->role->nama_role }}</td>
                             <td class="py-4 px-2 border-b border-gray-50">
                                 <div class="flex items-center justify-center gap-3">
-                                    <button onclick="viewDetail('{{ $p->name }}', '{{ $p->email }}', '{{ $p->role->nama_role }}')" class="w-[28px] h-[28px] rounded-full bg-[#f1f5f9] text-[#1c3a5a] flex items-center justify-center hover:bg-gray-200 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[15px]"></i></button>
+                                    <button onclick="viewDetail('{{ $p->user->name }}','{{ $p->kelas }}', '{{ $p->user->email }}', '{{ $p->user->role->nama_role }}')" class="w-[28px] h-[28px] rounded-full bg-[#f1f5f9] text-[#1c3a5a] flex items-center justify-center hover:bg-gray-200 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[15px]"></i></button>
                                     <button onclick="viewEdit(
                                         '{{ $p->id }}',
-                                        '{{ $p->name }}',
-                                        '{{ $p->email }}',
-                                        '{{ $p->role_id }}')" class="w-[28px] h-[28px] rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit Data"><i class="ph-fill ph-pencil-simple text-[15px]"></i></button>
+                                        '{{ $p->user->name }}',
+                                        '{{ $p->kelas }}',
+                                        '{{ $p->user->email }}',
+                                        '{{ $p->user->role_id }}')" class="w-[28px] h-[28px] rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit Data"><i class="ph-fill ph-pencil-simple text-[15px]"></i></button>
                                     <button onclick="openDeleteModal(() => hapusPetugas('{{ $p->id }}'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-[#ef4444] flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus Data"><i class="ph-fill ph-trash text-[15px]"></i></button>
                                 </div>
                             </td>
@@ -104,8 +107,9 @@
     @section('scripts')
     <script>
         // Lihat Detail
-        function viewDetail(nama, email, role) {
+        function viewDetail(nama, kelas, email, role) {
             document.getElementById('detail_nama').value = nama;
+            document.getElementById('detail_kelas').value = kelas;
             document.getElementById('detail_email').value = email;
             document.getElementById('detail_role_text').value = role;
 
@@ -113,7 +117,7 @@
         }
 
         // Edit Data
-        function viewEdit(id, nama, email, roleId) {
+        function viewEdit(id, nama, kelas, email, roleId) {
 
             // ambil form
             const form = document.getElementById('formEditPetugas');
@@ -123,6 +127,7 @@
 
             // isi input
             document.getElementById('edit_nama').value = nama;
+            document.getElementById('edit_kelas').value = kelas;
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_role').value = roleId;
 
@@ -130,7 +135,6 @@
             switchView('edit');
         }
 
-        // Pindah antara Tabel Data dan Form Input
         function switchView(viewName) {
             const views = {
                 'tabel': document.getElementById('viewTabelData'),
@@ -139,7 +143,6 @@
                 'detail': document.getElementById('viewDetailData')
             };
 
-            // Sembunyikan semua view
             Object.values(views).forEach(v => {
                 if (v) {
                     v.classList.add('hidden');
@@ -147,10 +150,11 @@
                 }
             });
 
-            // Tampilkan view yang dipilih
             const activeView = views[viewName];
+
             if (activeView) {
                 activeView.classList.remove('hidden');
+
                 if (viewName === 'tabel') {
                     activeView.classList.add('flex');
                 } else {
@@ -162,13 +166,16 @@
                 top: 0,
                 behavior: 'smooth'
             });
-            document.addEventListener('DOMContentLoaded', function() {
-
-                @if(session('active_view') == 'tambah')
-                switchView('tambah');
-                @endif
-
-            });
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+    @if($errors->any())
+        switchView('tambah');
+    @elseif(session('active_view'))
+        switchView('{{ session('active_view') }}');
+    @endif
+
+        });
     </script>
     @endsection

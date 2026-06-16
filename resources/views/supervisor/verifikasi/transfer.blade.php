@@ -29,6 +29,7 @@
             <h3 class="text-[24px] font-bold text-gray-800">Pending Verifikasi</h3>
             
             <div class="flex bg-gray-100 p-1 rounded-xl w-full sm:w-[300px]">
+                <a href="{{ route('supervisor.verifikasi.login') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Login</a>
                 <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Registrasi</a>
                 <a href="{{ route('supervisor.verifikasi') }}" class="flex-1 px-4 py-2 bg-white rounded-lg shadow-sm text-brand-blue font-bold text-[13px] text-center transition-all">Transfer</a>
             </div>

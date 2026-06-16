@@ -35,11 +35,8 @@ class UserSeeder extends Seeder
         ]);
 
         Petugas::create([
-            'nama_petugas' => 'Andi',
             'user_id' => $userTeller->id,
-            'email' => 'teller@gmail.com',
-            'password' => Hash::make('123456'),
-            'role' => 'teller',
+            'kelas' => 'XI AK 1',
         ]);
 
         // USER SUPERVISOR
@@ -52,11 +49,8 @@ class UserSeeder extends Seeder
         ]);
 
         Petugas::create([
-            'nama_petugas' => 'Sinta',
             'user_id' => $userSupervisor->id,
-            'email' => 'supervisor@gmail.com',
-            'password' => Hash::make('123456'),
-            'role' => 'supervisor',
+            'kelas' => 'XI AK 1',
         ]);
 
 
@@ -69,11 +63,8 @@ class UserSeeder extends Seeder
         ]);
 
         Petugas::create([
-            'nama_petugas' => 'Aditya',
             'user_id' => $userCs->id,
-            'email' => 'adityanugrahakawali2@gmail.com',
-            'password' => Hash::make('123456'),
-            'role' => 'customerservice',
+            'kelas' => 'XI AK 1',
         ]);
     }
 }

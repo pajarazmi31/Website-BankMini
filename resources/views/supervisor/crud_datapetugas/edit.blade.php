@@ -17,6 +17,13 @@
                         class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
                 </div>
                 <div>
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Kelas</label>
+                    <input type="text"
+                        id="edit_kelas"
+                        name="kelas"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                </div>
+                <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
                     <input type="password"
                         name="password" placeholder="Kosongkan jika tidak ingin mengubah" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
