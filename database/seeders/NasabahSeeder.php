@@ -26,31 +26,39 @@ class NasabahSeeder extends Seeder
             'password' => Hash::make('123456'),
         ]);
 
-        Nasabah::create([
-            'user_id' => $userNasabah->id,
-            'nis_nip' => '242510190',
-            'nama_nasabah' => 'Dinar',
-            'tempat_lahir' => 'Bandung',
-            'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
-            'jenis_kelamin' => 'Laki-Laki',
-            'pendidikan' => 'SMA/K',
-            'rt_rw' => '01/02',
-            'kelurahan' => 'Cibaduyut',
-            'kecamatan' => 'Bojongloa',
-            'kab_kota' => 'Bandung',
-            'provinsi' => 'Jawa Barat',
-            'kode_pos' => '40236',
-            'email' => 'dinar@gmail.com',
-            'agama' => 'Islam',
-            'no_hp' => '081936339561',
-            'password' => Hash::make('123456'),
-            'jabatan' => 'Siswa',
-            'jenis_identitas' => 'KTP',
-            'nama_kontak_darurat' => 'Ayah Dinar',
-            'alamat_kontak_darurat' => 'Bandung',
-            'no_hp_kontak_darurat' => '08111111112',
-            'hubungan_kontak_darurat' => 'Ayah',
-        ]);
+       Nasabah::create([
+        'user_id' => $userNasabah->id,
+        'nis_nip' => '242510190',
+        'nama_nasabah' => 'Dinar',
+        'tempat_lahir' => 'Bandung',
+        'tanggal_lahir' => '2005-01-01',
+
+        'jurusan_id' => 1, // sesuaikan dengan id di tabel jurusan
+
+        'jenis_kelamin' => 'Laki-Laki',
+        'pendidikan' => 'SMK',
+
+        'alamat' => 'Jl. Cibaduyut RT 01 RW 02',
+
+        'provinsi_id' => 11,
+        'kab_kota_id' => 1102,
+        'kecamatan_id' => 9408061,
+        'kelurahan_id' => 1101010005,
+
+        'kode_pos' => '40236',
+        'email' => 'dinar@gmail.com',
+        'agama' => 'Islam',
+        'no_hp' => '081936339561',
+        'password' => Hash::make('123456'),
+        'jabatan' => 'Siswa',
+        'jenis_identitas' => 'KTP',
+
+        'nama_kontak_darurat' => 'Ayah Dinar',
+        'alamat_kontak_darurat' => 'Bandung',
+        'no_hp_kontak_darurat' => '08111111112',
+        'hubungan_kontak_darurat' => 'Ayah',
+
+        'pesan' => '-',
+    ]);
     }
 }

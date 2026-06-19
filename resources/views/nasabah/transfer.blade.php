@@ -169,11 +169,11 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                     <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
@@ -222,11 +222,11 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>

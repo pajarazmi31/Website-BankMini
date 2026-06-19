@@ -12,6 +12,12 @@ use App\Models\Penarikan;
 use App\Models\Transfer;
 use App\Models\Transaksi;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\SetoranExport;
+use App\Exports\PenarikanExport;
+use App\Exports\TransferExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class tellerController extends Controller
 {
@@ -56,6 +62,84 @@ class tellerController extends Controller
     // ======================================================
     // ===================== SETORAN ========================
     // ======================================================
+
+    public function exportSetoran($filter)
+    {
+        $query = Setoran::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get();
+
+        return Excel::download(
+            new SetoranExport($data),
+            'Setoran-' . $filter . '.xlsx'
+        );
+    }
+
+        public function exportSetoranCustom(Request $request)
+        {
+            $request->validate([
+                'start_date' => 'required|date',
+                'end_date'   => 'required|date',
+            ]);
+            $data = Setoran::whereBetween(
+                'created_at',
+                [
+                    $request->start_date . ' 00:00:00',
+                    $request->end_date . ' 23:59:59'
+                ]
+            )->get();
+
+            return Excel::download(
+                new SetoranExport($data),
+                'Setoran-' .
+                $request->start_date .
+                '_sampai_' .
+                $request->end_date .
+                '.xlsx'
+            );
+        }
+
+   public function cetakStruk($id)
+    {
+        $setoran = Setoran::with([
+            'petugas',
+            'transaksi'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_setoran.struk',
+            compact('setoran')
+        );
+
+        return $pdf->download(
+            'Struk-Setoran-' .
+            str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
+            '.pdf'
+        );
+    }
+
     public function setoran(Request $request)
     {
         $user = Auth::user();
@@ -237,6 +321,86 @@ class tellerController extends Controller
     // ======================================================
     // ===================== PENARIKAN ======================
     // ======================================================
+
+    public function exportPenarikan($filter)
+    {
+        $query = Penarikan::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get(); // <- INI YANG KELUPAAN
+
+        return Excel::download(
+            new PenarikanExport($data),
+            'Penarikan-' . $filter . '.xlsx'
+        );
+    }
+
+    public function exportPenarikanCustom(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+
+        $data = Penarikan::whereBetween(
+            'created_at',
+            [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]
+        )->get();
+
+        return Excel::download(
+            new PenarikanExport($data),
+            'Penarikan-' .
+            Carbon::parse($request->start_date)->format('d-m-Y') .
+            '_sampai_' .
+            Carbon::parse($request->end_date)->format('d-m-Y') .
+            '.xlsx'
+        );
+    }
+
+    public function cetakStrukPenarikan($id)
+    {
+        $penarikan = Penarikan::with([
+            'petugas',
+            'transaksi'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_penarikan.struk',
+            compact('penarikan')
+        );
+
+        return $pdf->download(
+            'Struk-Penarikan-' .
+            str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
+            '.pdf'
+        );
+    }
+
+
     public function penarikan(Request $request)
     {
         $user = Auth::user();
@@ -300,9 +464,7 @@ class tellerController extends Controller
                 'jumlah_penarikan' => $jumlahPenarikan,
                 'transaksi_id'     => $request->transaksi_id,
                 'biaya_transaksi'  => $biayaAdmin,
-                // total_biaya bisa tetap disimpan untuk record, 
-                // tapi tidak memotong saldo_saat_ini
-                'total_biaya'      => $biayaAdmin, 
+                'total_biaya'      => $jumlahPenarikan + $biayaAdmin,
             ]);
 
             DB::commit();
@@ -375,6 +537,86 @@ class tellerController extends Controller
     // ======================================================
     // ===================== TRANSFER =======================
     // ======================================================
+
+
+    public function exportTransfer($filter)
+    {
+        $query = Transfer::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get();
+
+        return Excel::download(
+            new TransferExport($data),
+            'Transfer-' . $filter . '.xlsx'
+        );
+    }
+
+    public function exportTransferCustom(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+
+        $data = Transfer::whereBetween('created_at', [
+            Carbon::parse($request->start_date)->startOfDay(),
+            Carbon::parse($request->end_date)->endOfDay(),
+        ])->get();
+
+        return Excel::download(
+            new TransferExport($data),
+            'Transfer-' .
+            $request->start_date .
+            '-sampai-' .
+            $request->end_date .
+            '.xlsx'
+        );
+    }
+
+    public function cetakStrukTransfer($id)
+    {
+        $transfer = Transfer::with([
+            'petugas',
+            'rekeningPengirim',
+            'rekeningPenerima',
+            'transaksi' 
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_transfer.struk',
+            compact('transfer')
+        );
+
+        return $pdf->download(
+            'Struk-Transfer-' .
+            str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
+            '.pdf'
+        );
+    }
+
     public function transfer(Request $request)
     {
         $user = Auth::user();
@@ -466,7 +708,7 @@ class tellerController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->back()->with('success', 'Transfer berhasil! Biaya admin sebesar Rp ' . number_format($biayaAdmin, 0, ',', '.') . ' harap diterima secara tunai.');
+            return redirect()->back();
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -596,12 +838,9 @@ class tellerController extends Controller
                 'catatan'              => $request->catatan,
             ]);
 
-            DB::commit();
+        DB::commit();
 
-            return back()->with(
-                'success',
-                'Data transfer berhasil diperbarui!'
-            );
+        return back();
 
         } catch (\Exception $e) {
 
@@ -615,7 +854,8 @@ class tellerController extends Controller
     }
     public function destroyTransfer($id)
     {
-        Transfer::findOrFail($id)->delete();
-        return back()->with('success', 'History transaksi transfer berhasil dihapus!');
+       Transfer::findOrFail($id)->delete();
+
+        return back();
     }
 }

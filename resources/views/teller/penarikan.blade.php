@@ -24,11 +24,115 @@
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </form>
 
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
-        <h3 class="text-[22px] font-bold text-gray-800">Data Penarikan</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Penarikan
-        </button>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
+
+    <h3 class="text-[22px] font-bold text-gray-800">
+        Data Penarikan
+    </h3>
+
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+
+            <!-- EXPORT EXCEL -->
+            <div class="relative">
+
+                <button
+                    id="btnExportExcel"
+                    type="button"
+                    class="bg-green-600 text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-green-700 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                    <i class="ph ph-file-xls text-base"></i>
+                    Export Excel
+                    <i class="ph ph-caret-down"></i>
+
+                </button>
+
+                <!-- DROPDOWN -->
+                <div
+                    id="dropdownExport"
+                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+
+                    <a href="{{ route('penarikan.export', ['filter' => 'hari_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Hari Ini
+                    </a>
+
+                    <a href="{{ route('penarikan.export', ['filter' => 'minggu_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Minggu Ini
+                    </a>
+
+                    <a href="{{ route('penarikan.export', ['filter' => 'bulan_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Bulan Ini
+                    </a>
+
+                    <a href="{{ route('penarikan.export', ['filter' => 'tahun_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Tahun Ini
+                    </a>
+
+                    <hr>
+
+                    <button
+                        type="button"
+                        onclick="toggleCustomTanggal()"
+                        class="w-full text-left px-4 py-3 hover:bg-gray-50 text-sm">
+                        Custom Tanggal
+                    </button>
+
+                </div>
+
+                <!-- CUSTOM TANGGAL -->
+                 <div
+                id="customTanggalBox"
+                class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+                
+                    <form action="{{ route('penarikan.export.custom') }}" method="GET">
+ 
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">
+                            Dari Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            name="start_date"
+                            class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
+
+
+
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">
+                            Sampai Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            name="end_date"
+                            class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
+
+                        <button
+                            type="submit"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg text-xs font-medium">
+                            Download Excel
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- TAMBAH PENARIKAN -->
+            <button
+                onclick="switchView('tambah')"
+                class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                <i class="ph ph-plus text-base"></i>
+                Tambah Penarikan
+
+            </button>
+
+        </div>
+
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="penarikanTableCard">
@@ -107,6 +211,13 @@
                         title="Edit">
                         <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                     </button>
+
+                    <a href="{{ route('penarikan.struk', $d->id) }}"
+                    target="_blank"
+                    class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
+                    title="Cetak Struk">
+                        <i class="ph-fill ph-printer text-[15px]"></i>
+                    </a>
 
                     <!-- 3. FORM & TOMBOL HAPUS -->
                     <form
@@ -451,27 +562,111 @@ document.addEventListener('input', function (e) {
 
         // AJAX Pagination click interceptor
         document.addEventListener('click', function(e) {
+
             const link = e.target.closest('#penarikanTableCard a');
-            if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
+
+            if (!link) return;
+
+            // BIARKAN LINK PDF NORMAL
+            if (link.classList.contains('download-struk')) {
+                return;
+            }
+
+            if (
+                link.getAttribute('href') &&
+                !link.getAttribute('href').startsWith('#')
+            ) {
+
                 e.preventDefault();
+
                 const targetUrl = link.getAttribute('href');
-                
+
                 window.history.pushState({}, '', targetUrl);
-                
+
                 fetch(targetUrl)
                     .then(response => response.text())
                     .then(html => {
+
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(html, 'text/html');
-                        const newCard = doc.getElementById('penarikanTableCard');
-                        const currentCard = document.getElementById('penarikanTableCard');
+
+                        const newCard =
+                            doc.getElementById('penarikanTableCard');
+
+                        const currentCard =
+                            document.getElementById('penarikanTableCard');
+
                         if (newCard && currentCard) {
                             currentCard.innerHTML = newCard.innerHTML;
                         }
-                        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+                        document.querySelector('main')
+                            .scrollTo({
+                                top: 0,
+                                behavior: 'smooth'
+                            });
+
                     })
-                    .catch(err => console.error('Gagal memuat halaman:', err));
+                    .catch(err =>
+                        console.error('Gagal memuat halaman:', err)
+                    );
             }
         });
+
+        // ===========================
+        // EXPORT EXCEL DROPDOWN
+        // ===========================
+
+        const btnExportExcel = document.getElementById('btnExportExcel');
+        const dropdownExport = document.getElementById('dropdownExport');
+        const customTanggalBox = document.getElementById('customTanggalBox');
+
+        if (btnExportExcel) {
+
+            btnExportExcel.addEventListener('click', function(e) {
+
+                e.stopPropagation();
+
+                dropdownExport.classList.toggle('hidden');
+
+                if (!customTanggalBox.classList.contains('hidden')) {
+                    customTanggalBox.classList.add('hidden');
+                }
+
+            });
+
+        }
+
+        function toggleCustomTanggal() {
+
+            customTanggalBox.classList.toggle('hidden');
+
+        }
+
+        window.toggleCustomTanggal = function() {
+
+            const customTanggalBox =
+                document.getElementById('customTanggalBox');
+
+            customTanggalBox.classList.toggle('hidden');
+
+        }
+
+        document.addEventListener('click', function(e) {
+
+            if (
+                !e.target.closest('#dropdownExport') &&
+                !e.target.closest('#btnExportExcel') &&
+                !e.target.closest('#customTanggalBox')
+            ) {
+
+                dropdownExport.classList.add('hidden');
+                customTanggalBox.classList.add('hidden');
+
+            }
+
+        })
+
+
     });
 </script>

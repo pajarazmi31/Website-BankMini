@@ -43,19 +43,30 @@ Route::put('/setoran/{id}', [tellerController::class, 'updateSetoran'])
 ->name('setoran.update');
 Route::delete('/setoran/{id}', [tellerController::class, 'destroySetoran'])
 ->name('setoran.destroy');
+Route::get('/setoran/struk/{id}', [tellerController::class, 'cetakStruk'])
+    ->name('setoran.struk');
+Route::get('/setoran/export/{filter}', [TellerController::class, 'exportSetoran'])
+    ->name('setoran.export');
+Route::get('/setoran/export-custom', [TellerController::class, 'exportSetoranCustom'])
+    ->name('setoran.export.custom');
 
 //penarikan
 Route::get('/teller/penarikan', [tellerController::class, 'penarikan'])->name('teller.penarikan');
 Route::post('/penarikan/store',[tellerController::class, 'storePenarikan'])->name('penarikan.store');
 Route::put('/penarikan/update/{id}',[tellerController::class, 'updatePenarikan'])->name('penarikan.update');
 Route::delete('/penarikan/delete/{id}',[tellerController::class, 'destroyPenarikan'])->name('penarikan.delete');
-
+Route::get('/penarikan/struk/{id}', [tellerController::class, 'cetakStrukPenarikan'])->name('penarikan.struk');
+Route::get('/penarikan/export/{filter}',[tellerController::class, 'exportPenarikan'])->name('penarikan.export');
+Route::get('/penarikan/export/custom',[tellerController::class, 'exportPenarikanCustom'])->name('penarikan.export.custom');
 
 //transfer
 Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('teller.transfer');
 Route::post('/transfer/store', [tellerController::class, 'storeTransfer'])->name('transfer.store');
 Route::put('/transfer/update/{id}', [tellerController::class, 'updateTransfer'])->name('transfer.update');
 Route::delete('/transfer/delete/{id}', [tellerController::class, 'destroyTransfer'])->name('transfer.delete');
+Route::get('/transfer/struk/{id}',[TellerController::class, 'cetakStrukTransfer'])->name('transfer.struk');
+Route::get('/transfer/export/{filter}',[tellerController::class, 'exportTransfer'])->name('transfer.export');
+Route::get('/transfer/export-custom',[tellerController::class, 'exportTransferCustom'])->name('transfer.export.custom');
 
 //cari nama si norek
 Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
