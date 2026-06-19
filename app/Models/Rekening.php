@@ -49,4 +49,9 @@ class Rekening extends Model
     {
         return $this->belongsTo(Nasabah::class, 'nasabah_id', 'id');
     }
+
+    public function setoran()
+    {
+        return $this->hasMany(Setoran::class, 'id_rekening', 'id');
+    }
 }
