@@ -2,21 +2,47 @@
 
 namespace App\Exports;
 
-use App\Models\Bukti_Tf;
-use Maatwebsite\Excel\Concerns\FromCollection;
-// 1. PASTIKAN DUA CODE DI BAWAH INI SUDAH DI-IMPORT
+// Menggunakan model yang sesuai dengan file asli kamu
+use App\Models\Bukti_Tf; 
+use Maatwebsite\Excel\Concerns\FromQuery; // 1. Diubah dari FromCollection ke FromQuery
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\Exportable;
 
-// 2. PASTIKAN DI SINI ADA 'implements WithHeadings'
-class BuktiTfExport implements FromCollection, WithHeadings, WithMapping
+class BuktiTfExport implements FromQuery, WithHeadings, WithMapping // 2. Daftarkan FromQuery di sini
 {
-    public function collection()
+    use Exportable;
+
+    protected $startDate;
+    protected $endDate;
+
+    // 3. Constructor untuk menangkap data filter tanggal dari Controller
+    public function __construct($startDate = null, $endDate = null)
     {
-        return Bukti_Tf::all();
+        $this->startDate = $startDate;
+        $this->endDate = $endDate;
     }
 
-    // 3. FUNGSI HEADINGS UNTUK MEMBUAT JUDUL KOLOM
+    // 4. Ganti fungsi collection() menjadi query()
+    public function query()
+    {
+        // Mulai query dasar dari model Bukti_Tf
+        $query = Bukti_Tf::query();
+
+        // Jika filter tanggal diisi oleh user, lakukan penyaringan rentang tanggal
+        if ($this->startDate && $this->endDate) {
+            // Sesuaikan kolom tanggalnya, di sini saya pakai 'created_at' 
+            // (Jika di tabelmu nama kolomnya 'datetime_tgl', ganti menjadi 'datetime_tgl')
+            $query->whereBetween('datetime_tgl', [
+                $this->startDate . ' 00:00:00', 
+                $this->endDate . ' 23:59:59'
+            ]);
+        }
+
+        return $query;
+    }
+
+    // 5. HEADING TETAP DIPERTAHANKAN (Aman tidak berubah)
     public function headings(): array
     {
         return [
@@ -31,13 +57,14 @@ class BuktiTfExport implements FromCollection, WithHeadings, WithMapping
         ];
     }
 
+    // 6. MAPPING TETAP DIPERTAHANKAN (Aman tidak berubah)
     public function map($item): array
     {
         return [
             $item->id,
             $item->nama_pengirim,
             $item->nama_penerima,
-            $item->id_rekening. ' ',
+            $item->id_rekening . ' ',
             'Rp ' . number_format($item->jumlah_transfer, 0, ',', '.'),
             $item->no_hp_pengirim,
             ucfirst($item->status_verifikasi),

@@ -32,7 +32,7 @@ class NasabahSeeder extends Seeder
             'nama_nasabah' => 'Dinar',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
+            'jurusan' => 2,
             'jenis_kelamin' => 'Laki-Laki',
             'pendidikan' => 'SMA/K',
             'rt_rw' => '01/02',

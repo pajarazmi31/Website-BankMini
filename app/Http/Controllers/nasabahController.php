@@ -71,7 +71,8 @@ class nasabahController extends Controller
         if ($rekening) {
             $nomorRekening = $rekening->id;
 
-            $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+            $riwayatTransfer = RiwayatTf::with(['pengirim.nasabah.user', 'penerima']) // <-- Ditambahkan ini
+                ->where('id_pengirim', $nomorRekening)
                 ->orWhere('id_penerima', $nomorRekening)
                 ->orderBy('created_at', 'desc')
                 ->get();
