@@ -102,6 +102,8 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::post('/datapetugas/store', [DataPetugasController::class, 'store'])->name('datapetugas.store');
     Route::put('/datapetugas/update/{id}', [DataPetugasController::class, 'update'])->name('datapetugas.update');
     Route::delete('/datapetugas/delete/{id}', [DataPetugasController::class, 'destroy'])->name('datapetugas.destroy');
+    Route::get('/datapetugas/download-template', [DataPetugasController::class, 'downloadTemplate'])->name('datapetugas.download-template');
+Route::post('/datapetugas/import', [DataPetugasController::class, 'importExcel'])->name('datapetugas.import');
 
 
     // Verifikasi Transfer

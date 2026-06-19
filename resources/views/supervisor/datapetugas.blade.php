@@ -37,13 +37,28 @@
         </div>
 
 
-        <!-- Table Header -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-1">
-            <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Petugas</h3>
-            <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-                <i class="ph ph-plus text-base"></i> Tambah Data
-            </button>
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 px-1">
+            <div>
+                <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Petugas</h3>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
+                <form action="{{ route('datapetugas.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-1.5 rounded-[12px] border border-gray-200">
+                    @csrf
+                    <input type="file" name="file_excel" required class="text-[12px] text-gray-500 file:mr-3 file:py-1 file:px-2 file:rounded-[8px] file:border-0 file:text-[12px] file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 cursor-pointer max-w-[180px]">
+                    <button type="submit" class="bg-emerald-600 text-white px-3 py-1.5 rounded-[8px] text-[12px] font-bold flex items-center gap-1.5 hover:bg-emerald-700 transition-all shadow-sm">
+                        <i class="ph ph-file-arrow-up text-base"></i> Import
+                    </button>
+                </form>
 
+                <a href="{{ route('datapetugas.download-template') }}" class="border border-gray-300 text-gray-700 bg-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm w-full sm:w-auto justify-center text-center">
+                    <i class="ph ph-download text-base"></i> Template
+                </a>
+
+                <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+                    <i class="ph ph-plus text-base"></i> Tambah Data
+                </button>
+            </div>
         </div>
 
         <!-- Table Card -->

@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PetugasImport;
+use App\Exports\PetugasTemplateExport;
 
 class DataPetugasController extends Controller
 {
@@ -150,6 +153,28 @@ class DataPetugasController extends Controller
 
             return back()
                 ->with('error', 'Data petugas gagal dihapus');
+        }
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new PetugasTemplateExport, 'template_import_petugas.xlsx');
+    }
+
+    public function importExcel(Request $request)
+    {
+        $request->validate([
+            'file_excel' => 'required|mimes:xlsx,xls,csv|max:2048',
+        ]);
+
+        try {
+            Excel::import(new PetugasImport, $request->file('file_excel'));
+
+            return redirect()->route('datapetugas.index')
+                ->with('success', 'Data petugas berhasil di-import dari Excel!');
+        } catch (\Exception $e) {
+            return redirect()->route('datapetugas.index')
+                ->with('error', 'Gagal mengimport data. Pastikan format file dan ID Role sudah benar.');
         }
     }
 }
