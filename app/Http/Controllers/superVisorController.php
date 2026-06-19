@@ -55,11 +55,15 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
     }
 
-    public function exportExcel() 
-    {
-    // Mengunduh file dengan nama 'laporan-transfer-supervisor.xlsx'
-    return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
-    }
+public function exportExcel(Request $request) 
+{
+    // Tangkap input filter tanggal dari form
+    $startDate = $request->input('start_date');
+    $endDate = $request->input('end_date');
+
+    // Kirim tanggal tersebut ke dalam Constructor class BuktiTfExport
+    return Excel::download(new BuktiTfExport($startDate, $endDate), 'riwayat-transfer.xlsx');
+}
 
     public function detailTf($id){
         $data = Bukti_Tf::find($id);

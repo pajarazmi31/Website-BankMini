@@ -50,12 +50,30 @@
                         </button>
                     </form>
             @if ($bukti_tf->isNotEmpty())            
-                <span class="text-[14px] text-gray-500 font-medium"></span>
-                
-                <a href="{{ route('supervisor.exportTransfer') }}" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[12px] font-semibold rounded-lg shadow-sm transition-all">
-                    <i class="ph ph-file-arrow-up text-base"></i>
-                    Export Excel
-                </a>
+                <div class="relative inline-block text-left" id="filterDropdownContainer">
+                    <button type="button" onclick="toggleFilterDropdown()" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-xl transition">
+                        <i class="ph-bold ph-sliders-horizontal"></i> Filter Tanggal Export
+                    </button>
+
+                    <div id="filterDropdownMenu" class="hidden absolute right-0 mt-2 w-72 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none p-4 z-50 border border-gray-100">
+                        <form action="{{ route('supervisor.exportTransfer') }}" method="GET" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1">Dari Tanggal</label>
+                                <input type="date" name="start_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-500 mb-1">Sampai Tanggal</label>
+                                <input type="date" name="end_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
+                            </div>
+                            
+                            <div class="border-t border-gray-100 pt-3 flex justify-end">
+                                <button type="submit" class="w-full bg-[#059669] hover:bg-[#047857] text-white font-semibold text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition">
+                                    <i class="ph-bold ph-file-xls text-sm"></i> Unduh Excel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 @endif
             </div>
             <div class="overflow-x-auto">
@@ -204,5 +222,19 @@
             
             document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+    function toggleFilterDropdown() {
+        const menu = document.getElementById('filterDropdownMenu');
+        menu.classList.toggle('hidden');
+    }
+
+    // Menutup dropdown jika user klik di luar area filter
+    window.addEventListener('click', function(e) {
+        const menu = document.getElementById('filterDropdownMenu');
+        const container = document.getElementById('filterDropdownContainer');
+        if (!container.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
     </script>
     @endsection
