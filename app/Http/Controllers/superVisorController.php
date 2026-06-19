@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Bukti_Tf;
 use App\Models\Rekening;
-use app\Exports\BuktiTfExport;
+use App\Exports\BuktiTfExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
