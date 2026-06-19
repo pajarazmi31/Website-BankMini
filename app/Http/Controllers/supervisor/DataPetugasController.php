@@ -31,7 +31,7 @@ class DataPetugasController extends Controller
             })
             ->get();
 
-        $roles = Role::whereIn('nama_role', [ 
+        $roles = Role::whereIn('nama_role', [
             'customerservice',
             'teller'
         ])->get();
@@ -74,7 +74,6 @@ class DataPetugasController extends Controller
             return redirect()
                 ->route('datapetugas.index')
                 ->with('success', 'Data petugas berhasil ditambahkan');
-
         } catch (\Exception $e) {
 
             return back()
@@ -119,7 +118,6 @@ class DataPetugasController extends Controller
             return redirect()
                 ->route('datapetugas.index')
                 ->with('success', 'Data petugas berhasil diupdate');
-
         } catch (\Exception $e) {
 
             return back()
@@ -148,7 +146,6 @@ class DataPetugasController extends Controller
             return redirect()
                 ->route('datapetugas.index')
                 ->with('success', 'Data petugas berhasil dihapus');
-
         } catch (\Exception $e) {
 
             return back()
@@ -170,11 +167,22 @@ class DataPetugasController extends Controller
         try {
             Excel::import(new PetugasImport, $request->file('file_excel'));
 
-            return redirect()->route('datapetugas.index')
+            return redirect()->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil di-import dari Excel!');
+        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
+            // Menangkap error jika validasi baris excel gagal (misal email salah/kosong)
+            $failures = $e->failures();
+            $errorMessages = [];
+            foreach ($failures as $failure) {
+                $errorMessages[] = "Baris ke-" . $failure->row() . " (" . implode(', ', $failure->errors()) . ")";
+            }
+
+            return redirect()->route('supervisor.datapetugas')
+                ->with('error', 'Gagal Validasi: ' . implode(' | ', $errorMessages));
         } catch (\Exception $e) {
-            return redirect()->route('datapetugas.index')
-                ->with('error', 'Gagal mengimport data. Pastikan format file dan ID Role sudah benar.');
+            // Menangkap error sistem/database asli (misal: table tidak ditemukan, query error)
+            return redirect()->route('supervisor.datapetugas')
+                ->with('error', 'Gagal System: ' . $e->getMessage());
         }
     }
 }

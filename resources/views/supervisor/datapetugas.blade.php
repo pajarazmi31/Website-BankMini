@@ -28,6 +28,16 @@
     @endsection
 
     @section('content')
+
+    @if ($errors->any())
+    <div style="color: red; background: #f8d7da; padding: 10px; margin-bottom: 10px;">
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <!-- ================= VIEW 1: TABEL DATA PETUGAS ================= -->
     <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
         <!-- Search Bar Mobile -->
@@ -37,11 +47,11 @@
         </div>
 
 
-<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 px-1">
+        <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 px-1">
             <div>
                 <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Petugas</h3>
             </div>
-            
+
             <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
                 <form action="{{ route('datapetugas.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-1.5 rounded-[12px] border border-gray-200">
                     @csrf
@@ -185,11 +195,12 @@
 
         document.addEventListener('DOMContentLoaded', function() {
 
-    @if($errors->any())
-        switchView('tambah');
-    @elseif(session('active_view'))
-        switchView('{{ session('active_view') }}');
-    @endif
+            @if($errors -> any())
+            switchView('tambah');
+            @elseif(session('active_view'))
+            switchView('{{ session('
+                active_view ') }}');
+            @endif
 
         });
     </script>
