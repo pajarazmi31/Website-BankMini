@@ -128,7 +128,7 @@ class rekeningController extends Controller
                     return redirect()->route('costumerservice.keloladata')->with('success','Data Rekening berhasil ditambah');
                 }
     }
-    return redirect()->route('costumerservice.keloladata')->with('failed','Data Rekening gagal ditambah');
+    // return redirect()->route('costumerservice.keloladata')->with('failed','Data Rekening gagal ditambah');
 }
 
 
@@ -171,13 +171,27 @@ class rekeningController extends Controller
             'nomor_kontak_darurat' => 'required',
             'hubungan_kontak_darurat' => 'required',
             'alamat_kontak_darurat' => 'required',
-            'no_rekening' => 'required',
-            'status_akun' => 'required',
         ]);
 
         $nasabah = Nasabah::findOrFail($id);
         $user = User::findOrFail($nasabah->user_id);
         $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
+
+        if ( $request->jabatan == 'Siswa' ) {
+            $no_rekening = '03' . $request->jurusan . $request->nis_nip;
+        }
+
+        if ( $request->jabatan == 'Guru' ) {
+            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+            $urutan = Nasabah::where('jabatan', 'Guru')->count() + 1;
+            $no_rekening = '01' . $urutan . $tanggal;
+        }
+
+        if ( $request->jabatan == 'TU' ) {
+            $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
+            $urutan = Nasabah::where('jabatan', 'TU')->count() + 1;
+            $no_rekening = '02' . $urutan . $tanggal;
+        }
 
         $user->update([
             'name' => $request->nama_lengkap,
@@ -210,12 +224,9 @@ class rekeningController extends Controller
             'hubungan_kontak_darurat' => $request->hubungan_kontak_darurat,
         ]);
 
-        if ($rekening) {
             $rekening->update([
-                'id' => $request->no_rekening,
-                'status_akun' => $request->status_akun,
+                'id' => $no_rekening,
             ]);
-        }
 
 
         return redirect()->route('costumerservice.keloladata')->with('success', 'data nasabah berhasil di ubah');

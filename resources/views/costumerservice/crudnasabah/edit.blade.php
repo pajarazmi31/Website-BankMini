@@ -207,10 +207,6 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                     <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                        <input type="text" name="no_rekening" value="{{ old('no_rekening', $nasabah->rekening->id ?? '') }}" id="edit_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
                         <input type="text" value="{{ $nasabah->rekening->status_akun ?? '' }}" id="edit_status" readonly class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none bg-gray-50 cursor-not-allowed">
                     </div>

@@ -34,7 +34,7 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         return view('supervisor.dashboard', compact('user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
     }
 
-    
+
     public function verifikasiTFF(){
         $user = Auth::user();
         $super = $user->petugas;
@@ -55,7 +55,7 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
     }
 
-    public function exportExcel() 
+    public function exportExcel()
     {
     // Mengunduh file dengan nama 'laporan-transfer-supervisor.xlsx'
     return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
@@ -85,11 +85,11 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         try {
             // Jalankan Database Transaction untuk keamanan mutasi saldo
             DB::transaction(function () use ($request, $data) {
-                
+
                 if ($request->status_verifikasi === 'berhasil') {
-                    
+
                     // MENCARI REKENING:
-                    // Kita tembak kolom 'id' di tabel rekening menggunakan nilai yang tersimpan 
+                    // Kita tembak kolom 'id' di tabel rekening menggunakan nilai yang tersimpan
                     // di kolom 'no_rekening_penerima' pada tabel Bukti_Tf.
                     $rekening = Rekening::where('id', $data->id_rekening)->first();
 
@@ -106,8 +106,8 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
                 $data->save();
             });
 
-            $pesan = $request->status_verifikasi === 'berhasil' 
-                ? 'Transaksi berhasil disetujui, saldo masuk ke rekening tujuan!' 
+            $pesan = $request->status_verifikasi === 'berhasil'
+                ? 'Transaksi berhasil disetujui, saldo masuk ke rekening tujuan!'
                 : 'Transaksi telah ditolak.';
 
             return redirect()->back()->with('success', $pesan);
@@ -153,8 +153,9 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
     }
 
     public function detail(String $id) {
+        $user = Auth::user();
         $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
-        return view('supervisor.verifikasi.registrasirekening.detail', compact('nasabah'));
+        return view('supervisor.verifikasi.registrasirekening.detail', compact('user','nasabah'));
     }
 
     public function datapetugas(){
@@ -170,8 +171,9 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
     }
 
     public function detailNasabah(String $id) {
+        $user = Auth::user();
         $nasabah = Nasabah::with('rekening', 'jurusan', 'provinsi', 'kabupaten', 'kecamatan', 'desa')->findOrFail($id);
-        return view('supervisor.crud_datanasabah.detail', compact('nasabah'));
+        return view('supervisor.crud_datanasabah.detail', compact('user','nasabah'));
     }
 
     public function revisi(String $id, Request $request) {

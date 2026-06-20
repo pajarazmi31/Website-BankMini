@@ -15,7 +15,7 @@ class csController extends Controller
         $nasabahHariIni = Nasabah::whereDate('created_at', today())->count();
         $nasabah = Nasabah::with('rekening')
         ->whereHas('rekening', function ($query) {
-            $query->where('status_akun', 'non-aktif');
+            $query->whereIn('status_akun', ['non-aktif', 'revisi']);
         })
         ->get();
         $jumlahNasabah = User::where('role_id','1')->count();

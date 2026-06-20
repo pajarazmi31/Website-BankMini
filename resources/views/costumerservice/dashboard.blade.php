@@ -56,23 +56,43 @@
         <div class="flex flex-col gap-3">
             <!-- Item 1 -->
             @foreach ( $nasabah as $nsbh )
-            <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
-                <div class="flex items-center gap-3.5">
-                    <i class="ph-fill ph-user-circle text-[32px] md:text-[40px] text-brand-blue"></i>
-                    <div>
-                        <h4 class="font-bold text-[14px] md:text-[15px] text-gray-800">{{ $nsbh->nama_nasabah }}</h4>
-                        <p class="text-[11px] md:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru</p>
+                @if ( $nsbh->rekening->status_akun == 'non-aktif' )
+                <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
+                    <div class="flex items-center gap-3.5">
+                        <i class="ph-fill ph-user-circle text-[32px] md:text-[40px] text-brand-blue"></i>
+                        <div>
+                            <h4 class="font-bold text-[14px] md:text-[15px] text-gray-800">{{ $nsbh->nama_nasabah }}</h4>
+                            <p class="text-[11px] md:text-[12px] text-gray-500 mt-0.5">Registrasi Akun Baru</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                            <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
+                        </button>
+                        <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-red-100 flex items-center justify-center cursor-default">
+                            <i class="ph ph-x-circle text-[20px] text-red-800 " title="Non Aktif"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
-                        <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
-                    </button>
-                    <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
-                        <i class="ph-bold ph-clock text-[14px] md:text-[16px]"></i>
-                    </button>
+                @elseif ($nsbh->rekening->status_akun == 'revisi')
+                                <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
+                    <div class="flex items-center gap-3.5">
+                        <i class="ph-fill ph-user-circle text-[32px] md:text-[40px] text-brand-blue"></i>
+                        <div>
+                            <h4 class="font-bold text-[14px] md:text-[15px] text-gray-800">{{ $nsbh->nama_nasabah }}</h4>
+                            <p class="text-[11px] md:text-[12px] text-gray-500 mt-0.5">Revisi Akun</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                            <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
+                        </button>
+                        <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
+                            <i class="ph-bold ph-warning-circle text-[15px]"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
+                @endif
             @endforeach
             <!-- Item 2 -->
             {{-- <div class="bg-white rounded-[16px] p-4 px-5 flex items-center justify-between shadow-card">
