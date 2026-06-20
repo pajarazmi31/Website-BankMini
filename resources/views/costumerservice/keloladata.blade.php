@@ -128,7 +128,7 @@ selamat datang {{ $user->name }}!
                                         <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                     </button>
                                 </a>
-                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post">
+                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post"  onsubmit="return confirm('Yakin ingin menghapus data nasabah ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">

@@ -18,7 +18,9 @@ class rekeningController extends Controller
         $user = Auth::user();
         $cs = $user->petugas;
         $provinsi = DB::table('provinsi')->get();
-        $allNasabah = Nasabah::with('rekening', 'jurusan')->get();
+        $allNasabah = Nasabah::with('rekening', 'jurusan')
+            ->orderByDesc('id')
+            ->get();
 
         return view('costumerservice.keloladata', compact('user', 'cs', 'provinsi', 'allNasabah'));
     }

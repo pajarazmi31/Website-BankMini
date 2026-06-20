@@ -27,7 +27,7 @@ class superVisorController extends Controller
         $nasabahPending = Nasabah::with('rekening')
         ->whereHas('rekening', function ($query) {
             $query->where('status_akun', 'non-aktif');
-        })->get();
+        })->orderByDesc('id')->get();
         $totalPendingRegistrasi = $nasabahPending->count();
 $totalPendingTransfer = $nasabahTfPending->count();
 $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
@@ -124,8 +124,7 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
-            })
-            ->get();
+            })->orderByDesc('id')->get();
         return view('supervisor.verifikasi.registrasirekening', compact('user','super','allNasabah'));
     }
 
@@ -165,7 +164,7 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
     }
 
     public function nasabah() {
-        $userNasabah = Nasabah::with('rekening')->get();
+        $userNasabah = Nasabah::with('rekening')->orderByDesc('id')->get();
         $user = Auth::user();
         return view('supervisor.datanasabah', compact('userNasabah', 'user'));
     }

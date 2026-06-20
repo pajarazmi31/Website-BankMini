@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\loginController;
 use App\Http\Controllers\Bukti_tfController;
+use App\Http\controllers\siswaController;
 use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
@@ -66,7 +67,9 @@ Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])-
 
 //customer service
 Route::middleware(['role:customerservice'])->group(function () {
-    
+
+Route::get('/siswa/{nis}', [siswaController::class, 'getSiswa']);
+
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
 Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');

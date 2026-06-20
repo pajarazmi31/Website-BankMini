@@ -12,15 +12,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                        <input type="number" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="number" id="nis" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                        <input type="text" name="nama_lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" id="nama_lengkap" name="nama_lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                        <select name="jenis_kelamin" id="jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="Laki-Laki">Laki-laki</option>
@@ -29,16 +29,16 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tempat Lahir</label>
-                        <input type="text" name="tempat_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" id="tempat_lahir" name="tempat_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
+                        <input type="date" id="tanggal_lahir" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                        <select name="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                        <select name="agama" id="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam">Islam</option>
@@ -67,6 +67,7 @@
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
                         <select name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="" disabled selected>Pilih Pendidikan</option>
                             <option value="SD">SD</option>
                             <option value="SMP">SMP</option>
                             <option value="SMK">SMK</option>
@@ -82,6 +83,7 @@
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
                         <select name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="" disabled selected>Pilih Jabatan</option>
                             <option value="Siswa">Siswa</option>
                             <option value="Guru">Guru</option>
                             <option value="TU">TU</option>
@@ -90,6 +92,7 @@
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Identitas Utama</label>
                         <select name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="" disabled selected>Pilih Jenis Identitas</option>
                             <option value="KTP">KTP</option>
                             <option value="Kartu Keluarga">Kartu Keluarga</option>
                         </select>
@@ -100,7 +103,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                        <input type="text" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" id="kode_pos" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
@@ -160,7 +163,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                            <input type="tel" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input type="tel" id="no_hp" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>
@@ -195,6 +198,29 @@
             alert("{{ session('failed') }}");
         @endif
 
+        //////////
+
+        $('#nis').on('change', function() {
+    let nis = $(this).val();
+
+    $.get('/siswa/' + nis, function(response) {
+
+        if(response.status) {
+
+            $('#nama_lengkap').val(response.data.nama_lengkap);
+            $('#tempat_lahir').val(response.data.tempat_lahir);
+            $('#tanggal_lahir').val(response.data.tanggal_lahir);
+            $('#jenis_kelamin').val(response.data.jenis_kelamin);
+            $('#agama').val(response.data.agama);
+            $('#kode_pos').val(response.data.kode_pos);
+            $('#no_hp').val(response.data.no_hp);
+
+        } else {
+            alert('Data siswa tidak ditemukan');
+        }
+
+    });
+});
 
         // --- Bagian 2: Fungsi Dinamis AJAX Wilayah ---
         function handleWilayahChange(elementId, targetId, urlPath, placeholder, dependentIds = []) {
