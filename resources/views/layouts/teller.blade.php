@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Teller - Bank Mini')</title>
+    <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
@@ -85,10 +86,10 @@
             </button>
 
             <div class="flex items-center gap-3 px-6 mb-10">
-                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-8 h-8 object-contain">
+                <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Logo" class="w-12 h-12 object-contain">
                 <div>
-                    <h1 class="font-extrabold text-[16px] leading-tight tracking-tight text-gray-900">BANK MINI</h1>
-                    <p class="text-[10px] text-gray-500 font-medium mt-0.5">SMKN 1 Kawali</p>
+                    <h1 class="font-extrabold text-[16px] leading-tight tracking-tight text-gray-900">Bank Mini</h1>
+                    <p class="text-[10px] text-gray-500 font-semibold mt-0.5">K-One</p>
                 </div>
             </div>
 
@@ -164,8 +165,11 @@
         <!-- MOBILE TOP BAR (Standardized) -->
         <div class="lg:hidden flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 sticky top-0 z-30">
             <div class="flex items-center gap-2 text-brand-blue">
-                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-7 h-7 object-contain">
-                <span class="font-bold text-sm tracking-tight text-gray-900">BANK MINI</span>
+                <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Logo" class="w-9 h-9 object-contain">
+                <div class="flex flex-col">
+                    <span class="font-bold text-sm tracking-tight text-gray-900 leading-none">Bank Mini</span>
+                    <span class="text-[10px] text-gray-500 font-semibold leading-none mt-0.5">K-One</span>
+                </div>
             </div>
             <button class="p-2 bg-gray-50 rounded-lg text-brand-blue" onclick="toggleSidebar()">
                 <i class="ph ph-list text-2xl"></i>

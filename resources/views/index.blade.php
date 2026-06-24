@@ -45,7 +45,7 @@
         }
     </script>
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="shortcut icon" href="{{ asset('img/icon/landingpage/fav-icon.png') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('img/bankmini2.png') }}" type="image/png">
 </head>
 
 <body class="font-sans text-gray-800 bg-merek-bg antialiased selection:bg-merek-kuning selection:text-white">
@@ -58,8 +58,8 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="#beranda" class="flex items-center gap-2 group">
-                        <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-5 h-5 lg:w-10 lg:h-10 object-contain transition-transform group-hover:scale-105">
-                        <span class="font-bold text-sm  lg:text-xl tracking-tight text-gray-900">BANK MINI SMKN 1 KAWALI</span>
+                        <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Logo" class="h-8 lg:h-12 w-auto object-contain transition-transform group-hover:scale-105">
+                        <span class="font-bold text-sm  lg:text-xl tracking-tight text-gray-900">BANK MINI K-ONE</span>
                     </a>
                 </div>
 
@@ -138,11 +138,21 @@
                 <!-- Konten Kiri -->
                 <div class="md:col-span-7 flex flex-col justify-center">
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="{{ asset('img/icon/Bank Icon (1).png') }}" alt="Bank Icon" class="w-10 h-10 lg:w-14 lg:h-14 object-contain">
+                        <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Icon" class="h-10 lg:h-14 w-auto object-contain">
                         <h3 class="text-1xl lg:text-2xl font-bold text-merek-hijau">Fasilitas Belajar Praktis</h3>
                     </div>
-                    <p class="text-gray-600 mb-8 leading-relaxed text-justify text-sm lg:text-base">
-                       Bank mini K-One adalah sarana pembelajaran praktik yang terdapat di SMK Negeri 1 Kawali, khususnya pada kompetensi keahlian Akuntansi dan Keuangan Lembaga, untuk mensimulasikan kegiatan operasional perbankan secara sederhana di lingkungan sekolah.
+                    <p class="text-gray-600 mb-4 leading-relaxed text-justify text-sm lg:text-base">
+                        Bank mini K-One adalah sarana pembelajaran praktik yang terdapat di SMK Negeri 1 Kawali, khususnya pada kompetensi keahlian Akuntansi dan Keuangan Lembaga, untuk mensimulasikan kegiatan operasional perbankan secara sederhana di lingkungan sekolah.
+                    </p>
+                    <p class="text-gray-600 mb-2 leading-relaxed text-sm lg:text-base font-semibold">
+                        Pelayanan yang dilakukan di Bank Mini K-One diantaranya:
+                    </p>
+                    <ul class="list-disc pl-5 text-gray-600 mb-8 text-sm lg:text-base space-y-1">
+                        <li>Pembukaan rekening tabungan</li>
+                        <li>Penerimaan setoran tabungan</li>
+                        <li>Penarikan tabungan</li>
+                        <li>Top Up E-Wallet, dll.</li>
+                    </ul>
                     <div>
                         <span class="inline-block bg-merek-hijau text-white text-xs lg:text-sm font-bold px-5 py-2 rounded-full shadow-sm">
                             100% Transaksi Aman
@@ -157,7 +167,7 @@
                         <div class="absolute top-0 right-0 -mr-16 -mt-16 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-colors duration-500"></div>
 
                         <div class="relative z-10">
-                        <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-10 h-10 object-contain">
+                            <img src="{{ asset('img/icon/landingpage/shield.png') }}" alt="Shield Icon" class="w-14 h-14 object-contain mb-4">
                             <h3 class="text-2xl font-bold">Keamanan Terjamin</h3>
                         </div>
                         <p class="text-gray-300 text-justify text-xs lg:text-base mb-8 leading-relaxed">
@@ -206,7 +216,7 @@
                                 1
                             </div>
                             <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Registrasi</h3>
-                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Isi formulir pendaftaran digital di counter Bank Mini.</p>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Nasabah mengisi formulir pendaftaran dan menyerahkan dokumen persyaratan kepada petugas CS.</p>
                         </div>
 
                         <!-- Langkah 2 -->
@@ -215,7 +225,7 @@
                                 2
                             </div>
                             <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Verifikasi</h3>
-                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Tunjukkan Kartu Identitas kepada petugas untuk validasi data.</p>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Petugas CS memeriksa keaslian dokumen, memvalidasi NIK, lalu menginput data ke sistem</p>
                         </div>
 
                         <!-- Langkah 3 -->
@@ -224,7 +234,7 @@
                                 3
                             </div>
                             <h3 class="text-sm lg:text-2xl font-bold text-merek-biru mb-3">Terima Buku</h3>
-                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Dapatkan buku tabungan dan mulailah menabung.</p>
+                            <p class="text-gray-500 text-xs lg:text-base max-w-xs leading-relaxed">Sistem otomatis memproses pembuatan rekening, lalu nasabah menerima buku tabungan resmi.</p>
                         </div>
                     </div>
                 </div>
@@ -254,19 +264,19 @@
                             <!-- Langkah 1 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#1e3a5f] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">1</div>
-                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Nasabah memberikan buku tabungan dan uang secara langsung kepada petugas teller.</p>
                             </div>
 
                             <!-- Langkah 2 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#1A5B53] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">2</div>
-                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Teller menerima uang tersebut, menghitungnya, lalu mengetik data transaksi ke dalam sistem.</p>
                             </div>
 
                             <!-- Langkah 3 -->
                             <div class="relative flex items-center gap-8 z-10">
                                 <div class="w-10 h-10 rounded-full bg-[#34B38A] text-white flex items-center justify-center font-bold text-lg shadow-md shrink-0">3</div>
-                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
+                                <p class="text-gray-600 font-medium text-sm lg:text-lg leading-relaxed">Sistem otomatis mengubah uang tunai menjadi saldo digital dan mencetak struk.</p>
                             </div>
                         </div>
                     </div>
@@ -289,19 +299,19 @@
                                 <!-- Langkah 1 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#B87333] text-white flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">1</div>
-                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Nasabah memberikan buku tabungan kepada petugas teller.</p>
                                 </div>
 
                                 <!-- Langkah 2 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#D4A017] text-white flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">2</div>
-                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Adipiscing elit sed do eiusmod tempor.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Teller memeriksa dokumen, saldo, lalu menginput data penarikan ke sistem.</p>
                                 </div>
 
                                 <!-- Langkah 3 -->
                                 <div class="relative flex items-center gap-8 z-10">
                                     <div class="w-10 h-10 rounded-full bg-[#FFD700] text-[#1e3a5f] flex items-center justify-center font-bold text-lg shadow-lg shrink-0 border border-white/10">3</div>
-                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Incididunt ut labore et dolore magna.</p>
+                                    <p class="text-gray-100 font-medium text-sm lg:text-lg leading-relaxed">Sistem memproses data, lalu nasabah menerima uang tunai dan struk.</p>
                                 </div>
                             </div>
                         </div>
@@ -339,19 +349,19 @@
 
                             <div class="space-y-4">
                                 <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                    Pihak luar mengirim uang terlebih dahulu lewat ATM atau bank umum.
                                 </div>
                                 <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
-                                    Sed do eiusmod tempor incididunt ut labore et dolore magna.
+                                    Pihak luar mengisi nama pengirim, penerima, dan nominal di formulir ini.
                                 </div>
                                 <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
-                                    Ut enim ad minim veniam, quis nostrud exercitation ullamco.
+                                    Pihak luar mengunggah foto struk atau screenshot bukti transfernya.
                                 </div>
                                 <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
-                                    Duis aute irure dolor in reprehenderit in voluptate velit.
+                                    Pihak luar menekan tombol "Kirim" agar data diperiksa oleh sistem.
                                 </div>
                                 <div class="bg-white/10 rounded-xl p-4 text-xs lg:text-sm text-gray-200">
-                                    Excepteur sint occaecat cupidatat non proident, sunt in culpa.
+                                    Setelah bukti dikonfirmasi, saldo tabungan Bank Mini bertambah.
                                 </div>
                             </div>
                         </div>
@@ -532,8 +542,8 @@
             <div class="bg-[#f3f6f9] rounded-[20px] p-8 md:p-12 shadow-sm border border-gray-100">
                 <!-- Brand Title -->
                 <div class="flex items-center gap-3 mb-10">
-                    <img src="{{ asset('img/icon/landingpage/bank.png') }}" alt="Bank Icon" class="w-6 h-6 lg:w-8 lg:h-8 object-contain">
-                    <span class="font-bold text-base lg:text-2xl text-[#1e3a5f]">Bank Mini SMKN 1 Kawali</span>
+                    <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Icon" class="h-8 lg:h-10 w-auto object-contain">
+                    <span class="font-bold text-base lg:text-2xl text-[#1e3a5f]">Bank Mini K-One</span>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 items-start">
