@@ -36,12 +36,12 @@ class tellerController extends Controller
             ->sum('jumlah_penarikan');
 
         // TRANSAKSI TERBARU 
-        // Jika Anda ingin menggabungkan, Anda bisa menggunakan collection:
-        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
-        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
+        // Ambil semua transaksi tanpa limit agar bisa di-paginate di view history
+        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->get();
+        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->get();
 
         // Gabungkan dan urutkan berdasarkan waktu
-        $transactions = $setor->concat($tarik)->sortByDesc('created_at')->take(3);
+        $transactions = $setor->concat($tarik)->sortByDesc('created_at');
 
         return view('teller.dashboard', compact(
             'user',
