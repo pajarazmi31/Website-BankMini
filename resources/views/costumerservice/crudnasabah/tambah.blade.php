@@ -77,7 +77,7 @@
                             <option value= {{ old('pendidikan' == 'SD' ? 'selected' : '') }}>SD</option>
                             <option value="SMP" {{ old('pendidikan' == 'SMP' ? 'selected' : '') }}>SMP</option>
                             <option value="SMK"> {{ old('pendidikan' == 'SMK' ? 'selected' : '') }}SMK</option>
-                            <option value="SMA"> {{ old('pendidikan' == 'SMA' ? 'selected' : '') }}</option>
+                            <option value="SMA"> {{ old('pendidikan' == 'SMA' ? 'selected' : '') }}SMA</option>
                             <option value="D1" {{ old('pendidikan' == 'D1' ? 'selected' : '') }}>D1</option>
                             <option value="D2" {{ old('pendidikan' == 'D2' ? 'selected' : '') }}>D2</option>
                             <option value="D3"> {{ old('pendidikan' == 'D3' ? 'selected' : '') }}D3</option>
