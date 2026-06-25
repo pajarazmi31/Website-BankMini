@@ -80,7 +80,7 @@ selamat datang {{ $user->name }}!
                                 <i class="ph ph-x-circle text-[20px]" title="Non Aktif"></i>
                             </span>
                             @elseif ( $nasabah->rekening?->status_akun == 'revisi')
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Revisi">
                                 <i class="ph-bold ph-warning-circle text-[15px]"></i>
                             </button>
                             @else
@@ -251,7 +251,17 @@ selamat datang {{ $user->name }}!
 
         document.getElementById('detail_rekening').value = rekening;
         document.getElementById('detail_status').value = status;
-        // document.getElementById('detail_pesan').value = pesan;
+
+        const revisiSection = document.getElementById('revisi_section');
+        const detailPesan = document.getElementById('detail_pesan');
+
+        if (status === 'revisi') {
+            revisiSection.classList.remove('hidden');
+            detailPesan.innerText = pesan;
+        } else {
+            revisiSection.classList.add('hidden');
+            detailPesan.innerText = '';
+        }
 
         switchView('detail');
     }

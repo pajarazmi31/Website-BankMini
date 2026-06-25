@@ -34,6 +34,7 @@
             @method('PUT')
 
             <input type="hidden" value="revisi" name="status_akun">
+            <input type="hidden" value="{{ $user->name }}" name="nama_perevisi">
 
             <div class="space-y-6">
                 <!-- Info Nasabah yang Direvisi -->

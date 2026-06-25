@@ -12,7 +12,7 @@ class csController extends Controller
     public function index() {
         $user = Auth::user();
         $cs = $user->petugas;
-        $nasabahHariIni = Nasabah::whereDate('created_at', today())->count();
+        $revisi = rekening::where('status_akun','revisi')->count();
         $nasabah = Nasabah::with('rekening')
         ->whereHas('rekening', function ($query) {
             $query->whereIn('status_akun', ['non-aktif', 'revisi']);
@@ -20,7 +20,7 @@ class csController extends Controller
         ->get();
         $jumlahNasabah = User::where('role_id','1')->count();
         $jumlahPending = Rekening::where('status_akun','non-aktif')->count();
-        return view('costumerservice.dashboard', compact('user','cs','nasabahHariIni','nasabah','jumlahNasabah','jumlahPending'));
+        return view('costumerservice.dashboard', compact('user','cs','revisi','nasabah','jumlahNasabah','jumlahPending'));
     }
 
 

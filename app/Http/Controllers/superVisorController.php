@@ -29,8 +29,8 @@ class superVisorController extends Controller
             $query->where('status_akun', 'non-aktif');
         })->orderByDesc('id')->get();
         $totalPendingRegistrasi = $nasabahPending->count();
-$totalPendingTransfer = $nasabahTfPending->count();
-$totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
+        $totalPendingTransfer = $nasabahTfPending->count();
+        $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         return view('supervisor.dashboard', compact('user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
     }
 
@@ -179,12 +179,16 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
     public function revisi(String $id, Request $request) {
         $request->validate([
             'pesan' => 'required',
+            'nama_perevisi' => 'required',
             'status_akun' => 'required',
         ]);
+
+
 
         $nasabah = Nasabah::FindOrFAil($id);
         $nasabah->update([
             'pesan' => $request->pesan,
+            'nama_perevisi' => $request->nama_perevisi,
         ]);
 
         $rekening = Rekening::where('nasabah_id', $nasabah->id);

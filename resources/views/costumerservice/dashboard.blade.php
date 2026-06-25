@@ -24,8 +24,8 @@
     <!-- Nasabah Hari Ini -->
     <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
         <div class="relative z-10">
-            <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Nasabah Hari Ini</p>
-            <h3 class="text-[28px] md:text-[32px] font-bold">{{ $nasabahHariIni }}</h3>
+            <p class="text-[11px] font-semibold tracking-[0.08em] text-green-100/80 mb-2.5 uppercase">Revisi</p>
+            <h3 class="text-[28px] md:text-[32px] font-bold">{{ $revisi }}</h3>
         </div>
         <div class="absolute -right-2 -bottom-2 flex opacity-10">
             <i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i>

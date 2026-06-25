@@ -124,7 +124,6 @@
                 <div class="px-6 mt-4">
                     <form action="{{ route('logout') }}" method="POST">
                         @csrf
-
                         <button
                             type="submit"
                             class="flex items-center gap-3 py-2 text-red-600 font-medium hover:text-red-700 transition-colors">
