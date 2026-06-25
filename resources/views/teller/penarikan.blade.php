@@ -431,10 +431,15 @@ document.addEventListener('input', function (e) {
     document.addEventListener('input', function(e) {
 
         if (e.target.id === 'edit_id_rekening') {
+
+            // hanya angka
+            e.target.value = e.target.value.replace(/\D/g, '');
+
             cariNamaRekening();
         }
 
     });
+
 
     function editData(id, nama, rek, nominal, petugas, biaya, transaksiId) {
 

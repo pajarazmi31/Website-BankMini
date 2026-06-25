@@ -34,9 +34,11 @@
                     <input type="text"
                         id="tambah_id_rekening"
                         name="id_rekening"
+                        inputmode="numeric"
+                        autocomplete="off"
                         placeholder="Masukkan nomor rekening"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]">
-                </div>
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]">                
+                    </div>
 
                 <!-- BARIS 1 KANAN: NAMA LENGKAP -->
                 <div>
@@ -129,52 +131,54 @@ const biayaInputTmb      = document.getElementById('tambah_biaya_transaksi');
 const totalBiayaInputTmb = document.getElementById('tambah_total_biaya');
 const totalBiayaViewTmb  = document.getElementById('tambah_total_biaya_view');
 
-// SALDO
-let saldoRekeningTmb = 0;
-const saldoMinimum = 10000;
+    // SALDO
+    let saldoRekeningTmb = 0;
+    const saldoMinimum = 1000;
 
-// 1. AJAX CARI REKENING
-rekeningInputTmb.addEventListener('keyup', async function () {
+    // No Rekening hanya angka
+    rekeningInputTmb.addEventListener('input', function () {
+        this.value = this.value.replace(/\D/g, '');
+    });
 
-    let rekening = this.value.trim();
+    // AJAX Cari Rekening
+    rekeningInputTmb.addEventListener('keyup', async function () {
 
-    if (rekening.length === 0) {
+        let rekening = this.value.trim();
 
-        namaInputTmb.value = '';
-        saldoRekeningTmb = 0;
-        return;
+        if (rekening.length === 0) {
 
-    }
+            namaInputTmb.value = '';
+            saldoRekeningTmb = 0;
+            return;
 
-    try {
+        }
 
-        let response = await fetch(`/cari-rekening/${rekening}`);
-        let data = await response.json();
+        try {
 
-        if (data.success) {
+            let response = await fetch(`/cari-rekening/${rekening}`);
+            let data = await response.json();
 
-            namaInputTmb.value = data.nama;
+            if (data.success) {
 
-            // AMBIL SALDO
-            saldoRekeningTmb = parseInt(data.saldo);
+                namaInputTmb.value = data.nama;
+                saldoRekeningTmb = parseInt(data.saldo);
 
-        } else {
+            } else {
 
-            namaInputTmb.value = 'Rekening tidak ditemukan';
+                namaInputTmb.value = 'Rekening tidak ditemukan';
+                saldoRekeningTmb = 0;
+
+            }
+
+        } catch (err) {
+
+            namaInputTmb.value = 'Terjadi kesalahan';
             saldoRekeningTmb = 0;
 
         }
 
-    } catch (err) {
-
-        console.error("Gagal cari rekening:", err);
-
-        namaInputTmb.value = 'Terjadi kesalahan';
-        saldoRekeningTmb = 0;
-
-    }
-
 });
+
 
 // 2. LOGIKA UTILITY ANGKA
 function formatAngka(num) {

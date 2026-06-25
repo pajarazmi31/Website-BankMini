@@ -37,13 +37,14 @@
                         No. Rekening
                     </label>
 
-                    <!-- Diubah ke type="text" bray supaya tidak error/hilang saat disuntik string lewat JS -->
-                    <input
-                        type="text"
-                        name="id_rekening"
-                        id="edit_id_rekening"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]"
-                    >
+                        <input
+                            type="text"
+                            name="id_rekening"
+                            id="edit_id_rekening"
+                            inputmode="numeric"
+                            autocomplete="off"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]"
+                        >
                 </div>
 
                 <div>
@@ -148,6 +149,11 @@ const biayaInputTmb      =document.getElementById('edit_transaksi_id');
 
 const totalViewTmb       = document.getElementById('edit_total_biaya');
 const totalInputTmb      = document.getElementById('edit_total');
+
+// No Rekening hanya angka
+rekeningInputTmb?.addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '');
+});
 
 
 

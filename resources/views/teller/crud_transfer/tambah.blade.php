@@ -38,16 +38,19 @@
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                         Norek. Pengirim
-                    </label>
-                    <input
-                        type="text"
-                        id="tambah_id_rekening_pengirim"
-                        name="id_rekening_pengirim"
-                        onkeyup="cekRekeningTransfer('tambah', 'pengirim')"
-                        placeholder="Masukkan nomor rekening pengirim"
-                        required
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                                            </label>
+                        <input
+                            type="text"
+                            id="tambah_id_rekening_pengirim"
+                            name="id_rekening_pengirim"
+                            onkeyup="cekRekeningTransfer('tambah', 'pengirim')"
+                            placeholder="Masukkan nomor rekening pengirim"
+                            required
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            autocomplete="off"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
+                        >
                     <div id="tambah_info_pengirim" class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]"></div>
                 </div>
 
@@ -55,15 +58,18 @@
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                         Norek. Penerima
                     </label>
-                    <input
-                        type="text"
-                        id="tambah_id_rekening_penerima"
-                        name="id_rekening_penerima"
-                        onkeyup="cekRekeningTransfer('tambah', 'penerima')"
-                        placeholder="Masukkan nomor rekening penerima"
-                        required
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                        <input
+                            type="text"
+                            id="tambah_id_rekening_penerima"
+                            name="id_rekening_penerima"
+                            onkeyup="cekRekeningTransfer('tambah', 'penerima')"
+                            placeholder="Masukkan nomor rekening penerima"
+                            required
+                            inputmode="numeric"
+                            pattern="[0-9]*"
+                            autocomplete="off"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
+                        >
                     <div id="tambah_info_penerima" class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]"></div>
                 </div>
             </div>
@@ -196,6 +202,18 @@ document.getElementById('tambah_jumlah_transfer')?.addEventListener('input', fun
     calculateTotal();
 });
 
+// Norek Pengirim hanya angka
+document.getElementById('tambah_id_rekening_pengirim')
+?.addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '');
+});
+
+// Norek Penerima hanya angka
+document.getElementById('tambah_id_rekening_penerima')
+?.addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '');
+});
+
 // 3. FUNGSI AJAX CEK REKENING UNIK UNTUK TRANSFER (Plus Validasi Rekening Sama)
 async function cekRekeningTransfer(aksi, tipe) {
     const pengirimInput = document.getElementById('tambah_id_rekening_pengirim');
@@ -208,9 +226,16 @@ async function cekRekeningTransfer(aksi, tipe) {
     
     if (!inputTarget || !infoTarget) return;
 
-    let rekening = inputTarget.value.trim();
+    let rekening = inputTarget.value.replace(/\D/g, '').trim();
 
-    if (rekening.length === 0) {
+    // kalau kosong jangan tampil apa-apa
+    if (!rekening) {
+        infoTarget.innerHTML = '';
+        return;
+    }
+
+    // opsional: tunggu minimal 3 digit
+    if (rekening.length < 3) {
         infoTarget.innerHTML = '';
         return;
     }
