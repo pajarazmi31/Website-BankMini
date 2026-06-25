@@ -168,7 +168,7 @@ class tellerController extends Controller
     public function storeSetoran(Request $request)
     {
         $request->validate([
-            'id_rekening'       => 'required|exists:rekening,id',
+            'id_rekening' => 'required|numeric|exists:rekening,id',
             'jumlah_penyetoran' => 'required',
             'setoran'           => 'required',
             'nama_penyetor'     => 'required',
@@ -691,8 +691,8 @@ class tellerController extends Controller
         ]);
 
         $request->validate([
-            'id_rekening_pengirim' => 'required|exists:rekening,id',
-            'id_rekening_penerima' => 'required|exists:rekening,id|different:id_rekening_pengirim',
+            'id_rekening_pengirim' => 'required|numeric|exists:rekening,id',
+            'id_rekening_penerima' => 'required|numeric|exists:rekening,id|different:id_rekening_pengirim',
             'jumlah_transfer'      => 'required|numeric|min:1',
         ]);
 

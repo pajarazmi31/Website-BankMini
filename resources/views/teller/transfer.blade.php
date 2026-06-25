@@ -365,7 +365,16 @@
 
         let rekening = inputTarget.value.trim();
 
-        if (rekening.length === 0) {
+        // kosong = jangan tampil apa-apa
+        if (rekening === '') {
+            infoTarget.innerHTML = '';
+            return;
+        }
+
+        // hanya angka
+        rekening = rekening.replace(/\D/g, '');
+
+        if (rekening.length < 1) {
             infoTarget.innerHTML = '';
             return;
         }
@@ -434,6 +443,19 @@
 
     // --- INITIALIZE EVENT LISTENERS (ANTI BENTROK) ---
     document.addEventListener('DOMContentLoaded', function() {
+
+        // EDIT PENGIRIM hanya angka
+        document.getElementById('edit_id_rekening_pengirim')
+        ?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        // EDIT PENERIMA hanya angka
+        document.getElementById('edit_id_rekening_penerima')
+        ?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         const tambahNominal = document.getElementById('tambah_jumlah_transfer');
         if (tambahNominal) {
             tambahNominal.addEventListener('input', function() {

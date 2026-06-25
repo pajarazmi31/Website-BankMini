@@ -66,60 +66,167 @@
 
 <div class="bg-transparent space-y-4">
 
-    @forelse($riwayatTransfer as $item)
+        @forelse($riwayatTransfer as $item)
 
         @php
-            $isKeluar = $item->id_pengirim == $rekening->id;
+            $isSetoran = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'setoran';
+
+            $isPenarikan = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'penarikan';
+
+            $isTransferTellerKeluar = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'transfer_teller_keluar';
+
+            $isTransferTellerMasuk = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'transfer_teller_masuk';
+
+            $isKeluar =
+                $isTransferTellerKeluar ||
+                (
+                    !$isSetoran &&
+                    !$isPenarikan &&
+                    isset($item->id_pengirim) &&
+                    $item->id_pengirim == $rekening->id
+                );
         @endphp
 
-        <div class="flex justify-between items-center bg-white p-5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-gray-50">
+            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
 
-            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4">
 
-                <div class="w-12 h-12 rounded-full flex items-center justify-center
-                    {{ $isKeluar ? 'bg-red-100' : 'bg-green-100' }}">
+                    <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
+                        @if($isSetoran)
+                            bg-blue-100
+                        @elseif($isPenarikan)
+                            bg-orange-100
+                        @elseif($isKeluar)
+                            bg-red-100
+                        @else
+                            bg-green-100
+                        @endif">
 
-                    <i class="ph-bold {{ $isKeluar ? 'ph-arrow-up' : 'ph-arrow-down' }}"></i>
+                        @if($isSetoran)
 
-                </div>
+                            <i class="ph-bold ph-plus text-blue-600"></i>
 
-                <div>
+                        @elseif($isPenarikan)
 
-                    @if($isKeluar)
-                        <p class="font-bold text-base text-textDark">
-                            Transfer ke {{ $item->nama_penerima }}
-                        </p>
-                    @else
-                        <p class="font-bold text-base text-textDark">
+                            <i class="ph-bold ph-money text-orange-600"></i>
+
+                        @elseif($isKeluar)
+
+                            <i class="ph-bold ph-arrow-up text-red-600"></i>
+
+                        @else
+
+                            <i class="ph-bold ph-arrow-down text-green-600"></i>
+
+                        @endif
+
+                    </div>
+
+                    <div>
+
+                        <p class="font-bold text-sm lg:text-lg text-textDark">
+
+                       @if($isSetoran)
+
+                            Top Up Saldo
+
+                        @elseif($isPenarikan)
+
+                            Penarikan Tunai
+
+                        @elseif($isTransferTellerKeluar)
+
+                            Transfer Teller Keluar
+
+                        @elseif($isTransferTellerMasuk)
+
+                            Transfer Teller Masuk
+
+                        @elseif($isKeluar)
+
+                            Transfer Keluar
+
+                        @else
+
                             Transfer Masuk
-                        </p>
-                    @endif
 
-                    <p class="text-xs text-textGray">
-                        {{ $item->created_at->format('d M Y H:i') }}
-                    </p>
+                        @endif
+
+                        </p> 
+
+                        @if($isSetoran)
+
+                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                                Top Up melalui Teller
+                            </p>
+
+                        @elseif($isPenarikan)
+
+                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                                Penarikan melalui Teller
+                            </p>
+
+                        @elseif($isTransferTellerKeluar)
+
+                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                                Transfer Teller ke {{ $item->id_rekening_penerima }}
+                            </p>
+
+                        @elseif($isTransferTellerMasuk)
+
+                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                                Transfer Teller dari {{ $item->id_rekening_pengirim }}
+                            </p>
+
+                        @elseif(
+                            isset($item->jenis_transaksi) &&
+                            $item->jenis_transaksi == 'transfer' &&
+                            !empty($item->catatan)
+                        )
+
+                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                                {{ $item->catatan }}
+                            </p>
+
+                        @endif
+
+                    </div>
 
                 </div>
+
+                <p class="font-bold text-xs lg:text-lg
+                    {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
+
+                @if($isSetoran)
+
+                    + Rp {{ number_format($item->jumlah_penyetoran, 0, ',', '.') }}
+
+                @elseif($isPenarikan)
+
+                    - Rp {{ number_format($item->jumlah_penarikan, 0, ',', '.') }}
+
+                @else
+
+                    {{ $isKeluar ? '-' : '+' }}
+                    Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+
+                @endif
+
+                </p>
 
             </div>
 
-            <p class="font-bold text-sm lg:text-lg
-                {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
+        @empty
 
-                {{ $isKeluar ? '-' : '+' }}
-                Rp {{ number_format($item->jumlah_transfer,0,',','.') }}
+            <div class="text-center py-8 text-gray-500">
+                Belum ada riwayat transaksi.
+            </div>
 
-            </p>
-
-        </div>
-
-    @empty
-
-        <div class="text-center py-5 text-gray-500">
-            Belum ada riwayat transfer
-        </div>
-
-    @endforelse
+        @endforelse
 
 </div>
     </div>
@@ -161,57 +268,151 @@
         </div>
 
         <div class="space-y-6">
-@forelse($riwayatTransfer as $item)
+    @forelse($semuaRiwayat as $item)
 
-    @php
-        $isKeluar = $item->id_pengirim == $rekening->id;
-    @endphp
+        @php
+            $isSetoran = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'setoran';
 
-    <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+            $isPenarikan = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'penarikan';
 
-        <div class="flex items-center gap-4">
+            $isTransferTellerKeluar = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'transfer_teller_keluar';
 
-            <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
-                {{ $isKeluar ? 'bg-red-100' : 'bg-green-100' }}">
+            $isTransferTellerMasuk = isset($item->jenis_transaksi)
+                        && $item->jenis_transaksi == 'transfer_teller_masuk';
 
-                <i class="ph-bold {{ $isKeluar ? 'ph-arrow-up' : 'ph-arrow-down' }}"></i>
+            $isKeluar =
+                $isTransferTellerKeluar ||
+                (
+                    !$isSetoran &&
+                    !$isPenarikan &&
+                    isset($item->id_pengirim) &&
+                    $item->id_pengirim == $rekening->id
+                );
+        @endphp
+
+        <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
+
+            <div class="flex items-center gap-4">
+
+                <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
+
+                    @if($isSetoran)
+                        bg-blue-100
+                    @elseif($isPenarikan)
+                        bg-orange-100
+                    @elseif($isKeluar)
+                        bg-red-100
+                    @else
+                        bg-green-100
+                    @endif">
+
+                   @if($isSetoran)
+
+                        <i class="ph-bold ph-plus text-blue-600"></i>
+
+                    @elseif($isPenarikan)
+
+                        <i class="ph-bold ph-money text-orange-600"></i>
+
+                    @elseif($isKeluar)
+
+                        <i class="ph-bold ph-arrow-up text-red-600"></i>
+
+                    @else
+
+                        <i class="ph-bold ph-arrow-down text-green-600"></i>
+
+                    @endif
+                </div>
+
+                <div>
+
+                    <p class="font-bold text-sm lg:text-lg text-textDark">
+
+                        @if($isSetoran)
+
+                            Top Up Saldo
+
+                        @elseif($isPenarikan)
+
+                            Penarikan Tunai
+
+                        @elseif($isTransferTellerKeluar)
+
+                            Transfer Teller Keluar
+
+                        @elseif($isTransferTellerMasuk)
+
+                            Transfer Teller Masuk
+
+                        @elseif($isKeluar)
+
+                            Transfer Keluar
+
+                        @else
+
+                            Transfer Masuk
+
+                        @endif
+
+                    </p>
+
+                    @if($isTransferTellerKeluar)
+
+                        <p class="text-[8px] lg:text-[10px] text-gray-400">
+                            Transfer Teller ke {{ $item->id_rekening_penerima }}
+                        </p>
+
+                    @elseif($isTransferTellerMasuk)
+
+                        <p class="text-[8px] lg:text-[10px] text-gray-400">
+                            Transfer Teller dari {{ $item->id_rekening_pengirim }}
+                        </p>
+
+                    @elseif(!$isSetoran && !empty($item->catatan))
+
+                        <p class="text-[8px] lg:text-[10px] text-gray-400">
+                            {{ $item->catatan }}
+                        </p>
+
+                    @endif
+
+                </div>
 
             </div>
 
-            <div>
+            <p class="font-bold text-xs lg:text-lg
+                {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
 
-                <p class="font-bold text-sm lg:text-lg text-textDark">
-                    {{ $isKeluar ? 'Transfer Keluar' : 'Transfer Masuk' }}
-                </p>
+                @if($isSetoran)
 
-                <p class="text-[8px] lg:text-[11px] text-textGray mt-0.5">
-                    {{ $item->created_at->format('d M Y H:i') }}
-                </p>
+                    + Rp {{ number_format($item->jumlah_penyetoran, 0, ',', '.') }}
 
-                @if($item->catatan)
-                    <p class="text-[8px] lg:text-[10px] text-gray-400">
-                        {{ $item->catatan }}
-                    </p>
+                @elseif($isPenarikan)
+
+                    - Rp {{ number_format($item->jumlah_penarikan, 0, ',', '.') }}
+
+                @else
+
+                    {{ $isKeluar ? '-' : '+' }}
+                    Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+
                 @endif
 
-            </div>
+            </p>
 
         </div>
 
-        <p class="font-bold text-xs lg:text-lg {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
-            {{ $isKeluar ? '-' : '+' }}
-            Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
-        </p>
+    @empty
 
-    </div>
+        <div class="text-center py-8 text-gray-500">
+            Belum ada riwayat transaksi.
+        </div>
 
-@empty
-
-    <div class="text-center py-8 text-gray-500">
-        Belum ada riwayat transaksi.
-    </div>
-
-@endforelse
+    @endforelse
         </div>
 
         <!-- Pagination -->
