@@ -21,7 +21,7 @@
     <!-- Search Bar Mobile -->
     <form action="" method="GET" class="md:hidden relative mb-5 m-0 p-0">
         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </form>
 
 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
@@ -292,14 +292,17 @@
         });
 
         const activeView = views[viewName];
+        const searchBar = document.getElementById('searchBarContainer');
 
         if (activeView) {
             activeView.classList.remove('hidden');
 
             if (viewName === 'tabel') {
                 activeView.classList.add('flex');
+                if (searchBar) searchBar.classList.remove('md:hidden');
             } else {
                 activeView.classList.add('block');
+                if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
 

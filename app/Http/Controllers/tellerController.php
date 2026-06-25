@@ -42,12 +42,12 @@ class tellerController extends Controller
             ->sum('jumlah_penarikan');
 
         // TRANSAKSI TERBARU 
-        // Jika Anda ingin menggabungkan, Anda bisa menggunakan collection:
-        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
-        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
+        // Ambil semua transaksi tanpa limit agar bisa di-paginate di view history
+        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->get();
+        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->get();
 
         // Gabungkan dan urutkan berdasarkan waktu
-        $transactions = $setor->concat($tarik)->sortByDesc('created_at')->take(3);
+        $transactions = $setor->concat($tarik)->sortByDesc('created_at');
 
         return view('teller.dashboard', compact(
             'user',
@@ -155,7 +155,8 @@ class tellerController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_lengkap', 'like', '%' . $search . '%')
-                  ->orWhere('nama_penyetor', 'like', '%' . $search . '%');
+                  ->orWhere('nama_penyetor', 'like', '%' . $search . '%')
+                  ->orWhere('id_rekening', 'like', '%' . $search . '%');
             });
         }
 
@@ -310,6 +311,32 @@ class tellerController extends Controller
         return response()->json([
             'success' => false
         ]);
+    }
+
+    public function searchRekening(Request $request)
+    {
+        $search = $request->query('query');
+        if (strlen($search) < 2) {
+            return response()->json([]);
+        }
+
+        $data = Rekening::with('nasabah')
+            ->where('id', 'like', '%' . $search . '%')
+            ->orWhereHas('nasabah', function($q) use ($search) {
+                $q->where('nama_nasabah', 'like', '%' . $search . '%');
+            })
+            ->limit(10)
+            ->get();
+
+        $results = $data->map(function($item) {
+            return [
+                'id' => $item->id,
+                'nama' => $item->nasabah->nama_nasabah ?? '-',
+                'saldo' => $item->saldo_saat_ini
+            ];
+        });
+
+        return response()->json($results);
     }
         
     public function destroySetoran($id)

@@ -1,12 +1,21 @@
 @props(['total' => 3, 'current' => 1, 'paginator' => null])
 
-@if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
-    @php
+@php
+    $showPagination = true;
+    if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator) {
         $total = $paginator->lastPage();
         $current = $paginator->currentPage();
-    @endphp
-@endif
+        if ($paginator->total() === 0) {
+            $showPagination = false;
+        }
+    } else {
+        if ($total <= 0) {
+            $showPagination = false;
+        }
+    }
+@endphp
 
+@if ($showPagination)
 <div class="flex items-center justify-end gap-1.5 mt-5 pt-2">
     <!-- Previous Button -->
     @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
@@ -16,7 +25,7 @@
             </button>
         @else
             <a href="{{ $paginator->previousPageUrl() }}" 
-               class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
+               class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md flex justify-center items-center">
                 <i class="ph-bold ph-caret-left"></i>
             </a>
         @endif
@@ -31,10 +40,16 @@
             <!-- Active Page (Text) -->
             <span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">{{ $i }}</span>
         @else
-            <!-- Other Pages (Buttons) -->
-            <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
-                {{ $i }}
-            </button>
+            <!-- Other Pages (Buttons/Links) -->
+            @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
+                <a href="{{ $paginator->url($i) }}" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md flex justify-center items-center">
+                    {{ $i }}
+                </a>
+            @else
+                <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
+                    {{ $i }}
+                </button>
+            @endif
         @endif
 
         {{-- Add ellipsis if there are many pages --}}
@@ -45,7 +60,21 @@
     @endfor
     
     <!-- Next Button -->
-    <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" {{ $current == $total ? 'disabled' : '' }}>
-        <i class="ph-bold ph-caret-right"></i>
-    </button>
+    @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
+        @if ($paginator->hasMorePages())
+            <a href="{{ $paginator->nextPageUrl() }}" 
+               class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md flex justify-center items-center">
+                <i class="ph-bold ph-caret-right"></i>
+            </a>
+        @else
+            <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] opacity-50 cursor-not-allowed" disabled>
+                <i class="ph-bold ph-caret-right"></i>
+            </button>
+        @endif
+    @else
+        <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed" {{ $current == $total ? 'disabled' : '' }}>
+            <i class="ph-bold ph-caret-right"></i>
+        </button>
+    @endif
 </div>
+@endif

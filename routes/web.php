@@ -70,6 +70,7 @@ Route::get('/transfer/export-custom',[tellerController::class, 'exportTransferCu
 
 //cari nama si norek
 Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
+Route::get('/search-rekening', [tellerController::class, 'searchRekening'])->name('teller.search_rekening');
 });
 
 

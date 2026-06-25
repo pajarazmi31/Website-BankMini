@@ -245,12 +245,16 @@
         Object.values(views).forEach(v => { if(v) v.classList.add('hidden'); });
 
         const activeView = views[viewName];
+        const searchBar = document.getElementById('searchBarContainer');
+
         if (activeView) {
             activeView.classList.remove('hidden');
             if (viewName === 'tabel') {
                 activeView.classList.add('flex');
+                if (searchBar) searchBar.classList.remove('md:hidden');
             } else {
                 activeView.classList.add('block');
+                if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
         document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -462,6 +466,101 @@
                 if(editNominal) editNominal.value = cleanNumber(editNominal.value);
             });
         }
+
+        // --- AUTOCOMPLETE SUGGESTIONS FOR NOREK SENDER & RECIPIENT ---
+        function setupAutocomplete(inputId, suggestionsId, infoId, type) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionsId);
+            const info = document.getElementById(infoId);
+            
+            if (!input || !suggestions) return;
+            
+            let debounceTimer;
+            
+            input.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                const query = this.value.trim();
+                
+                // Run original validation in real-time
+                cekRekeningTransfer('tambah', type);
+                
+                if (query.length < 2) {
+                    suggestions.innerHTML = '';
+                    suggestions.classList.add('hidden');
+                    return;
+                }
+                
+                debounceTimer = setTimeout(() => {
+                    fetch(`/search-rekening?query=${query}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.length === 0) {
+                                suggestions.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 font-medium">Tidak ada hasil</div>';
+                                suggestions.classList.remove('hidden');
+                                return;
+                            }
+                            
+                            let html = '';
+                            data.forEach(item => {
+                                html += `
+                                    <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 transition-colors flex flex-col" data-id="${item.id}" data-nama="${item.nama}" data-saldo="${item.saldo}">
+                                        <span class="font-bold text-[14px] text-gray-800">${item.id}</span>
+                                        <span class="text-[11px] text-gray-400 font-medium mt-0.5">${item.nama}</span>
+                                    </div>
+                                `;
+                            });
+                            suggestions.innerHTML = html;
+                            suggestions.classList.remove('hidden');
+                        })
+                        .catch(err => console.error('Gagal memuat rekomendasi:', err));
+                }, 250);
+            });
+            
+            // Handle clicking suggestion
+            suggestions.addEventListener('click', function(e) {
+                const item = e.target.closest('[data-id]');
+                if (!item) return;
+                
+                const id = item.dataset.id;
+                const nama = item.dataset.nama;
+                const saldo = item.dataset.saldo;
+                
+                input.value = id;
+                suggestions.innerHTML = '';
+                suggestions.classList.add('hidden');
+                
+                // Trigger verify details
+                if (type === 'pengirim') {
+                    if (info) {
+                        info.innerHTML = `
+                            <span class="text-green-600 font-semibold">
+                                ✓ ${nama}
+                            </span>
+                            | Saldo: Rp. ${formatNumber(saldo)}
+                        `;
+                    }
+                } else if (type === 'penerima') {
+                    if (info) {
+                        info.innerHTML = `
+                            <span class="text-green-600 font-semibold">
+                                ✓ ${nama}
+                            </span>
+                        `;
+                    }
+                }
+            });
+            
+            // Close suggestions on clicking outside
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.innerHTML = '';
+                    suggestions.classList.add('hidden');
+                }
+            });
+        }
+
+        setupAutocomplete('tambah_id_rekening_pengirim', 'tambah_rekening_pengirim_suggestions', 'tambah_info_pengirim', 'pengirim');
+        setupAutocomplete('tambah_id_rekening_penerima', 'tambah_rekening_penerima_suggestions', 'tambah_info_penerima', 'penerima');
     });
 
     function confirmDeleteTransfer(id) {
