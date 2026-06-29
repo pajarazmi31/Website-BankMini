@@ -104,6 +104,8 @@ Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destro
         Route::put('/datapetugas/update/{id}', [DataPetugasController::class, 'update'])->name('datapetugas.update');
         Route::delete('/datapetugas/delete/{id}', [DataPetugasController::class, 'destroy'])->name('datapetugas.destroy');
         
+        // biaya transaksi
+        Route::get('/supervisor/biayatransaksi', [superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
         
         //View Verifikasi Tf
         Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasiTFF'])->name('supervisor.verifikasi');

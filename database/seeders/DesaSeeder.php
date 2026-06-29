@@ -12,15 +12,30 @@ class DesaSeeder extends Seeder
      */
     public function run(): void
     {
-            $file = fopen(database_path('master/villages.csv'), 'r');
+        $file = fopen(database_path('master/villages.csv'), 'r');
 
-            while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
+        DB::beginTransaction();
+        $insertData = [];
+        $chunkSize = 1000;
 
-            DB::table('desa')->insert([
+        while (($data = fgetcsv($file, 1000, ",")) !== FALSE) {
+            $insertData[] = [
                 'id' => $data[0],
                 'kecamatan_id' => $data[1],
                 'name' => $data[2],
-            ]);
+            ];
+
+            if (count($insertData) >= $chunkSize) {
+                DB::table('desa')->insert($insertData);
+                $insertData = [];
+            }
         }
+
+        if (count($insertData) > 0) {
+            DB::table('desa')->insert($insertData);
+        }
+
+        DB::commit();
+        fclose($file);
     }
 }

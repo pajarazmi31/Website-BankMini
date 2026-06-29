@@ -34,7 +34,7 @@
     </script>
 
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
-
+    <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
 </head>
 <body class="font-sans antialiased text-gray-800 bg-white min-h-full lg:min-h-screen flex flex-col-reverse lg:flex-row overflow-x-hidden">
 

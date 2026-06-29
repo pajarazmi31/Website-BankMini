@@ -205,5 +205,9 @@ public function exportExcel(Request $request)
         return view('supervisor.verifikasi.registrasirekening.revisi', compact('nasabah','rekening', 'user'));
     }
 
-
+    public function biayatransaksi() {
+        $user = Auth::user();
+        $super = $user->petugas;
+        return view('supervisor.biayatransaksi', compact('user', 'super'));
+    }
 }
