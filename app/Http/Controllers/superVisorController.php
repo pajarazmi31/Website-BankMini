@@ -122,15 +122,28 @@ public function exportExcel(Request $request)
         }
     }
 
-    public function verifikasiNasabah() {
+    public function verifikasiNasabah(Request $request) {
         $user = Auth::user();
         $super = $user->petugas;
+        $keyword = $request->input('keyword');
+
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
             })
-            ->get();
-        return view('supervisor.verifikasi.registrasirekening', compact('user','super','allNasabah'));
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function($q) use ($keyword) {
+                    $q->where('nama_nasabah', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('jabatan', 'LIKE', '%' . $keyword . '%')
+                      ->orWhereHas('rekening', function($qRek) use ($keyword) {
+                          $qRek->where('id', 'LIKE', '%' . $keyword . '%');
+                      });
+                });
+            })
+            ->paginate(5)
+            ->withQueryString();
+
+        return view('supervisor.verifikasi.registrasirekening', compact('user', 'super', 'allNasabah', 'keyword'));
     }
 
     public function aktif(String $id) {
@@ -168,10 +181,25 @@ public function exportExcel(Request $request)
         return view('supervisor.datapetugas', compact( 'user','super'));
     }
 
-    public function nasabah() {
-        $userNasabah = Nasabah::with('rekening')->get();
+    public function nasabah(Request $request) {
         $user = Auth::user();
-        return view('supervisor.datanasabah', compact('userNasabah', 'user'));
+        $keyword = $request->input('keyword');
+
+        $userNasabah = Nasabah::with('rekening')
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($q) use ($keyword) {
+                    $q->where('nama_nasabah', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('jabatan', 'LIKE', '%' . $keyword . '%')
+                      ->orWhereHas('rekening', function ($qRek) use ($keyword) {
+                          $qRek->where('id', 'LIKE', '%' . $keyword . '%')
+                               ->orWhere('status_akun', 'LIKE', '%' . $keyword . '%');
+                      });
+                });
+            })
+            ->paginate(5)
+            ->withQueryString();
+
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'keyword'));
     }
 
     public function detailNasabah(String $id) {

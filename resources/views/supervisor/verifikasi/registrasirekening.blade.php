@@ -22,10 +22,10 @@
 @section('content')
 <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
     <!-- Search Bar Mobile -->
-    <div class="md:hidden relative mb-5">
+    <form action="{{ route('supervisor.verifikasi.registrasi') }}" method="get" class="md:hidden relative mb-5">
         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-    </div>
+        <input type="text" name="keyword" value="{{ request('keyword') }}" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+    </form>
 
 
     <!-- Section Title & Tabs -->
@@ -39,61 +39,81 @@
 
     <!-- Table Card / Content -->
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
-        <div class="overflow-x-auto">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] w-12 border-b border-gray-100">No</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Lengkap</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Jabatan</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">No Rekening</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Status</th>
-                        <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-40 border-b border-gray-100">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody class="text-[14px] text-gray-800 font-medium">
-                    <!-- Row 1 -->
-                    @foreach ( $allNasabah as $nasabah )
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">1.</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
-                                <i class="ph-bold ph-clock text-[15px]"></i>
-                            </button>
-                        </td>
-                        <td class="py-4 px-2 border-b border-gray-50">
-                            <div class="flex items-center justify-center gap-2">
-                                <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                </a>
-                                <form action="{{ route('rekening.aktif', $nasabah->rekening->id ) }}" method="post">
-                                    @csrf
-                                    <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
-                                </form>
-                                <form action="{{ route('hapus.nasabah.super', $nasabah->id) }}" method="post">
-                                @csrf
-                                @method('DELETE')
-                                <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
-                                </form>
-                                <a href="{{ route('halaman.revisi', $nasabah->id) }}">
-                                    <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center hover:bg-[#fde68a] transition-colors" title="Revisi">
-                                        <i class="ph-bold ph-arrow-counter-clockwise text-[16px]"></i>
-                                    </button>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="flex justify-between items-center mb-4 border-b border-gray-50 pb-2">
+            <form action="{{ route('supervisor.verifikasi.registrasi') }}" method="get" class="hidden md:flex gap-2 items-center">
+                <div class="relative">
+                    <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                    <input type="text" placeholder="Cari data..."
+                        value="{{ request('keyword') }}" name="keyword"
+                        class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                </div>
+                    
+                <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                    <i class="ph ph-magnifying-glass text-lg"></i>
+                </button>
+            </form>
         </div>
+        <div id="search-results" class="flex flex-col flex-1">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] w-12 border-b border-gray-100">No</th>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Nama Lengkap</th>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Jabatan</th>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">No Rekening</th>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] border-b border-gray-100">Status</th>
+                            <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-40 border-b border-gray-100">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-[14px] text-gray-800 font-medium">
+                        @forelse ( $allNasabah as $nasabah )
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-4 px-2 border-b border-gray-50">{{ $allNasabah->firstItem() + $loop->index }}.</td>
+                            <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
+                            <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
+                            <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>
+                            <td class="py-4 px-2 border-b border-gray-50 text-center">
+                                <button class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default" title="Pending">
+                                    <i class="ph-bold ph-clock text-[15px]"></i>
+                                </button>
+                            </td>
+                            <td class="py-4 px-2 border-b border-gray-50">
+                                <div class="flex items-center justify-center gap-2">
+                                    <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
+                                    <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                    </a>
+                                    <form action="{{ route('rekening.aktif', $nasabah->rekening->id ) }}" method="post">
+                                        @csrf
+                                        <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
+                                    </form>
+                                    <form action="{{ route('hapus.nasabah.super', $nasabah->id) }}" method="post">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
+                                    </form>
+                                    <a href="{{ route('halaman.revisi', $nasabah->id) }}">
+                                        <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center hover:bg-[#fde68a] transition-colors" title="Revisi">
+                                            <i class="ph-bold ph-arrow-counter-clockwise text-[16px]"></i>
+                                        </button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr class="hover:bg-gray-50/50 transition-colors">
+                            <td class="py-4 px-2 border-b text-gray-500 border-gray-50 text-center" colspan="6">Maaf Data Kosong</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
-        <!-- Pagination -->
-        <x-pagination total="3" />
-
+            <!-- Pagination -->
+            @if ($allNasabah->isNotEmpty())
+                <x-pagination :paginator="$allNasabah" />
+            @endif
+        </div>
     </div>
 </div>
 

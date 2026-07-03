@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\Hash;
 class DataPetugasController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
+        $keyword = $request->input('keyword');
 
         $petugas = User::with('role')
             ->whereHas('role', function ($query) {
@@ -25,7 +26,17 @@ class DataPetugasController extends Controller
                     'teller'
                 ]);
             })
-            ->get();
+            ->when($keyword, function ($query, $keyword) {
+                return $query->where(function ($q) use ($keyword) {
+                    $q->where('name', 'LIKE', '%' . $keyword . '%')
+                      ->orWhere('email', 'LIKE', '%' . $keyword . '%')
+                      ->orWhereHas('role', function ($qRole) use ($keyword) {
+                          $qRole->where('nama_role', 'LIKE', '%' . $keyword . '%');
+                      });
+                });
+            })
+            ->paginate(5)
+            ->withQueryString();
 
         $roles = Role::whereIn('nama_role', [
             'supervisor',
@@ -37,7 +48,8 @@ class DataPetugasController extends Controller
             'petugas',
             'roles',
             'user',
-            'super'
+            'super',
+            'keyword'
         ));
     }
 
@@ -60,7 +72,7 @@ class DataPetugasController extends Controller
             ]);
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil ditambahkan');
         } catch (\Exception $e) {
 

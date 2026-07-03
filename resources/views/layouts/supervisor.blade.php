@@ -340,6 +340,92 @@
                 modal.classList.replace('flex', 'hidden');
             }, 300);
         }
+
+        // Responsive live search for supervisor views
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInputs = document.querySelectorAll('input[name="keyword"]');
+            const searchResults = document.getElementById('search-results');
+            
+            if (searchInputs.length === 0 || !searchResults) return;
+
+            let debounceTimer;
+
+            searchInputs.forEach(input => {
+                const form = input.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function (e) {
+                        e.preventDefault();
+                        performSearch(input.value, form);
+                    });
+                }
+
+                input.addEventListener('input', function () {
+                    clearTimeout(debounceTimer);
+                    
+                    const query = this.value;
+                    // Sync values between mobile and desktop search bars
+                    searchInputs.forEach(otherInput => {
+                        if (otherInput !== input) {
+                            otherInput.value = query;
+                        }
+                    });
+
+                    debounceTimer = setTimeout(() => {
+                        const activeForm = input.closest('form');
+                        performSearch(query, activeForm);
+                    }, 300);
+                });
+            });
+
+            // Handle AJAX pagination
+            document.addEventListener('click', function(e) {
+                const pageLink = e.target.closest('#search-results .pagination a, #search-results a[href*="page="], #search-results a[href*="?page="]');
+                if (pageLink) {
+                    e.preventDefault();
+                    const url = pageLink.getAttribute('href');
+                    if (url) {
+                        fetchResults(url);
+                    }
+                }
+            });
+
+            function performSearch(query, form) {
+                const baseUrl = form ? form.getAttribute('action') : window.location.pathname;
+                const url = new URL(baseUrl, window.location.origin);
+                url.searchParams.set('keyword', query);
+                fetchResults(url.toString());
+            }
+
+            function fetchResults(url) {
+                const container = document.getElementById('search-results');
+                if (!container) return;
+
+                // Add visual loading state
+                container.style.opacity = '0.5';
+                container.style.transition = 'opacity 0.15s ease-in-out';
+
+                fetch(url, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newResults = doc.getElementById('search-results');
+                    if (newResults && container) {
+                        container.innerHTML = newResults.innerHTML;
+                    }
+                    container.style.opacity = '1';
+                    window.history.pushState({ path: url }, '', url);
+                })
+                .catch(error => {
+                    console.error('Error fetching search results:', error);
+                    container.style.opacity = '1';
+                });
+            }
+        });
     </script>
     @yield('scripts')
 </body>
