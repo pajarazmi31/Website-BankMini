@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Nasabah;
 use App\Models\Petugas;
+use App\Models\Transaksi;
 
 
 class superVisorController extends Controller
@@ -205,9 +206,54 @@ public function exportExcel(Request $request)
         return view('supervisor.verifikasi.registrasirekening.revisi', compact('nasabah','rekening', 'user'));
     }
 
-    public function biayatransaksi() {
+
+    // Fungsi untuk menampilkan halaman biaya transaksi
+    public function biayatransaksi()
+    {
         $user = Auth::user();
         $super = $user->petugas;
-        return view('supervisor.biayatransaksi', compact('user', 'super'));
+
+        $setoran = Transaksi::where('jenis_transaksi', 'Setoran')->first();
+        $penarikan = Transaksi::where('jenis_transaksi', 'Penarikan')->first();
+        $transfer = Transaksi::where('jenis_transaksi', 'Transfer')->first();
+
+        return view(
+            'supervisor.biayatransaksi',
+            compact(
+                'user',
+                'super',
+                'setoran',
+                'penarikan',
+                'transfer'
+            )
+        );
+    }
+
+    public function updateBiayaTransaksi(Request $request)
+    {
+        Transaksi::where(
+            'jenis_transaksi',
+            'Setoran'
+        )->update([
+            'nominal' => $request->biaya_setoran
+        ]);
+
+        Transaksi::where(
+            'jenis_transaksi',
+            'Penarikan'
+        )->update([
+            'nominal' => $request->biaya_penarikan
+        ]);
+
+        Transaksi::where(
+            'jenis_transaksi',
+            'Transfer'
+        )->update([
+            'nominal' => $request->biaya_transfer
+        ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }
