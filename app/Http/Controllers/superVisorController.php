@@ -29,8 +29,8 @@ class superVisorController extends Controller
             $query->where('status_akun', 'non-aktif');
         })->get();
         $totalPendingRegistrasi = $nasabahPending->count();
-$totalPendingTransfer = $nasabahTfPending->count();
-$totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
+        $totalPendingTransfer = $nasabahTfPending->count();
+        $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
         return view('supervisor.dashboard', compact('user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
     }
 
@@ -50,7 +50,7 @@ $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
             return $query->where('nama_penerima', 'LIKE', '%' . $keyword . '%')
                                 ->orWhere('nama_pengirim', 'like', '%' . $keyword .'%')
                                 ->orWhere('id_rekening', 'like', '%' . $keyword .'%');
-        })->get();
+        })->latest()->get();
 
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
     }

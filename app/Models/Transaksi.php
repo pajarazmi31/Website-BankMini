@@ -41,4 +41,9 @@ class Transaksi extends Model
     {
         return $this->belongsTo(Rekening::class, 'transaksi_id', 'id');
     }
+
+    public function buktiTf()
+    {
+        return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
+    }
 }

@@ -19,10 +19,16 @@ class Bukti_Tf extends Model
         'status_verifikasi',
         'datetime_tgl',
         'catatan',
+        'transaksi_id',
     ]);
 
     public function buktiTf()
     {
         return $this->belongsTo(Rekening::class, 'id_rekening', 'id');
+    }
+
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'transaksi_id', 'id');
     }
 }

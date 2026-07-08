@@ -26,6 +26,10 @@
                     <input type="text" id="detail_rek_penerima" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                 </div>
                 <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Admin</label>
+                    <input type="text" id="detail_admin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
+                </div>
+                <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nomor Telepon</label>
                     <input type="text" id="detail_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                 </div>
@@ -42,16 +46,16 @@
             <div class="mb-6">
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Bukti Transfer</label>
                 <div class="w-full h-[220px] border border-gray-200 rounded-xl bg-white flex items-center justify-center overflow-hidden">
-                    <!-- 
-                        BAGIAN BACKEND: BUKTI TRANSFER
-                        - Tampilkan gambar bukti transfer dari database di sini.
-                        - Jika tidak ada gambar, tampilkan placeholder.
-                    -->
+                    
+                    <!-- 1. PLACEHOLDER (Muncul kalau belum ada file) -->
                     <div id="detail_bukti_container" class="flex flex-col items-center justify-center text-gray-400 gap-2">
                         <i class="ph ph-image text-4xl"></i>
                         <p class="text-[12px]">Bukti transfer belum diunggah</p>
                     </div>
-                    <img id="detail_bukti_img" src="#" alt="Bukti Transfer" class="hidden w-full h-full object-contain">
+
+                    <!-- 2. TAG TUNGGAL SERBAGUNA (Bisa jadi foto atau PDF) -->
+                    <object id="detail_bukti_content" data="" type="" class="hidden w-full h-full object-contain"></object>
+                    
                 </div>
             </div>
 

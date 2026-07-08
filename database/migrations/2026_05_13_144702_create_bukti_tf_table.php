@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('bukti_tf', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('transaksi_id')->constrained('transaksi');
             $table->String('nama_pengirim',100);
             $table->String('no_hp_pengirim',15);
             $table->String('id_rekening',20);
