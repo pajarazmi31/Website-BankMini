@@ -131,14 +131,15 @@
             </div>
 
             <!-- PESAN REVISI - DIPERBAIKI -->
-            @if( $nasabah->rekening?->status_akun == 'revisi' ?? '')
-            <div class="mt-6">
-                <label class="block text-[13px] font-semibold text-gray-500 mb-2">📝 Pesan Revisi</label>
-                <div class="w-full border border-amber-200 rounded-lg px-4 py-3 text-[14px] text-gray-700 bg-amber-50 resize-none">
-                    {{$nasabah->pesan}}
+            <div id="revisi_section" class="mt-6 hidden">
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    📝 Pesan Revisi dari {{ $nasabah->nama_perevisi }}
+                </label>
+
+                <div id="detail_pesan"
+                    class="w-full border border-amber-200 rounded-lg px-4 py-3 text-[14px] text-gray-700 bg-amber-50">
                 </div>
             </div>
-            @endif
         </div>
 
         <!-- BUTTONS -->

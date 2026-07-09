@@ -39,7 +39,8 @@ class Nasabah extends Model
         'alamat_kontak_darurat',
         'no_hp_kontak_darurat',
         'hubungan_kontak_darurat',
-        'pesan'
+        'pesan',
+        'nama_perevisi'
     ]);
 
     public function user() {

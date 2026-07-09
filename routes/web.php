@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\loginController;
 use App\Http\Controllers\Bukti_tfController;
+use App\Http\controllers\siswaController;
 use App\Http\Controllers\nasabahController;
 use App\Http\Controllers\tellerController;
 use App\Http\Controllers\superVisorController;
@@ -42,22 +43,34 @@ Route::put('/setoran/{id}', [tellerController::class, 'updateSetoran'])
 ->name('setoran.update');
 Route::delete('/setoran/{id}', [tellerController::class, 'destroySetoran'])
 ->name('setoran.destroy');
+Route::get('/setoran/struk/{id}', [tellerController::class, 'cetakStruk'])
+    ->name('setoran.struk');
+Route::get('/setoran/export/{filter}', [TellerController::class, 'exportSetoran'])
+    ->name('setoran.export');
+Route::get('/setoran/export-custom', [TellerController::class, 'exportSetoranCustom'])
+    ->name('setoran.export.custom');
 
 //penarikan
 Route::get('/teller/penarikan', [tellerController::class, 'penarikan'])->name('teller.penarikan');
 Route::post('/penarikan/store',[tellerController::class, 'storePenarikan'])->name('penarikan.store');
 Route::put('/penarikan/update/{id}',[tellerController::class, 'updatePenarikan'])->name('penarikan.update');
 Route::delete('/penarikan/delete/{id}',[tellerController::class, 'destroyPenarikan'])->name('penarikan.delete');
-
+Route::get('/penarikan/struk/{id}', [tellerController::class, 'cetakStrukPenarikan'])->name('penarikan.struk');
+Route::get('/penarikan/export/{filter}',[tellerController::class, 'exportPenarikan'])->name('penarikan.export');
+Route::get('/penarikan/export/custom',[tellerController::class, 'exportPenarikanCustom'])->name('penarikan.export.custom');
 
 //transfer
 Route::get('/teller/transfer', [tellerController::class, 'transfer'])->name('teller.transfer');
 Route::post('/transfer/store', [tellerController::class, 'storeTransfer'])->name('transfer.store');
 Route::put('/transfer/update/{id}', [tellerController::class, 'updateTransfer'])->name('transfer.update');
 Route::delete('/transfer/delete/{id}', [tellerController::class, 'destroyTransfer'])->name('transfer.delete');
+Route::get('/transfer/struk/{id}',[TellerController::class, 'cetakStrukTransfer'])->name('transfer.struk');
+Route::get('/transfer/export/{filter}',[tellerController::class, 'exportTransfer'])->name('transfer.export');
+Route::get('/transfer/export-custom',[tellerController::class, 'exportTransferCustom'])->name('transfer.export.custom');
 
 //cari nama si norek
 Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
+Route::get('/search-rekening', [tellerController::class, 'searchRekening'])->name('teller.search_rekening');
 });
 
 
@@ -65,7 +78,9 @@ Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])-
 
 //customer service
 Route::middleware(['role:customerservice'])->group(function () {
-    
+
+Route::get('/siswa/{nis}', [siswaController::class, 'getSiswa']);
+
 route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
 Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
 Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
@@ -105,6 +120,8 @@ Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destro
         
         // biaya transaksi
         Route::get('/supervisor/biayatransaksi', [superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
+        Route::get('/supervisor/biaya-transaksi',[superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
+        Route::post('/supervisor/biaya-transaksi/update',[superVisorController::class, 'updateBiayaTransaksi'])->name('supervisor.biayatransaksi.update');
         
         //View Verifikasi Tf
         Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasiTFF'])->name('supervisor.verifikasi');
