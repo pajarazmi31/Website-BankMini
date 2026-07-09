@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
             DesaSeeder::class,
             DataSiswaSeeder::class,
             UserSeeder::class,
-            RekeningSeeder::class,
         ]);
     }
 }

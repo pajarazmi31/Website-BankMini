@@ -20,7 +20,7 @@ return new class extends Migration
             $table->Date('tanggal_lahir');
             $table->foreignId('jurusan_id')->constrained('jurusan');
             $table->Enum('jenis_kelamin',['Laki-Laki','Perempuan']);
-            $table->Enum('pendidikan',['SD','SMP','SMA','SMK','S1','S2','S3','D1','D2','D3']);
+            $table->Enum('pendidikan',['SD','SMP','SMA','SMK','S1/D4','S2','S3','D1','D2','D3']);
             $table->Text('alamat');
             $table->foreignId('provinsi_id')->constrained('provinsi');
             $table->foreignId('kab_kota_id')->constrained('kabupaten');
@@ -38,6 +38,7 @@ return new class extends Migration
             $table->String('no_hp_kontak_darurat', 15);
             $table->String('hubungan_kontak_darurat', 50);
             $table->Text('pesan');
+            $table->String('nama_perevisi');
             $table->timestamps();
         });
     }

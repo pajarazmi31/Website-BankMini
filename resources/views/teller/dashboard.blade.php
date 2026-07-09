@@ -207,7 +207,7 @@
         }
 
         function renderPagination() {
-            if (totalItems === 0) {
+            if (totalPages <= 1) {
                 paginationContainer.innerHTML = '';
                 return;
             }
