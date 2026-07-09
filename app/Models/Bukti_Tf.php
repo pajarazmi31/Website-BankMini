@@ -13,6 +13,7 @@ class Bukti_Tf extends Model
         'no_hp_pengirim',
         'id_rekening',
         'no_rekening_penerima',
+        'nominal_admin',
         'jumlah_transfer',
         'bukti_foto',
         'nama_penerima',

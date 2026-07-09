@@ -17,6 +17,7 @@ return new class extends Migration
             $table->String('nama_pengirim',100);
             $table->String('no_hp_pengirim',15);
             $table->String('id_rekening',20);
+            $table->decimal('nominal_admin',15,2);
             $table->decimal('jumlah_transfer',15,2);
             $table->String('bukti_foto');
             $table->String('nama_penerima',100);

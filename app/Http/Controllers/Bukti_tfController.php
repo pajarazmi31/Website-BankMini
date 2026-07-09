@@ -31,7 +31,7 @@ class Bukti_tfController extends Controller
     }
 
     public function transfer_luar(Request $request){
-
+    $adminTfLuar = Transaksi::where('id', 2)->value('nominal');
     $hariIni = Carbon::today();
 
     if ($request->has('jumlah_transfer')) {
@@ -61,6 +61,7 @@ class Bukti_tfController extends Controller
         'nama_pengirim' => $request->nama_pengirim,
         'no_hp_pengirim' => $request->no_hp_pengirim,
         'id_rekening' => $request->id_rekening,
+        'nominal_admin' => $adminTfLuar,
         'jumlah_transfer' => $request->jumlah_transfer,
         'bukti_foto' => $buktiPath,
         'nama_penerima' => $request->nama_penerima,
