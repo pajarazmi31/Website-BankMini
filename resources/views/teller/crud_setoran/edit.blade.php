@@ -34,12 +34,14 @@
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                             No. Rekening
                         </label>
-                        <input type="text"
-                            id="id_rekening"
-                            name="id_rekening"
-                            required
-                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
-                    </div>
+                            <input type="text"
+                                id="id_rekening"
+                                name="id_rekening"
+                                inputmode="numeric"
+                                autocomplete="off"
+                                required
+                                class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">                    
+                            </div>
 
                     <!-- KANAN = NAMA LENGKAP -->
                     <div>
@@ -275,6 +277,11 @@
         const editBiaya = document.getElementById('edit_biaya');
         const editRekening = document.getElementById('id_rekening');
 
+                document.getElementById('edit_nohp')
+        ?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         editNominal.addEventListener('input', (e) => {
             let val = e.target.value.replace(/\D/g, '');
             editNominal.value = formatMataUangEdit(val);
@@ -289,7 +296,10 @@
 
         editRekening.addEventListener('input', async function () {
 
-    let rekening = this.value.trim();
+            // Hapus semua selain angka
+            this.value = this.value.replace(/\D/g, '');
+
+            let rekening = this.value.trim();
 
     if (rekening.length === 0) {
         document.getElementById('nama_lengkap').value = '';

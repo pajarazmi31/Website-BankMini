@@ -189,7 +189,7 @@
                     @if(Route::currentRouteName() != 'teller.dashboard')
                     <form action="" method="GET" id="searchBarContainer" class="relative hidden md:block m-0 p-0">
                         <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 transition-all">
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau rekening..." class="pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-[13px] w-[260px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 transition-all">
                     </form>
                     @endif
 

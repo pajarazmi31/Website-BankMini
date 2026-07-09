@@ -35,7 +35,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
-                <div>
+                <div class="relative">
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                         Norek. Pengirim
                     </label>
@@ -43,15 +43,16 @@
                         type="text"
                         id="tambah_id_rekening_pengirim"
                         name="id_rekening_pengirim"
-                        onkeyup="cekRekeningTransfer('tambah', 'pengirim')"
+                        autocomplete="off"
                         placeholder="Masukkan nomor rekening pengirim"
                         required
                         class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
                     >
+                    <div id="tambah_rekening_pengirim_suggestions" class="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto hidden animate-fade-in"></div>
                     <div id="tambah_info_pengirim" class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]"></div>
                 </div>
 
-                <div>
+                <div class="relative">
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                         Norek. Penerima
                     </label>
@@ -59,11 +60,12 @@
                         type="text"
                         id="tambah_id_rekening_penerima"
                         name="id_rekening_penerima"
-                        onkeyup="cekRekeningTransfer('tambah', 'penerima')"
+                        autocomplete="off"
                         placeholder="Masukkan nomor rekening penerima"
                         required
                         class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
                     >
+                    <div id="tambah_rekening_penerima_suggestions" class="absolute left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-50 max-h-60 overflow-y-auto hidden animate-fade-in"></div>
                     <div id="tambah_info_penerima" class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]"></div>
                 </div>
             </div>

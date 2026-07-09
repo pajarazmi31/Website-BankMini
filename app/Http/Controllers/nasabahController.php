@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 
+use App\Models\Setoran;
+use App\Models\Penarikan;
+use App\Models\Transfer;
+
 class nasabahController extends Controller
 {
     public function index()
@@ -49,18 +53,76 @@ class nasabahController extends Controller
                 ->whereYear('created_at', $tahunIni)
                 ->sum('jumlah_transfer');
 
-                    // RIWAYAT TRANSFER
-        $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+        // RIWAYAT TRANSFER
+        $transferNasabah = RiwayatTf::where('id_pengirim', $nomorRekening)
             ->orWhere('id_penerima', $nomorRekening)
-            ->latest()
-            ->take(5)
-            ->get();
+            ->get()
+            ->map(function ($item) {
+
+                $item->jenis_transaksi = 'transfer';
+
+                return $item;
+            });
+
+        $transferTeller = Transfer::where('id_rekening_pengirim', $nomorRekening)
+            ->orWhere('id_rekening_penerima', $nomorRekening)
+            ->get()
+            ->map(function ($item) use ($nomorRekening) {
+
+                $item->jenis_transaksi =
+                    $item->id_rekening_pengirim == $nomorRekening
+                    ? 'transfer_teller_keluar'
+                    : 'transfer_teller_masuk';
+
+                return $item;
+            });
+
+    // Setoran dari teller
+    $setoran = Setoran::where('id_rekening', $nomorRekening)
+        ->get()
+        ->map(function ($item) {
+
+            $item->jenis_transaksi = 'setoran';
+
+            return $item;
+        });
+
+    // Penarikan dari teller
+    $penarikan = Penarikan::where('id_rekening', $nomorRekening)
+        ->get()
+        ->map(function ($item) {
+
+            $item->jenis_transaksi = 'penarikan';
+
+            return $item;
+        });
+
+        // Gabungkan semua riwayat
+        $semuaRiwayat = $transferNasabah
+            ->concat($transferTeller)
+            ->concat($setoran)
+            ->concat($penarikan)
+            ->sortByDesc('created_at')
+            ->values();
+
+        // Dashboard cuma tampil 5 terbaru
+        $riwayatTransfer = $semuaRiwayat->take(5);
+
         } else {
             $totalPemasukanBulanIni = 0;
             $totalPengeluaranBulanIni = 0;
             $riwayatTransfer = collect();
+            $semuaRiwayat = collect();
         }
-        return view('nasabah.dashboard', compact('user', 'nasabah', 'rekening', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni', 'riwayatTransfer'));
+        return view('nasabah.dashboard', compact(
+            'user',
+            'nasabah',
+            'rekening',
+            'totalPemasukanBulanIni',
+            'totalPengeluaranBulanIni',
+            'riwayatTransfer',
+            'semuaRiwayat'
+        ));  
     }
 
     public function transfer()

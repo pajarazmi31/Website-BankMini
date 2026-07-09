@@ -32,13 +32,14 @@
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                             No. Rekening
                         </label>
-                        <input type="text"
-                            id="tambah_id_rekening"
-                            name="id_rekening"
-                            placeholder="Masukkan nomor rekening"
-                            required
-                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
-                    </div>
+                            <input type="text"
+                                id="tambah_id_rekening"
+                                name="id_rekening"
+                                placeholder="Masukkan nomor rekening"
+                                inputmode="numeric"
+                                required
+                                class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">                   
+                            </div>
 
                     <!-- KANAN = NAMA LENGKAP -->
                     <div>
@@ -255,6 +256,21 @@
         const totalBiayaInput = document.getElementById('total_biaya');
         const rekeningInput = document.getElementById('tambah_id_rekening');
         const namaInput = document.getElementById('tambah_nama_lengkap');
+        const noHpTambah = document.querySelector('input[name="no_hp_penyetor"]');
+
+        //bole angka saja
+        if (noHpTambah) {
+            noHpTambah.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
+
+        // Hanya izinkan angka pada No Rekening
+        if (rekeningInput) {
+            rekeningInput.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+        }
 
         // Fungsi Hitung Total Biaya
         function hitungTotalBiaya() {

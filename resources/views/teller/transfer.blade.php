@@ -24,10 +24,110 @@
     </form>
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
-        <h3 class="text-[22px] font-bold text-gray-800">Data Transfer</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Transfer
-        </button>
+
+        <h3 class="text-[22px] font-bold text-gray-800">
+            Data Transfer
+        </h3>
+
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+
+            <!-- EXPORT EXCEL -->
+            <div class="relative">
+
+                <button
+                    id="btnExportExcel"
+                    type="button"
+                    class="bg-green-600 text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-green-700 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                    <i class="ph ph-file-xls text-base"></i>
+                    Export Excel
+                    <i class="ph ph-caret-down"></i>
+
+                </button>
+
+                <div
+                    id="dropdownExport"
+                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+
+                    <a href="{{ route('transfer.export', ['filter' => 'hari_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Hari Ini
+                    </a>
+
+                    <a href="{{ route('transfer.export', ['filter' => 'minggu_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Minggu Ini
+                    </a>
+
+                    <a href="{{ route('transfer.export', ['filter' => 'bulan_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Bulan Ini
+                    </a>
+
+                    <a href="{{ route('transfer.export', ['filter' => 'tahun_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Tahun Ini
+                    </a>
+
+                    <hr>
+
+                    <button
+                        type="button"
+                        onclick="toggleCustomTanggal()"
+                        class="w-full text-left px-4 py-3 hover:bg-gray-50 text-sm">
+                        Custom Tanggal
+                    </button>
+
+                </div>
+
+                <div
+                id="customTanggalBox"
+                class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+                
+                        <form action="{{ route('transfer.export.custom') }}" method="GET">
+
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">
+                            Dari Tanggal
+                        </label>
+
+                       <input
+                            type="date"
+                            name="start_date"
+                            class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
+
+                        <label class="block text-xs font-semibold text-gray-500 mb-1">
+                            Sampai Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            name="end_date"
+                            class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
+
+                       <button
+                            type="submit"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg text-[12px] font-semibold transition-all">
+                            Download Excel
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- TAMBAH TRANSFER -->
+            <button
+                onclick="switchView('tambah')"
+                class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                <i class="ph ph-plus text-base"></i>
+                Tambah Transfer
+
+            </button>
+
+        </div>
+
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="transferTableCard">
@@ -88,6 +188,13 @@
                                 <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                             </button>
 
+                            <a href="{{ route('transfer.struk', $d->id) }}"
+                            target="_blank"
+                            class="w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
+                            title="Cetak Struk">
+                                <i class="ph-fill ph-printer text-[15px]"></i>
+                            </a>
+
                             <form id="delete-form-{{ $d->id }}" action="{{ route('transfer.delete', $d->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
@@ -138,12 +245,16 @@
         Object.values(views).forEach(v => { if(v) v.classList.add('hidden'); });
 
         const activeView = views[viewName];
+        const searchBar = document.getElementById('searchBarContainer');
+
         if (activeView) {
             activeView.classList.remove('hidden');
             if (viewName === 'tabel') {
                 activeView.classList.add('flex');
+                if (searchBar) searchBar.classList.remove('md:hidden');
             } else {
                 activeView.classList.add('block');
+                if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
         document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
@@ -254,7 +365,16 @@
 
         let rekening = inputTarget.value.trim();
 
-        if (rekening.length === 0) {
+        // kosong = jangan tampil apa-apa
+        if (rekening === '') {
+            infoTarget.innerHTML = '';
+            return;
+        }
+
+        // hanya angka
+        rekening = rekening.replace(/\D/g, '');
+
+        if (rekening.length < 1) {
             infoTarget.innerHTML = '';
             return;
         }
@@ -323,6 +443,19 @@
 
     // --- INITIALIZE EVENT LISTENERS (ANTI BENTROK) ---
     document.addEventListener('DOMContentLoaded', function() {
+
+        // EDIT PENGIRIM hanya angka
+        document.getElementById('edit_id_rekening_pengirim')
+        ?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        // EDIT PENERIMA hanya angka
+        document.getElementById('edit_id_rekening_penerima')
+        ?.addEventListener('input', function () {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
         const tambahNominal = document.getElementById('tambah_jumlah_transfer');
         if (tambahNominal) {
             tambahNominal.addEventListener('input', function() {
@@ -355,6 +488,101 @@
                 if(editNominal) editNominal.value = cleanNumber(editNominal.value);
             });
         }
+
+        // --- AUTOCOMPLETE SUGGESTIONS FOR NOREK SENDER & RECIPIENT ---
+        function setupAutocomplete(inputId, suggestionsId, infoId, type) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionsId);
+            const info = document.getElementById(infoId);
+            
+            if (!input || !suggestions) return;
+            
+            let debounceTimer;
+            
+            input.addEventListener('input', function() {
+                clearTimeout(debounceTimer);
+                const query = this.value.trim();
+                
+                // Run original validation in real-time
+                cekRekeningTransfer('tambah', type);
+                
+                if (query.length < 2) {
+                    suggestions.innerHTML = '';
+                    suggestions.classList.add('hidden');
+                    return;
+                }
+                
+                debounceTimer = setTimeout(() => {
+                    fetch(`/search-rekening?query=${query}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.length === 0) {
+                                suggestions.innerHTML = '<div class="px-4 py-3 text-sm text-gray-500 font-medium">Tidak ada hasil</div>';
+                                suggestions.classList.remove('hidden');
+                                return;
+                            }
+                            
+                            let html = '';
+                            data.forEach(item => {
+                                html += `
+                                    <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-50 transition-colors flex flex-col" data-id="${item.id}" data-nama="${item.nama}" data-saldo="${item.saldo}">
+                                        <span class="font-bold text-[14px] text-gray-800">${item.id}</span>
+                                        <span class="text-[11px] text-gray-400 font-medium mt-0.5">${item.nama}</span>
+                                    </div>
+                                `;
+                            });
+                            suggestions.innerHTML = html;
+                            suggestions.classList.remove('hidden');
+                        })
+                        .catch(err => console.error('Gagal memuat rekomendasi:', err));
+                }, 250);
+            });
+            
+            // Handle clicking suggestion
+            suggestions.addEventListener('click', function(e) {
+                const item = e.target.closest('[data-id]');
+                if (!item) return;
+                
+                const id = item.dataset.id;
+                const nama = item.dataset.nama;
+                const saldo = item.dataset.saldo;
+                
+                input.value = id;
+                suggestions.innerHTML = '';
+                suggestions.classList.add('hidden');
+                
+                // Trigger verify details
+                if (type === 'pengirim') {
+                    if (info) {
+                        info.innerHTML = `
+                            <span class="text-green-600 font-semibold">
+                                ✓ ${nama}
+                            </span>
+                            | Saldo: Rp. ${formatNumber(saldo)}
+                        `;
+                    }
+                } else if (type === 'penerima') {
+                    if (info) {
+                        info.innerHTML = `
+                            <span class="text-green-600 font-semibold">
+                                ✓ ${nama}
+                            </span>
+                        `;
+                    }
+                }
+            });
+            
+            // Close suggestions on clicking outside
+            document.addEventListener('click', function(e) {
+                if (!input.contains(e.target) && !suggestions.contains(e.target)) {
+                    suggestions.innerHTML = '';
+                    suggestions.classList.add('hidden');
+                }
+            });
+        }
+
+        setupAutocomplete('tambah_id_rekening_pengirim', 'tambah_rekening_pengirim_suggestions', 'tambah_info_pengirim', 'pengirim');
+        setupAutocomplete('tambah_id_rekening_penerima', 'tambah_rekening_penerima_suggestions', 'tambah_info_penerima', 'penerima');
     });
 
     function confirmDeleteTransfer(id) {
@@ -420,29 +648,88 @@
         });
 
         // AJAX Pagination click interceptor
-        document.addEventListener('click', function(e) {
-            const link = e.target.closest('#transferTableCard a');
-            if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
-                e.preventDefault();
-                const targetUrl = link.getAttribute('href');
-                
-                window.history.pushState({}, '', targetUrl);
-                
-                fetch(targetUrl)
-                    .then(response => response.text())
-                    .then(html => {
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const newCard = doc.getElementById('transferTableCard');
-                        const currentCard = document.getElementById('transferTableCard');
-                        if (newCard && currentCard) {
-                            currentCard.innerHTML = newCard.innerHTML;
-                        }
-                        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
-                    })
-                    .catch(err => console.error('Gagal memuat halaman:', err));
+       document.addEventListener('click', function(e) {
+
+        const link = e.target.closest('#transferTableCard a');
+
+        if (!link) return;
+
+        // biarkan link download / pdf normal
+        if (link.target === '_blank') return;
+
+        if (link.getAttribute('href') &&
+            !link.getAttribute('href').startsWith('#')) {
+
+            e.preventDefault();
+
+            const targetUrl = link.getAttribute('href');
+
+            window.history.pushState({}, '', targetUrl);
+
+            fetch(targetUrl)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    const newCard =
+                        doc.getElementById('transferTableCard');
+
+                    const currentCard =
+                        document.getElementById('transferTableCard');
+
+                    if (newCard && currentCard) {
+                        currentCard.innerHTML = newCard.innerHTML;
+                    }
+                });
+        }
+    });
+
+    // ===========================
+    // EXPORT EXCEL DROPDOWN
+    // ===========================
+
+    const btnExportExcel = document.getElementById('btnExportExcel');
+    const dropdownExport = document.getElementById('dropdownExport');
+    const customTanggalBox = document.getElementById('customTanggalBox');
+
+    if (btnExportExcel) {
+
+        btnExportExcel.addEventListener('click', function(e) {
+
+            e.stopPropagation();
+
+            dropdownExport.classList.toggle('hidden');
+
+            if (!customTanggalBox.classList.contains('hidden')) {
+                customTanggalBox.classList.add('hidden');
             }
+
         });
+
+    }
+
+    window.toggleCustomTanggal = function() {
+
+        customTanggalBox.classList.toggle('hidden');
+
+    }
+
+    document.addEventListener('click', function(e) {
+
+        if (
+            !e.target.closest('#dropdownExport') &&
+            !e.target.closest('#btnExportExcel') &&
+            !e.target.closest('#customTanggalBox')
+        ) {
+
+            dropdownExport.classList.add('hidden');
+            customTanggalBox.classList.add('hidden');
+
+        }
+
+    });
+
     });
 </script>
 @endsection
