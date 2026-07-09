@@ -53,7 +53,12 @@ Selamat Datang, {{ $user->name }}!
                 <span class="text-gray-400 font-semibold text-[13px] tracking-wide mb-2">Biaya Admin</span>
                 <div class="relative flex items-center">
                     <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
-                    <input type="number" id="biaya_setoran" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all" placeholder="0">
+                    <input
+                    type="number"
+                    id="biaya_setoran"
+                    value="{{ $setoran->nominal ?? 0 }}"
+                    class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
+                    placeholder="0">
                 </div>
             </div>
 
@@ -77,7 +82,12 @@ Selamat Datang, {{ $user->name }}!
                 <span class="text-gray-400 font-semibold text-[13px] tracking-wide mb-2">Biaya Admin</span>
                 <div class="relative flex items-center">
                     <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
-                    <input type="number" id="biaya_penarikan" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all" placeholder="0">
+                    <input
+                        type="number"
+                        id="biaya_penarikan"
+                        value="{{ $penarikan->nominal ?? 0 }}"
+                        class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
+                        placeholder="0">
                 </div>
             </div>
 
@@ -101,7 +111,12 @@ Selamat Datang, {{ $user->name }}!
                 <span class="text-gray-400 font-semibold text-[13px] tracking-wide mb-2">Biaya Admin</span>
                 <div class="relative flex items-center">
                     <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
-                    <input type="number" id="biaya_transfer" class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all" placeholder="0">
+                    <input
+                        type="number"
+                        id="biaya_transfer"
+                        value="{{ $transfer->nominal ?? 0 }}"
+                        class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
+                        placeholder="0">
                 </div>
             </div>
 
@@ -118,9 +133,57 @@ Selamat Datang, {{ $user->name }}!
 
 @section('scripts')
 <script>
-    function saveFees() {
-        // Panggil toast alert sistem yang didefinisikan secara global pada layout
-        showToast('Biaya transaksi berhasil disimpan!');
+async function saveFees() {
+
+    try {
+
+        const response = await fetch(
+            "{{ route('supervisor.biayatransaksi.update') }}",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN":
+                        document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content
+                },
+                body: JSON.stringify({
+
+                    biaya_setoran:
+                        document.getElementById(
+                            'biaya_setoran'
+                        ).value,
+
+                    biaya_penarikan:
+                        document.getElementById(
+                            'biaya_penarikan'
+                        ).value,
+
+                    biaya_transfer:
+                        document.getElementById(
+                            'biaya_transfer'
+                        ).value,
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.success) {
+            showToast(
+                'Biaya transaksi berhasil disimpan!'
+            );
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        showToast(
+            'Gagal menyimpan biaya transaksi!'
+        );
     }
+}
 </script>
 @endsection

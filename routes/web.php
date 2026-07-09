@@ -121,6 +121,8 @@ Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destro
         
         // biaya transaksi
         Route::get('/supervisor/biayatransaksi', [superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
+        Route::get('/supervisor/biaya-transaksi',[superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
+        Route::post('/supervisor/biaya-transaksi/update',[superVisorController::class, 'updateBiayaTransaksi'])->name('supervisor.biayatransaksi.update');
         
         //View Verifikasi Tf
         Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasiTFF'])->name('supervisor.verifikasi');

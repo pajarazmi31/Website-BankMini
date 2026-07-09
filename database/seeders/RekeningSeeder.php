@@ -54,6 +54,7 @@ class RekeningSeeder extends Seeder
             'no_hp_kontak_darurat' => '08111111111',
             'hubungan_kontak_darurat' => 'Ayah',
             'pesan' => 'pesan',
+            'nama_perevisi' => '-',
         ]);
 
         Rekening::create([

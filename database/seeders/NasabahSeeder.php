@@ -51,6 +51,7 @@ class NasabahSeeder extends Seeder
             'alamat_kontak_darurat' => 'Bandung',
             'no_hp_kontak_darurat' => '08111111112',
             'hubungan_kontak_darurat' => 'Ayah',
+            'nama_perevisi' => '-',
         ]);
     }
 }
