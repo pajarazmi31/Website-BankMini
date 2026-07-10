@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Nasabah;
 use App\Models\Transaksi;
 use App\Models\Petugas;
+use App\Models\RiwayatTf;
 
 class superVisorController extends Controller
 {
@@ -23,6 +24,7 @@ class superVisorController extends Controller
 
         // Admin Transaksi
         $adminTotal = Bukti_Tf::where('status_verifikasi', 'berhasil')->sum('nominal_admin');
+        $adminAntarNasabah = RiwayatTf::get()->sum('nominal_admin');
 
         // Total Nasabah
         $totalNasabah = User::where('role_id', 1)->get()->count();
@@ -36,7 +38,7 @@ class superVisorController extends Controller
         $totalPendingRegistrasi = $nasabahPending->count();
         $totalPendingTransfer = $nasabahTfPending->count();
         $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
-        return view('supervisor.dashboard', compact('adminTotal','user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
+        return view('supervisor.dashboard', compact('adminAntarNasabah','adminTotal','user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
     }
 
 

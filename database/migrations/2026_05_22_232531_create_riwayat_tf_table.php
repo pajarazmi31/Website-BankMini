@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('riwayat_tf', function (Blueprint $table) {
             $table->id();
-
+            $table->foreignId('transaksi_id')->constrained('transaksi');
             $table->unsignedBigInteger('id_pengirim');
             $table->unsignedBigInteger('id_penerima');
 
             $table->string('nama_penerima');
             $table->decimal('jumlah_transfer', 15, 2);
+            $table->decimal('nominal_admin', 15, 2);
             $table->string('catatan')->nullable();
 
             $table->timestamps();

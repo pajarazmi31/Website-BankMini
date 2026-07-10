@@ -29,6 +29,15 @@ Selamat Datang, {{ $user->name }}!
             <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
         </div>
 
+        <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+            <div class="relative z-10">
+                <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Admin Antar Nasabah</p>
+                {{-- BACKEND:  --}}
+                <h3 class="text-[24px] md:text-[28px] font-bold">Rp. {{ number_format($adminAntarNasabah, 0, ',', '.') }}</h3>
+            </div>
+            <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
+        </div>
+
         <!-- Total Nasabah -->
         <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
             <div class="relative z-10">

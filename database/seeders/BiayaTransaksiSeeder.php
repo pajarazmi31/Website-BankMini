@@ -26,6 +26,10 @@ class BiayaTransaksiSeeder extends Seeder
                 'jenis_transaksi' => 'transfer',
                 'nominal' => 0,
             ],
+            [
+                'jenis_transaksi' => 'transfer',
+                'nominal' => 1000,
+            ],
         ]);
     }
 }
