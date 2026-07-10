@@ -189,7 +189,7 @@
                             '{{ $d->id_rekening }}',
                             '{{ $d->jumlah_penarikan }}', 
                             '{{ $user->name }}',
-                            '{{ $d->transaksi->nominal ?? 0 }}'
+                            '{{ $d->nominal_admin }}'
                         )"
                         class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                         title="Lihat Detail">

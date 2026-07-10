@@ -21,7 +21,8 @@ class Setoran extends Model
         'nama_penyetor',
         'alamat_penyetor',
         'no_hp_penyetor',
-        'total_biaya'
+        'total_biaya',
+        'nominal_admin'
     ];
 
     public function rekening()

@@ -169,7 +169,7 @@
                                     '{{ $d->nama_penyetor }}',
                                     '{{ $d->no_hp_penyetor }}',
                                     '{{ $d->alamat_penyetor }}',
-                                    '{{ optional($d->transaksi)->nominal ?? 0 }}',
+                                    '{{ $d->nominal_admin }}',
                                     '{{ $d->total_biaya }}',
                                     '{{ $d->catatan }}'
                                 )" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">

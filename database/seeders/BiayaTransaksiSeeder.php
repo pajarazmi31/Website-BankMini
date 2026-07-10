@@ -15,6 +15,10 @@ class BiayaTransaksiSeeder extends Seeder
                 'nominal' => 0,
             ],
             [
+                'jenis_transaksi' => 'transfer_luar',
+                'nominal' => 1000,
+            ],
+            [
                 'jenis_transaksi' => 'penarikan',
                 'nominal' => 0,
             ],

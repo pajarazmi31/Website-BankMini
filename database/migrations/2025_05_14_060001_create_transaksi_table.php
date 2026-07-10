@@ -13,11 +13,8 @@ return new class extends Migration
     {
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
-
             $table->string('jenis_transaksi');
-
             $table->bigInteger('nominal');
-
             $table->timestamps();
         });
     }

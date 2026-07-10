@@ -11,15 +11,14 @@ use App\Http\Controllers\csController;
 use App\Http\Controllers\supervisor\DataPetugasController;
 use App\Http\Controllers\rekeningController;
 use App\Http\Controllers\alamatController;
+use App\Http\Controllers\landingPageController;
 use App\Models\User;
 use App\Models\VerifikasiLogin;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 //halaman utama
-Route::get('/', function () {
-    return view('index');
-});
+Route::get('/', [landingPageController::class, 'index'])->name('/');
 
 // Logic Tf Luar
 Route::post('/Bukti_tf_transfer_luar', [Bukti_tfController::class, 'transfer_luar'])->name('bukti_tf.transfer_luar');

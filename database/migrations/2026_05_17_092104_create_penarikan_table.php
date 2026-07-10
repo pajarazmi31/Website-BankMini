@@ -23,7 +23,7 @@ return new class extends Migration
 
             $table->decimal('jumlah_penarikan', 15, 2);
 
-            $table->decimal('biaya_transaksi', 15, 2)
+            $table->decimal('nominal_admin',15,2)
                 ->default(0);
 
             $table->decimal('total_biaya', 15, 2);

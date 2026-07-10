@@ -20,6 +20,15 @@ Selamat Datang, {{ $user->name }}!
             <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
         </div>
 
+        <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
+            <div class="relative z-10">
+                <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Admin</p>
+                {{-- BACKEND:  --}}
+                <h3 class="text-[24px] md:text-[28px] font-bold">Rp. {{ number_format($adminTotal, 0, ',', '.') }}</h3>
+            </div>
+            <div class="absolute -right-2 -bottom-2 flex opacity-10"><i class="ph-fill ph-users text-[120px] translate-y-6 translate-x-4"></i></div>
+        </div>
+
         <!-- Total Nasabah -->
         <div class="bg-success-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
             <div class="relative z-10">
@@ -54,7 +63,6 @@ Selamat Datang, {{ $user->name }}!
 
 
             <div class="flex flex-col gap-3">
-
             @if($nasabahPending || $nasabahTfPending)
                 @forelse ($nasabahPending as $item)
                 <!-- Jika data ADA, bagian ini yang dijalankan (Looping) -->
@@ -100,7 +108,7 @@ Selamat Datang, {{ $user->name }}!
         </div>
 
         <!-- Red Card: Segera Periksa! -->
-
+        @if ($totalPending > 0)
         <div class="bg-[#fee2e2] rounded-[24px] p-7 shadow-sm border border-red-100 flex flex-col gap-8 mt-1">
             <div class="flex items-center gap-3">
                 <i class="ph-fill ph-warning text-[26px] text-[#dc2626]"></i>
@@ -138,6 +146,7 @@ Selamat Datang, {{ $user->name }}!
                 @endif
             </div>
         </div>
+        @endif
     </section>
 </div>
 

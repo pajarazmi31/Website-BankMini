@@ -41,6 +41,15 @@ class tellerController extends Controller
         $penarikanHariIni = Penarikan::whereDate('created_at', Carbon::today())
             ->sum('jumlah_penarikan');
 
+        $biayaAdminSetoran = Setoran::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
+        $biayaAdminPenarikan = Penarikan::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
+        $biayaAdminTransfer = Transfer::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
         // TRANSAKSI TERBARU 
         // Ambil semua transaksi tanpa limit agar bisa di-paginate di view history
         $setor = Setoran::with('rekening.nasabah')->latest('created_at')->get();
@@ -55,6 +64,9 @@ class tellerController extends Controller
             'totalTabungan',
             'setoranHariIni',
             'penarikanHariIni',
+            'biayaAdminSetoran',
+            'biayaAdminPenarikan',
+            'biayaAdminTransfer',
             'transactions'
         ));
     }
@@ -97,7 +109,7 @@ class tellerController extends Controller
         );
     }
 
-        public function exportSetoranCustom(Request $request)
+    public function exportSetoranCustom(Request $request)
         {
             $request->validate([
                 'start_date' => 'required|date',
@@ -172,7 +184,8 @@ class tellerController extends Controller
             'jumlah_penyetoran' => 'required',
             'setoran'           => 'required',
             'nama_penyetor'     => 'required',
-            'transaksi_id'      => 'required|exists:transaksi,id'
+            'transaksi_id'      => 'required|exists:transaksi,id',
+            'nominal_admin'     => 'nullable'
         ]);
 
         $user = Auth::user();
@@ -199,6 +212,7 @@ class tellerController extends Controller
                 'jumlah_penyetoran' => $jumlahSetoran,
                 'transaksi_id'      => $request->transaksi_id,
                 'total_biaya'       => $jumlahSetoran + $biayaAdmin,
+                'nominal_admin'     => $biayaAdmin,
                 'nama_lengkap'      => $request->nama_lengkap,
                 'nama_penyetor'     => $request->nama_penyetor,
                 'alamat_penyetor'   => $request->alamat_penyetor,
@@ -490,8 +504,8 @@ class tellerController extends Controller
                 'nama_penarik'     => $request->nama_penarik,
                 'jumlah_penarikan' => $jumlahPenarikan,
                 'transaksi_id'     => $request->transaksi_id,
-                'biaya_transaksi'  => $biayaAdmin,
                 'total_biaya'      => $jumlahPenarikan + $biayaAdmin,
+                'nominal_admin'    => $biayaAdmin,
             ]);
 
             DB::commit();
@@ -729,6 +743,7 @@ class tellerController extends Controller
                 'jumlah_transfer'      => $nominal,
                 'transaksi_id'         => $request->transaksi_id, 
                 'total_biaya'          => $nominal + $biayaAdmin, // Tetap mencatat total untuk laporan
+                'nominal_admin'        => $biayaAdmin, // Tetap mencatat total untuk laporan
                 'datetime'             => now(), 
                 'catatan'              => $request->catatan,
                 'id_petugas'           => $teller->id,

@@ -120,7 +120,7 @@
                                         <td class="py-4 px-2 border-b border-gray-50">
                                             <div class="flex items-center justify-center gap-2">
                                                 <!-- Tombol Lihat (Mata) memanggil view Form -->
-                                                <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}',  '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                                <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}','Rp{{number_format($item->transaksi->nominal,0, ',', '.') }}', '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
                                                 
                                                 <!-- 
                                                     BAGIAN BACKEND: AKSI VERIFIKASI (SETUJUI / TOLAK)
@@ -177,22 +177,49 @@
     @section('scripts')
     <script>
         // Lihat Detail
-        function viewDetail(pengirim, penerima, nominal, rek, telp, catatan,  tgl_pengirim, bukti) {
+        function viewDetail(pengirim, penerima, nominal, rek, admin, telp, catatan,  tgl_pengirim, bukti) {
             document.getElementById('detail_pengirim').value = pengirim;
             document.getElementById('detail_penerima').value = penerima;
             document.getElementById('detail_nominal').value = nominal;
             document.getElementById('detail_rek_penerima').value = rek;
             document.getElementById('detail_telepon').value = telp;
+            document.getElementById('detail_admin').value = admin;
             
             // Dummy data untuk field tambahan
             document.getElementById('detail_tanggal').value = tgl_pengirim;
             document.getElementById('detail_catatan').value = catatan;
-            document.getElementById('detail_bukti_img').src = bukti;
-            document.getElementById('detail_bukti_img').classList.remove('hidden');
+            // --- BAGIAN PERUBAHAN UNTUK BUKTI TRANSFER ---
+                const placeholder = document.getElementById('detail_bukti_container');
+                const contentTag = document.getElementById('detail_bukti_content'); // ID baru dari tag <object>
 
-            document.getElementById('detail_bukti_container').classList.add('hidden');
-            
-            switchView('detail');
+                // 1. Reset state awal agar bersih
+                placeholder.classList.add('hidden');
+                contentTag.classList.add('hidden');
+                contentTag.removeAttribute('data');
+                contentTag.removeAttribute('type');
+
+                // 2. Cek apakah link bukti ada atau kosong dari database
+                if (bukti) {
+                    // Ambil ekstensi filenya (PDF atau gambar) dari variabel 'bukti'
+                    const ekstensi = bukti.split('.').pop().toLowerCase();
+
+                    if (ekstensi === 'pdf') {
+                        contentTag.setAttribute('data', bukti);
+                        contentTag.setAttribute('type', 'application/pdf');
+                    } else {
+                        contentTag.setAttribute('data', bukti);
+                        contentTag.setAttribute('type', 'image/jpeg'); // Standar untuk semua tipe gambar
+                    }
+
+                    // Tampilkan tag object
+                    contentTag.classList.remove('hidden');
+                } else {
+                    // Jika dari database tidak ada file bukti, munculkan teks placeholder
+                    placeholder.classList.remove('hidden');
+                }
+                // ---------------------------------------------
+                
+                switchView('detail');
         }
 
         // Pindah antara Tabel Data dan Detail
