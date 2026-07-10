@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
         // USER TELLER
 
         $userTeller = User::create([
-            'name' => 'Andi',
+            'name' => 'Teller',
             'role_id' => $roleTeller->id,
             'email' => 'teller@gmail.com',
             'password' => Hash::make('123456'),
@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
         // USER SUPERVISOR
 
         $userSupervisor = User::create([
-            'name' => 'Sinta',
+            'name' => 'Supervisor',
             'role_id' => $roleSupervisor->id,
             'email' => 'supervisor@gmail.com',
             'password' => Hash::make('123456'),
@@ -56,9 +56,9 @@ class UserSeeder extends Seeder
 
         // USER CUSTOMER SERVICE
         $userCs = User::create([
-            'name' => 'Aditya',
+            'name' => 'Customer Service',
             'role_id' => $roleCs->id,
-            'email' => 'adityanugrahakawali2@gmail.com',
+            'email' => 'customerservice@gmail.com',
             'password' => Hash::make('123456'),
         ]);
 

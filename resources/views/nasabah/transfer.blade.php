@@ -169,11 +169,11 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                     <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
@@ -222,11 +222,11 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->user->name ?? 'Pengirim Misterius' }} 
+                                            {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
@@ -275,6 +275,37 @@
         // Scroll top
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+            const inputTransfer = document.getElementById('jumlah_transfer');
+
+        // Fungsi untuk memformat angka menjadi format ribuan dengan titik
+        function formatRupiah(angka) {
+            // Hapus semua karakter selain angka
+            let numberString = angka.replace(/[^,\d]/g, '').toString();
+            let split = numberString.split(',');
+            let sisa = split[0].length % 3;
+            let rupiah = split[0].substr(0, sisa);
+            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        }
+
+        // Event saat pengguna mengetik
+        inputTransfer.addEventListener('keyup', function(e) {
+            this.value = formatRupiah(this.value);
+        });
+
+        // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (inputTransfer.value) {
+                inputTransfer.value = formatRupiah(inputTransfer.value);
+            }
+        });
 
        // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
     let delayTimer;

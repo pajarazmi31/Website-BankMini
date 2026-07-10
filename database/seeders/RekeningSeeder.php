@@ -19,126 +19,47 @@ class RekeningSeeder extends Seeder
     {
         
         $roleNasabah = Role::where('nama_role', 'nasabah')->first();
+                
 
-        $userNasabah1 = User::create([
-            'name' => 'Dika Gunawan',
+        $userNasabah = User::create([
+            'name' => 'Nasabah',
             'role_id' => $roleNasabah->id,
-            'email' => 'dika@gmail.com',
+            'email' => 'nasabah@gmail.com',
             'password' => Hash::make('123456'),
-            ]);
+        ]);
 
-            Nasabah::create([
-            'user_id' => $userNasabah1->id,
+        $nasabah = Nasabah::create([
+            'user_id' => $userNasabah->id,
             'nis_nip' => '242510190',
-            'nama_nasabah' => 'Dika Gunawan',
+            'nama_nasabah' => 'Nasabah',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
+            'jurusan_id' => '3',
             'jenis_kelamin' => 'Laki-Laki',
-            'pendidikan' => 'SMA/K',
-            'rt_rw' => '01/02',
-            'kelurahan' => 'Cibaduyut',
-            'kecamatan' => 'Bojongloa',
-            'kab_kota' => 'Bandung',
-            'provinsi' => 'Jawa Barat',
+            'pendidikan' => 'SMA',
+            'alamat' => 'sindangraja',
+            'kelurahan_id' => 1101010001,
+            'kecamatan_id' => 1101010,
+            'kab_kota_id' => 1101,
+            'provinsi_id' => 11,
             'kode_pos' => '40236',
-            'email' => 'dika@gmail.com',
+            'email' => 'nasabah@gmail.com',
             'agama' => 'Islam',
-            'no_hp' => '08123456789',
+            'no_hp' => '08193456789',
             'password' => Hash::make('123456'),
             'jabatan' => 'Siswa',
             'jenis_identitas' => 'KTP',
             'nama_kontak_darurat' => 'Ayah Budi',
             'alamat_kontak_darurat' => 'Bandung',
-            'no_hp_kontak_darurat' => '08111111112',
+            'no_hp_kontak_darurat' => '08111111111',
             'hubungan_kontak_darurat' => 'Ayah',
-        ]);
-            
-            $userNasabah2 = User::create([
-                'name' => 'Dini Andini Nur Hasanah',
-                'role_id' => $roleNasabah->id,
-                'email' => 'dini@gmail.com',
-                'password' => Hash::make('123456'),
-            ]);
-
-            Nasabah::create([
-            'user_id' => $userNasabah2->id,
-            'nis_nip' => '242510190',
-            'nama_nasabah' => 'Dini Andini Nur Hasanah',
-            'tempat_lahir' => 'Bandung',
-            'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
-            'jenis_kelamin' => 'Laki-Laki',
-            'pendidikan' => 'SMA/K',
-            'rt_rw' => '01/02',
-            'kelurahan' => 'Cibaduyut',
-            'kecamatan' => 'Bojongloa',
-            'kab_kota' => 'Bandung',
-            'provinsi' => 'Jawa Barat',
-            'kode_pos' => '40236',
-            'email' => 'dini@gmail.com',
-            'agama' => 'Islam',
-            'no_hp' => '08123456789',
-            'password' => Hash::make('123456'),
-            'jabatan' => 'Siswa',
-            'jenis_identitas' => 'KTP',
-            'nama_kontak_darurat' => 'Ayah dini',
-            'alamat_kontak_darurat' => 'Bandung',
-            'no_hp_kontak_darurat' => '08111311112',
-            'hubungan_kontak_darurat' => 'Ayah',
-        ]);
-
-        $userNasabah3 = User::create([
-            'name' => 'Dida Halimawan',
-            'role_id' => $roleNasabah->id,
-            'email' => 'dida@gmail.com',
-            'password' => Hash::make('123456'),
-            ]);
-
-            Nasabah::create([
-            'user_id' => $userNasabah3->id,
-            'nis_nip' => '242510192',
-            'nama_nasabah' => 'Dida Halimawan',
-            'tempat_lahir' => 'Bandung',
-            'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
-            'jenis_kelamin' => 'Laki-Laki',
-            'pendidikan' => 'SMA/K',
-            'rt_rw' => '01/02',
-            'kelurahan' => 'Cibaduyut',
-            'kecamatan' => 'Bojongloa',
-            'kab_kota' => 'Bandung',
-            'provinsi' => 'Jawa Barat',
-            'kode_pos' => '40236',
-            'email' => 'dida@gmail.com',
-            'agama' => 'Islam',
-            'no_hp' => '08123456785',
-            'password' => Hash::make('123456'),
-            'jabatan' => 'Siswa',
-            'jenis_identitas' => 'KTP',
-            'nama_kontak_darurat' => 'Ayah dida',
-            'alamat_kontak_darurat' => 'Bandung',
-            'no_hp_kontak_darurat' => '08111101112',
-            'hubungan_kontak_darurat' => 'Ayah',
+            'pesan' => 'pesan',
+            'nama_perevisi' => '-',
         ]);
 
         Rekening::create([
             'id' => 242510190,
-           'nasabah_id' => $userNasabah1->id,
-           'saldo_saat_ini' => 100000,
-           'status_akun' => 'aktif' 
-        ]);
-
-        Rekening::create([
-            'id' => 242510191,
-           'nasabah_id' => $userNasabah2->id,
-           'saldo_saat_ini' => 100000,
-           'status_akun' => 'aktif' 
-        ]);
-
-        Rekening::create([
-            'id' => 242510192,
-           'nasabah_id' => $userNasabah3->id,
+           'nasabah_id' => $nasabah->id,
            'saldo_saat_ini' => 100000,
            'status_akun' => 'aktif' 
         ]);

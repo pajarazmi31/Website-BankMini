@@ -32,7 +32,7 @@ class NasabahSeeder extends Seeder
             'nama_nasabah' => 'Dinar',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
-            'jurusan' => 'PPLG',
+            'jurusan' => 2,
             'jenis_kelamin' => 'Laki-Laki',
             'pendidikan' => 'SMA/K',
             'rt_rw' => '01/02',
@@ -51,6 +51,7 @@ class NasabahSeeder extends Seeder
             'alamat_kontak_darurat' => 'Bandung',
             'no_hp_kontak_darurat' => '08111111112',
             'hubungan_kontak_darurat' => 'Ayah',
+            'nama_perevisi' => '-',
         ]);
     }
 }

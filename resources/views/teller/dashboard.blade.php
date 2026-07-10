@@ -53,7 +53,7 @@
         </div>
 
 <div class="flex flex-col gap-3">
-    @foreach($transactions as $t)
+    @foreach($transactions->take(3) as $t)
     @php
         // Cek apakah data ini adalah Setoran atau Penarikan
         $isSetor = $t instanceof \App\Models\Setoran;
@@ -122,14 +122,14 @@
             <h3 class="text-[12px] lg:text-[22px] font-bold text-gray-800">Semua Transaksi</h3>
         </div>
 
-        <div class="lg:space-y-5">
-    @foreach($transactions as $at)
+        <div class="lg:space-y-5" id="transactionList">
+    @forelse($transactions as $at)
     @php
         $isSetor = $at instanceof \App\Models\Setoran;
         $nominal = $isSetor ? $at->jumlah_penyetoran : $at->jumlah_penarikan;
         $color = $isSetor ? '#10a163' : '#ef4444';
     @endphp
-    <div class="flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50">
+    <div class="transaction-item flex justify-between items-center bg-white p-4 rounded-[20px] border border-gray-50">
         <div class="flex items-center gap-2">
             <i class="ph-fill ph-user-circle text-[40px] text-brand-blue"></i>
             <div>
@@ -147,11 +147,13 @@
             </span>
         </div>
     </div>
-    @endforeach
+    @empty
+    <div class="text-center text-gray-400 py-8 font-medium">Tidak ada data transaksi</div>
+    @endforelse
 </div>
 
         <!-- Pagination -->
-        <x-pagination total="3" />  
+        <div id="paginationContainer"></div>
 
     </div>
 </div>
@@ -180,5 +182,77 @@
         const scrollableMain = document.querySelector('main');
         if(scrollableMain) scrollableMain.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsPerPage = 5;
+        const items = document.querySelectorAll('#transactionList .transaction-item');
+        const paginationContainer = document.getElementById('paginationContainer');
+        let currentPage = 1;
+
+        const totalItems = items.length;
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+        function showPage(page) {
+            currentPage = page;
+            
+            items.forEach((item, index) => {
+                if (index >= (page - 1) * itemsPerPage && index < page * itemsPerPage) {
+                    item.style.setProperty('display', 'flex', 'important');
+                } else {
+                    item.style.setProperty('display', 'none', 'important');
+                }
+            });
+
+            renderPagination();
+        }
+
+        function renderPagination() {
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let html = `<div class="flex items-center justify-end gap-1.5 mt-5 pt-2">`;
+
+            // Previous Button
+            const prevDisabled = currentPage === 1 ? 'disabled opacity-50 cursor-not-allowed' : '';
+            html += `
+                <button onclick="goToPage(${currentPage - 1})" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md ${prevDisabled}" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="ph-bold ph-caret-left"></i>
+                </button>
+            `;
+
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html += `<span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">${i}</span>`;
+                } else {
+                    html += `
+                        <button onclick="goToPage(${i})" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
+                            ${i}
+                        </button>
+                    `;
+                }
+            }
+
+            // Next Button
+            const nextDisabled = currentPage === totalPages ? 'disabled opacity-50 cursor-not-allowed' : '';
+            html += `
+                <button onclick="goToPage(${currentPage + 1})" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md ${nextDisabled}" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i class="ph-bold ph-caret-right"></i>
+                </button>
+            `;
+
+            html += `</div>`;
+            paginationContainer.innerHTML = html;
+        }
+
+        window.goToPage = function(page) {
+            if (page < 1 || page > totalPages) return;
+            showPage(page);
+        };
+
+        showPage(1);
+    });
 </script>
 @endsection

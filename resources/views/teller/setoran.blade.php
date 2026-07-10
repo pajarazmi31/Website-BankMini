@@ -20,14 +20,115 @@
     <!-- Search Bar Mobile -->
     <form action="" method="GET" class="md:hidden relative mb-5 m-0 p-0">
         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </form>
 
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
-        <h3 class="text-[22px] font-bold text-gray-800">Data Setoran</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Setoran
-        </button>
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
+
+    <h3 class="text-[22px] font-bold text-gray-800">
+        Data Setoran
+    </h3>
+
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+
+            <!-- EXPORT EXCEL -->
+        <div class="relative">
+
+            <button
+                id="btnExportExcel"
+                type="button"
+                class="bg-green-600 text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-green-700 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                <i class="ph ph-file-xls text-base"></i>
+                Export Excel
+                <i class="ph ph-caret-down"></i>
+            </button>
+
+            <!-- DROPDOWN -->
+            <div
+                id="dropdownExport"
+                class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+
+                <a href="{{ route('setoran.export', ['filter' => 'hari_ini']) }}"
+                class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                    Hari Ini
+                </a>
+
+                <a href="{{ route('setoran.export', ['filter' => 'minggu_ini']) }}"
+                class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                    Minggu Ini
+                </a>
+
+                <a href="{{ route('setoran.export', ['filter' => 'bulan_ini']) }}"
+                class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                    Bulan Ini
+                </a>
+
+                <a href="{{ route('setoran.export', ['filter' => 'tahun_ini']) }}"
+                class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                    Tahun Ini
+                </a>
+
+                <hr>
+
+                <button
+                    type="button"
+                    onclick="toggleCustomTanggal()"
+                    class="w-full text-left px-4 py-3 hover:bg-gray-50 text-sm">
+                    Custom Tanggal
+                </button>
+            </div>
+
+        <!-- CUSTOM TANGGAL -->
+        <div
+            id="customTanggalBox"
+            class="hidden absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+
+            <form action="{{ route('setoran.export.custom') }}" method="GET">
+
+                <label class="block text-[11px] font-semibold text-gray-500 mb-1">
+                    Dari Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    name="start_date"
+                    class="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs mb-2">
+
+                <label class="block text-[11px] font-semibold text-gray-500 mb-1">
+                    Sampai Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    name="end_date"
+                    class="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs mb-3">
+
+                <button
+                    type="submit"
+                    class="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg text-[12px] font-semibold transition-all">
+
+                    Download Excel
+
+                </button>
+
+            </form>
+
+        </div>
+
+        </div>
+
+            <!-- TAMBAH SETORAN -->
+            <button
+                onclick="switchView('tambah')"
+                class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                <i class="ph ph-plus text-base"></i>
+                Tambah Setoran
+            </button>
+
+        </div>
+
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="setoranTableCard">
@@ -51,7 +152,8 @@
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->nama_lengkap }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-gray-800">Rp. {{ number_format($d->jumlah_penyetoran, 0, ',', '.') }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ \Carbon\Carbon::parse($d->datetime_tgl)->format('d-m-Y') }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                        {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->petugas->nama_petugas ?? $teller->nama_petugas }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
                             <div class="flex items-center justify-center gap-2">
@@ -94,6 +196,12 @@
                                 )' class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
+
+                                <a href="{{ route('setoran.struk', $d->id) }}"
+                                target="_blank"
+                                class="download-pdf w-[28px] h-[28px] rounded-full bg-[#dbeafe] text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors">
+                                    <i class="ph-fill ph-printer text-[15px]"></i>
+                                </a>
 
                                 <!-- Button Delete -->
                                 <form id="delete-form-{{ $d->id }}" action="{{ route('setoran.destroy', $d->id) }}" method="POST" class="inline">
@@ -462,27 +570,92 @@ document.addEventListener("DOMContentLoaded", function() {
     // AJAX Pagination click interceptor
     document.addEventListener('click', function(e) {
         const link = e.target.closest('#setoranTableCard a');
-        if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
+
+        if (!link) return;
+
+        // BIARKAN LINK DOWNLOAD / TAB BARU BERJALAN NORMAL
+        if (link.target === '_blank') {
+            return;
+        }
+
+        if (
+            link.getAttribute('href') &&
+            !link.getAttribute('href').startsWith('#')
+        ) {
             e.preventDefault();
+
             const targetUrl = link.getAttribute('href');
-            
+
             window.history.pushState({}, '', targetUrl);
-            
+
             fetch(targetUrl)
                 .then(response => response.text())
                 .then(html => {
                     const parser = new DOMParser();
                     const doc = parser.parseFromString(html, 'text/html');
+
                     const newCard = doc.getElementById('setoranTableCard');
                     const currentCard = document.getElementById('setoranTableCard');
+
                     if (newCard && currentCard) {
                         currentCard.innerHTML = newCard.innerHTML;
                     }
-                    document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+
+                    document.querySelector('main').scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
                 })
                 .catch(err => console.error('Gagal memuat halaman:', err));
         }
     });
+
+// ===========================
+// EXPORT EXCEL DROPDOWN
+// ===========================
+const btnExportExcel = document.getElementById('btnExportExcel');
+const dropdownExport = document.getElementById('dropdownExport');
+const customTanggalBox = document.getElementById('customTanggalBox');
+
+if (btnExportExcel) {
+
+    btnExportExcel.addEventListener('click', function(e) {
+
+        e.stopPropagation();
+
+        dropdownExport.classList.toggle('hidden');
+
+        if (!customTanggalBox.classList.contains('hidden')) {
+            customTanggalBox.classList.add('hidden');
+        }
+
+    });
+
+}
+
+// Custom tanggal
+window.toggleCustomTanggal = function () {
+
+    customTanggalBox.classList.toggle('hidden');
+
+}
+
+// Klik luar => tutup semua
+document.addEventListener('click', function(e) {
+
+    if (
+        !e.target.closest('#dropdownExport') &&
+        !e.target.closest('#btnExportExcel') &&
+        !e.target.closest('#customTanggalBox')
+    ) {
+
+        dropdownExport.classList.add('hidden');
+        customTanggalBox.classList.add('hidden');
+
+    }
+
 });
-</script>
-@endsection
+    });
+
+    </script>
+    @endsection

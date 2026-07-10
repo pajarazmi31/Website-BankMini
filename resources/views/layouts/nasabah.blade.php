@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Bank Mini')</title>
+    <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
 
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,10 +97,10 @@
             </button>
 
             <div class="px-8 mb-10 flex items-center gap-3">
-                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-10 h-10 object-contain">
+                <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Logo" class="w-14 h-14 object-contain">
                 <div>
-                    <h1 class="font-bold text-lg leading-tight tracking-tight text-textDark">BANK MINI</h1>
-                    <p class="text-[10px] text-textGray font-medium mt-0.5">SMKN 1 Kawali</p>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight text-textDark">Bank Mini</h1>
+                    <p class="text-[10px] text-textGray font-semibold mt-0.5">K-One</p>
                 </div>
             </div>
 
@@ -156,8 +157,11 @@
         <!-- MOBILE TOP BAR -->
         <div class="lg:hidden flex items-center justify-between px-6 py-4 bg-white border-b border-gray-100 sticky top-0 z-30">
             <div class="flex items-center gap-2">
-                <img src="{{ asset('img/icon/navbar/bank 3.svg') }}" alt="Bank Logo" class="w-7 h-7 object-contain">
-                <span class="font-bold text-sm tracking-tight text-textDark">BANK MINI</span>
+                <img src="{{ asset('img/bankmini2.png') }}" alt="Bank Logo" class="w-9 h-9 object-contain">
+                <div class="flex flex-col">
+                    <span class="font-bold text-sm tracking-tight text-textDark leading-none">Bank Mini</span>
+                    <span class="text-[10px] text-textGray font-semibold leading-none mt-0.5">K-One</span>
+                </div>
             </div>
             <button class="p-2 bg-gray-50 rounded-lg text-primary" onclick="toggleSidebar()">
                 <i class="ph ph-list text-2xl"></i>

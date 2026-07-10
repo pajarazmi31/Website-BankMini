@@ -100,6 +100,7 @@ Selamat Datang, {{ $user->name }}!
         </div>
 
         <!-- Red Card: Segera Periksa! -->
+
         <div class="bg-[#fee2e2] rounded-[24px] p-7 shadow-sm border border-red-100 flex flex-col gap-8 mt-1">
             <div class="flex items-center gap-3">
                 <i class="ph-fill ph-warning text-[26px] text-[#dc2626]"></i>
