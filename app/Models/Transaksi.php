@@ -46,4 +46,9 @@ class Transaksi extends Model
     {
         return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
     }
+
+    public function RiwayatTf()
+    {
+        return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
+    }
 }

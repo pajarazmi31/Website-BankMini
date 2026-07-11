@@ -120,7 +120,7 @@
                                         <td class="py-4 px-2 border-b border-gray-50">
                                             <div class="flex items-center justify-center gap-2">
                                                 <!-- Tombol Lihat (Mata) memanggil view Form -->
-                                                <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}','Rp{{number_format($item->transaksi->nominal,0, ',', '.') }}', '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                                <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}','Rp{{number_format($item->nominal_admin,0, ',', '.') }}', '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
                                                 
                                                 <!-- 
                                                     BAGIAN BACKEND: AKSI VERIFIKASI (SETUJUI / TOLAK)
