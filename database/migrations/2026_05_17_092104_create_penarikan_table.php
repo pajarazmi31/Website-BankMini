@@ -17,17 +17,19 @@ return new class extends Migration
             $table->unsignedBigInteger('id_petugas');
 
             $table->string('nama_penarik', 100);
-
+            
             $table->foreignId('transaksi_id')
-                ->nullable();
-
+            ->nullable();
+            
             $table->decimal('jumlah_penarikan', 15, 2);
-
+            
             $table->decimal('nominal_admin',15,2)
-                ->default(0);
-
+            ->default(0);
+            
             $table->decimal('total_biaya', 15, 2);
-
+            
+            $table->string('pilihan_biaya_transaksi', 100);
+            
             $table->timestamps();
         });
     }

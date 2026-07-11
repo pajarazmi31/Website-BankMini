@@ -16,6 +16,7 @@ class Penarikan extends Model
         'transaksi_id',
         'total_biaya',
         'nominal_admin',
+        'pilihan_biaya_transaksi',
         'datetime_tgl'
     ];
 

@@ -110,30 +110,30 @@ class tellerController extends Controller
     }
 
     public function exportSetoranCustom(Request $request)
-        {
-            $request->validate([
-                'start_date' => 'required|date',
-                'end_date'   => 'required|date',
-            ]);
-            $data = Setoran::whereBetween(
-                'created_at',
-                [
-                    $request->start_date . ' 00:00:00',
-                    $request->end_date . ' 23:59:59'
-                ]
-            )->get();
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+        $data = Setoran::whereBetween(
+            'created_at',
+            [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]
+        )->get();
 
-            return Excel::download(
-                new SetoranExport($data),
-                'Setoran-' .
+        return Excel::download(
+            new SetoranExport($data),
+            'Setoran-' .
                 $request->start_date .
                 '_sampai_' .
                 $request->end_date .
                 '.xlsx'
-            );
-        }
+        );
+    }
 
-   public function cetakStruk($id)
+    public function cetakStruk($id)
     {
         $setoran = Setoran::with([
             'petugas',
@@ -147,8 +147,8 @@ class tellerController extends Controller
 
         return $pdf->download(
             'Struk-Setoran-' .
-            str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
-            '.pdf'
+                str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
         );
     }
 
@@ -158,17 +158,17 @@ class tellerController extends Controller
         $teller = $user->petugas;
 
         $transaksi = Transaksi::where('jenis_transaksi', 'setoran')
-                              ->orWhere('jenis_transaksi', 'Setoran')
-                              ->first();
-                              
+            ->orWhere('jenis_transaksi', 'Setoran')
+            ->first();
+
         $query = Setoran::with(['petugas', 'transaksi'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_lengkap', 'like', '%' . $search . '%')
-                  ->orWhere('nama_penyetor', 'like', '%' . $search . '%')
-                  ->orWhere('id_rekening', 'like', '%' . $search . '%');
+                    ->orWhere('nama_penyetor', 'like', '%' . $search . '%')
+                    ->orWhere('id_rekening', 'like', '%' . $search . '%');
             });
         }
 
@@ -193,7 +193,7 @@ class tellerController extends Controller
 
         $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
         $biayaAdmin = (int) $masterTransaksi->nominal;
-        
+
         $jumlahSetoran = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
 
         DB::beginTransaction();
@@ -221,7 +221,6 @@ class tellerController extends Controller
 
             DB::commit();
             return back()->with('success', 'Penyetoran berhasil disimpan!');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
@@ -295,7 +294,6 @@ class tellerController extends Controller
                 'success',
                 'Data setoran berhasil diupdate!'
             );
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -336,13 +334,13 @@ class tellerController extends Controller
 
         $data = Rekening::with('nasabah')
             ->where('id', 'like', '%' . $search . '%')
-            ->orWhereHas('nasabah', function($q) use ($search) {
+            ->orWhereHas('nasabah', function ($q) use ($search) {
                 $q->where('nama_nasabah', 'like', '%' . $search . '%');
             })
             ->limit(10)
             ->get();
 
-        $results = $data->map(function($item) {
+        $results = $data->map(function ($item) {
             return [
                 'id' => $item->id,
                 'nama' => $item->nasabah->nama_nasabah ?? '-',
@@ -352,7 +350,7 @@ class tellerController extends Controller
 
         return response()->json($results);
     }
-        
+
     public function destroySetoran($id)
     {
         Setoran::findOrFail($id)->delete();
@@ -415,10 +413,10 @@ class tellerController extends Controller
         return Excel::download(
             new PenarikanExport($data),
             'Penarikan-' .
-            Carbon::parse($request->start_date)->format('d-m-Y') .
-            '_sampai_' .
-            Carbon::parse($request->end_date)->format('d-m-Y') .
-            '.xlsx'
+                Carbon::parse($request->start_date)->format('d-m-Y') .
+                '_sampai_' .
+                Carbon::parse($request->end_date)->format('d-m-Y') .
+                '.xlsx'
         );
     }
 
@@ -436,8 +434,8 @@ class tellerController extends Controller
 
         return $pdf->download(
             'Struk-Penarikan-' .
-            str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
-            '.pdf'
+                str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
         );
     }
 
@@ -446,15 +444,15 @@ class tellerController extends Controller
     {
         $user = Auth::user();
         $teller = $user->petugas;
-        
+
         $transaksi = Transaksi::where('jenis_transaksi', 'penarikan')->first();
         $query = Penarikan::with(['petugas', 'transaksi'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_penarik', 'like', '%' . $search . '%')
-                  ->orWhere('id_rekening', 'like', '%' . $search . '%');
+                    ->orWhere('id_rekening', 'like', '%' . $search . '%');
             });
         }
 
@@ -466,10 +464,11 @@ class tellerController extends Controller
     public function storePenarikan(Request $request)
     {
         $request->validate([
-            'id_rekening'      => 'required|exists:rekening,id',
-            'jumlah_penarikan' => 'required',
-            'nama_penarik'     => 'required',
-            'transaksi_id'     => 'required|exists:transaksi,id'
+            'id_rekening'             => 'required|exists:rekening,id',
+            'jumlah_penarikan'        => 'required',
+            'nama_penarik'            => 'required',
+            'transaksi_id'            => 'required|exists:transaksi,id',
+            'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
         ]);
 
         $user = Auth::user();
@@ -477,39 +476,53 @@ class tellerController extends Controller
 
         $jumlahPenarikan = (int) str_replace('.', '', $request->jumlah_penarikan);
         $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
-        
-        // Biaya admin dipisahkan dari saldo
-        $biayaAdmin = (int) $masterTransaksi->nominal;
-        
-        // Saldo hanya berkurang sebesar jumlah yang ditarik (bukan + biaya)
+
+        // 1. Tentukan biaya admin asli dan biaya admin yang akan dicatat di tabel penarikan
+        $biayaAdminAsli = (int) $masterTransaksi->nominal;
+
+        // Jika cash, biaya admin yang dicatat di tabel penarikan menjadi 0
+        // Jika potong_saldo, biaya admin tetap sesuai master transaksi (1.000)
+        $pilihanBiayaAdmin = ($request->pilihan_biaya_transaksi === 'cash') ? 0 : $biayaAdminAsli;
+
+        // 2. Tentukan berapa nominal yang memotong saldo di rekening
+        $totalPotongSaldo = $jumlahPenarikan;
+        if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
+            $totalPotongSaldo += $biayaAdminAsli;
+        }
+
         $saldoMinimum = 1000;
 
         DB::beginTransaction();
         try {
             $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
-            
-            // Cek saldo hanya berdasarkan jumlah penarikan saja
-            if (($rekening->saldo_saat_ini - $jumlahPenarikan) < $saldoMinimum) {
+
+            if (($rekening->saldo_saat_ini - $totalPotongSaldo) < $saldoMinimum) {
                 DB::rollBack();
-                return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk penarikan tersebut.');
+                return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk memproses penarikan.');
             }
 
-            // Kurangi saldo rekening HANYA dengan jumlah penarikan
-            $rekening->saldo_saat_ini -= $jumlahPenarikan;
+            $rekening->saldo_saat_ini -= $totalPotongSaldo;
             $rekening->save();
 
+            // 3. Simpan ke database dengan nominal_admin yang sudah dinamis (bisa 0 atau 1000)
             Penarikan::create([
-                'id_rekening'      => $request->id_rekening,
-                'id_petugas'       => $teller->id,
-                'nama_penarik'     => $request->nama_penarik,
-                'jumlah_penarikan' => $jumlahPenarikan,
-                'transaksi_id'     => $request->transaksi_id,
-                'total_biaya'      => $jumlahPenarikan + $biayaAdmin,
-                'nominal_admin'    => $biayaAdmin,
+                'id_rekening'             => $request->id_rekening,
+                'id_petugas'              => $teller->id,
+                'nama_penarik'            => $request->nama_penarik,
+                'jumlah_penarikan'        => $jumlahPenarikan,
+                'transaksi_id'            => $request->transaksi_id,
+                'total_biaya'             => $jumlahPenarikan + $pilihanBiayaAdmin,
+                'nominal_admin'           => $pilihanBiayaAdmin, // <--- Ini akan menjadi 0 jika memilih cash
+                'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi,
             ]);
 
             DB::commit();
-            return back()->with('success', 'Penarikan berhasil! Silakan terima uang tunai sebesar Rp ' . number_format($biayaAdmin, 0, ',', '.') . ' untuk biaya admin.');
+
+            if ($request->pilihan_biaya_transaksi === 'cash') {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin Rp ' . number_format($biayaAdminAsli, 0, ',', '.') . ' dibayarkan tunai (tidak dicatat di saldo).');
+            } else {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin otomatis memotong saldo.');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal memproses penarikan: ' . $e->getMessage());
@@ -530,7 +543,7 @@ class tellerController extends Controller
             $penarikan = Penarikan::findOrFail($id);
 
             $rekeningLama = Rekening::lockForUpdate()->findOrFail($penarikan->id_rekening);
-            $rekeningLama->saldo_saat_ini += $penarikan->total_biaya; 
+            $rekeningLama->saldo_saat_ini += $penarikan->total_biaya;
             $rekeningLama->save();
 
             $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penarikan);
@@ -630,10 +643,10 @@ class tellerController extends Controller
         return Excel::download(
             new TransferExport($data),
             'Transfer-' .
-            $request->start_date .
-            '-sampai-' .
-            $request->end_date .
-            '.xlsx'
+                $request->start_date .
+                '-sampai-' .
+                $request->end_date .
+                '.xlsx'
         );
     }
 
@@ -643,7 +656,7 @@ class tellerController extends Controller
             'petugas',
             'rekeningPengirim',
             'rekeningPenerima',
-            'transaksi' 
+            'transaksi'
         ])->findOrFail($id);
 
         $pdf = Pdf::loadView(
@@ -653,8 +666,8 @@ class tellerController extends Controller
 
         return $pdf->download(
             'Struk-Transfer-' .
-            str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
-            '.pdf'
+                str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
         );
     }
 
@@ -664,22 +677,22 @@ class tellerController extends Controller
         $teller = $user->petugas; // Ambil data teller
 
         $transaksi = Transaksi::where('jenis_transaksi', 'transfer')
-                            ->orWhere('jenis_transaksi', 'Transfer')
-                            ->first();
-                            
+            ->orWhere('jenis_transaksi', 'Transfer')
+            ->first();
+
         $query = Transfer::with(['petugas', 'transaksi', 'rekeningPengirim.nasabah', 'rekeningPenerima.nasabah'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('rekeningPengirim.nasabah', function($subQuery) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('rekeningPengirim.nasabah', function ($subQuery) use ($search) {
                     $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
                 })
-                ->orWhereHas('rekeningPenerima.nasabah', function($subQuery) use ($search) {
-                    $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
-                })
-                ->orWhere('id_rekening_pengirim', 'like', '%' . $search . '%')
-                ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
+                    ->orWhereHas('rekeningPenerima.nasabah', function ($subQuery) use ($search) {
+                        $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
+                    })
+                    ->orWhere('id_rekening_pengirim', 'like', '%' . $search . '%')
+                    ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
             });
         }
 
@@ -741,17 +754,16 @@ class tellerController extends Controller
                 'id_rekening_pengirim' => $norekPengirim,
                 'id_rekening_penerima' => $norekPenerima,
                 'jumlah_transfer'      => $nominal,
-                'transaksi_id'         => $request->transaksi_id, 
+                'transaksi_id'         => $request->transaksi_id,
                 'total_biaya'          => $nominal + $biayaAdmin, // Tetap mencatat total untuk laporan
                 'nominal_admin'        => $biayaAdmin, // Tetap mencatat total untuk laporan
-                'datetime'             => now(), 
+                'datetime'             => now(),
                 'catatan'              => $request->catatan,
                 'id_petugas'           => $teller->id,
             ]);
 
             DB::commit();
             return redirect()->back();
-
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage())->withInput();
@@ -880,10 +892,9 @@ class tellerController extends Controller
                 'catatan'              => $request->catatan,
             ]);
 
-        DB::commit();
+            DB::commit();
 
-        return back();
-
+            return back();
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -896,7 +907,7 @@ class tellerController extends Controller
     }
     public function destroyTransfer($id)
     {
-       Transfer::findOrFail($id)->delete();
+        Transfer::findOrFail($id)->delete();
 
         return back();
     }
