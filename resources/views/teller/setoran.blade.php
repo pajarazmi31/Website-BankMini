@@ -2,14 +2,27 @@
 
 @section('title', 'Teller - Data Setoran')
 @section('header_title')
-    Selamat Datang, {{ $user->name }}!
+Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Sistem Administrasi Data Transaksi Penyetoran Kas.')
 
 @section('styles')
 <style>
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 @endsection
 
@@ -20,17 +33,127 @@
     <!-- Search Bar Mobile -->
     <form action="" method="GET" class="md:hidden relative mb-5 m-0 p-0">
         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </form>
 
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
-        <h3 class="text-[22px] font-bold text-gray-800">Data Setoran</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Setoran
-        </button>
+
+        <h3 class="text-[22px] font-bold text-gray-800">
+            Data Setoran
+        </h3>
+
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+
+            <!-- EXPORT EXCEL -->
+            <div class="relative">
+
+                <button
+                    id="btnExportExcel"
+                    type="button"
+                    class="bg-green-600 text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-green-700 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                    <i class="ph ph-file-xls text-base"></i>
+                    Export Excel
+                    <i class="ph ph-caret-down"></i>
+                </button>
+
+                <!-- DROPDOWN -->
+                <div
+                    id="dropdownExport"
+                    class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
+
+                    <a href="{{ route('setoran.export', ['filter' => 'hari_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Hari Ini
+                    </a>
+
+                    <a href="{{ route('setoran.export', ['filter' => 'minggu_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Minggu Ini
+                    </a>
+
+                    <a href="{{ route('setoran.export', ['filter' => 'bulan_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Bulan Ini
+                    </a>
+
+                    <a href="{{ route('setoran.export', ['filter' => 'tahun_ini']) }}"
+                        class="block px-4 py-3 hover:bg-gray-50 text-sm">
+                        Tahun Ini
+                    </a>
+
+                    <hr>
+
+                    <button
+                        type="button"
+                        onclick="toggleCustomTanggal()"
+                        class="w-full text-left px-4 py-3 hover:bg-gray-50 text-sm">
+                        Custom Tanggal
+                    </button>
+                </div>
+
+                <!-- CUSTOM TANGGAL -->
+                <div
+                    id="customTanggalBox"
+                    class="hidden absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+
+                    <form action="{{ route('setoran.export.custom') }}" method="GET">
+
+                        <label class="block text-[11px] font-semibold text-gray-500 mb-1">
+                            Dari Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            name="start_date"
+                            class="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs mb-2">
+
+                        <label class="block text-[11px] font-semibold text-gray-500 mb-1">
+                            Sampai Tanggal
+                        </label>
+
+                        <input
+                            type="date"
+                            name="end_date"
+                            class="w-full border border-gray-200 rounded-lg px-2.5 py-1.5 text-xs mb-3">
+
+                        <button
+                            type="submit"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg text-[12px] font-semibold transition-all">
+
+                            Download Excel
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <!-- TAMBAH SETORAN -->
+            <button
+                onclick="switchView('tambah')"
+                class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+
+                <i class="ph ph-plus text-base"></i>
+                Tambah Setoran
+            </button>
+
+        </div>
+
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="setoranTableCard">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -51,7 +174,9 @@
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->nama_lengkap }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-gray-800">Rp. {{ number_format($d->jumlah_penyetoran, 0, ',', '.') }}</td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ \Carbon\Carbon::parse($d->datetime_tgl)->format('d-m-Y') }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
+                        </td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->petugas->nama_petugas ?? $teller->nama_petugas }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
                             <div class="flex items-center justify-center gap-2">
@@ -67,7 +192,7 @@
                                     '{{ $d->nama_penyetor }}',
                                     '{{ $d->no_hp_penyetor }}',
                                     '{{ $d->alamat_penyetor }}',
-                                    '{{ optional($d->transaksi)->nominal ?? 0 }}',
+                                    '{{ $d->nominal_admin }}',
                                     '{{ $d->total_biaya }}',
                                     '{{ $d->catatan }}'
                                 )" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
@@ -94,6 +219,12 @@
                                 )' class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
+
+                                <a href="{{ route('setoran.struk', $d->id) }}"
+                                    target="_blank"
+                                    class="download-pdf w-[28px] h-[28px] rounded-full bg-[#dbeafe] text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors">
+                                    <i class="ph-fill ph-printer text-[15px]"></i>
+                                </a>
 
                                 <!-- Button Delete -->
                                 <form id="delete-form-{{ $d->id }}" action="{{ route('setoran.destroy', $d->id) }}" method="POST" class="inline">
@@ -139,7 +270,7 @@
         };
 
         Object.values(views).forEach(v => {
-            if(v) v.classList.add('hidden');
+            if (v) v.classList.add('hidden');
         });
 
         const activeView = views[viewName];
@@ -155,7 +286,17 @@
                 if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
-        document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
+        document.querySelector('main').scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
     }
 
     function terbilang(nilai) {
@@ -178,35 +319,35 @@
     }
 
     function formatAngka(angka) {
-    angka = parseInt(angka) || 0;
-    return 'Rp. ' + new Intl.NumberFormat('id-ID').format(angka);
+        angka = parseInt(angka) || 0;
+        return 'Rp. ' + new Intl.NumberFormat('id-ID').format(angka);
     }
 
     // =========================================================================
     // 2. LIVE INTEGRATION FOR EDIT FORM (AUTO-CALCULATE, FORMAT, & AJAX)
     // =========================================================================
     document.addEventListener("DOMContentLoaded", function() {
-        const formEdit         = document.getElementById('editForm');
-        const editNominal      = document.getElementById('edit_nominal');
-        const editTerbilang    = document.getElementById('edit_terbilang');
-        const editBiaya        = document.getElementById('edit_biaya');
-        const editTotal        = document.getElementById('edit_total');
-        const editRekening     = document.getElementById('edit_id_rekening');
-        const editNamaLengkap  = document.getElementById('edit_nama_lengkap');
+        const formEdit = document.getElementById('editForm');
+        const editNominal = document.getElementById('edit_nominal');
+        const editTerbilang = document.getElementById('edit_terbilang');
+        const editBiaya = document.getElementById('edit_biaya');
+        const editTotal = document.getElementById('edit_total');
+        const editRekening = document.getElementById('edit_id_rekening');
+        const editNamaLengkap = document.getElementById('edit_nama_lengkap');
 
-        if(editNominal) editNominal.type = 'text';
-        if(editBiaya) editBiaya.type     = 'text';
-        if(editTotal) editTotal.type     = 'text';
+        if (editNominal) editNominal.type = 'text';
+        if (editBiaya) editBiaya.type = 'text';
+        if (editTotal) editTotal.type = 'text';
 
         function hitungTotalEdit() {
-            if(!editNominal || !editBiaya || !editTotal) return;
+            if (!editNominal || !editBiaya || !editTotal) return;
             let setoran = bersihkan(editNominal.value);
-            let biaya   = bersihkan(editBiaya.value);
-            let total   = setoran + biaya;
+            let biaya = bersihkan(editBiaya.value);
+            let total = setoran + biaya;
             editTotal.value = formatAngka(total);
         }
 
-        if(editNominal) {
+        if (editNominal) {
             editNominal.addEventListener('input', function(e) {
                 let angka = e.target.value.replace(/\D/g, '');
                 if (!angka) {
@@ -221,7 +362,7 @@
             });
         }
 
-        if(editBiaya) {
+        if (editBiaya) {
             editBiaya.addEventListener('input', function(e) {
                 let angka = e.target.value.replace(/\D/g, '');
                 if (!angka) {
@@ -234,20 +375,20 @@
             });
         }
 
-        if(editRekening) {
-            editRekening.addEventListener('change', async function () {
+        if (editRekening) {
+            editRekening.addEventListener('change', async function() {
                 let rekening = this.value.trim();
                 if (rekening.length === 0) {
-                    if(editNamaLengkap) editNamaLengkap.value = '';
+                    if (editNamaLengkap) editNamaLengkap.value = '';
                     return;
                 }
                 try {
                     let response = await fetch(`/cari-rekening/${rekening}`);
                     let data = await response.json();
                     if (data.success) {
-                        if(editNamaLengkap) editNamaLengkap.value = data.nama;
+                        if (editNamaLengkap) editNamaLengkap.value = data.nama;
                     } else {
-                        if(editNamaLengkap) editNamaLengkap.value = '';
+                        if (editNamaLengkap) editNamaLengkap.value = '';
                         alert('Nomor rekening tidak ditemukan!');
                     }
                 } catch (error) {
@@ -256,11 +397,11 @@
             });
         }
 
-        if(formEdit) {
+        if (formEdit) {
             formEdit.addEventListener('submit', function() {
-                if(editNominal) editNominal.value = bersihkan(editNominal.value);
-                if(editBiaya) editBiaya.value     = bersihkan(editBiaya.value);
-                if(editTotal) editTotal.value     = bersihkan(editTotal.value);
+                if (editNominal) editNominal.value = bersihkan(editNominal.value);
+                if (editBiaya) editBiaya.value = bersihkan(editBiaya.value);
+                if (editTotal) editTotal.value = bersihkan(editTotal.value);
             });
         }
     });
@@ -270,16 +411,16 @@
     // =========================================================================
     function bersihkan(angka) {
         if (!angka) return 0;
-        
+
         // Kalau tipenya string dan mengandung titik ribuan (misal: 200.000)
         let str = angka.toString().trim();
-        
+
         // JIKA string mengandung titik tapi BUKAN format pecahan desimal murni, 
         // kita buang titiknya dulu sebelum di-parse agar tidak dikira desimal bray
         if (str.includes('.') && !str.includes(',')) {
             str = str.replace(/\./g, '');
         }
-        
+
         return parseInt(str.replace(/\D/g, '')) || 0;
     }
 
@@ -287,8 +428,8 @@
     // 3. CORE CRUD ACTION TRIGGERS (FIXED FINAL NOMINAL & NO TELLER PREFIX)
     // =========================================================================
     window.lihatDetailSetoran = function(
-        petugas, namalengkap, rek, setoran, mataUang, 
-        nominal, terbilangStr, namapenyetor, noHp, alamat, 
+        petugas, namalengkap, rek, setoran, mataUang,
+        nominal, terbilangStr, namapenyetor, noHp, alamat,
         biayatransaksi, totalbiaya, catatan
     ) {
         const setVal = (id, val) => {
@@ -302,7 +443,7 @@
         setVal('detail_rek', rek);
         setVal('detail_setoran', setoran);
         setVal('detail_mata_uang', mataUang);
-        
+
         // JALUR NUKLIR: Kita buang semua karakter non-angka, tapi jika diakhiri .00 kita potong duluan bray
         const paksaAngka = (str) => {
             if (!str) return "Rp 0";
@@ -317,157 +458,112 @@
         };
 
         // Pasang langsung hasil paksaan ke input detail
-        document.getElementById('detail_nominal').value         = paksaAngka(nominal);
+        document.getElementById('detail_nominal').value = paksaAngka(nominal);
         document.getElementById('detail_biaya_transaksi').value = paksaAngka(biayatransaksi);
-        document.getElementById('detail_total_biaya').value     = paksaAngka(totalbiaya);
-        
+        document.getElementById('detail_total_biaya').value = paksaAngka(totalbiaya);
+
         setVal('detail_terbilang', terbilangStr);
         setVal('detail_nama_penyetor', namapenyetor);
         setVal('detail_no_hp', noHp);
-        
+
         setVal('detail_alamat', alamat);
         setVal('detail_alamat_desktop', alamat);
         setVal('detail_alamat_mobile', alamat);
         setVal('detail_catatan', catatan);
-        
+
         switchView('detail');
     }
 
-   function editData(
-    id,
-    nama_lengkap,
-    id_rekening,
-    setoran,
-    mata_uang,
-    jumlah_penyetoran,
-    uang_terbilang,
-    nama_penyetor,
-    no_hp_penyetor,
-    alamat_penyetor,
-    biaya_transaksi,
-    total_biaya,
-    catatan,
-    petugas,
-    transaksi_id
-) {
-    const setVal = (id, value) => {
-        const el = document.getElementById(id);
-        if (el) el.value = value ?? '';
-    };
+    function editData(
+        id,
+        nama_lengkap,
+        id_rekening,
+        setoran,
+        mata_uang,
+        jumlah_penyetoran,
+        uang_terbilang,
+        nama_penyetor,
+        no_hp_penyetor,
+        alamat_penyetor,
+        biaya_transaksi,
+        total_biaya,
+        catatan,
+        petugas,
+        transaksi_id
+    ) {
+        const setVal = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value ?? '';
+        };
 
-    const form = document.getElementById('editForm');
+        const form = document.getElementById('editForm');
 
-    if (form) {
-        form.action = `/setoran/${id}`;
-    }
-
-    setVal('edit_id', id);
-
-    setVal('nama_lengkap', nama_lengkap);
-    setVal('id_rekening', id_rekening);
-
-    setVal('edit_setoran', setoran);
-    setVal('edit_mata_uang', mata_uang);
-
-    setVal('edit_petugas', petugas);
-
-    setVal('edit_catatan', catatan);
-
-    setVal('edit_penyetor', nama_penyetor);
-
-    setVal('edit_nohp', no_hp_penyetor);
-
-    setVal('edit_alamat', alamat_penyetor);
-
-    setVal('edit_nominal', formatAngka(jumlah_penyetoran));
-
-    setVal('edit_biaya', formatAngka(biaya_transaksi));
-
-    setVal('edit_transaksi_id', transaksi_id);
-
-    setVal('edit_total', formatAngka(total_biaya));
-
-    setVal(
-        'edit_terbilang',
-        uang_terbilang
-            ? uang_terbilang
-            : (terbilang(jumlah_penyetoran) + ' Rupiah')
-    );
-
-    switchView('edit');
-}
-
-function confirmDeleteSetoran(id) {
-    const msg = 'Apakah Anda yakin ingin menghapus history transaksi ini? <span class="font-bold text-red-500">Saldo nasabah akan otomatis dikurangi kembali!</span>';
-    openDeleteModal(function() {
-        document.getElementById('delete-form-' + id).submit();
-    }, msg);
-}
-
-// AJAX Live Search & PJAX Pagination
-document.addEventListener("DOMContentLoaded", function() {
-    let debounceTimeout = null;
-
-    function performAjaxSearch(searchVal) {
-        const query = new URLSearchParams(window.location.search);
-        query.set('search', searchVal);
-        query.delete('page'); // Reset to page 1 on new search
-
-        const targetUrl = `${window.location.pathname}?${query.toString()}`;
-        window.history.replaceState({}, '', targetUrl);
-
-        // Sync other search input fields
-        document.querySelectorAll('input[name="search"]').forEach(input => {
-            if (input.value !== searchVal) {
-                input.value = searchVal;
-            }
-        });
-
-        fetch(targetUrl)
-            .then(response => response.text())
-            .then(html => {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newCard = doc.getElementById('setoranTableCard');
-                const currentCard = document.getElementById('setoranTableCard');
-                if (newCard && currentCard) {
-                    currentCard.innerHTML = newCard.innerHTML;
-                }
-            })
-            .catch(err => console.error('Gagal melakukan pencarian:', err));
-    }
-
-    // Attach input listener to both desktop & mobile search inputs
-    document.querySelectorAll('input[name="search"]').forEach(input => {
-        input.addEventListener('input', function() {
-            clearTimeout(debounceTimeout);
-            const val = this.value;
-            debounceTimeout = setTimeout(() => {
-                performAjaxSearch(val);
-            }, 300);
-        });
-    });
-
-    // Prevent form reloads on Enter
-    document.querySelectorAll('form').forEach(form => {
-        const hasSearchInput = form.querySelector('input[name="search"]');
-        if (hasSearchInput) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                performAjaxSearch(hasSearchInput.value);
-            });
+        if (form) {
+            form.action = `/setoran/${id}`;
         }
-    });
 
-    // AJAX Pagination click interceptor
-    document.addEventListener('click', function(e) {
-        const link = e.target.closest('#setoranTableCard a');
-        if (link && link.getAttribute('href') && !link.getAttribute('href').startsWith('#')) {
-            e.preventDefault();
-            const targetUrl = link.getAttribute('href');
-            
-            window.history.pushState({}, '', targetUrl);
-            
+        setVal('edit_id', id);
+
+        setVal('nama_lengkap', nama_lengkap);
+        setVal('id_rekening', id_rekening);
+
+        setVal('edit_setoran', setoran);
+        setVal('edit_mata_uang', mata_uang);
+
+        setVal('edit_petugas', petugas);
+
+        setVal('edit_catatan', catatan);
+
+        setVal('edit_penyetor', nama_penyetor);
+
+        setVal('edit_nohp', no_hp_penyetor);
+
+        setVal('edit_alamat', alamat_penyetor);
+
+        setVal('edit_nominal', formatAngka(jumlah_penyetoran));
+
+        setVal('edit_biaya', formatAngka(biaya_transaksi));
+
+        setVal('edit_transaksi_id', transaksi_id);
+
+        setVal('edit_total', formatAngka(total_biaya));
+
+        setVal(
+            'edit_terbilang',
+            uang_terbilang ?
+            uang_terbilang :
+            (terbilang(jumlah_penyetoran) + ' Rupiah')
+        );
+
+        switchView('edit');
+    }
+
+    function confirmDeleteSetoran(id) {
+        const msg = 'Apakah Anda yakin ingin menghapus history transaksi ini? <span class="font-bold text-red-500">Saldo nasabah akan otomatis dikurangi kembali!</span>';
+        openDeleteModal(function() {
+            document.getElementById('delete-form-' + id).submit();
+        }, msg);
+    }
+
+    // AJAX Live Search & PJAX Pagination
+    document.addEventListener("DOMContentLoaded", function() {
+        let debounceTimeout = null;
+
+        function performAjaxSearch(searchVal) {
+            const query = new URLSearchParams(window.location.search);
+            query.set('search', searchVal);
+            query.delete('page'); // Reset to page 1 on new search
+
+            const targetUrl = `${window.location.pathname}?${query.toString()}`;
+            window.history.replaceState({}, '', targetUrl);
+
+            // Sync other search input fields
+            document.querySelectorAll('input[name="search"]').forEach(input => {
+                if (input.value !== searchVal) {
+                    input.value = searchVal;
+                }
+            });
+
             fetch(targetUrl)
                 .then(response => response.text())
                 .then(html => {
@@ -478,11 +574,120 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (newCard && currentCard) {
                         currentCard.innerHTML = newCard.innerHTML;
                     }
-                    document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
                 })
-                .catch(err => console.error('Gagal memuat halaman:', err));
+                .catch(err => console.error('Gagal melakukan pencarian:', err));
         }
+
+        // Attach input listener to both desktop & mobile search inputs
+        document.querySelectorAll('input[name="search"]').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(debounceTimeout);
+                const val = this.value;
+                debounceTimeout = setTimeout(() => {
+                    performAjaxSearch(val);
+                }, 300);
+            });
+        });
+
+        // Prevent form reloads on Enter
+        document.querySelectorAll('form').forEach(form => {
+            const hasSearchInput = form.querySelector('input[name="search"]');
+            if (hasSearchInput) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    performAjaxSearch(hasSearchInput.value);
+                });
+            }
+        });
+
+        // AJAX Pagination click interceptor
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('#setoranTableCard a');
+
+            if (!link) return;
+
+            // BIARKAN LINK DOWNLOAD / TAB BARU BERJALAN NORMAL
+            if (link.target === '_blank') {
+                return;
+            }
+
+            if (
+                link.getAttribute('href') &&
+                !link.getAttribute('href').startsWith('#')
+            ) {
+                e.preventDefault();
+
+                const targetUrl = link.getAttribute('href');
+
+                window.history.pushState({}, '', targetUrl);
+
+                fetch(targetUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+
+                        const newCard = doc.getElementById('setoranTableCard');
+                        const currentCard = document.getElementById('setoranTableCard');
+
+                        if (newCard && currentCard) {
+                            currentCard.innerHTML = newCard.innerHTML;
+                        }
+
+                        document.querySelector('main').scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    })
+                    .catch(err => console.error('Gagal memuat halaman:', err));
+            }
+        });
+
+        // ===========================
+        // EXPORT EXCEL DROPDOWN
+        // ===========================
+        const btnExportExcel = document.getElementById('btnExportExcel');
+        const dropdownExport = document.getElementById('dropdownExport');
+        const customTanggalBox = document.getElementById('customTanggalBox');
+
+        if (btnExportExcel) {
+
+            btnExportExcel.addEventListener('click', function(e) {
+
+                e.stopPropagation();
+
+                dropdownExport.classList.toggle('hidden');
+
+                if (!customTanggalBox.classList.contains('hidden')) {
+                    customTanggalBox.classList.add('hidden');
+                }
+
+            });
+
+        }
+
+        // Custom tanggal
+        window.toggleCustomTanggal = function() {
+
+            customTanggalBox.classList.toggle('hidden');
+
+        }
+
+        // Klik luar => tutup semua
+        document.addEventListener('click', function(e) {
+
+            if (
+                !e.target.closest('#dropdownExport') &&
+                !e.target.closest('#btnExportExcel') &&
+                !e.target.closest('#customTanggalBox')
+            ) {
+
+                dropdownExport.classList.add('hidden');
+                customTanggalBox.classList.add('hidden');
+
+            }
+
+        });
     });
-});
 </script>
 @endsection

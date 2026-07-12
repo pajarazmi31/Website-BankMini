@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Supervisor - Bank Mini')</title>
     <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
     <!-- Tailwind CSS -->
@@ -143,11 +144,11 @@
 
                 <!-- Verifikasi -->
                 <div class="relative">
-                    @if($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi')
+                    @if($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi' || $route == 'supervisor.verifikasi.login')
                     <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
                     @endif
-                    <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex items-center gap-3 px-6 py-3 {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
-                        <i class="ph{{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? '-fill' : '' }} ph-folder text-[22px] {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi') ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
+                    <a href="{{ route('supervisor.verifikasi.login') }}" class="flex items-center gap-3 px-6 py-3 {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi' || $route == 'supervisor.verifikasi.login') ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
+                        <i class="ph{{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi' || $route == 'supervisor.verifikasi.login') ? '-fill' : '' }} ph-folder text-[22px] {{ ($route == 'supervisor.verifikasi' || $route == 'supervisor.verifikasi.registrasi' || $route == 'supervisor.verifikasi.login') ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
                         <span class="text-[14px]">Verifikasi</span>
                     </a>
                 </div>

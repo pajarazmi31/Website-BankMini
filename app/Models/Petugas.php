@@ -6,16 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Petugas extends Model
 {
-    protected $table = 'petugas';
+    protected $fillable = [
+        'user_id',
+        'kelas',
+    ];
 
-    protected $fillable = ([
-        'nama_petugas',
-        'email',
-        'password',
-        'role',
-    ]);
-
-    public function user() {
-        $this->belongsTo(User::class);
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

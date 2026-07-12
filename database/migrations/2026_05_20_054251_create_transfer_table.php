@@ -29,6 +29,7 @@ return new class extends Migration
                 ->nullable();
 
             $table->decimal('total_biaya', 15, 2);
+            $table->decimal('nominal_admin',15,2);
 
             $table->dateTime('datetime');
 

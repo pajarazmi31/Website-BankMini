@@ -12,6 +12,12 @@ use App\Models\Penarikan;
 use App\Models\Transfer;
 use App\Models\Transaksi;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\SetoranExport;
+use App\Exports\PenarikanExport;
+use App\Exports\TransferExport;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class tellerController extends Controller
 {
@@ -35,13 +41,22 @@ class tellerController extends Controller
         $penarikanHariIni = Penarikan::whereDate('created_at', Carbon::today())
             ->sum('jumlah_penarikan');
 
+        $biayaAdminSetoran = Setoran::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
+        $biayaAdminPenarikan = Penarikan::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
+        $biayaAdminTransfer = Transfer::whereDate('created_at', Carbon::today())
+            ->sum('nominal_admin');
+
         // TRANSAKSI TERBARU 
-        // Jika Anda ingin menggabungkan, Anda bisa menggunakan collection:
-        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
-        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->limit(5)->get();
+        // Ambil semua transaksi tanpa limit agar bisa di-paginate di view history
+        $setor = Setoran::with('rekening.nasabah')->latest('created_at')->get();
+        $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->get();
 
         // Gabungkan dan urutkan berdasarkan waktu
-        $transactions = $setor->concat($tarik)->sortByDesc('created_at')->take(3);
+        $transactions = $setor->concat($tarik)->sortByDesc('created_at');
 
         return view('teller.dashboard', compact(
             'user',
@@ -49,6 +64,9 @@ class tellerController extends Controller
             'totalTabungan',
             'setoranHariIni',
             'penarikanHariIni',
+            'biayaAdminSetoran',
+            'biayaAdminPenarikan',
+            'biayaAdminTransfer',
             'transactions'
         ));
     }
@@ -56,38 +74,120 @@ class tellerController extends Controller
     // ======================================================
     // ===================== SETORAN ========================
     // ======================================================
+
+    public function exportSetoran($filter)
+    {
+        $query = Setoran::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get();
+
+        return Excel::download(
+            new SetoranExport($data),
+            'Setoran-' . $filter . '.xlsx'
+        );
+    }
+
+    public function exportSetoranCustom(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+        $data = Setoran::whereBetween(
+            'created_at',
+            [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]
+        )->get();
+
+        return Excel::download(
+            new SetoranExport($data),
+            'Setoran-' .
+                $request->start_date .
+                '_sampai_' .
+                $request->end_date .
+                '.xlsx'
+        );
+    }
+
+    public function cetakStruk($id)
+    {
+        $setoran = Setoran::with([
+            'petugas',
+            'transaksi'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_setoran.struk',
+            compact('setoran')
+        );
+
+        return $pdf->download(
+            'Struk-Setoran-' .
+                str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
+        );
+    }
+
     public function setoran(Request $request)
     {
         $user = Auth::user();
         $teller = $user->petugas;
-
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'setoran')
-                              ->orWhere('jenis_transaksi', 'Setoran')
-                              ->first();
-                              
+            ->orWhere('jenis_transaksi', 'Setoran')
+            ->first();
+
         $query = Setoran::with(['petugas', 'transaksi'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_lengkap', 'like', '%' . $search . '%')
-                  ->orWhere('nama_penyetor', 'like', '%' . $search . '%');
+                    ->orWhere('nama_penyetor', 'like', '%' . $search . '%')
+                    ->orWhere('id_rekening', 'like', '%' . $search . '%');
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.setoran', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.setoran', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
     public function storeSetoran(Request $request)
     {
         $request->validate([
-            'id_rekening'       => 'required|exists:rekening,id',
+            'id_rekening' => 'required|numeric|exists:rekening,id',
             'jumlah_penyetoran' => 'required',
             'setoran'           => 'required',
             'nama_penyetor'     => 'required',
-            'transaksi_id'      => 'required|exists:transaksi,id'
+            'transaksi_id'      => 'required|exists:transaksi,id',
+            'nominal_admin'     => 'nullable'
         ]);
 
         $user = Auth::user();
@@ -95,7 +195,7 @@ class tellerController extends Controller
 
         $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
         $biayaAdmin = (int) $masterTransaksi->nominal;
-        
+
         $jumlahSetoran = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
 
         DB::beginTransaction();
@@ -114,6 +214,7 @@ class tellerController extends Controller
                 'jumlah_penyetoran' => $jumlahSetoran,
                 'transaksi_id'      => $request->transaksi_id,
                 'total_biaya'       => $jumlahSetoran + $biayaAdmin,
+                'nominal_admin'     => $biayaAdmin,
                 'nama_lengkap'      => $request->nama_lengkap,
                 'nama_penyetor'     => $request->nama_penyetor,
                 'alamat_penyetor'   => $request->alamat_penyetor,
@@ -122,7 +223,6 @@ class tellerController extends Controller
 
             DB::commit();
             return back()->with('success', 'Penyetoran berhasil disimpan!');
-
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
@@ -196,7 +296,6 @@ class tellerController extends Controller
                 'success',
                 'Data setoran berhasil diupdate!'
             );
-
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -227,7 +326,33 @@ class tellerController extends Controller
             'success' => false
         ]);
     }
-        
+
+    public function searchRekening(Request $request)
+    {
+        $search = $request->query('query');
+        if (strlen($search) < 2) {
+            return response()->json([]);
+        }
+
+        $data = Rekening::with('nasabah')
+            ->where('id', 'like', '%' . $search . '%')
+            ->orWhereHas('nasabah', function ($q) use ($search) {
+                $q->where('nama_nasabah', 'like', '%' . $search . '%');
+            })
+            ->limit(10)
+            ->get();
+
+        $results = $data->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'nama' => $item->nasabah->nama_nasabah ?? '-',
+                'saldo' => $item->saldo_saat_ini
+            ];
+        });
+
+        return response()->json($results);
+    }
+
     public function destroySetoran($id)
     {
         Setoran::findOrFail($id)->delete();
@@ -237,34 +362,117 @@ class tellerController extends Controller
     // ======================================================
     // ===================== PENARIKAN ======================
     // ======================================================
+
+    public function exportPenarikan($filter)
+    {
+        $query = Penarikan::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get(); // <- INI YANG KELUPAAN
+
+        return Excel::download(
+            new PenarikanExport($data),
+            'Penarikan-' . $filter . '.xlsx'
+        );
+    }
+
+    public function exportPenarikanCustom(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+
+        $data = Penarikan::whereBetween(
+            'created_at',
+            [
+                $request->start_date . ' 00:00:00',
+                $request->end_date . ' 23:59:59'
+            ]
+        )->get();
+
+        return Excel::download(
+            new PenarikanExport($data),
+            'Penarikan-' .
+                Carbon::parse($request->start_date)->format('d-m-Y') .
+                '_sampai_' .
+                Carbon::parse($request->end_date)->format('d-m-Y') .
+                '.xlsx'
+        );
+    }
+
+    public function cetakStrukPenarikan($id)
+    {
+        $penarikan = Penarikan::with([
+            'petugas',
+            'transaksi'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_penarikan.struk',
+            compact('penarikan')
+        );
+
+        return $pdf->download(
+            'Struk-Penarikan-' .
+                str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
+        );
+    }
+
+
     public function penarikan(Request $request)
     {
         $user = Auth::user();
         $teller = $user->petugas;
-        
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'penarikan')->first();
         $query = Penarikan::with(['petugas', 'transaksi'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('nama_penarik', 'like', '%' . $search . '%')
-                  ->orWhere('id_rekening', 'like', '%' . $search . '%');
+                    ->orWhere('id_rekening', 'like', '%' . $search . '%');
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
     public function storePenarikan(Request $request)
     {
         $request->validate([
-            'id_rekening'      => 'required|exists:rekening,id',
-            'jumlah_penarikan' => 'required',
-            'nama_penarik'     => 'required',
-            'transaksi_id'     => 'required|exists:transaksi,id'
+            'id_rekening'             => 'required|exists:rekening,id',
+            'jumlah_penarikan'        => 'required',
+            'nama_penarik'            => 'required',
+            'transaksi_id'            => 'required|exists:transaksi,id',
+            'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
         ]);
 
         $user = Auth::user();
@@ -272,41 +480,53 @@ class tellerController extends Controller
 
         $jumlahPenarikan = (int) str_replace('.', '', $request->jumlah_penarikan);
         $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
-        
-        // Biaya admin dipisahkan dari saldo
-        $biayaAdmin = (int) $masterTransaksi->nominal;
-        
-        // Saldo hanya berkurang sebesar jumlah yang ditarik (bukan + biaya)
+
+        // 1. Tentukan biaya admin asli dan biaya admin yang akan dicatat di tabel penarikan
+        $biayaAdminAsli = (int) $masterTransaksi->nominal;
+
+        // Jika cash, biaya admin yang dicatat di tabel penarikan menjadi 0
+        // Jika potong_saldo, biaya admin tetap sesuai master transaksi (1.000)
+        $pilihanBiayaAdmin = ($request->pilihan_biaya_transaksi === 'cash') ? 0 : $biayaAdminAsli;
+
+        // 2. Tentukan berapa nominal yang memotong saldo di rekening
+        $totalPotongSaldo = $jumlahPenarikan;
+        if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
+            $totalPotongSaldo += $biayaAdminAsli;
+        }
+
         $saldoMinimum = 1000;
 
         DB::beginTransaction();
         try {
             $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
-            
-            // Cek saldo hanya berdasarkan jumlah penarikan saja
-            if (($rekening->saldo_saat_ini - $jumlahPenarikan) < $saldoMinimum) {
+
+            if (($rekening->saldo_saat_ini - $totalPotongSaldo) < $saldoMinimum) {
                 DB::rollBack();
-                return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk penarikan tersebut.');
+                return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk memproses penarikan.');
             }
 
-            // Kurangi saldo rekening HANYA dengan jumlah penarikan
-            $rekening->saldo_saat_ini -= $jumlahPenarikan;
+            $rekening->saldo_saat_ini -= $totalPotongSaldo;
             $rekening->save();
 
+            // 3. Simpan ke database dengan nominal_admin yang sudah dinamis (bisa 0 atau 1000)
             Penarikan::create([
-                'id_rekening'      => $request->id_rekening,
-                'id_petugas'       => $teller->id,
-                'nama_penarik'     => $request->nama_penarik,
-                'jumlah_penarikan' => $jumlahPenarikan,
-                'transaksi_id'     => $request->transaksi_id,
-                'biaya_transaksi'  => $biayaAdmin,
-                // total_biaya bisa tetap disimpan untuk record, 
-                // tapi tidak memotong saldo_saat_ini
-                'total_biaya'      => $biayaAdmin, 
+                'id_rekening'             => $request->id_rekening,
+                'id_petugas'              => $teller->id,
+                'nama_penarik'            => $request->nama_penarik,
+                'jumlah_penarikan'        => $jumlahPenarikan,
+                'transaksi_id'            => $request->transaksi_id,
+                'total_biaya'             => $jumlahPenarikan + $pilihanBiayaAdmin,
+                'nominal_admin'           => $pilihanBiayaAdmin, // <--- Ini akan menjadi 0 jika memilih cash
+                'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi,
             ]);
 
             DB::commit();
-            return back()->with('success', 'Penarikan berhasil! Silakan terima uang tunai sebesar Rp ' . number_format($biayaAdmin, 0, ',', '.') . ' untuk biaya admin.');
+
+            if ($request->pilihan_biaya_transaksi === 'cash') {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin Rp ' . number_format($biayaAdminAsli, 0, ',', '.') . ' dibayarkan tunai (tidak dicatat di saldo).');
+            } else {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin otomatis memotong saldo.');
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal memproses penarikan: ' . $e->getMessage());
@@ -327,7 +547,7 @@ class tellerController extends Controller
             $penarikan = Penarikan::findOrFail($id);
 
             $rekeningLama = Rekening::lockForUpdate()->findOrFail($penarikan->id_rekening);
-            $rekeningLama->saldo_saat_ini += $penarikan->total_biaya; 
+            $rekeningLama->saldo_saat_ini += $penarikan->total_biaya;
             $rekeningLama->save();
 
             $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penarikan);
@@ -375,34 +595,116 @@ class tellerController extends Controller
     // ======================================================
     // ===================== TRANSFER =======================
     // ======================================================
+
+
+    public function exportTransfer($filter)
+    {
+        $query = Transfer::query();
+
+        switch ($filter) {
+
+            case 'hari_ini':
+                $query->whereDate('created_at', Carbon::today());
+                break;
+
+            case 'minggu_ini':
+                $query->whereBetween('created_at', [
+                    Carbon::now()->startOfWeek(),
+                    Carbon::now()->endOfWeek()
+                ]);
+                break;
+
+            case 'bulan_ini':
+                $query->whereMonth('created_at', Carbon::now()->month)
+                    ->whereYear('created_at', Carbon::now()->year);
+                break;
+
+            case 'tahun_ini':
+                $query->whereYear('created_at', Carbon::now()->year);
+                break;
+        }
+
+        $data = $query->get();
+
+        return Excel::download(
+            new TransferExport($data),
+            'Transfer-' . $filter . '.xlsx'
+        );
+    }
+
+    public function exportTransferCustom(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required|date',
+            'end_date'   => 'required|date',
+        ]);
+
+        $data = Transfer::whereBetween('created_at', [
+            Carbon::parse($request->start_date)->startOfDay(),
+            Carbon::parse($request->end_date)->endOfDay(),
+        ])->get();
+
+        return Excel::download(
+            new TransferExport($data),
+            'Transfer-' .
+                $request->start_date .
+                '-sampai-' .
+                $request->end_date .
+                '.xlsx'
+        );
+    }
+
+    public function cetakStrukTransfer($id)
+    {
+        $transfer = Transfer::with([
+            'petugas',
+            'rekeningPengirim',
+            'rekeningPenerima',
+            'transaksi'
+        ])->findOrFail($id);
+
+        $pdf = Pdf::loadView(
+            'teller.crud_transfer.struk',
+            compact('transfer')
+        );
+
+        return $pdf->download(
+            'Struk-Transfer-' .
+                str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
+                '.pdf'
+        );
+    }
+
     public function transfer(Request $request)
     {
         $user = Auth::user();
         $teller = $user->petugas; // Ambil data teller
-
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'transfer')
-                            ->orWhere('jenis_transaksi', 'Transfer')
-                            ->first();
-                            
+            ->orWhere('jenis_transaksi', 'Transfer')
+            ->first();
+
         $query = Transfer::with(['petugas', 'transaksi', 'rekeningPengirim.nasabah', 'rekeningPenerima.nasabah'])->latest();
 
         if ($request->has('search') && $request->search != '') {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('rekeningPengirim.nasabah', function($subQuery) use ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->whereHas('rekeningPengirim.nasabah', function ($subQuery) use ($search) {
                     $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
                 })
-                ->orWhereHas('rekeningPenerima.nasabah', function($subQuery) use ($search) {
-                    $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
-                })
-                ->orWhere('id_rekening_pengirim', 'like', '%' . $search . '%')
-                ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
+                    ->orWhereHas('rekeningPenerima.nasabah', function ($subQuery) use ($search) {
+                        $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
+                    })
+                    ->orWhere('id_rekening_pengirim', 'like', '%' . $search . '%')
+                    ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.transfer', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.transfer', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
 
@@ -422,8 +724,8 @@ class tellerController extends Controller
         ]);
 
         $request->validate([
-            'id_rekening_pengirim' => 'required|exists:rekening,id',
-            'id_rekening_penerima' => 'required|exists:rekening,id|different:id_rekening_pengirim',
+            'id_rekening_pengirim' => 'required|numeric|exists:rekening,id',
+            'id_rekening_penerima' => 'required|numeric|exists:rekening,id|different:id_rekening_pengirim',
             'jumlah_transfer'      => 'required|numeric|min:1',
         ]);
 
@@ -458,16 +760,16 @@ class tellerController extends Controller
                 'id_rekening_pengirim' => $norekPengirim,
                 'id_rekening_penerima' => $norekPenerima,
                 'jumlah_transfer'      => $nominal,
-                'transaksi_id'         => $request->transaksi_id, 
+                'transaksi_id'         => $request->transaksi_id,
                 'total_biaya'          => $nominal + $biayaAdmin, // Tetap mencatat total untuk laporan
-                'datetime'             => now(), 
+                'nominal_admin'        => $biayaAdmin, // Tetap mencatat total untuk laporan
+                'datetime'             => now(),
                 'catatan'              => $request->catatan,
                 'id_petugas'           => $teller->id,
             ]);
 
             DB::commit();
-            return redirect()->back()->with('success', 'Transfer berhasil! Biaya admin sebesar Rp ' . number_format($biayaAdmin, 0, ',', '.') . ' harap diterima secara tunai.');
-
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage())->withInput();
@@ -598,11 +900,7 @@ class tellerController extends Controller
 
             DB::commit();
 
-            return back()->with(
-                'success',
-                'Data transfer berhasil diperbarui!'
-            );
-
+            return back();
         } catch (\Exception $e) {
 
             DB::rollBack();
@@ -616,6 +914,7 @@ class tellerController extends Controller
     public function destroyTransfer($id)
     {
         Transfer::findOrFail($id)->delete();
-        return back()->with('success', 'History transaksi transfer berhasil dihapus!');
+
+        return back();
     }
 }

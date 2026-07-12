@@ -37,8 +37,28 @@ class Transaksi extends Model
         return $this->hasMany(Transfer::class, 'transaksi_id', 'id');
     }
 
+    public function transfer_luar()
+    {
+        return $this->hasMany(Bukti_Tf::class, 'transaksi_id', 'id');
+    }
+
+    public function transfer_nasabah()
+    {
+        return $this->hasMany(RiwayatTf::class, 'transaksi_id', 'id');
+    }
+
     public function rekening()
     {
         return $this->belongsTo(Rekening::class, 'transaksi_id', 'id');
+    }
+
+    public function buktiTf()
+    {
+        return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
+    }
+
+    public function RiwayatTf()
+    {
+        return $this->hasMany(Bukti_Tf::class, 'id_rekening', 'id');
     }
 }

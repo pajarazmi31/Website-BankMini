@@ -41,6 +41,15 @@
 
     <!-- Table Card -->
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse whitespace-nowrap">
                 <thead>
@@ -53,63 +62,70 @@
                         <th class="py-4 px-2 text-[#a3a3a3] font-medium text-[13px] text-center w-24 border-b border-gray-100">Aksi</th>
                     </tr>
                 </thead>
-<tbody class="text-[14px] text-gray-800 font-medium">
-    @foreach ( $userNasabah as $index => $nasabah )
-        <tr class="hover:bg-gray-50/50 transition-colors">
-            <td class="py-4 px-2 border-b border-gray-50 pl-4">{{ $index + 1 }}.</td>
-            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->nama_nasabah}}</td>
-            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
-            <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->rekening->id ?? 'Data Kosong' }}</td>
-            <td class="py-4 px-2 border-b border-gray-50 text-center">
-            
-            @if ($nasabah->rekening?->status_akun == 'aktif')
-                <button
-                    class="w-[28px] h-[28px] rounded-full bg-green-100 text-green-700 inline-flex items-center justify-center cursor-default"
-                    title="Aktif"
-                    type="button"
-                >
-                    <i class="ph ph-check-circle text-[20px]"></i>
-                </button>
+                <tbody class="text-[14px] text-gray-800 font-medium">
+                    @foreach ( $userNasabah as $index => $nasabah )
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
+                            {{ $userNasabah->firstItem() + $index }}.
+                        </td>
+                        <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->nama_nasabah}}</td>
+                        <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
+                        <td class="py-4 px-4 border-b border-gray-50">{{ $nasabah->rekening->id ?? 'Data Kosong' }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-center">
 
-            @elseif ($nasabah->rekening?->status_akun == 'non-aktif')
-                <button
-                    class="w-[28px] h-[28px] rounded-full bg-red-100 text-red-700 inline-flex items-center justify-center cursor-default"
-                    title="Non Aktif"
-                    type="button"
-                >
-                    <i class="ph ph-x-circle text-[20px]"></i>
-                </button>
+                            @if ($nasabah->rekening?->status_akun == 'aktif')
+                            <button
+                                class="w-[28px] h-[28px] rounded-full bg-green-100 text-green-700 inline-flex items-center justify-center cursor-default"
+                                title="Aktif"
+                                type="button">
+                                <i class="ph ph-check-circle text-[20px]"></i>
+                            </button>
 
-            @elseif ($nasabah->rekening?->status_akun == 'revisi')
-                <button
-                    class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default"
-                    title="Pending"
-                    type="button"
-                >
-                    <i class="ph-bold ph-warning-circle text-[20px]"></i>
-                </button>
-            @else
-                <span class="text-[11px] text-gray-400 italic">Belum Ada Akun</span>
-            @endif
-            </td>
-            
-            <td class="py-4 px-2 border-b border-gray-50 text-center">
-                <div class="flex items-center justify-center">
-                    <a href="{{ route('detail.nasabah', $nasabah->id) }}">
-                        <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                    </a>
-                </div>
-            </td>
-        </tr>
-    @endforeach
-</tbody>
+                            @elseif ($nasabah->rekening?->status_akun == 'non-aktif')
+                            <button
+                                class="w-[28px] h-[28px] rounded-full bg-red-100 text-red-700 inline-flex items-center justify-center cursor-default"
+                                title="Non Aktif"
+                                type="button">
+                                <i class="ph ph-x-circle text-[20px]"></i>
+                            </button>
+
+                            @elseif ($nasabah->rekening?->status_akun == 'revisi')
+                            <button
+                                class="w-[28px] h-[28px] rounded-full bg-[#fef3c7] text-[#d97706] inline-flex items-center justify-center cursor-default"
+                                title="Revisi"
+                                type="button">
+                                <i class="ph-bold ph-warning-circle text-[20px]"></i>
+                            </button>
+                            @else
+                            <span class="text-[11px] text-gray-400 italic">Belum Ada Akun</span>
+                            @endif
+                        </td>
+
+                        <td class="py-4 px-2 border-b border-gray-50 text-center">
+                            <div class="flex items-center justify-center">
+                                <a href="{{ route('detail.nasabah', $nasabah->id) }}">
+                                    <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
             </table>
         </div>
 
         <!-- Pagination -->
-        <x-pagination total="3" />
+        <x-pagination :paginator="$userNasabah" />
 
     </div>
 </div>
 
+<script>
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
+    }
+</script>
 @endsection

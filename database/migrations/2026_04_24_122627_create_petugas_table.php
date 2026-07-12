@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('petugas', function (Blueprint $table) {
             $table->id();
-            $table->String('nama_petugas');
-            $table->foreignId('user_id')->constrained('users');
-            $table->String('email',100);
-            $table->String('password');
-            $table->String('role');
+            $table->foreignId('user_id')
+                ->unique()
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+            $table->Enum('kelas', ['X AK 1', 'X AK 2', 'X AK 3', 'XI AK 1', 'XI AK 2', 'XI AK 3','XII AK 1', 'XII AK 2', 'XII AK 3']);
 
             $table->timestamps();
         });

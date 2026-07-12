@@ -14,8 +14,9 @@ class Penarikan extends Model
         'nama_penarik',
         'jumlah_penarikan',
         'transaksi_id',
-        'biaya_transaksi', // Kita tambahkan ini bray agar bisa disimpan ke db
         'total_biaya',
+        'nominal_admin',
+        'pilihan_biaya_transaksi',
         'datetime_tgl'
     ];
 

@@ -136,6 +136,11 @@
                         <input type="text" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
+                        <label class="block text-xs font-semibold text-textGray mb-2">Nominal Admin (Rp)</label>
+                        <input type="text" name="nominal_admin" id="nominal_admin" value="Rp {{ number_format($biaya_admin->nominal, 0, ',', '.') }}"  readonly required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="hidden" name="transaksi_id" value="{{ $biaya_admin->id }}">
+                    </div>
+                    <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Catatan (Opsional)</label>
                         <!-- 
                             BAGIAN BACKEND: INPUT CATATAN
@@ -169,7 +174,7 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                     <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
@@ -222,7 +227,7 @@
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
                                 <div>
-                                    <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
+                                        <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else

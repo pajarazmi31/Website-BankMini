@@ -3,15 +3,28 @@
 @section('title', 'CS - Edit Nasabah')
 
 @section('header_title')
-    Edit Data Nasabah
+Edit Data Nasabah
 @endsection
 
 @section('header_subtitle', 'Ubah data informasi nasabah.')
 
 @section('styles')
 <style>
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 @endsection
 
@@ -22,7 +35,7 @@
             @csrf
             @method('PUT')
 
-            <input type="hidden" value="non-aktif" name="status_akun">;
+            <input type="hidden" value="non-aktif" name="status_akun">
             <!-- SECTION 1: DATA PRIBADI -->
             <div class="mb-10">
                 <div class="flex items-center gap-3 mb-8">
@@ -31,13 +44,13 @@
                 </div>
 
                 @if ($errors->any())
-                    <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
-                        <ul class="list-disc pl-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
+                    <ul class="list-disc pl-5">
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
                 @endif
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
@@ -127,43 +140,44 @@
                         <textarea id="edit_alamat" name="alamat" class="w-full h-[155px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">{{ old('alamat', $nasabah->alamat) }}</textarea>
                     </div>
                     <div class="col-span-1 flex flex-col gap-5">
-                        <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                            <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Provinsi</option>
-                                @foreach ($provinsi as $prov)
-                                    <option value="{{ $prov->id }}" {{ old('provinsi', $nasabah->provinsi_id) == $prov->id ? 'selected' : '' }}>{{ $prov->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
-                            <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Kabupaten</option>
-                                @foreach ($kabupaten as $kab)
-                                    <option value="{{ $kab->id }}" {{ old('kab_kota', $nasabah->kab_kota_id) == $kab->id ? 'selected' : '' }}>{{ $kab->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                            <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Kecamatan</option>
-                                @foreach ($kecamatan as $kec)
-                                    <option value="{{ $kec->id }}" {{ old('kecamatan', $nasabah->kecamatan_id) == $kec->id ? 'selected' : '' }}>{{ $kec->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
-                            <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Desa</option>
-                                @foreach ($desa as $ds)
-                                    <option value="{{ $ds->id }}" {{ old('kelurahan', $nasabah->kelurahan_id) == $ds->id ? 'selected' : '' }}>{{ $ds->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
+                        <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="">Pilih Provinsi</option>
+                            @foreach ($provinsi as $prov)
+                            <option value="{{ $prov->id }}" {{ old('provinsi', $nasabah->provinsi_id) == $prov->id ? 'selected' : '' }}>{{ $prov->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
+                        <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="">Pilih Kabupaten</option>
+                            @foreach ($kabupaten as $kab)
+                            <option value="{{ $kab->id }}" {{ old('kab_kota', $nasabah->kab_kota_id) == $kab->id ? 'selected' : '' }}>{{ $kab->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    </div>
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
+                        <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="">Pilih Kecamatan</option>
+                            @foreach ($kecamatan as $kec)
+                            <option value="{{ $kec->id }}" {{ old('kecamatan', $nasabah->kecamatan_id) == $kec->id ? 'selected' : '' }}>{{ $kec->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
+                        <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <option value="">Pilih Desa</option>
+                            @foreach ($desa as $ds)
+                            <option value="{{ $ds->id }}" {{ old('kelurahan', $nasabah->kelurahan_id) == $ds->id ? 'selected' : '' }}>{{ $ds->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
                         <input type="number" name="kode_pos" value="{{ old('kode_pos', $nasabah->kode_pos) }}" id="edit_kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
@@ -207,10 +221,6 @@
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                     <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
-                        <input type="text" name="no_rekening" value="{{ old('no_rekening', $nasabah->rekening->id ?? '') }}" id="edit_rekening" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Status Rekening</label>
                         <input type="text" value="{{ $nasabah->rekening->status_akun ?? '' }}" id="edit_status" readonly class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none bg-gray-50 cursor-not-allowed">
                     </div>
@@ -230,60 +240,60 @@
 @section('scripts')
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-$(document).ready(function() {
-    $('#provinsi').change(function(){
-        let id_provinsi = $(this).val();
-        if(!id_provinsi) return;
+    $(document).ready(function() {
+        $('#provinsi').change(function() {
+            let id_provinsi = $(this).val();
+            if (!id_provinsi) return;
 
-        $.ajax({
-            url: '/get-kabupaten/' + id_provinsi,
-            type: 'GET',
-            success:function(data){
-                $('#kabupaten').empty();
-                $('#kabupaten').append(`<option value="">Pilih Kabupaten</option>`);
-                $('#kecamatan').empty().append(`<option value="">Pilih Kecamatan</option>`);
-                $('#desa').empty().append(`<option value="">Pilih Desa</option>`);
-                data.forEach(function(item){
-                    $('#kabupaten').append(`<option value="${item.id}">${item.name}</option>`);
-                });
-            }
+            $.ajax({
+                url: '/get-kabupaten/' + id_provinsi,
+                type: 'GET',
+                success: function(data) {
+                    $('#kabupaten').empty();
+                    $('#kabupaten').append(`<option value="">Pilih Kabupaten</option>`);
+                    $('#kecamatan').empty().append(`<option value="">Pilih Kecamatan</option>`);
+                    $('#desa').empty().append(`<option value="">Pilih Desa</option>`);
+                    data.forEach(function(item) {
+                        $('#kabupaten').append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                }
+            });
+        });
+
+        $('#kabupaten').change(function() {
+            let id_kabupaten = $(this).val();
+            if (!id_kabupaten) return;
+
+            $.ajax({
+                url: '/get-kecamatan/' + id_kabupaten,
+                type: 'GET',
+                success: function(data) {
+                    $('#kecamatan').empty();
+                    $('#kecamatan').append(`<option value="">Pilih Kecamatan</option>`);
+                    $('#desa').empty().append(`<option value="">Pilih Desa</option>`);
+                    data.forEach(function(item) {
+                        $('#kecamatan').append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                }
+            });
+        });
+
+        $('#kecamatan').change(function() {
+            let id_kecamatan = $(this).val();
+            if (!id_kecamatan) return;
+
+            $.ajax({
+                url: '/get-desa/' + id_kecamatan,
+                type: 'GET',
+                success: function(data) {
+                    $('#desa').empty();
+                    $('#desa').append(`<option value="">Pilih Desa</option>`);
+                    data.forEach(function(item) {
+                        $('#desa').append(`<option value="${item.id}">${item.name}</option>`);
+                    });
+                }
+            });
         });
     });
-
-    $('#kabupaten').change(function(){
-        let id_kabupaten = $(this).val();
-        if(!id_kabupaten) return;
-
-        $.ajax({
-            url: '/get-kecamatan/' + id_kabupaten,
-            type: 'GET',
-            success:function(data){
-                $('#kecamatan').empty();
-                $('#kecamatan').append(`<option value="">Pilih Kecamatan</option>`);
-                $('#desa').empty().append(`<option value="">Pilih Desa</option>`);
-                data.forEach(function(item){
-                    $('#kecamatan').append(`<option value="${item.id}">${item.name}</option>`);
-                });
-            }
-        });
-    });
-
-    $('#kecamatan').change(function(){
-        let id_kecamatan = $(this).val();
-        if(!id_kecamatan) return;
-
-        $.ajax({
-            url: '/get-desa/' + id_kecamatan,
-            type: 'GET',
-            success:function(data){
-                $('#desa').empty();
-                $('#desa').append(`<option value="">Pilih Desa</option>`);
-                data.forEach(function(item){
-                    $('#desa').append(`<option value="${item.id}">${item.name}</option>`);
-                });
-            }
-        });
-    });
-});
 </script>
 @endsection

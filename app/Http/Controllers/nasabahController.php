@@ -11,6 +11,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 
+use App\Models\Setoran;
+use App\Models\Penarikan;
+use App\Models\Transfer;
+use App\Models\Transaksi;
+
 class nasabahController extends Controller
 {
     public function index()
@@ -49,22 +54,81 @@ class nasabahController extends Controller
                 ->whereYear('created_at', $tahunIni)
                 ->sum('jumlah_transfer');
 
-                    // RIWAYAT TRANSFER
-        $riwayatTransfer = RiwayatTf::where('id_pengirim', $nomorRekening)
+        // RIWAYAT TRANSFER
+        $transferNasabah = RiwayatTf::where('id_pengirim', $nomorRekening)
             ->orWhere('id_penerima', $nomorRekening)
-            ->latest()
-            ->take(5)
-            ->get();
+            ->get()
+            ->map(function ($item) {
+
+                $item->jenis_transaksi = 'transfer';
+
+                return $item;
+            });
+
+        $transferTeller = Transfer::where('id_rekening_pengirim', $nomorRekening)
+            ->orWhere('id_rekening_penerima', $nomorRekening)
+            ->get()
+            ->map(function ($item) use ($nomorRekening) {
+
+                $item->jenis_transaksi =
+                    $item->id_rekening_pengirim == $nomorRekening
+                    ? 'transfer_teller_keluar'
+                    : 'transfer_teller_masuk';
+
+                return $item;
+            });
+
+    // Setoran dari teller
+    $setoran = Setoran::where('id_rekening', $nomorRekening)
+        ->get()
+        ->map(function ($item) {
+
+            $item->jenis_transaksi = 'setoran';
+
+            return $item;
+        });
+
+    // Penarikan dari teller
+    $penarikan = Penarikan::where('id_rekening', $nomorRekening)
+        ->get()
+        ->map(function ($item) {
+
+            $item->jenis_transaksi = 'penarikan';
+
+            return $item;
+        });
+
+        // Gabungkan semua riwayat
+        $semuaRiwayat = $transferNasabah
+            ->concat($transferTeller)
+            ->concat($setoran)
+            ->concat($penarikan)
+            ->sortByDesc('created_at')
+            ->values();
+
+        // Dashboard cuma tampil 5 terbaru
+        $riwayatTransfer = $semuaRiwayat->take(5);
+
         } else {
             $totalPemasukanBulanIni = 0;
             $totalPengeluaranBulanIni = 0;
             $riwayatTransfer = collect();
+            $semuaRiwayat = collect();
         }
-        return view('nasabah.dashboard', compact('user', 'nasabah', 'rekening', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni', 'riwayatTransfer'));
+        return view('nasabah.dashboard', compact(
+            'user',
+            'nasabah',
+            'rekening',
+            'totalPemasukanBulanIni',
+            'totalPengeluaranBulanIni',
+            'riwayatTransfer',
+            'semuaRiwayat'
+        ));  
     }
 
     public function transfer()
     {
+        $biaya_admin = Transaksi::findOrFail(5);
         $user = Auth::user();
         $nasabah = $user->nasabah;
         $rekening = Rekening::where('nasabah_id', $nasabah->id)->first();
@@ -109,7 +173,7 @@ class nasabahController extends Controller
             $totalPemasukanBulanIni = 0;
             $totalPengeluaranBulanIni = 0;
         }
-        return view('nasabah.transfer', compact('user', 'rekening', 'nasabah', 'riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
+        return view('nasabah.transfer', compact('biaya_admin','user', 'rekening', 'nasabah', 'riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
     }
 
     public function cekRekening($id)
@@ -146,16 +210,13 @@ class nasabahController extends Controller
 
         // 2. Ambil ID rekening pengirim secara manual lewat 'nasabah_id' agar anti-error
         $nasabah = Nasabah::where('user_id', Auth::id())->first();
-
         $rekeningUser = Rekening::where('nasabah_id', $nasabah->id)->first();
 
         // Proteksi: Jika user login ternyata belum punya akun di tabel rekening
         if (!$rekeningUser) {
             return redirect()->back()->with('error', 'Transfer gagal: Anda belum memiliki nomor rekening.');
         }
-
         $idPengirim = $rekeningUser->id;
-
         // Proteksi: Cegah transfer ke rekening diri sendiri
         if ($idPengirim === $request->id_penerima) {
             return redirect()->back()->with('error', 'Tidak bisa mentransfer ke rekening sendiri.');
@@ -165,32 +226,35 @@ class nasabahController extends Controller
         try {
             DB::transaction(function () use ($idPengirim, $request) {
 
+                $adminTransfer = Transaksi::where('id', 5)->value('nominal');
                 // Ambil data rekening pengirim dan kunci barisnya (lockForUpdate)
                 $rekeningPengirim = Rekening::where('id', $idPengirim)->lockForUpdate()->firstOrFail();
-
                 // Ambil data rekening penerima berdasarkan nomor rekening yang diinput
                 $rekeningPenerima = Rekening::where('id', $request->id_penerima)->lockForUpdate()->firstOrFail();
 
                 $nominal = $request->jumlah_transfer;
+                $totalPotongan = $nominal + $adminTransfer;
 
                 // Cek apakah saldo pengirim mencukupi
-                if ($rekeningPengirim->saldo_saat_ini < $nominal) {
+                if ($rekeningPengirim->saldo_saat_ini < $totalPotongan) {
                     throw new \Exception('Saldo Anda tidak mencukupi untuk melakukan transfer ini.');
                 }
 
                 // PROSES POTONG & TAMBAH SALDO
                 // A. Kurangi saldo pengirim
-                $rekeningPengirim->decrement('saldo_saat_ini', $nominal);
+                $rekeningPengirim->decrement('saldo_saat_ini', $totalPotongan);
 
                 // B. Tambah saldo penerima
                 $rekeningPenerima->increment('saldo_saat_ini', $nominal);
 
                 // C. Catat ke tabel riwayat_tf
-                RiwayatTf::create([
-                    'id_pengirim' => $idPengirim,
+                RiwayatTf::create([  
+                    'transaksi_id'  => 5,
+                    'id_pengirim' => $idPengirim,   
                     'id_penerima' => $rekeningPenerima->id,
                     'nama_penerima' => $request->nama_penerima ?? 'Nasabah Mini Bank',
                     'jumlah_transfer' => $nominal,
+                    'nominal_admin' => $adminTransfer,
                     'catatan' => $request->catatan,
                 ]);
             });
