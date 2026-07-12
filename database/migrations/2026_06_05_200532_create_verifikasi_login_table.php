@@ -11,15 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-
-        Schema::create('petugas', function (Blueprint $table) {
+        Schema::create('verifikasi_login', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('user_id')
-                ->unique()
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->Enum('kelas', ['X AK 1', 'X AK 2', 'X AK 3', 'XI AK 1', 'XI AK 2', 'XI AK 3','XII AK 1', 'XII AK 2', 'XII AK 3']);
+            $table->enum('status', [
+                'pending',
+                'disetujui',
+                'ditolak'
+            ])->default('pending');
+
+            $table->foreignId('supervisor_id')
+                ->nullable()
+                ->constrained('users');
+
+            $table->timestamp('waktu_verifikasi')
+                ->nullable();
 
             $table->timestamps();
         });
@@ -30,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('petugas');
+        Schema::dropIfExists('verifikasi_login');
     }
 };

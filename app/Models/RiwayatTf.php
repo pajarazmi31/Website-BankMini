@@ -9,9 +9,11 @@ class RiwayatTf extends Model
     protected $table = 'riwayat_tf';
 
     protected $fillable = [
+        'transaksi_id',
         'id_pengirim',
         'id_penerima',
         'nama_penerima', // Sebenarnya ini opsional jika sudah berelasi ke Rekening, tapi tidak apa-apa jika ingin disimpan
+        'nominal_admin',
         'jumlah_transfer',
         'catatan'
     ];
@@ -26,5 +28,10 @@ class RiwayatTf extends Model
     public function pengirim()
     {
         return $this->belongsTo(Rekening::class, 'id_pengirim', 'id');
+    }
+
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'transaksi_id', 'id');
     }
 }

@@ -14,15 +14,17 @@ use Carbon\Carbon;
 class rekeningController extends Controller
 {
 
-    public function keloladata() {
+    public function keloladata(Request $request) {
         $user = Auth::user();
         $cs = $user->petugas;
+        $perPage = $request->input('per_page', 10);
         $provinsi = DB::table('provinsi')->get();
         $allNasabah = Nasabah::with('rekening', 'jurusan')
             ->orderByDesc('id')
-            ->get();
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('costumerservice.keloladata', compact('user', 'cs', 'provinsi', 'allNasabah'));
+        return view('costumerservice.keloladata', compact('user', 'cs', 'provinsi', 'allNasabah', 'perPage'));
     }
 
 

@@ -2,14 +2,27 @@
 
 @section('title', 'Teller - Data Transfer')
 @section('header_title')
-    Selamat Datang, {{ $user->name }}!
+Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('styles')
 <style>
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 @endsection
 
@@ -81,16 +94,16 @@
                 </div>
 
                 <div
-                id="customTanggalBox"
-                class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
-                
-                        <form action="{{ route('transfer.export.custom') }}" method="GET">
+                    id="customTanggalBox"
+                    class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+
+                    <form action="{{ route('transfer.export.custom') }}" method="GET">
 
                         <label class="block text-xs font-semibold text-gray-500 mb-1">
                             Dari Tanggal
                         </label>
 
-                       <input
+                        <input
                             type="date"
                             name="start_date"
                             class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
@@ -104,7 +117,7 @@
                             name="end_date"
                             class="w-full border rounded-lg px-3 py-1.5 text-sm mb-3">
 
-                       <button
+                        <button
                             type="submit"
                             class="w-full bg-green-600 hover:bg-green-700 text-white py-1.5 rounded-lg text-[12px] font-semibold transition-all">
                             Download Excel
@@ -131,6 +144,15 @@
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="transferTableCard">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -145,21 +167,21 @@
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                @forelse($data as $index => $d)
-                <tr class="hover:bg-gray-50/50 transition-colors">
-                    <td class="py-4 px-2 border-b border-gray-50">{{ $data->firstItem() + $index }}.</td>
-                    <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_pengirim }}</td>
-                    <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_penerima }}</td>
-                    <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
-                        Rp. {{ number_format($d->jumlah_transfer, 0, ',', '.') }}
-                    </td>
-                    <td class="py-4 px-2 border-b border-gray-50">
-                        {{ $d->created_at->format('d-m-Y') }}
-                    </td>
-                   <td class="py-4 px-2 border-b border-gray-50">{{ $user->name ?? 'Teller' }}</td>
-                    <td class="py-4 px-2 border-b border-gray-50 text-center">
-                        <div class="flex items-center justify-center gap-2">
-                            <button type="button" 
+                    @forelse($data as $index => $d)
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $data->firstItem() + $index }}.</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_pengirim }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $d->id_rekening_penerima }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
+                            Rp. {{ number_format($d->jumlah_transfer, 0, ',', '.') }}
+                        </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $d->created_at->format('d-m-Y') }}
+                        </td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $user->name ?? 'Teller' }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <button type="button"
                                     onclick="tampilkanDetail(this)"
                                     data-petugas="{{ $user->name ?? 'Teller' }}"
                                     data-pengirim="{{ $d->rekeningPengirim->nama_nasabah ?? $d->id_rekening_pengirim }}"
@@ -170,12 +192,12 @@
                                     data-catatan="{{ $d->catatan ?? '-' }}"
                                     class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                                     title="Lihat Detail">
-                                <i class="ph-fill ph-eye text-[15px]"></i>
-                            </button>
+                                    <i class="ph-fill ph-eye text-[15px]"></i>
+                                </button>
 
-                            <button
-                                type="button"
-                                onclick='editData(
+                                <button
+                                    type="button"
+                                    onclick='editData(
                                     "{{ $d->id }}",
                                     "{{ $d->id_rekening_pengirim }}",
                                     "{{ $d->id_rekening_penerima }}",
@@ -183,36 +205,36 @@
                                     "{{ $user->name }}",
                                     "{{ $d->catatan }}"
                                 )'
-                                class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
-                                title="Edit">
-                                <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                            </button>
-
-                            <a href="{{ route('transfer.struk', $d->id) }}"
-                            target="_blank"
-                            class="w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
-                            title="Cetak Struk">
-                                <i class="ph-fill ph-printer text-[15px]"></i>
-                            </a>
-
-                            <form id="delete-form-{{ $d->id }}" action="{{ route('transfer.delete', $d->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button
-                                    type="button"
-                                    onclick="confirmDeleteTransfer('{{ $d->id }}')"
-                                    class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors">
-                                    <i class="ph-fill ph-trash text-[15px]"></i>
+                                    class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                                    title="Edit">
+                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                 </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="6" class="py-10 text-center text-gray-400 font-medium">Tidak ada data transfer</td>
-                </tr>
-                @endforelse
+
+                                <a href="{{ route('transfer.struk', $d->id) }}"
+                                    target="_blank"
+                                    class="w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
+                                    title="Cetak Struk">
+                                    <i class="ph-fill ph-printer text-[15px]"></i>
+                                </a>
+
+                                <form id="delete-form-{{ $d->id }}" action="{{ route('transfer.delete', $d->id) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="button"
+                                        onclick="confirmDeleteTransfer('{{ $d->id }}')"
+                                        class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors">
+                                        <i class="ph-fill ph-trash text-[15px]"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="py-10 text-center text-gray-400 font-medium">Tidak ada data transfer</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -242,7 +264,9 @@
             'detail': document.getElementById('viewDetailData')
         };
 
-        Object.values(views).forEach(v => { if(v) v.classList.add('hidden'); });
+        Object.values(views).forEach(v => {
+            if (v) v.classList.add('hidden');
+        });
 
         const activeView = views[viewName];
         const searchBar = document.getElementById('searchBarContainer');
@@ -257,7 +281,17 @@
                 if (searchBar) searchBar.classList.add('md:hidden');
             }
         }
-        document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+        document.querySelector('main')?.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
     }
 
     // --- LOGIKA UTILITY ANGKA ---
@@ -271,29 +305,29 @@
 
     function hitungBiaya(prefix) {
         const inputNominal = document.getElementById(`${prefix}_jumlah_transfer`);
-        const inputAdmin   = document.getElementById(`${prefix}_biaya_transaksi`);
-        const inputTotal   = document.getElementById(`${prefix}_total_biaya`);
+        const inputAdmin = document.getElementById(`${prefix}_biaya_transaksi`);
+        const inputTotal = document.getElementById(`${prefix}_total_biaya`);
         const inputTotalView = document.getElementById(`${prefix}_total_biaya_view`);
 
         if (!inputNominal) return;
 
         let nominal = cleanNumber(inputNominal.value);
-        let total   = nominal + BIAYA_ADMIN_MASTER;
+        let total = nominal + BIAYA_ADMIN_MASTER;
 
         if (inputAdmin) inputAdmin.value = BIAYA_ADMIN_MASTER;
         if (inputTotal) inputTotal.value = total;
         if (inputTotalView) inputTotalView.value = 'Rp. ' + formatNumber(total);
     }
 
-        function tampilkanDetail(button) {
+    function tampilkanDetail(button) {
         // Pastikan semua atribut menggunakan prefix 'data-'
-        const petugas  = button.getAttribute('data-petugas');
+        const petugas = button.getAttribute('data-petugas');
         const pengirim = button.getAttribute('data-pengirim');
         const penerima = button.getAttribute('data-penerima');
-        const nominal  = button.getAttribute('data-nominal');
-        const biaya    = button.getAttribute('data-biaya');
-        const total    = button.getAttribute('data-total');
-        const catatan  = button.getAttribute('data-catatan');
+        const nominal = button.getAttribute('data-nominal');
+        const biaya = button.getAttribute('data-biaya');
+        const total = button.getAttribute('data-total');
+        const catatan = button.getAttribute('data-catatan');
 
         // Masukkan ke input (tambahkan pengecekan agar tidak error jika elemen tidak ditemukan)
         const setVal = (id, val) => {
@@ -312,7 +346,7 @@
         switchView('detail');
     }
     // --- VIEW EDIT & INJEKSI DATA ---
-       function editData(id, pengirim, penerima, nominal, petugas, catatan) {
+    function editData(id, pengirim, penerima, nominal, petugas, catatan) {
 
         document.getElementById('edit_id').value = id;
 
@@ -345,7 +379,7 @@
     }
 
     // --- AJAX DETEKSI PEMILIK REKENING (TAMBAH / EDIT) ---
-        function cekRekeningTransfer(prefix, jenis) {
+    function cekRekeningTransfer(prefix, jenis) {
 
         const pengirimInput = document.getElementById(`${prefix}_id_rekening_pengirim`);
         const penerimaInput = document.getElementById(`${prefix}_id_rekening_penerima`);
@@ -353,13 +387,13 @@
         const infoPengirim = document.getElementById(`${prefix}_info_pengirim`);
         const infoPenerima = document.getElementById(`${prefix}_info_penerima`);
 
-        let inputTarget = (jenis === 'pengirim')
-            ? pengirimInput
-            : penerimaInput;
+        let inputTarget = (jenis === 'pengirim') ?
+            pengirimInput :
+            penerimaInput;
 
-        let infoTarget = (jenis === 'pengirim')
-            ? infoPengirim
-            : infoPenerima;
+        let infoTarget = (jenis === 'pengirim') ?
+            infoPengirim :
+            infoPenerima;
 
         if (!inputTarget || !infoTarget) return;
 
@@ -446,15 +480,15 @@
 
         // EDIT PENGIRIM hanya angka
         document.getElementById('edit_id_rekening_pengirim')
-        ?.addEventListener('input', function () {
-            this.value = this.value.replace(/\D/g, '');
-        });
+            ?.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
 
         // EDIT PENERIMA hanya angka
         document.getElementById('edit_id_rekening_penerima')
-        ?.addEventListener('input', function () {
-            this.value = this.value.replace(/\D/g, '');
-        });
+            ?.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
 
         const tambahNominal = document.getElementById('tambah_jumlah_transfer');
         if (tambahNominal) {
@@ -478,14 +512,14 @@
         const formTambah = document.getElementById('tambahPenarikanForm') || document.querySelector('#viewTambahData form');
         if (formTambah) {
             formTambah.addEventListener('submit', function() {
-                if(tambahNominal) tambahNominal.value = cleanNumber(tambahNominal.value);
+                if (tambahNominal) tambahNominal.value = cleanNumber(tambahNominal.value);
             });
         }
 
         const formEdit = document.getElementById('editForm');
         if (formEdit) {
             formEdit.addEventListener('submit', function() {
-                if(editNominal) editNominal.value = cleanNumber(editNominal.value);
+                if (editNominal) editNominal.value = cleanNumber(editNominal.value);
             });
         }
 
@@ -494,24 +528,24 @@
             const input = document.getElementById(inputId);
             const suggestions = document.getElementById(suggestionsId);
             const info = document.getElementById(infoId);
-            
+
             if (!input || !suggestions) return;
-            
+
             let debounceTimer;
-            
+
             input.addEventListener('input', function() {
                 clearTimeout(debounceTimer);
                 const query = this.value.trim();
-                
+
                 // Run original validation in real-time
                 cekRekeningTransfer('tambah', type);
-                
+
                 if (query.length < 2) {
                     suggestions.innerHTML = '';
                     suggestions.classList.add('hidden');
                     return;
                 }
-                
+
                 debounceTimer = setTimeout(() => {
                     fetch(`/search-rekening?query=${query}`)
                         .then(res => res.json())
@@ -521,7 +555,7 @@
                                 suggestions.classList.remove('hidden');
                                 return;
                             }
-                            
+
                             let html = '';
                             data.forEach(item => {
                                 html += `
@@ -537,20 +571,20 @@
                         .catch(err => console.error('Gagal memuat rekomendasi:', err));
                 }, 250);
             });
-            
+
             // Handle clicking suggestion
             suggestions.addEventListener('click', function(e) {
                 const item = e.target.closest('[data-id]');
                 if (!item) return;
-                
+
                 const id = item.dataset.id;
                 const nama = item.dataset.nama;
                 const saldo = item.dataset.saldo;
-                
+
                 input.value = id;
                 suggestions.innerHTML = '';
                 suggestions.classList.add('hidden');
-                
+
                 // Trigger verify details
                 if (type === 'pengirim') {
                     if (info) {
@@ -571,7 +605,7 @@
                     }
                 }
             });
-            
+
             // Close suggestions on clicking outside
             document.addEventListener('click', function(e) {
                 if (!input.contains(e.target) && !suggestions.contains(e.target)) {
@@ -648,87 +682,87 @@
         });
 
         // AJAX Pagination click interceptor
-       document.addEventListener('click', function(e) {
+        document.addEventListener('click', function(e) {
 
-        const link = e.target.closest('#transferTableCard a');
+            const link = e.target.closest('#transferTableCard a');
 
-        if (!link) return;
+            if (!link) return;
 
-        // biarkan link download / pdf normal
-        if (link.target === '_blank') return;
+            // biarkan link download / pdf normal
+            if (link.target === '_blank') return;
 
-        if (link.getAttribute('href') &&
-            !link.getAttribute('href').startsWith('#')) {
+            if (link.getAttribute('href') &&
+                !link.getAttribute('href').startsWith('#')) {
 
-            e.preventDefault();
+                e.preventDefault();
 
-            const targetUrl = link.getAttribute('href');
+                const targetUrl = link.getAttribute('href');
 
-            window.history.pushState({}, '', targetUrl);
+                window.history.pushState({}, '', targetUrl);
 
-            fetch(targetUrl)
-                .then(response => response.text())
-                .then(html => {
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(html, 'text/html');
+                fetch(targetUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
 
-                    const newCard =
-                        doc.getElementById('transferTableCard');
+                        const newCard =
+                            doc.getElementById('transferTableCard');
 
-                    const currentCard =
-                        document.getElementById('transferTableCard');
+                        const currentCard =
+                            document.getElementById('transferTableCard');
 
-                    if (newCard && currentCard) {
-                        currentCard.innerHTML = newCard.innerHTML;
-                    }
-                });
+                        if (newCard && currentCard) {
+                            currentCard.innerHTML = newCard.innerHTML;
+                        }
+                    });
+            }
+        });
+
+        // ===========================
+        // EXPORT EXCEL DROPDOWN
+        // ===========================
+
+        const btnExportExcel = document.getElementById('btnExportExcel');
+        const dropdownExport = document.getElementById('dropdownExport');
+        const customTanggalBox = document.getElementById('customTanggalBox');
+
+        if (btnExportExcel) {
+
+            btnExportExcel.addEventListener('click', function(e) {
+
+                e.stopPropagation();
+
+                dropdownExport.classList.toggle('hidden');
+
+                if (!customTanggalBox.classList.contains('hidden')) {
+                    customTanggalBox.classList.add('hidden');
+                }
+
+            });
+
         }
-    });
 
-    // ===========================
-    // EXPORT EXCEL DROPDOWN
-    // ===========================
+        window.toggleCustomTanggal = function() {
 
-    const btnExportExcel = document.getElementById('btnExportExcel');
-    const dropdownExport = document.getElementById('dropdownExport');
-    const customTanggalBox = document.getElementById('customTanggalBox');
+            customTanggalBox.classList.toggle('hidden');
 
-    if (btnExportExcel) {
+        }
 
-        btnExportExcel.addEventListener('click', function(e) {
+        document.addEventListener('click', function(e) {
 
-            e.stopPropagation();
+            if (
+                !e.target.closest('#dropdownExport') &&
+                !e.target.closest('#btnExportExcel') &&
+                !e.target.closest('#customTanggalBox')
+            ) {
 
-            dropdownExport.classList.toggle('hidden');
-
-            if (!customTanggalBox.classList.contains('hidden')) {
+                dropdownExport.classList.add('hidden');
                 customTanggalBox.classList.add('hidden');
+
             }
 
         });
-
-    }
-
-    window.toggleCustomTanggal = function() {
-
-        customTanggalBox.classList.toggle('hidden');
-
-    }
-
-    document.addEventListener('click', function(e) {
-
-        if (
-            !e.target.closest('#dropdownExport') &&
-            !e.target.closest('#btnExportExcel') &&
-            !e.target.closest('#customTanggalBox')
-        ) {
-
-            dropdownExport.classList.add('hidden');
-            customTanggalBox.classList.add('hidden');
-
-        }
-
-    });
 
     });
 </script>

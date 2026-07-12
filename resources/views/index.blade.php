@@ -436,17 +436,21 @@
                                 @enderror
                             </div>
 
-                            <!-- Kolom: Tanggal Transfer -->
+                            <!-- Kolom: Biaya Admin (Otomatis ID 2) -->
                             <div class="relative">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Transfer</label>
-                                <!-- BAGIAN BACKEND: INPUT TANGGAL TRANSFER -->
-                                <input type="date" name="datetime_tgl" value="{{ old('datetime_tgl') }}"
-                                    class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition text-gray-500 appearance-none {{ $errors->has('datetime_tgl') ? 'border-red-500' : 'border-gray-200' }}">
-                                <i class="ph ph-caret-down absolute right-4 top-10 text-gray-400 pointer-events-none"></i>
-                                @error('datetime_tgl')
-                                    <!-- BAGIAN BACKEND: ERROR TANGGAL TRANSFER -->
-                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
-                                @enderror
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Biaya Admin</label>
+                                
+                                <!-- 1. INPUT DISPLAY (Hanya untuk dilihat user, dikunci dengan 'readonly') -->
+                                <input type="text" 
+                                    value="Rp {{ number_format($biaya_admin->nominal, 0, ',', '.') }}" 
+                                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg outline-none transition text-gray-500 cursor-not-allowed" 
+                                    readonly>
+
+                                <!-- 2. INPUT HIDDEN (Ini yang bertugas mengirimkan ID '2' ke backend Laravel saat disubmit) -->
+                                <input type="hidden" name="transaksi_id" value="{{ $biaya_admin->id }}">
+
+                                <!-- Karena ini readonly dan otomatis, kita tidak butuh pesan error validation di sini 
+                                    karena nilainya sudah pasti valid di-set dari database -->
                             </div>
 
                             <!-- Kolom: Nomor Rekening Penerima -->
@@ -487,33 +491,38 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Unggah Bukti Transfer</label>
                             <div onclick="document.getElementById('file-upload').click()"
-                                class="mt-1 min-h-[160px] relative flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg bg-white hover:bg-gray-50 transition cursor-pointer group overflow-hidden {{ $errors->has('bukti_transfer') ? 'border-red-300' : 'border-gray-300' }}">
+                                class="mt-1 min-h-[160px] relative flex justify-center items-center px-6 pt-5 pb-6 border-2 border-dashed rounded-lg bg-white hover:bg-gray-50 transition cursor-pointer group overflow-hidden {{ $errors->has('bukti_foto') ? 'border-red-300' : 'border-gray-300' }}">
+                                
                                 <!-- Konten Default (Ikon & Teks) -->
                                 <div id="upload-placeholder" class="space-y-2 text-center transition-all duration-300">
                                     <img src="{{ asset('img/icon/landingpage/upload-cloud.png') }}" alt="Upload Icon" class="w-12 h-12 mx-auto object-contain">
                                     <div class="flex text-sm text-gray-600 justify-center">
                                         <span class="font-medium text-merek-biru">Klik untuk unggah bukti</span>
                                     </div>
-                                    <p class="text-xs text-gray-400">JPG atau PNG hingga 5MB</p>
+                                    <!-- UBAH DISINI: Tambahkan informasi PDF -->
+                                    <p class="text-xs text-gray-400">JPG, PNG, atau PDF hingga 5MB</p>
                                 </div>
 
                                 <!-- Konten Pratinjau (Tersembunyi Awalnya) -->
-                                <div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-white z-10 items-center justify-center p-2">
-                                    <img id="image-preview" src="#" alt="Pratinjau" class="max-h-full max-w-full object-contain rounded-md shadow-sm">
+                                <!-- UBAH DISINI: preview-container diubah flex-col agar layout aman -->
+                                <div id="preview-container" class="hidden absolute inset-0 w-full h-full bg-white z-10 flex flex-col items-center justify-center p-2">
+                                    
+                                    <!-- UBAH DISINI: Ganti <img> jadi <object> serbaguna -->
+                                    <object id="file-preview-object" data="" type="" class="w-full h-full object-contain rounded-md shadow-sm"></object>
+                                    
+                                    <!-- Overlay untuk ganti file -->
                                     <div class="absolute inset-0 bg-merek-biru/10 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                                        <!-- UBAH DISINI: Teks diganti jadi "Ganti File" karena bisa jadi bukan gambar -->
                                         <div class="bg-merek-biru text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                                            Ganti Gambar
+                                            Ganti File
                                         </div>
                                     </div>
                                 </div>
 
-                                <!--
-                                    BAGIAN BACKEND: INPUT FILE BUKTI TRANSFER
-                                    - name="bukti_transfer": File gambar akan dikirim dengan key ini.
-                                    - Backend perlu menyimpan file ini menggunakan fitur Storage Laravel.
-                                -->
-                                <input id="file-upload" name="bukti_foto" type="file" class="sr-only" accept="image/*" onchange="previewImage(this)">
+                                <!-- UBAH DISINI: accept ditambah application/pdf -->
+                                <input id="file-upload" name="bukti_foto" type="file" class="sr-only" accept="image/*,application/pdf" onchange="previewImage(this)">
                             </div>
+                            
                             @error('bukti_foto')
                                 <!-- BAGIAN BACKEND: ERROR BUKTI TRANSFER -->
                                 <p class="text-xs text-red-500 mt-2">{{ $message }}</p>
@@ -607,24 +616,41 @@
     <!-- Script untuk animasi navbar dan interaktivitas menu -->
     <script>
         // Fungsi pratinjau gambar bukti transfer
-        function previewImage(input) {
-            const placeholder = document.getElementById('upload-placeholder');
-            const container = document.getElementById('preview-container');
-            const preview = document.getElementById('image-preview');
+function previewImage(input) {
+    const placeholder = document.getElementById('upload-placeholder');
+    const previewContainer = document.getElementById('preview-container');
+    const previewObject = document.getElementById('file-preview-object');
 
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
+    // Pastikan user benar-benar memilih file
+    if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const fileType = file.type; // Mengambil mime-type file (contoh: "image/jpeg" atau "application/pdf")
+        
+        // Buat URL sementara (blob) agar browser bisa membaca file lokal tersebut
+        const fileUrl = URL.createObjectURL(file);
 
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    placeholder.classList.add('hidden');
-                    container.classList.remove('hidden');
-                    container.classList.add('flex');
-                }
-
-                reader.readAsDataURL(input.files[0]);
-            }
+        // Atur tipe data dan sumber dokumen pada tag <object>
+        if (fileType === 'application/pdf') {
+            previewObject.setAttribute('data', fileUrl);
+            previewObject.setAttribute('type', 'application/pdf');
+        } else {
+            previewObject.setAttribute('data', fileUrl);
+            previewObject.setAttribute('type', 'image/jpeg'); // Standar untuk semua jenis gambar lokal
         }
+
+        // Jalankan transisi tampilan (sembunyikan info upload, munculkan preview)
+        placeholder.classList.add('hidden');
+        previewContainer.classList.remove('hidden');
+        previewContainer.classList.add('flex'); // Memastikan flexbox aktif saat tampil
+    } else {
+        // Jika batal memilih file, reset ke tampilan awal
+        previewObject.removeAttribute('data');
+        previewObject.removeAttribute('type');
+        previewContainer.classList.add('hidden');
+        previewContainer.classList.remove('flex');
+        placeholder.classList.remove('hidden');
+    }
+}
 
         // Logika untuk menampilkan/menyembunyikan menu mobile
         function toggleMobileMenu() {

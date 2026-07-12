@@ -2,14 +2,27 @@
 
 @section('title', 'Teller - Data Penarikan')
 @section('header_title')
-    Selamat Datang, {{ $user->name }}!
+Selamat Datang, {{ $user->name }}!
 @endsection
 @section('header_subtitle', 'Lorem Ipsum is simply dummy text of the printing.')
 
 @section('styles')
 <style>
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 @endsection
 
@@ -24,11 +37,11 @@
         <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama atau rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </form>
 
-<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
 
-    <h3 class="text-[22px] font-bold text-gray-800">
-        Data Penarikan
-    </h3>
+        <h3 class="text-[22px] font-bold text-gray-800">
+            Data Penarikan
+        </h3>
 
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
 
@@ -83,12 +96,12 @@
                 </div>
 
                 <!-- CUSTOM TANGGAL -->
-                 <div
-                id="customTanggalBox"
-                class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
-                
+                <div
+                    id="customTanggalBox"
+                    class="hidden absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-lg border border-gray-100 z-[60] p-3">
+
                     <form action="{{ route('penarikan.export.custom') }}" method="GET">
- 
+
                         <label class="block text-xs font-semibold text-gray-500 mb-1">
                             Dari Tanggal
                         </label>
@@ -136,6 +149,15 @@
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col" id="penarikanTableCard">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -150,55 +172,55 @@
                     </tr>
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
-                   @forelse($data as $index => $d)
+                    @forelse($data as $index => $d)
 
-            <tr class="hover:bg-gray-50/50 transition-colors">
+                    <tr class="hover:bg-gray-50/50 transition-colors">
 
-                <td class="py-4 px-2 border-b border-gray-50">
-                    {{ $data->firstItem() + $index }}.
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $data->firstItem() + $index }}.
+                        </td>
 
-                <td class="py-4 px-2 border-b border-gray-50">
-                    {{ $d->nama_penarik }}
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $d->nama_penarik }}
+                        </td>
 
-                <td class="py-4 px-2 border-b border-gray-50">
-                    {{ $d->id_rekening }}
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $d->id_rekening }}
+                        </td>
 
-                <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
-                    Rp. {{ number_format($d->jumlah_penarikan, 0, ',', '.') }}
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-gray-800">
+                            Rp. {{ number_format($d->jumlah_penarikan, 0, ',', '.') }}
+                        </td>
 
-                <td class="py-4 px-2 border-b border-gray-50">
-                    {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
+                        </td>
 
-                <td class="py-4 px-2 border-b border-gray-50">
-                    {{ $user->name }}
-                </td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $user->name }}
+                        </td>
 
-            <td class="py-4 px-2 border-b border-gray-50 text-center">
-                <div class="flex items-center justify-center gap-2">
+                        <td class="py-4 px-2 border-b border-gray-50 text-center">
+                            <div class="flex items-center justify-center gap-2">
 
-                    <!-- Tombol Detail di dalam baris tabel lu -->
-                    <button
-                        type="button"
-                        onclick="showDetail(
+                                <!-- Tombol Detail di dalam baris tabel lu -->
+                                <button
+                                    type="button"
+                                    onclick="showDetail(
                             '{{ $d->nama_penarik }}',
                             '{{ $d->id_rekening }}',
                             '{{ $d->jumlah_penarikan }}', 
                             '{{ $user->name }}',
-                            '{{ $d->transaksi->nominal ?? 0 }}'
+                            '{{ $d->nominal_admin }}'
                         )"
-                        class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
-                        title="Lihat Detail">
-                        <i class="ph-fill ph-eye text-[15px]"></i>
-                    </button>
+                                    class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
+                                    title="Lihat Detail">
+                                    <i class="ph-fill ph-eye text-[15px]"></i>
+                                </button>
 
-                    <!-- 2. TOMBOL EDIT (Sudah ditambahkan type="button" agar tidak memicu submit apa pun) -->
-                    <button
-                    onclick="editData(
+                                <!-- 2. TOMBOL EDIT (Sudah ditambahkan type="button" agar tidak memicu submit apa pun) -->
+                                <button
+                                    onclick="editData(
                         '{{ $d->id }}',
                         '{{ $d->nama_penarik }}',
                         '{{ $d->id_rekening }}',
@@ -207,56 +229,54 @@
                         '{{ $d->transaksi->nominal ?? 0 }}',
                         '{{ $d->transaksi_id }}'
                     )"
-                        class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
-                        title="Edit">
-                        <i class="ph-fill ph-pencil-simple text-[15px]"></i>
-                    </button>
+                                    class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors"
+                                    title="Edit">
+                                    <i class="ph-fill ph-pencil-simple text-[15px]"></i>
+                                </button>
 
-                    <a href="{{ route('penarikan.struk', $d->id) }}"
-                    target="_blank"
-                    class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
-                    title="Cetak Struk">
-                        <i class="ph-fill ph-printer text-[15px]"></i>
-                    </a>
+                                <a href="{{ route('penarikan.struk', $d->id) }}"
+                                    target="_blank"
+                                    class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors"
+                                    title="Cetak Struk">
+                                    <i class="ph-fill ph-printer text-[15px]"></i>
+                                </a>
 
-                    <!-- 3. FORM & TOMBOL HAPUS -->
-                    <form
-                        id="delete-form-{{ $d->id }}"
-                        action="{{ route('penarikan.delete', $d->id) }}"
-                        method="POST"
-                        class="inline-block m-0 p-0"
-                    >
-                        @csrf
-                        @method('DELETE')
-                        <button
-                            type="button"
-                            onclick="confirmDeletePenarikan('{{ $d->id }}')"
-                            class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
-                            title="Hapus"
-                        >
-                            <i class="ph-fill ph-trash text-[15px]"></i>
-                        </button>
-                    </form>
+                                <!-- 3. FORM & TOMBOL HAPUS -->
+                                <form
+                                    id="delete-form-{{ $d->id }}"
+                                    action="{{ route('penarikan.delete', $d->id) }}"
+                                    method="POST"
+                                    class="inline-block m-0 p-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        type="button"
+                                        onclick="confirmDeletePenarikan('{{ $d->id }}')"
+                                        class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors"
+                                        title="Hapus">
+                                        <i class="ph-fill ph-trash text-[15px]"></i>
+                                    </button>
+                                </form>
 
-                </div>
-            </td>
+                            </div>
+                        </td>
 
-            </tr>
+                    </tr>
 
-            @empty
+                    @empty
 
-            <tr>
+                    <tr>
 
-                <td colspan="6"
-                    class="py-8 text-center text-gray-400">
+                        <td colspan="6"
+                            class="py-8 text-center text-gray-400">
 
-                    Belum ada data penarikan
+                            Belum ada data penarikan
 
-                </td>
+                        </td>
 
-            </tr>
+                    </tr>
 
-            @endforelse
+                    @endforelse
                 </tbody>
             </table>
         </div>
@@ -307,7 +327,17 @@
         }
 
         document.querySelector('main')
-            .scrollTo({ top: 0, behavior: 'smooth' });
+            .scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+    }
+
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
     }
 
     // =========================
@@ -329,8 +359,8 @@
     function showDetail(nama, rek, nominal, petugas, biaya) {
 
         let angkaNominal = parseInt(nominal) || 0;
-        let angkaBiaya   = parseInt(biaya) || 0;
-        let angkaTotal   = angkaNominal + angkaBiaya;
+        let angkaBiaya = parseInt(biaya) || 0;
+        let angkaTotal = angkaNominal + angkaBiaya;
 
         document.getElementById('detail_petugas').value = petugas;
         document.getElementById('detail_rek').value = rek;
@@ -348,41 +378,41 @@
         switchView('detail');
     }
 
-   // =========================
-// EDIT
-// =========================
+    // =========================
+    // EDIT
+    // =========================
 
-function jalankanKalkulatorEdit() {
+    function jalankanKalkulatorEdit() {
 
-    const nominal = bersihAngka(
-        document.getElementById('edit_jumlah_penarikan').value
-    );
+        const nominal = bersihAngka(
+            document.getElementById('edit_jumlah_penarikan').value
+        );
 
-    const biaya = bersihAngka(
-        document.getElementById('edit_biaya_transaksi').value
-    );
+        const biaya = bersihAngka(
+            document.getElementById('edit_biaya_transaksi').value
+        );
 
-    const total = nominal + biaya;
+        const total = nominal + biaya;
 
-    document.getElementById('edit_total').value = total;
+        document.getElementById('edit_total').value = total;
 
-    document.getElementById('edit_total_biaya').value =
-        'Rp. ' + formatRibuan(total);
-}
-
-document.addEventListener('input', function (e) {
-
-    if (e.target.id === 'edit_jumlah_penarikan') {
-
-        let val = e.target.value.replace(/\D/g, '');
-
-        e.target.value = val
-            ? formatRibuan(val)
-            : '';
-
-        jalankanKalkulatorEdit();
+        document.getElementById('edit_total_biaya').value =
+            'Rp. ' + formatRibuan(total);
     }
-});
+
+    document.addEventListener('input', function(e) {
+
+        if (e.target.id === 'edit_jumlah_penarikan') {
+
+            let val = e.target.value.replace(/\D/g, '');
+
+            e.target.value = val ?
+                formatRibuan(val) :
+                '';
+
+            jalankanKalkulatorEdit();
+        }
+    });
 
 
     // =====================================
@@ -390,45 +420,45 @@ document.addEventListener('input', function (e) {
     // =====================================
     async function cariNamaRekening() {
 
-    const rekeningInput =
-        document.getElementById('edit_id_rekening');
+        const rekeningInput =
+            document.getElementById('edit_id_rekening');
 
-    const namaInput =
-        document.getElementById('edit_nama_penarik');
+        const namaInput =
+            document.getElementById('edit_nama_penarik');
 
-    let rekening = rekeningInput.value.trim();
+        let rekening = rekeningInput.value.trim();
 
-    if (rekening.length === 0) {
-        namaInput.value = '';
-        return;
-    }
+        if (rekening.length === 0) {
+            namaInput.value = '';
+            return;
+        }
 
-    try {
+        try {
 
-        let response =
-            await fetch(`/cari-rekening/${rekening}`);
+            let response =
+                await fetch(`/cari-rekening/${rekening}`);
 
-        let data =
-            await response.json();
+            let data =
+                await response.json();
 
-        if (data.success) {
+            if (data.success) {
 
-            namaInput.value = data.nama;
+                namaInput.value = data.nama;
 
-        } else {
+            } else {
+
+                namaInput.value = 'Rekening tidak ditemukan';
+
+            }
+
+        } catch (err) {
+
+            console.error(err);
 
             namaInput.value = 'Rekening tidak ditemukan';
 
         }
-
-    } catch (err) {
-
-        console.error(err);
-
-        namaInput.value = 'Rekening tidak ditemukan';
-
     }
-}
 
     // EVENT LISTENER DIPISAH
     document.addEventListener('input', function(e) {
@@ -482,13 +512,13 @@ document.addEventListener('input', function (e) {
 
     if (nominalTambah) {
 
-        nominalTambah.addEventListener('input', function () {
+        nominalTambah.addEventListener('input', function() {
 
             let val = this.value.replace(/\D/g, '');
 
-            this.value = val
-                ? formatRibuan(val)
-                : '';
+            this.value = val ?
+                formatRibuan(val) :
+                '';
 
             const selected =
                 transaksiSelect.options[

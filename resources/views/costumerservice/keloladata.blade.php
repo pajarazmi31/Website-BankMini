@@ -50,6 +50,15 @@ selamat datang {{ $user->name }}!
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
+        <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
@@ -64,9 +73,11 @@ selamat datang {{ $user->name }}!
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
-                    @foreach ($allNasabah as $nasabah )
+                    @foreach ($allNasabah as $index => $nasabah )
                     <tr class="hover:bg-gray-50/50 transition-colors nasabah-row">
-                        <td class="row-number py-4 px-2 border-b border-gray-50 text-center"></td>
+                        <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
+                            {{ $allNasabah->firstItem() + $index }}.
+                        </td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id ?? 'Rekening Belum Dibuat'}}</td>
@@ -91,32 +102,32 @@ selamat datang {{ $user->name }}!
                             <div class="flex items-center justify-center gap-2">
                                 <button
                                     onclick="showDetail(
-                        '{{ $nasabah->nama_nasabah }}',
-                        '{{ $nasabah->nis_nip }}',
-                        '{{ $nasabah->jurusan->nama_jurusan }}',
-                        '{{ $nasabah->tempat_lahir }}',
-                        '{{ $nasabah->tanggal_lahir }}',
-                        '{{ $nasabah->jenis_kelamin }}',
-                        '{{ $nasabah->jenis_identitas }}',
-                        '{{ $nasabah->agama }}',
-                        '{{ $nasabah->pendidikan }}',
-                        '{{ $nasabah->jabatan }}',
-                        '{{ $nasabah->no_hp }}',
-                        '{{ $nasabah->email }}',
-                        '{{ $nasabah->alamat }}',
-                        '{{ $nasabah->desa->name }}',
-                        '{{ $nasabah->kecamatan->name }}',
-                        '{{ $nasabah->kabupaten->name }}',
-                        '{{ $nasabah->provinsi->name }}',
-                        '{{ $nasabah->kode_pos }}',
-                        '{{ $nasabah->nama_kontak_darurat }}',
-                        '{{ $nasabah->no_hp_kontak_darurat }}',
-                        '{{ $nasabah->hubungan_kontak_darurat }}',
-                        '{{ $nasabah->alamat_kontak_darurat }}',
-                        '{{ $nasabah->rekening->id ?? 'rekening belum dibuat' }}',
-                        '{{ $nasabah->rekening->status_akun ?? 'status belum ada'}}',
-                        '{{ $nasabah->pesan }}'
-                        )"
+                                    '{{ $nasabah->nama_nasabah }}',
+                                    '{{ $nasabah->nis_nip }}',
+                                    '{{ $nasabah->jurusan->nama_jurusan }}',
+                                    '{{ $nasabah->tempat_lahir }}',
+                                    '{{ $nasabah->tanggal_lahir }}',
+                                    '{{ $nasabah->jenis_kelamin }}',
+                                    '{{ $nasabah->jenis_identitas }}',
+                                    '{{ $nasabah->agama }}',
+                                    '{{ $nasabah->pendidikan }}',
+                                    '{{ $nasabah->jabatan }}',
+                                    '{{ $nasabah->no_hp }}',
+                                    '{{ $nasabah->email }}',
+                                    '{{ $nasabah->alamat }}',
+                                    '{{ $nasabah->desa->name }}',
+                                    '{{ $nasabah->kecamatan->name }}',
+                                    '{{ $nasabah->kabupaten->name }}',
+                                    '{{ $nasabah->provinsi->name }}',
+                                    '{{ $nasabah->kode_pos }}',
+                                    '{{ $nasabah->nama_kontak_darurat }}',
+                                    '{{ $nasabah->no_hp_kontak_darurat }}',
+                                    '{{ $nasabah->hubungan_kontak_darurat }}',
+                                    '{{ $nasabah->alamat_kontak_darurat }}',
+                                    '{{ $nasabah->rekening->id ?? 'rekening belum dibuat' }}',
+                                    '{{ $nasabah->rekening->status_akun ?? 'status belum ada'}}',
+                                    '{{ $nasabah->pesan }}'
+                                    )"
                                     class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                                     title="Lihat Detail">
 
@@ -128,7 +139,7 @@ selamat datang {{ $user->name }}!
                                         <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                     </button>
                                 </a>
-                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post"  onsubmit="return confirm('Yakin ingin menghapus data nasabah ini?')">
+                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post" onsubmit="return confirm('Yakin ingin menghapus data nasabah ini?')">
                                     @csrf
                                     @method('DELETE')
                                     <button class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
@@ -144,7 +155,7 @@ selamat datang {{ $user->name }}!
         </div>
 
         <!-- Pagination Container -->
-        <div id="paginationContainer"></div>
+        <x-pagination :paginator="$allNasabah" />
 
     </div>
 </div>
@@ -187,6 +198,13 @@ selamat datang {{ $user->name }}!
             top: 0,
             behavior: 'smooth'
         });
+    }
+
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
     }
 
     // Handle view parameter from URL
@@ -399,8 +417,6 @@ selamat datang {{ $user->name }}!
             });
         }
 
-        // Initial render
-        updateTable();
     });
 </script>
 @endsection

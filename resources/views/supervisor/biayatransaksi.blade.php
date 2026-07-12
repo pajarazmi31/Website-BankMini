@@ -126,6 +126,64 @@ Selamat Datang, {{ $user->name }}!
                 </p>
             </div>
         </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- card: 4 -->
+        <div class="bg-white rounded-[24px] shadow-card p-6 md:p-8 flex flex-col border border-gray-100/50 min-h-[200px]">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-[14px] bg-[#1c3a5a] flex items-center justify-center text-white shadow-md shadow-brand-blue/10">
+                    <i class="ph-fill ph-credit-card text-[22px]"></i>
+                </div>
+                <h4 class="text-[18px] md:text-[20px] font-bold text-[#1e293b]">Transfer Luar</h4>
+            </div>
+            
+            <div class="mt-6 flex flex-col">
+                <span class="text-gray-400 font-semibold text-[13px] tracking-wide mb-2">Biaya Admin</span>
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
+                    <input
+                        type="number"
+                        id="biaya_transfer_luar"
+                        value="{{ $transfer_luar->nominal ?? 0 }}"
+                        class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
+                        placeholder="0">
+                </div>
+            </div>
+
+            <div class="border-l-[3px] border-amber-500 pl-3.5 py-0.5 mt-8 mb-1">
+                <p class="text-[11px] text-gray-500 leading-relaxed font-normal">
+                    Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed.
+                </p>
+            </div>
+        </div>
+        <!-- card: 5 -->
+        <div class="bg-white rounded-[24px] shadow-card p-6 md:p-8 flex flex-col border border-gray-100/50 min-h-[200px]">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-[14px] bg-[#1c3a5a] flex items-center justify-center text-white shadow-md shadow-brand-blue/10">
+                    <i class="ph-fill ph-credit-card text-[22px]"></i>
+                </div>
+                <h4 class="text-[18px] md:text-[20px] font-bold text-[#1e293b]">Transfer Nasabah</h4>
+            </div>
+            
+            <div class="mt-6 flex flex-col">
+                <span class="text-gray-400 font-semibold text-[13px] tracking-wide mb-2">Biaya Admin</span>
+                <div class="relative flex items-center">
+                    <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
+                    <input
+                        type="number"
+                        id="biaya_transfer_nasabah"
+                        value="{{ $transfer_nasabah->nominal ?? 0 }}"
+                        class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
+                        placeholder="0">
+                </div>
+            </div>
+
+            <div class="border-l-[3px] border-amber-500 pl-3.5 py-0.5 mt-8 mb-1">
+                <p class="text-[11px] text-gray-500 leading-relaxed font-normal">
+                    Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed.
+                </p>
+            </div>
+        </div>
 
     </div>
 </div>
@@ -163,6 +221,16 @@ async function saveFees() {
                     biaya_transfer:
                         document.getElementById(
                             'biaya_transfer'
+                        ).value,
+
+                    biaya_transfer_luar:
+                        document.getElementById(
+                            'biaya_transfer_luar'
+                        ).value,
+
+                    biaya_transfer_nasabah:
+                        document.getElementById(
+                            'biaya_transfer_nasabah'
                         ).value,
                 })
             }

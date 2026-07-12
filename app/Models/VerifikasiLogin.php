@@ -4,11 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Petugas extends Model
+class VerifikasiLogin extends Model
 {
+    protected $table = 'verifikasi_login';
+
     protected $fillable = [
         'user_id',
-        'kelas',
+        'status',
+        'supervisor_id',
+        'waktu_verifikasi'
     ];
 
     public function user()

@@ -20,6 +20,7 @@ class Transfer extends Model
         'jumlah_transfer',
         'transaksi_id',
         'total_biaya',
+        'nominal_admin',
         'datetime',
         'catatan',
         'id_petugas',
