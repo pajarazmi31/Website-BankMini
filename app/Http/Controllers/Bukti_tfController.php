@@ -48,20 +48,30 @@ class Bukti_tfController extends Controller
         'id_rekening.required' => 'Nomor rekening wajib diisi.',
     ]);
 
-    $buktiPath = $request->file('bukti_foto')->store('bukti_fotos', 'public');
+           $file = $request->file('bukti_foto');
 
-    Bukti_Tf::create([
-        'nama_pengirim' => $request->nama_pengirim,
-        'no_hp_pengirim' => $request->no_hp_pengirim,
-        'id_rekening' => $request->id_rekening,
-        'jumlah_transfer' => $request->jumlah_transfer,
-        'bukti_foto' => $buktiPath,
-        'nama_penerima' => $request->nama_penerima,
-        'status_verifikasi' => 'pending',
-        'datetime_tgl' => $request->datetime_tgl,
-        'catatan' => $request->catatan
-    ]);
+$namaFile = time().'_'.$file->getClientOriginalName();
 
-    return redirect()->back()->with('success', 'data berhasil ditambahkan');
-    }
-}
+$tujuan = public_path('uploads');
+
+$file->move($tujuan, $namaFile);
+
+$buktiPath = 'uploads/'.$namaFile;
+
+Bukti_Tf::create([
+    'nama_pengirim' => $request->nama_pengirim,
+    'no_hp_pengirim' => $request->no_hp_pengirim,
+    'id_rekening' => $request->id_rekening,
+    'jumlah_transfer' => $request->jumlah_transfer,
+    'bukti_foto' => $buktiPath,
+    'nama_penerima' => $request->nama_penerima,
+    'status_verifikasi' => 'pending',
+    'datetime_tgl' => $request->datetime_tgl,
+    'catatan' => $request->catatan
+]);
+
+return redirect()->back()->with('success', 'Data berhasil ditambahkan.');
+
+    }   // <-- tutup function transfer_luar
+
+}       // <-- tutup class Bukti_tfController
