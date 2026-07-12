@@ -73,6 +73,15 @@
 
         <!-- Table Card -->
         <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
+            <div class="flex items-center gap-2 mb-4">
+                <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+                </select>
+            </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
@@ -88,7 +97,9 @@
                     <tbody class="text-[14px] text-gray-800 font-medium">
                         @foreach($petugas as $index => $p)
                         <tr class="hover:bg-gray-50/50 transition-colors">
-                            <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">{{ $index + 1 }}.</td>
+                            <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
+                                {{ $petugas->firstItem() + $index }}.
+                            </td>
                             <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->user->name }}</td>
                             <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->kelas }}</td>
                             <td class="py-4 px-4 border-b border-gray-50 hidden md:table-cell text-gray-700 font-medium">{{ $p->user->email }}</td>
@@ -112,7 +123,7 @@
             </div>
 
             <!-- Pagination -->
-            <x-pagination />
+            <x-pagination :paginator="$petugas" />
 
         </div>
     </div>
@@ -193,9 +204,16 @@
             });
         }
 
+        function changePerPage(value) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('per_page', value);
+            url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+            window.location.href = url.toString();
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
 
-            @if($errors -> any())
+            @if($errors->any())
             switchView('tambah');
             @elseif(session('active_view'))
             switchView('{{ session('

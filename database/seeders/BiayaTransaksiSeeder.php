@@ -27,7 +27,7 @@ class BiayaTransaksiSeeder extends Seeder
                 'nominal' => 0,
             ],
             [
-                'jenis_transaksi' => 'transfer',
+                'jenis_transaksi' => 'transfer_nasabah',
                 'nominal' => 1000,
             ],
         ]);

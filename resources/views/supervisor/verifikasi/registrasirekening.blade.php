@@ -48,7 +48,7 @@ Selamat Datang, {{ $user->name }}!
 
     <!-- Table Card / Content -->
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
-        <div class="mb-1 border-b border-gray-50">
+        <div class="flex justify-between items-center mb-1 border-b border-gray-50">
             <form action="{{ route('supervisor.searchData') }}" method="get" class="flex gap-2 items-center">
                 <div class="relative">
                     <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
@@ -61,6 +61,15 @@ Selamat Datang, {{ $user->name }}!
                     <i class="ph ph-magnifying-glass text-lg"></i>
                 </button>
             </form>
+                    <div class="flex items-center gap-2 mb-4">
+            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+            </select>
+        </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
@@ -76,9 +85,11 @@ Selamat Datang, {{ $user->name }}!
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
-                    @foreach ( $allNasabah as $nasabah )
+                    @foreach ( $allNasabah as $index => $nasabah )
                     <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">1.</td>
+                                                <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
+                            {{ $userNasabah->firstItem() + $index }}.
+                        </td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>
@@ -115,9 +126,16 @@ Selamat Datang, {{ $user->name }}!
         </div>
 
         <!-- Pagination -->
-        <x-pagination total="3" />
+        <x-pagination :paginator="$allNasabah" />
 
     </div>
 </div>
-
+<script>
+    function changePerPage(value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('per_page', value);
+        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        window.location.href = url.toString();
+    }
+</script>
 @endsection

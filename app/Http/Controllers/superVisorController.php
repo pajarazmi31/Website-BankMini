@@ -12,7 +12,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Nasabah;
 use App\Models\VerifikasiLogin;
-use Carbon\Carbon;use App\Models\Transaksi;
+use Carbon\Carbon;
+use App\Models\Transaksi;
 use App\Models\Petugas;
 use App\Models\RiwayatTf;
 
@@ -39,16 +40,18 @@ class superVisorController extends Controller
         $totalPendingRegistrasi = $nasabahPending->count();
         $totalPendingTransfer = $nasabahTfPending->count();
         $totalPending = $totalPendingRegistrasi + $totalPendingTransfer;
-        return view('supervisor.dashboard', compact('adminAntarNasabah','adminTotal','user','super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending','totalNasabah', 'totalPending','totalSaldoTabungan','totalPendingRegistrasi','totalPendingTransfer'));
+        return view('supervisor.dashboard', compact('adminAntarNasabah', 'adminTotal', 'user', 'super', 'nasabahPending', 'nasabahTf', 'nasabahTfPending', 'totalNasabah', 'totalPending', 'totalSaldoTabungan', 'totalPendingRegistrasi', 'totalPendingTransfer'));
     }
 
 
-    public function verifikasiTFF()
+    public function verifikasiTFF(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $bukti_tf = Bukti_Tf::latest()->get();
-        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super'));
+        $perPage = $request->input('per_page', 10);
+        $bukti_tf = Bukti_Tf::latest()->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
+        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'perPage'));
     }
 
     public function searchData(Request $request)
@@ -58,8 +61,8 @@ class superVisorController extends Controller
         $keyword = $request->keyword;
         $bukti_tf = Bukti_Tf::when($keyword, function ($query, $keyword) {
             return $query->where('nama_penerima', 'LIKE', '%' . $keyword . '%')
-                                ->orWhere('nama_pengirim', 'like', '%' . $keyword .'%')
-                                ->orWhere('id_rekening', 'like', '%' . $keyword .'%');
+                ->orWhere('nama_pengirim', 'like', '%' . $keyword . '%')
+                ->orWhere('id_rekening', 'like', '%' . $keyword . '%');
         })->latest()->get();
 
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword'));
@@ -137,15 +140,17 @@ class superVisorController extends Controller
         }
     }
 
-    public function verifikasiNasabah()
+    public function verifikasiNasabah(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
+        $perPage = $request->input('per_page', 10);
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
-            })->orderByDesc('id')->get();
-        return view('supervisor.verifikasi.registrasirekening', compact('user', 'super', 'allNasabah'));
+            })->orderByDesc('id')->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
+        return view('supervisor.verifikasi.registrasirekening', compact('user', 'super', 'allNasabah', 'perPage'));
     }
 
     public function aktif(String $id)
@@ -188,11 +193,15 @@ class superVisorController extends Controller
         return view('supervisor.datapetugas', compact('user', 'super'));
     }
 
-    public function nasabah()
+    public function nasabah(Request $request)
     {
-        $userNasabah = Nasabah::with('rekening')->orderByDesc('id')->get();
         $user = Auth::user();
-        return view('supervisor.datanasabah', compact('userNasabah', 'user'));
+        $perPage = $request->input('per_page', 10);
+
+        $userNasabah = Nasabah::with('rekening')->orderByDesc('id')
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage',));
     }
 
     public function detailNasabah(String $id)
@@ -234,20 +243,22 @@ class superVisorController extends Controller
         return view('supervisor.verifikasi.registrasirekening.revisi', compact('nasabah', 'rekening', 'user'));
     }
 
-    public function verifikasiLogin()
+    public function verifikasiLogin(Request $request)
     {
         $user = Auth::user();
 
+        $perPage = $request->input('per_page', 10);
+
         $data = VerifikasiLogin::with(['user'])
-            ->latest()
-            ->get();
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
         return view(
             'supervisor.verifikasi.login',
-            compact('user', 'data')
+            compact('user', 'data', 'perPage')
         );
     }
-     public function setujuiLogin($id)
+    public function setujuiLogin($id)
     {
         VerifikasiLogin::findOrFail($id)
             ->update([
@@ -280,6 +291,8 @@ class superVisorController extends Controller
         $setoran = Transaksi::where('jenis_transaksi', 'Setoran')->first();
         $penarikan = Transaksi::where('jenis_transaksi', 'Penarikan')->first();
         $transfer = Transaksi::where('jenis_transaksi', 'Transfer')->first();
+        $transfer_luar = Transaksi::where('jenis_transaksi', 'Transfer_Luar')->first();
+        $transfer_nasabah = Transaksi::where('jenis_transaksi', 'Transfer_Nasabah')->first();
 
         return view(
             'supervisor.biayatransaksi',
@@ -288,7 +301,9 @@ class superVisorController extends Controller
                 'super',
                 'setoran',
                 'penarikan',
-                'transfer'
+                'transfer',
+                'transfer_luar',
+                'transfer_nasabah'
             )
         );
     }
@@ -314,6 +329,20 @@ class superVisorController extends Controller
             'Transfer'
         )->update([
             'nominal' => $request->biaya_transfer
+        ]);
+
+        Transaksi::where(
+            'jenis_transaksi',
+            'Transfer_Luar'
+        )->update([
+            'nominal' => $request->biaya_transfer_luar
+        ]);
+
+        Transaksi::where(
+            'jenis_transaksi',
+            'Transfer_Nasabah'
+        )->update([
+            'nominal' => $request->biaya_transfer_nasabah
         ]);
 
         return response()->json([

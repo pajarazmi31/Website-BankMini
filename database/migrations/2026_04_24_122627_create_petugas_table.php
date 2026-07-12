@@ -19,7 +19,7 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->Enum('kelas', ['X AK 1', 'X AK 2', 'XI AK 1', 'XI AK 2', 'XII AK 1', 'XII AK 2']);
+            $table->Enum('kelas', ['X AK 1', 'X AK 2', 'X AK 3', 'XI AK 1', 'XI AK 2', 'XI AK 3','XII AK 1', 'XII AK 2', 'XII AK 3']);
 
             $table->timestamps();
         });

@@ -16,11 +16,11 @@ use App\Exports\PetugasTemplateExport;
 
 class DataPetugasController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
-
+        $perPage = $request->input('per_page', 10);
         $petugas = Petugas::with(['user.role'])
             ->whereHas('user.role', function ($query) {
                 $query->whereIn('nama_role', [
@@ -29,7 +29,8 @@ class DataPetugasController extends Controller
                     'teller'
                 ]);
             })
-            ->get();
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
         $roles = Role::whereIn('nama_role', [
             'customerservice',
@@ -40,6 +41,7 @@ class DataPetugasController extends Controller
             'petugas',
             'roles',
             'user',
+            'perPage',
             'super'
         ));
     }

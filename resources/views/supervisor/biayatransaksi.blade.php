@@ -143,8 +143,8 @@ Selamat Datang, {{ $user->name }}!
                     <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
                     <input
                         type="number"
-                        id="biaya_transfer"
-                        value="{{ $transfer->nominal ?? 0 }}"
+                        id="biaya_transfer_luar"
+                        value="{{ $transfer_luar->nominal ?? 0 }}"
                         class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
                         placeholder="0">
                 </div>
@@ -171,8 +171,8 @@ Selamat Datang, {{ $user->name }}!
                     <span class="absolute left-4 text-gray-800 font-bold text-[14px]">Rp.</span>
                     <input
                         type="number"
-                        id="biaya_transfer"
-                        value="{{ $transfer->nominal ?? 0 }}"
+                        id="biaya_transfer_nasabah"
+                        value="{{ $transfer_nasabah->nominal ?? 0 }}"
                         class="w-full pl-11 pr-4 py-3 bg-white border border-gray-200 rounded-[12px] text-[14px] font-bold focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-800 placeholder-gray-400 shadow-sm transition-all"
                         placeholder="0">
                 </div>
@@ -221,6 +221,16 @@ async function saveFees() {
                     biaya_transfer:
                         document.getElementById(
                             'biaya_transfer'
+                        ).value,
+
+                    biaya_transfer_luar:
+                        document.getElementById(
+                            'biaya_transfer_luar'
+                        ).value,
+
+                    biaya_transfer_nasabah:
+                        document.getElementById(
+                            'biaya_transfer_nasabah'
                         ).value,
                 })
             }

@@ -156,7 +156,7 @@ class tellerController extends Controller
     {
         $user = Auth::user();
         $teller = $user->petugas;
-
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'setoran')
             ->orWhere('jenis_transaksi', 'Setoran')
             ->first();
@@ -172,9 +172,11 @@ class tellerController extends Controller
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.setoran', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.setoran', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
     public function storeSetoran(Request $request)
@@ -444,7 +446,7 @@ class tellerController extends Controller
     {
         $user = Auth::user();
         $teller = $user->petugas;
-
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'penarikan')->first();
         $query = Penarikan::with(['petugas', 'transaksi'])->latest();
 
@@ -456,9 +458,11 @@ class tellerController extends Controller
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
     public function storePenarikan(Request $request)
@@ -675,7 +679,7 @@ class tellerController extends Controller
     {
         $user = Auth::user();
         $teller = $user->petugas; // Ambil data teller
-
+        $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'transfer')
             ->orWhere('jenis_transaksi', 'Transfer')
             ->first();
@@ -696,9 +700,11 @@ class tellerController extends Controller
             });
         }
 
-        $data = $query->paginate(5)->withQueryString();
+        $data = $query
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage]);
 
-        return view('teller.transfer', compact('user', 'teller', 'data', 'transaksi'));
+        return view('teller.transfer', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
 
