@@ -124,6 +124,9 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::get('/supervisor/biaya-transaksi', [superVisorController::class, 'biayatransaksi'])->name('supervisor.biayatransaksi');
     Route::post('/supervisor/biaya-transaksi/update', [superVisorController::class, 'updateBiayaTransaksi'])->name('supervisor.biayatransaksi.update');
 
+    Route::get('/supervisor/saldo-minimum', [superVisorController::class, 'saldoMinimum'])->name('supervisor.saldominimum');
+    Route::POST('/supervisor/saldo-minimum/update', [superVisorController::class, 'saldoMinimumUpdate'])->name('supervisor.saldominimumUpdate');
+    
     //View Verifikasi Tf
     Route::get('/supervisor/verifikasi', [superVisorController::class, 'verifikasiTFF'])->name('supervisor.verifikasi');
     Route::get('/admin/produk/search', [superVisorController::class, 'searchData'])->name('supervisor.searchData');
