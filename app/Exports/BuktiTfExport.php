@@ -2,75 +2,48 @@
 
 namespace App\Exports;
 
-// Menggunakan model yang sesuai dengan file asli kamu
 use App\Models\Bukti_Tf; 
-use Maatwebsite\Excel\Concerns\FromQuery; // 1. Diubah dari FromCollection ke FromQuery
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;          // Diubah ke FromView
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;    // Agar lebar kolom otomatis pas
 
-class BuktiTfExport implements FromQuery, WithHeadings, WithMapping // 2. Daftarkan FromQuery di sini
+class BuktiTfExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
     protected $startDate;
     protected $endDate;
 
-    // 3. Constructor untuk menangkap data filter tanggal dari Controller
+    // Constructor tetap dipertahankan untuk menangkap data filter
     public function __construct($startDate = null, $endDate = null)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
     }
 
-    // 4. Ganti fungsi collection() menjadi query()
-    public function query()
+    // Logika query tetap dipertahankan
+    public function queryData()
     {
-        // Mulai query dasar dari model Bukti_Tf
         $query = Bukti_Tf::query();
 
-        // Jika filter tanggal diisi oleh user, lakukan penyaringan rentang tanggal
         if ($this->startDate && $this->endDate) {
-            // Sesuaikan kolom tanggalnya, di sini saya pakai 'created_at' 
-            // (Jika di tabelmu nama kolomnya 'datetime_tgl', ganti menjadi 'datetime_tgl')
             $query->whereBetween('datetime_tgl', [
                 $this->startDate . ' 00:00:00', 
                 $this->endDate . ' 23:59:59'
             ]);
         }
 
-        return $query;
+        return $query->get(); // Kita ambil datanya dengan ->get() untuk dilempar ke view
     }
 
-    // 5. HEADING TETAP DIPERTAHANKAN (Aman tidak berubah)
-    public function headings(): array
+    // Fungsi view untuk merender file blade
+    public function view(): View
     {
-        return [
-            'ID',
-            'Nama Pengirim',
-            'Nama Penerima',
-            'No Rekening Penerima',
-            'Nominal Admin',
-            'Nominal Transfer',
-            'Nomor Telepon',
-            'Status Verifikasi',
-            'Tanggal Transaksi'
-        ];
-    }
-
-    // 6. MAPPING TETAP DIPERTAHANKAN (Aman tidak berubah)
-    public function map($item): array
-    {
-        return [
-            $item->id,
-            $item->nama_pengirim,
-            $item->nama_penerima,
-            $item->id_rekening . ' ',
-            'Rp ' . number_format($item->nominal_admin, 0, ',', '.'),
-            'Rp ' . number_format($item->jumlah_transfer, 0, ',', '.'),
-            $item->no_hp_pengirim,
-            ucfirst($item->status_verifikasi),
-            $item->datetime_tgl,
-        ];
+        return view('exports.bukti_tf', [
+            'daftar_bukti' => $this->queryData(),
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate
+        ]);
     }
 }

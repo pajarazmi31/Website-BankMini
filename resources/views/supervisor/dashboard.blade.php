@@ -22,7 +22,7 @@ Selamat Datang, {{ $user->name }}!
 
         <div class="bg-primary-gradient rounded-2xl p-6 text-white relative overflow-hidden shadow-lg h-[130px] flex flex-col justify-center">
             <div class="relative z-10">
-                <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Admin</p>
+                <p class="text-[11px] font-semibold tracking-[0.08em] text-blue-100/80 mb-2.5 uppercase">Total Saldo Admin Tf Luar</p>
                 {{-- BACKEND:  --}}
                 <h3 class="text-[24px] md:text-[28px] font-bold">Rp. {{ number_format($adminTotal, 0, ',', '.') }}</h3>
             </div>

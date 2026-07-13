@@ -207,7 +207,7 @@
 
                 @elseif($isPenarikan)
 
-                    - Rp {{ number_format($item->jumlah_penarikan, 0, ',', '.') }}
+                    - Rp {{ number_format($item->jumlah_penarikan, 0, ',', '.') }} 
 
                 @else
 

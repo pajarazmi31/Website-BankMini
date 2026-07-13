@@ -16,6 +16,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\SetoranExport;
 use App\Exports\PenarikanExport;
 use App\Exports\TransferExport;
+use App\Models\Minimum_saldo;
 use Maatwebsite\Excel\Facades\Excel;
 
 
@@ -446,6 +447,7 @@ class tellerController extends Controller
     {
         $user = Auth::user();
         $teller = $user->petugas;
+        $saldoMinimum = Minimum_saldo::where('id', 1)->value('nominal');
         $perPage = $request->input('per_page', 10);
         $transaksi = Transaksi::where('jenis_transaksi', 'penarikan')->first();
         $query = Penarikan::with(['petugas', 'transaksi'])->latest();
@@ -462,7 +464,7 @@ class tellerController extends Controller
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
-        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
+        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi','saldoMinimum', 'perPage'));
     }
 
     public function storePenarikan(Request $request)
@@ -494,7 +496,7 @@ class tellerController extends Controller
             $totalPotongSaldo += $biayaAdminAsli;
         }
 
-        $saldoMinimum = 1000;
+        $saldoMinimum = Minimum_saldo::where('id', 1)->value('nominal');
 
         DB::beginTransaction();
         try {

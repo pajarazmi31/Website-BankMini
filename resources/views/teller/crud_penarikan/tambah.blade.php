@@ -152,7 +152,7 @@ const BIAYA_ADMIN_ASLI = bersihkanAngka(biayaInputTmb.value);
 
 // SALDO
 let saldoRekeningTmb = 0;
-const saldoMinimum = 1000;
+const saldoMinimum = {{ $saldoMinimum }};
 
 // No Rekening hanya angka
 rekeningInputTmb.addEventListener('input', function() {
