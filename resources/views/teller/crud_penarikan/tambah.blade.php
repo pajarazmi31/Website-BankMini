@@ -149,8 +149,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const totalBiayaViewTmb = document.getElementById('tambah_total_biaya_view');
     const pilihanBiayaTmb = document.getElementById('pilihan_biaya_transaksi');
 
-    let saldoRekeningTmb = 0;
-    const saldoMinimum = 1000;
+// SALDO
+let saldoRekeningTmb = 0;
+const saldoMinimum = {{ $saldoMinimum }};
 
     function formatAngka(num) {
         return new Intl.NumberFormat('id-ID').format(num);

@@ -114,7 +114,7 @@
                         @forelse ($bukti_tf as $index => $item)
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
-                                {{ $bukti_tf->firstItem() + $index }}.
+                                {{ $bukti_tf->firstItem() + $index }}
                             </td>
                             <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_pengirim }}</td>
                             <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_penerima }}</td>

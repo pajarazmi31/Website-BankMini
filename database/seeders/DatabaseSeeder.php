@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             KecamatanSeeder::class,
             DesaSeeder::class,
             DataSiswaSeeder::class,
+            MinimumSaldoSeeder::class,
             UserSeeder::class,
             RekeningSeeder::class,
         ]);

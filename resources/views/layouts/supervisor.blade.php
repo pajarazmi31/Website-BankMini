@@ -137,6 +137,7 @@
                             <a href="{{ route('supervisor.datapetugas') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.datapetugas' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Data Petugas</a>
                             <a href="{{ route('supervisor.datanasabah') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.datanasabah' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Data Nasabah</a>
                             <a href="{{ route('supervisor.biayatransaksi') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.biayatransaksi' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Biaya Transaksi</a>
+                            <a href="{{ route('supervisor.saldominimum') }}" class="pl-[52px] pr-6 py-2.5 {{ $route == 'supervisor.saldominimum' ? 'text-brand-blue font-bold' : 'text-[#a3a3a3] font-medium' }} text-[13.5px] hover:text-gray-800 hover:bg-gray-50 transition-colors">Saldo Minimum</a>
                             <div class="h-2"></div>
                         </div>
                     </div>
