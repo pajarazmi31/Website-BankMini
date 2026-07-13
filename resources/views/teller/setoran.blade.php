@@ -177,12 +177,14 @@ Selamat Datang, {{ $user->name }}!
                         <td class="py-4 px-2 border-b border-gray-50">
                             {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
                         </td>
-                        <td class="py-4 px-2 border-b border-gray-50">{{ $d->petugas->nama_petugas ?? $teller->nama_petugas }}</td>
+                        <td class="py-4 px-2 border-b border-gray-50">
+                            {{ $user->name }}
+                        </td>
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <!-- Button Detail -->
                                 <button type="button" onclick="lihatDetailSetoran(
-                                    '{{ $d->petugas->nama_petugas ?? $teller->nama_petugas }}',
+                                    '{{ $user->name }}',
                                     '{{ $d->nama_lengkap }}',
                                     '{{ $d->id_rekening }}',
                                     '{{ $d->setoran }}',
@@ -214,7 +216,7 @@ Selamat Datang, {{ $user->name }}!
                                     "{{ optional($d->transaksi)->nominal ?? 0 }}",
                                     "{{ $d->total_biaya }}",
                                     "{{ $d->catatan }}",
-                                    "{{ $d->petugas->nama_petugas ?? $teller->nama_petugas }}",
+                                    "{{ $user->name }}",
                                     "{{ $d->transaksi_id }}"
                                 )' class="w-[28px] h-[28px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit">
                                     <i class="ph-fill ph-pencil-simple text-[15px]"></i>

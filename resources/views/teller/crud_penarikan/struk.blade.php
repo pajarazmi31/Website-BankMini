@@ -126,9 +126,7 @@ td{
     <tr>
         <td class="label">Petugas</td>
         <td class="titik">:</td>
-        <td>
-            {{ optional($penarikan->petugas)->nama_petugas }}
-        </td>
+        <td>{{ $user->name }}</td>
     </tr>
 </table>
 

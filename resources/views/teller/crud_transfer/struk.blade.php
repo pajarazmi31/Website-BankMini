@@ -61,21 +61,21 @@ td{
 
 <table>
     <tr>
-        <td class="label">No Transaksi</td>
+        <td class="label">Nama Pengirim</td>
         <td class="titik">:</td>
-        <td>TR-{{ str_pad($transfer->id, 5, '0', STR_PAD_LEFT) }}</td>
-    </tr>
-
-    <tr>
-        <td class="label">Tanggal</td>
-        <td class="titik">:</td>
-        <td>{{ $transfer->created_at->format('d-m-Y H:i') }}</td>
+        <td>{{ optional($transfer->rekeningPengirim->nasabah)->nama_nasabah ?? '-' }}</td>
     </tr>
 
     <tr>
         <td class="label">Rek Pengirim</td>
         <td class="titik">:</td>
         <td>{{ $transfer->id_rekening_pengirim }}</td>
+    </tr>
+
+    <tr>
+        <td class="label">Nama Penerima</td>
+        <td class="titik">:</td>
+        <td>{{ optional($transfer->rekeningPenerima->nasabah)->nama_nasabah ?? '-' }}</td>
     </tr>
 
     <tr>
@@ -125,9 +125,7 @@ td{
     <tr>
         <td class="label">Petugas</td>
         <td class="titik">:</td>
-        <td>
-            {{ optional($transfer->petugas)->nama_petugas }}
-        </td>
+        <td>{{ $user->name }}</td>
     </tr>
 </table>
 

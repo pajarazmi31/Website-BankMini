@@ -2,47 +2,25 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class TransferExport implements FromCollection, WithHeadings, ShouldAutoSize
+class TransferExport implements FromView
 {
     protected $data;
+    protected $judul;
 
-    public function __construct($data)
+    public function __construct($data, $judul)
     {
         $this->data = $data;
+        $this->judul = $judul;
     }
 
-    public function collection()
+    public function view(): View
     {
-        return $this->data->map(function ($item) {
-
-            $biayaAdmin = $item->total_biaya - $item->jumlah_transfer;
-
-            return [
-                'Tanggal'           => $item->created_at->format('d-m-Y H:i'),
-                'Rekening Pengirim' => $item->id_rekening_pengirim,
-                'Rekening Penerima' => $item->id_rekening_penerima,
-                'Nominal Transfer'  => 'Rp ' . number_format($item->jumlah_transfer, 0, ',', '.'),
-                'Biaya Admin'       => 'Rp ' . number_format($biayaAdmin, 0, ',', '.'),
-                'Total Biaya'       => 'Rp ' . number_format($item->total_biaya, 0, ',', '.'),
-                'Catatan'           => $item->catatan ?? '-',
-            ];
-        });
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Tanggal',
-            'Rekening Pengirim',
-            'Rekening Penerima',
-            'Nominal Transfer',
-            'Biaya Admin',
-            'Total Biaya',
-            'Catatan'
-        ];
+        return view('exports.transfer', [
+            'data' => $this->data,
+            'judul' => $this->judul,
+        ]);
     }
 }

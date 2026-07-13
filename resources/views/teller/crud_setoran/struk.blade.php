@@ -93,7 +93,7 @@ td{
     <tr>
         <td class="label">Petugas</td>
         <td class="separator">:</td>
-        <td>{{ optional($setoran->petugas)->nama_petugas }}</td>
+        <td>{{ $user->name }}</td>
     </tr>
 </table>
 

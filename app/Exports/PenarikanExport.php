@@ -2,40 +2,25 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class PenarikanExport implements FromCollection, WithHeadings
+class PenarikanExport implements FromView
 {
     protected $data;
+    protected $judul;
 
-    public function __construct($data)
+    public function __construct($data, $judul)
     {
         $this->data = $data;
+        $this->judul = $judul;
     }
 
-    public function collection()
+    public function view(): View
     {
-        return $this->data->map(function ($item) {
-
-            return [
-                'Nama Penarik'      => $item->nama_penarik,
-                'No Rekening'       => $item->id_rekening,
-                'Jumlah Penarikan'  => $item->jumlah_penarikan,
-                'Petugas'           => $item->petugas->nama_petugas ?? '-',
-                'Tanggal'           => $item->created_at->format('d-m-Y H:i'),
-            ];
-        });
-    }
-
-    public function headings(): array
-    {
-        return [
-            'Nama Penarik',
-            'No Rekening',
-            'Jumlah Penarikan',
-            'Petugas',
-            'Tanggal'
-        ];
+        return view('exports.penarikan', [
+            'data'  => $this->data,
+            'judul' => $this->judul,
+        ]);
     }
 }
