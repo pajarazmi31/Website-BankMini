@@ -2,49 +2,25 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
 
-class SetoranExport implements FromCollection, WithHeadings
+class SetoranExport implements FromView
 {
     protected $data;
+    protected $judul;
 
-    public function __construct($data)
+    public function __construct($data, $judul)
     {
         $this->data = $data;
+        $this->judul = $judul;
     }
 
-    public function collection()
+    public function view(): View
     {
-        return $this->data->map(function ($item) {
-
-            return [
-
-                $item->id,
-                $item->id_rekening,
-                $item->nama_lengkap,
-                $item->nama_penyetor,
-                $item->jumlah_penyetoran,
-                $item->total_biaya,
-                $item->created_at,
-
-            ];
-
-        });
-    }
-
-    public function headings(): array
-    {
-        return [
-
-            'ID Setoran',
-            'No Rekening',
-            'Nama Nasabah',
-            'Nama Penyetor',
-            'Nominal',
-            'Total Biaya',
-            'Tanggal'
-
-        ];
+        return view('exports.setoran', [
+            'data'  => $this->data,
+            'judul' => $this->judul,
+        ]);
     }
 }

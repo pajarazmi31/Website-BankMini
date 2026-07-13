@@ -88,7 +88,7 @@ Selamat Datang, {{ $user->name }}!
                     @foreach ( $allNasabah as $index => $nasabah )
                     <tr class="hover:bg-gray-50/50 transition-colors">
                                                 <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
-                            {{ $userNasabah->firstItem() + $index }}.
+                            {{ $allNasabah->firstItem() + $index }}.
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>

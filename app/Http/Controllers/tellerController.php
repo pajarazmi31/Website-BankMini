@@ -83,6 +83,7 @@ class tellerController extends Controller
 
             case 'hari_ini':
                 $query->whereDate('created_at', Carbon::today());
+                $judul = 'LAPORAN DATA SETORAN HARI INI';
                 break;
 
             case 'minggu_ini':
@@ -90,23 +91,30 @@ class tellerController extends Controller
                     Carbon::now()->startOfWeek(),
                     Carbon::now()->endOfWeek()
                 ]);
+                $judul = 'LAPORAN DATA SETORAN MINGGU INI';
                 break;
 
             case 'bulan_ini':
                 $query->whereMonth('created_at', Carbon::now()->month);
+                $judul = 'LAPORAN DATA SETORAN BULAN INI';
                 break;
 
             case 'tahun_ini':
                 $query->whereYear('created_at', Carbon::now()->year);
+                $judul = 'LAPORAN DATA SETORAN TAHUN INI';
+                break;
+
+            default:
+                $judul = 'LAPORAN DATA SETORAN';
                 break;
         }
 
         $data = $query->get();
 
-        return Excel::download(
-            new SetoranExport($data),
-            'Setoran-' . $filter . '.xlsx'
-        );
+    return Excel::download(
+        new SetoranExport($data, $judul),
+        'Setoran-' . now()->timestamp . '.xlsx'
+    );
     }
 
     public function exportSetoranCustom(Request $request)
@@ -115,6 +123,7 @@ class tellerController extends Controller
             'start_date' => 'required|date',
             'end_date'   => 'required|date',
         ]);
+
         $data = Setoran::whereBetween(
             'created_at',
             [
@@ -123,8 +132,10 @@ class tellerController extends Controller
             ]
         )->get();
 
+        $judul = 'LAPORAN DATA SETORAN';
+
         return Excel::download(
-            new SetoranExport($data),
+            new SetoranExport($data, $judul),
             'Setoran-' .
                 $request->start_date .
                 '_sampai_' .
@@ -133,6 +144,7 @@ class tellerController extends Controller
         );
     }
 
+
     public function cetakStruk($id)
     {
         $setoran = Setoran::with([
@@ -140,15 +152,17 @@ class tellerController extends Controller
             'transaksi'
         ])->findOrFail($id);
 
+        $user = Auth::user();
+
         $pdf = Pdf::loadView(
             'teller.crud_setoran.struk',
-            compact('setoran')
+            compact('setoran', 'user')
         );
 
         return $pdf->download(
             'Struk-Setoran-' .
-                str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
-                '.pdf'
+            str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
+            '.pdf'
         );
     }
 
@@ -379,6 +393,7 @@ public function updateSetoran(Request $request, $id)
 
             case 'hari_ini':
                 $query->whereDate('created_at', Carbon::today());
+                $judul = 'LAPORAN DATA PENARIKAN HARI INI';
                 break;
 
             case 'minggu_ini':
@@ -386,21 +401,28 @@ public function updateSetoran(Request $request, $id)
                     Carbon::now()->startOfWeek(),
                     Carbon::now()->endOfWeek()
                 ]);
+                $judul = 'LAPORAN DATA PENARIKAN MINGGU INI';
                 break;
 
             case 'bulan_ini':
                 $query->whereMonth('created_at', Carbon::now()->month);
+                $judul = 'LAPORAN DATA PENARIKAN BULAN INI';
                 break;
 
             case 'tahun_ini':
                 $query->whereYear('created_at', Carbon::now()->year);
+                $judul = 'LAPORAN DATA PENARIKAN TAHUN INI';
+                break;
+
+            default:
+                $judul = 'LAPORAN DATA PENARIKAN';
                 break;
         }
 
-        $data = $query->get(); // <- INI YANG KELUPAAN
+        $data = $query->get();
 
         return Excel::download(
-            new PenarikanExport($data),
+            new PenarikanExport($data, $judul),
             'Penarikan-' . $filter . '.xlsx'
         );
     }
@@ -420,15 +442,18 @@ public function updateSetoran(Request $request, $id)
             ]
         )->get();
 
+        $judul = 'LAPORAN DATA PENARIKAN';
+
         return Excel::download(
-            new PenarikanExport($data),
+            new PenarikanExport($data, $judul),
             'Penarikan-' .
-                Carbon::parse($request->start_date)->format('d-m-Y') .
-                '_sampai_' .
-                Carbon::parse($request->end_date)->format('d-m-Y') .
-                '.xlsx'
+            $request->start_date .
+            '_sampai_' .
+            $request->end_date .
+            '.xlsx'
         );
     }
+
 
     public function cetakStrukPenarikan($id)
     {
@@ -437,9 +462,11 @@ public function updateSetoran(Request $request, $id)
             'transaksi'
         ])->findOrFail($id);
 
+        $user = Auth::user();
+
         $pdf = Pdf::loadView(
             'teller.crud_penarikan.struk',
-            compact('penarikan')
+            compact('penarikan', 'user')
         );
 
         return $pdf->download(
@@ -619,12 +646,16 @@ public function updatePenarikan(Request $request, $id)
 
     public function exportTransfer($filter)
     {
-        $query = Transfer::query();
+        $query = Transfer::with([
+            'rekeningPengirim.nasabah',
+            'rekeningPenerima.nasabah'
+        ]);
 
         switch ($filter) {
 
             case 'hari_ini':
                 $query->whereDate('created_at', Carbon::today());
+                $judul = 'LAPORAN DATA TRANSFER HARI INI';
                 break;
 
             case 'minggu_ini':
@@ -632,22 +663,29 @@ public function updatePenarikan(Request $request, $id)
                     Carbon::now()->startOfWeek(),
                     Carbon::now()->endOfWeek()
                 ]);
+                $judul = 'LAPORAN DATA TRANSFER MINGGU INI';
                 break;
 
             case 'bulan_ini':
                 $query->whereMonth('created_at', Carbon::now()->month)
                     ->whereYear('created_at', Carbon::now()->year);
+                $judul = 'LAPORAN DATA TRANSFER BULAN INI';
                 break;
 
             case 'tahun_ini':
                 $query->whereYear('created_at', Carbon::now()->year);
+                $judul = 'LAPORAN DATA TRANSFER TAHUN INI';
+                break;
+
+            default:
+                $judul = 'LAPORAN DATA TRANSFER';
                 break;
         }
 
         $data = $query->get();
 
         return Excel::download(
-            new TransferExport($data),
+            new TransferExport($data, $judul),
             'Transfer-' . $filter . '.xlsx'
         );
     }
@@ -665,27 +703,30 @@ public function updatePenarikan(Request $request, $id)
         ])->get();
 
         return Excel::download(
-            new TransferExport($data),
+            new TransferExport($data, 'LAPORAN DATA TRANSFER'),
             'Transfer-' .
-                $request->start_date .
-                '-sampai-' .
-                $request->end_date .
-                '.xlsx'
+            $request->start_date .
+            '-sampai-' .
+            $request->end_date .
+            '.xlsx'
         );
     }
 
     public function cetakStrukTransfer($id)
     {
+
         $transfer = Transfer::with([
+            'rekeningPengirim.nasabah',
+            'rekeningPenerima.nasabah',
             'petugas',
-            'rekeningPengirim',
-            'rekeningPenerima',
             'transaksi'
         ])->findOrFail($id);
 
+        $user = Auth::user();
+
         $pdf = Pdf::loadView(
             'teller.crud_transfer.struk',
-            compact('transfer')
+            compact('transfer', 'user')
         );
 
         return $pdf->download(
