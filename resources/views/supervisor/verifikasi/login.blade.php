@@ -47,14 +47,26 @@ Selamat Datang, {{ $user->name }}!
                     <i class="ph ph-magnifying-glass text-lg"></i>
                 </button>
             </form>
-            <div class="flex items-center gap-2 mb-4">
-                <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-                <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
-                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
-                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
-                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
-                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
-                </select>
+            <div>
+                <div class="flex items-center gap-2 mb-2">
+                    <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                    <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+                    </select>
+                </div>
+                @if($data->count() > 0)
+                <form action="{{ route('supervisor.verifikasi.login.destroyAll') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SELURUH data verifikasi login? Tindakan ini tidak dapat dibatalkan!');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-0.5 bg-red-50 text-red-600 hover:bg-red-100 font-medium text-[13px] rounded-xl transition-all border border-red-200">
+                        <i class="ph ph-trash text-lg"></i>
+                        <span>Hapus Semua Data</span>
+                    </button>
+                </form>
+                @endif
             </div>
         </div>
         <div class="overflow-x-auto">

@@ -282,6 +282,13 @@ class superVisorController extends Controller
         return back()->with('success', 'Login ditolak');
     }
 
+    public function destroyAllLogin()
+    {
+        VerifikasiLogin::truncate(); // atau ::query()->delete(); jika ada constraint foreign key
+
+        return redirect()->back()->with('success', 'Semua data verifikasi login berhasil dihapus.');
+    }
+
     // Fungsi untuk menampilkan halaman biaya transaksi
     public function biayatransaksi()
     {

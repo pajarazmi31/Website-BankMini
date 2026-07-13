@@ -207,12 +207,13 @@ Selamat Datang, {{ $user->name }}!
                                 <button
                                     type="button"
                                     onclick="showDetail(
-                            '{{ $d->nama_penarik }}',
-                            '{{ $d->id_rekening }}',
-                            '{{ $d->jumlah_penarikan }}', 
-                            '{{ $user->name }}',
-                            '{{ $d->nominal_admin }}'
-                        )"
+                                        '{{ $d->nama_penarik }}',
+                                        '{{ $d->id_rekening }}',
+                                        '{{ $d->jumlah_penarikan }}', 
+                                        '{{ $d->pilihan_biaya_transaksi }}', 
+                                        '{{ $user->name }}',
+                                        '{{ $d->nominal_admin }}'
+                                    )"
                                     class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                                     title="Lihat Detail">
                                     <i class="ph-fill ph-eye text-[15px]"></i>
@@ -225,6 +226,7 @@ Selamat Datang, {{ $user->name }}!
                         '{{ $d->nama_penarik }}',
                         '{{ $d->id_rekening }}',
                         '{{ $d->jumlah_penarikan }}',
+                        '{{ $d->pilihan_biaya_transaksi }}',
                         '{{ $user->name }}',
                         '{{ $d->transaksi->nominal ?? 0 }}',
                         '{{ $d->transaksi_id }}'
@@ -354,9 +356,9 @@ Selamat Datang, {{ $user->name }}!
 
     // =========================
     // DETAIL
-    // =========================
+    // ========================= 
 
-    function showDetail(nama, rek, nominal, petugas, biaya) {
+    function showDetail(nama, rek, nominal, pilihan_biaya, petugas, biaya) {
 
         let angkaNominal = parseInt(nominal) || 0;
         let angkaBiaya = parseInt(biaya) || 0;
@@ -365,6 +367,7 @@ Selamat Datang, {{ $user->name }}!
         document.getElementById('detail_petugas').value = petugas;
         document.getElementById('detail_rek').value = rek;
         document.getElementById('detail_nama').value = nama;
+        document.getElementById('detail_pilihan_biaya').value = pilihan_biaya;
 
         document.getElementById('detail_nominal').value =
             'Rp. ' + formatRibuan(angkaNominal);
@@ -474,13 +477,17 @@ Selamat Datang, {{ $user->name }}!
     });
 
 
-    function editData(id, nama, rek, nominal, petugas, biaya, transaksiId) {
+    function editData(id, nama, rek, nominal, pilihanBiaya, petugas, biaya, transaksiId) {
 
         document.getElementById('edit_id').value = id;
-
         document.getElementById('edit_id_rekening').value = rek;
-
         document.getElementById('edit_petugas').value = petugas;
+
+        // --- PASTI-KAN BARIS INI ADA UNTUK MENSET NILAI SELECT/INPUT PILIHAN BIAYA ---
+        const selectPilihan = document.getElementById('edit_pilihan_biaya_transaksi') || document.getElementById('pilihan_biaya_transaksi');
+        if (selectPilihan) {
+            selectPilihan.value = pilihanBiaya;
+        }
 
         let biayaMurni = parseInt(biaya) || 0;
 
@@ -496,44 +503,15 @@ Selamat Datang, {{ $user->name }}!
         document.getElementById('editPenarikanForm').action =
             '/penarikan/update/' + id;
 
-        // tampilkan nama awal
+        // Tampilkan nama awal
         document.getElementById('edit_nama_penarik').value = nama;
 
-        // setelah itu fetch ulang berdasarkan rekening
+        // Fetch ulang nama berdasarkan rekening jika perlu
         cariNamaRekening();
 
         jalankanKalkulatorEdit();
 
         switchView('edit');
-    }
-
-    const nominalTambah =
-        document.getElementById('jumlah_penarikan');
-
-    if (nominalTambah) {
-
-        nominalTambah.addEventListener('input', function() {
-
-            let val = this.value.replace(/\D/g, '');
-
-            this.value = val ?
-                formatRibuan(val) :
-                '';
-
-            const selected =
-                transaksiSelect.options[
-                    transaksiSelect.selectedIndex
-                ];
-
-            const biaya =
-                parseInt(selected.dataset.biaya) || 0;
-
-            const total =
-                bersihAngka(val) + biaya;
-
-            document.getElementById('total_biaya').value =
-                'Rp. ' + formatRibuan(total);
-        });
     }
 
     function confirmDeletePenarikan(id) {

@@ -34,11 +34,21 @@
             </div>
 
             <!-- BARIS 2: NOMINAL PENARIKAN (FULL WIDTH - TENGAH PANJANG) -->
-            <div class="md:col-span-2">
+            <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                     Nominal Penarikan
                 </label>
                 <input type="text" id="detail_nominal"
+                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
+                    readonly>
+            </div>
+
+            <!-- BARIS 2 KIRI: BIAYA TRANSAKSI -->
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    Pilihan Biaya Transaksi
+                </label>
+                <input type="text" id="detail_pilihan_biaya"
                     class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
                     readonly>
             </div>

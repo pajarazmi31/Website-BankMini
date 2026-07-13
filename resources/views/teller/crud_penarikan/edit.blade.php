@@ -6,7 +6,7 @@
         @method('PUT')
 
         <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
-            
+
             <div class="lg:flex lg:justify-between items-start mb-8">
                 <div class="flex items-center gap-3 mb-3">
                     <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
@@ -21,8 +21,7 @@
                         id="edit_petugas"
                         name="id_petugas"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]">
                 </div>
             </div>
 
@@ -32,19 +31,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
 
 
-                                <div>
+                <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                         No. Rekening
                     </label>
 
-                        <input
-                            type="text"
-                            name="id_rekening"
-                            id="edit_id_rekening"
-                            inputmode="numeric"
-                            autocomplete="off"
-                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]"
-                        >
+                    <input
+                        type="text"
+                        name="id_rekening"
+                        id="edit_id_rekening"
+                        inputmode="numeric"
+                        autocomplete="off"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]">
                 </div>
 
                 <div>
@@ -57,25 +55,36 @@
                         name="nama_penarik"
                         id="edit_nama_penarik"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]"
-                     >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]">
                 </div>
 
             </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+                <div class="mb-5">
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                        Nominal Penarikan
+                    </label>
 
-            <div class="mb-5">
-                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
-                    Nominal Penarikan
-                </label>
+                    <input
+                        type="text"
+                        name="jumlah_penarikan"
+                        id="edit_jumlah_penarikan"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]">
+                </div>
+                <div class="mb-5">
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                        Pilihan Biaya Transaksi
+                    </label>
 
-                <input
-                    type="text"
-                    name="jumlah_penarikan"
-                    id="edit_jumlah_penarikan"
-                    class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px]"
-                >
+                    <select
+                        name="pilihan_biaya_transaksi" id="edit_pilihan_biaya_transaksi"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
+                        required>
+                        <option value="cash">Cash</option>
+                        <option value="potong_saldo">Potong Saldo</option>
+                    </select>
+                </div>
             </div>
-
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
 
                 <div>
@@ -87,8 +96,7 @@
                         type="text"
                         id="edit_biaya_transaksi"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]">
 
                     <input type="hidden" id="edit_transaksi_id" name="transaksi_id">
                 </div>
@@ -102,8 +110,7 @@
                         type="text"
                         id="edit_total_biaya"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]">
 
                     <input type="hidden" id="edit_total" name="total_biaya">
                 </div>
@@ -115,15 +122,13 @@
                 <button
                     type="button"
                     onclick="switchView('tabel')"
-                    class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl"
-                >
+                    class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl">
                     Kembali
                 </button>
 
                 <button
                     type="submit"
-                    class="w-full bg-button-gradient hover:bg-green-700 text-white font-bold py-3.5 rounded-xl"
-                >
+                    class="w-full bg-button-gradient hover:bg-green-700 text-white font-bold py-3.5 rounded-xl">
                     Simpan Perubahan
                 </button>
 
@@ -136,65 +141,54 @@
 </div>
 
 <script>
+    const formEditPenarikan = document.getElementById('editPenarikanForm');
 
-// Selector
-const formTambahPenarikan = document.getElementById('editPenarikanForm');
+    const rekeningInputEdit = document.getElementById('edit_id_rekening');
+    const namaInputEdit = document.getElementById('edit_nama_penarik');
+    const jumlahInputEdit = document.getElementById('edit_jumlah_penarikan');
 
-const rekeningInputTmb   = document.getElementById('edit_id_rekening');
-const namaInputTmb       = document.getElementById('edit_nama_penarik');
-const jumlahInputTmb     = document.getElementById('edit_jumlah_penarikan');
+    const biayaViewEdit = document.getElementById('edit_biaya_transaksi');
+    const pilihanBiayaEdit = document.getElementById('pilihan_biaya_transaksi');
+    const biayaInputEdit = document.getElementById('edit_transaksi_id');
 
-const biayaViewTmb       = document.getElementById('edit_biaya_transaksi');
-const biayaInputTmb      =document.getElementById('edit_transaksi_id');
+    const totalViewEdit = document.getElementById('edit_total_biaya');
+    const totalInputEdit = document.getElementById('edit_total');
 
-const totalViewTmb       = document.getElementById('edit_total_biaya');
-const totalInputTmb      = document.getElementById('edit_total');
+    rekeningInputEdit?.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '');
+    });
 
-// No Rekening hanya angka
-rekeningInputTmb?.addEventListener('input', function () {
-    this.value = this.value.replace(/\D/g, '');
-});
+    function formatAngka(num) {
+        return new Intl.NumberFormat('id-ID').format(num);
+    }
 
+    function bersihkanAngka(angka) {
+        return parseInt(angka.toString().replace(/\D/g, '')) || 0;
+    }
 
+    function hitungTotal() {
+        let nominal = bersihkanAngka(jumlahInputEdit.value);
+        let biaya = bersihkanAngka(biayaViewEdit.value);
 
-// =====================================
-// FORMAT ANGKA
-// =====================================
-function formatAngka(num) {
-    return new Intl.NumberFormat('id-ID').format(num);
-}
+        let total = nominal + biaya;
 
-function bersihkanAngka(angka) {
-    return parseInt(angka.toString().replace(/\D/g, '')) || 0;
-}
+        totalInputEdit.value = total;
+        totalViewEdit.value = 'Rp. ' + formatAngka(total);
+    }
 
-function hitungTotal() {
+    jumlahInputEdit?.addEventListener('input', function() {
+        let value = this.value.replace(/\D/g, '');
+        this.value = value ? formatAngka(value) : '';
+        hitungTotal();
+    });
 
-    let nominal = bersihkanAngka(jumlahInputTmb.value);
-    let biaya   = bersihkanAngka(biayaViewTmb.value);
+    pilihanBiayaEdit?.addEventListener('change', function() {
+        hitungTotal();
+    });
 
-    let total = nominal + biaya;
+    formEditPenarikan?.addEventListener('submit', function(e) {
+        jumlahInputEdit.value = bersihkanAngka(jumlahInputEdit.value);
+    });
 
-    totalInputTmb.value = total;
-
-    totalViewTmb.value = 
-        'Rp. ' + formatAngka(total);
-
-}
-
-
-
-// =====================================
-// SUBMIT
-// =====================================
-formTambahPenarikan.addEventListener('submit', function(e) {
-
-    jumlahInputTmb.value = bersihkanAngka(jumlahInputTmb.value);
-
-});
-
-
-// INITIAL
-hitungTotal();
-
+    hitungTotal();
 </script>

@@ -112,7 +112,7 @@
                     <p class="text-base md:text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
                         Membangun kebiasaan finansial yang cerdas melalui pengalaman perbankan nyata di lingkungan sekolah yang aman dan edukatif.
                     </p>
-                    <a href="#form-transfer" class="inline-block bg-merek-kuning text-white font-semibold px-8 py-3 rounded-md hover:bg-opacity-90 transition shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200">
+                    <a href="#alur-layanan" class="inline-block bg-merek-kuning text-white font-semibold px-8 py-3 rounded-md hover:bg-opacity-90 transition shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200">
                         Buka Tabungan
                     </a>
                 </div>

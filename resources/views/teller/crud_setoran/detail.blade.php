@@ -85,7 +85,11 @@
                 <h3 class="text-[20px] font-bold text-gray-800">Detail Transaksi</h3>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-5">
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pilihan Biaya Transaksi</label>
+                    <input type="text" id="detail_pilihan_biaya_transaksi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none" readonly>
+                </div>
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Transaksi</label>
                     <input type="text" id="detail_biaya_transaksi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none" readonly>
@@ -132,7 +136,8 @@
         document.getElementById('detail_nama_lengkap').value    = data.nama_lengkap || '-';
         document.getElementById('detail_setoran').value         = data.setoran ? data.setoran.toUpperCase() : '-';
         document.getElementById('detail_mata_uang').value       = data.mata_uang ? data.mata_uang.toUpperCase() : 'IDR';
-        
+        document.getElementById('detail_pilihan_biaya_transaksi').value  = data.pilihan_biaya_transaksi || 'Cash';
+
         // Kalkulasi Biaya Transaksi: Total Biaya - Jumlah Penyetoran
         let jumlahPenyetoran = parseInt(data.jumlah_penyetoran) || 0;
         let totalBiaya       = parseInt(data.total_biaya) || 0;

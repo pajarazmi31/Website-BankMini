@@ -172,7 +172,20 @@
                     </h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-5">
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                            Pilihan Biaya Transaksi
+                        </label>
+                        <select
+                            name="pilihan_biaya_transaksi"
+                            id="edit_pilihan_biaya_transaksi"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
+                            required>
+                            <option value="Cash">Cash</option>
+                            <option value="Potong Saldo">Potong Saldo</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                             Biaya Transaksi

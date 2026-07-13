@@ -43,8 +43,7 @@
                         name="id_rekening_pengirim"
                         onkeyup="cekRekeningTransfer('edit', 'pengirim')"
                         required
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
 
                     <div id="edit_info_pengirim"
                         class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]">
@@ -63,8 +62,7 @@
                         name="id_rekening_penerima"
                         onkeyup="cekRekeningTransfer('edit', 'penerima')"
                         required
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
 
                     <div id="edit_info_penerima"
                         class="text-xs text-gray-400 mt-1 mb-1 min-h-[16px]">
@@ -86,8 +84,7 @@
                         id="edit_jumlah_transfer"
                         name="jumlah_transfer"
                         required
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
                 </div>
 
                 <!-- CATATAN -->
@@ -100,10 +97,22 @@
                         type="text"
                         id="edit_catatan"
                         name="catatan"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
                 </div>
-
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-10">
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                        Pilihan Biaya Admin <span class="text-red-500">*</span>
+                    </label>
+                    <select id="edit_pilihan_biaya_transaksi"
+                        name="pilihan_biaya_transaksi"
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b]"
+                        required>
+                        <option value="Cash">Cash (Tunai)</option>
+                        <option value="Potong Saldo">Potong Saldo Rekening</option>
+                    </select>
+                </div>
                 <!-- BIAYA -->
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">
@@ -114,14 +123,12 @@
                         type="text"
                         id="edit_biaya_transaksi_view"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50">
 
                     <input
                         type="hidden"
                         id="edit_biaya_transaksi"
-                        name="biaya_transaksi"
-                    >
+                        name="biaya_transaksi">
                 </div>
 
                 <!-- TOTAL -->
@@ -134,14 +141,12 @@
                         type="text"
                         id="edit_total_biaya_view"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50"
-                    >
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50">
 
                     <input
                         type="hidden"
                         id="edit_total_biaya"
-                        name="total_biaya"
-                    >
+                        name="total_biaya">
                 </div>
             </div>
 
@@ -199,12 +204,12 @@
 
     // FORMAT RUPIAH EDIT
     document.getElementById('edit_jumlah_transfer')
-    ?.addEventListener('input', function () {
+        ?.addEventListener('input', function() {
 
-        let angka = this.value.replace(/\D/g, '');
+            let angka = this.value.replace(/\D/g, '');
 
-        this.value = angka ? formatNumber(angka) : '';
+            this.value = angka ? formatNumber(angka) : '';
 
-        calculateEditTotal();
-    });
+            calculateEditTotal();
+        });
 </script>

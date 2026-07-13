@@ -186,6 +186,7 @@ Selamat Datang, {{ $user->name }}!
                                     data-petugas="{{ $user->name ?? 'Teller' }}"
                                     data-pengirim="{{ $d->rekeningPengirim->nama_nasabah ?? $d->id_rekening_pengirim }}"
                                     data-penerima="{{ $d->rekeningPenerima->nama_nasabah ?? $d->id_rekening_penerima }}"
+                                    data-pilihan-biaya="{{ $d->pilihan_biaya_transaksi ?? 'Cash' }}"
                                     data-nominal="{{ number_format($d->jumlah_transfer, 0, ',', '.') }}"
                                     data-biaya="{{ number_format(($d->total_biaya - $d->jumlah_transfer), 0, ',', '.') }}"
                                     data-total="{{ number_format($d->total_biaya, 0, ',', '.') }}"
@@ -202,6 +203,7 @@ Selamat Datang, {{ $user->name }}!
                                     "{{ $d->id_rekening_pengirim }}",
                                     "{{ $d->id_rekening_penerima }}",
                                     "{{ $d->jumlah_transfer }}",
+                                    "{{ $d->pilihan_biaya_transaksi }}",
                                     "{{ $user->name }}",
                                     "{{ $d->catatan }}"
                                 )'
@@ -324,6 +326,7 @@ Selamat Datang, {{ $user->name }}!
         const petugas = button.getAttribute('data-petugas');
         const pengirim = button.getAttribute('data-pengirim');
         const penerima = button.getAttribute('data-penerima');
+        const pilihan_biaya = button.getAttribute('data-pilihan-biaya');
         const nominal = button.getAttribute('data-nominal');
         const biaya = button.getAttribute('data-biaya');
         const total = button.getAttribute('data-total');
@@ -338,6 +341,7 @@ Selamat Datang, {{ $user->name }}!
         setVal('detail_petugas', petugas);
         setVal('detail_pengirim', pengirim);
         setVal('detail_penerima', penerima);
+        setVal('detail_pilihan_biaya', pilihan_biaya);
         setVal('detail_nominal', "Rp. " + nominal);
         setVal('detail_biaya_transaksi', "Rp. " + biaya);
         setVal('detail_total_biaya', "Rp. " + total);
@@ -346,7 +350,7 @@ Selamat Datang, {{ $user->name }}!
         switchView('detail');
     }
     // --- VIEW EDIT & INJEKSI DATA ---
-    function editData(id, pengirim, penerima, nominal, petugas, catatan) {
+    function editData(id, pengirim, penerima, nominal, pilihan_biaya, petugas, catatan) {
 
         document.getElementById('edit_id').value = id;
 
@@ -356,6 +360,8 @@ Selamat Datang, {{ $user->name }}!
 
         document.getElementById('edit_jumlah_transfer').value =
             formatNumber(nominal);
+
+        document.getElementById('edit_pilihan_biaya_transaksi').value = pilihan_biaya || 'Cash';
 
         document.getElementById('edit_catatan').value =
             catatan ?? '';

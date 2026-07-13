@@ -192,6 +192,7 @@ Selamat Datang, {{ $user->name }}!
                                     '{{ $d->nama_penyetor }}',
                                     '{{ $d->no_hp_penyetor }}',
                                     '{{ $d->alamat_penyetor }}',
+                                    '{{ $d->pilihan_biaya_transaksi }}',
                                     '{{ $d->nominal_admin }}',
                                     '{{ $d->total_biaya }}',
                                     '{{ $d->catatan }}'
@@ -211,6 +212,7 @@ Selamat Datang, {{ $user->name }}!
                                     "{{ $d->nama_penyetor }}",
                                     "{{ $d->no_hp_penyetor }}",
                                     "{{ $d->alamat_penyetor }}",
+                                    "{{ $d->pilihan_biaya_transaksi }}",
                                     "{{ optional($d->transaksi)->nominal ?? 0 }}",
                                     "{{ $d->total_biaya }}",
                                     "{{ $d->catatan }}",
@@ -430,7 +432,7 @@ Selamat Datang, {{ $user->name }}!
     window.lihatDetailSetoran = function(
         petugas, namalengkap, rek, setoran, mataUang,
         nominal, terbilangStr, namapenyetor, noHp, alamat,
-        biayatransaksi, totalbiaya, catatan
+        pilihanBiaya, biayatransaksi, totalbiaya, catatan
     ) {
         const setVal = (id, val) => {
             const el = document.getElementById(id);
@@ -443,6 +445,7 @@ Selamat Datang, {{ $user->name }}!
         setVal('detail_rek', rek);
         setVal('detail_setoran', setoran);
         setVal('detail_mata_uang', mataUang);
+        setVal('detail_pilihan_biaya_transaksi', pilihanBiaya || 'Cash');
 
         // JALUR NUKLIR: Kita buang semua karakter non-angka, tapi jika diakhiri .00 kita potong duluan bray
         const paksaAngka = (str) => {
@@ -485,6 +488,7 @@ Selamat Datang, {{ $user->name }}!
         nama_penyetor,
         no_hp_penyetor,
         alamat_penyetor,
+        pilihan_biaya,
         biaya_transaksi,
         total_biaya,
         catatan,
@@ -519,6 +523,8 @@ Selamat Datang, {{ $user->name }}!
         setVal('edit_nohp', no_hp_penyetor);
 
         setVal('edit_alamat', alamat_penyetor);
+
+        setVal('edit_pilihan_biaya_transaksi', pilihan_biaya || 'Cash');
 
         setVal('edit_nominal', formatAngka(jumlah_penyetoran));
 

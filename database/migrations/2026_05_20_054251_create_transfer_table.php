@@ -36,6 +36,8 @@ return new class extends Migration
             $table->string('catatan')
                 ->nullable();
 
+            $table->string('pilihan_biaya_transaksi', 100);
+
             $table->foreignId('id_petugas')
                 ->constrained('petugas')
                 ->cascadeOnDelete();

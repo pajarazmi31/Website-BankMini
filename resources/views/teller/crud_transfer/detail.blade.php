@@ -1,6 +1,6 @@
 <div id="viewDetailData" class="fade-in hidden flex-1 mt-4">
     <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
-        
+
         <div class="flex justify-between items-start mb-8">
             <div class="flex items-center gap-3">
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
@@ -30,6 +30,12 @@
             <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Catatan</label>
                 <input type="text" id="detail_catatan" value="-" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-10">
+            <div>
+                <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pilihan Biaya Admin</label>
+                <input type="text" id="detail_pilihan_biaya" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50" readonly>
             </div>
             <div>
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Transaksi (Rp)</label>

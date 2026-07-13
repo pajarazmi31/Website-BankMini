@@ -137,116 +137,133 @@
 </div>
 
 <script>
-// Selector dengan ID Baru khusus Form Tambah
-const formTambahPenarikan = document.getElementById('tambahPenarikanForm');
-const rekeningInputTmb = document.getElementById('tambah_id_rekening');
-const namaInputTmb = document.getElementById('tambah_nama_penarik');
-const jumlahInputTmb = document.getElementById('tambah_jumlah_penarikan');
-const biayaInputTmb = document.getElementById('tambah_biaya_transaksi');
-const totalBiayaInputTmb = document.getElementById('tambah_total_biaya');
-const totalBiayaViewTmb = document.getElementById('tambah_total_biaya_view');
-const pilihanBiayaTmb = document.getElementById('pilihan_biaya_transaksi'); // TAMBAHKAN INI
+// Pastikan DOM sudah dimuat sebelum menjalankan script
+document.addEventListener('DOMContentLoaded', function () {
 
-// Simpan nominal biaya admin asli dari backend ke dalam variabel js
-const BIAYA_ADMIN_ASLI = bersihkanAngka(biayaInputTmb.value);
+    const formTambahPenarikan = document.getElementById('tambahPenarikanForm');
+    const rekeningInputTmb = document.getElementById('tambah_id_rekening');
+    const namaInputTmb = document.getElementById('tambah_nama_penarik');
+    const jumlahInputTmb = document.getElementById('tambah_jumlah_penarikan');
+    const biayaInputTmb = document.getElementById('tambah_biaya_transaksi');
+    const totalBiayaInputTmb = document.getElementById('tambah_total_biaya');
+    const totalBiayaViewTmb = document.getElementById('tambah_total_biaya_view');
+    const pilihanBiayaTmb = document.getElementById('pilihan_biaya_transaksi');
 
-// SALDO
-let saldoRekeningTmb = 0;
-const saldoMinimum = 1000;
+    let saldoRekeningTmb = 0;
+    const saldoMinimum = 1000;
 
-// No Rekening hanya angka
-rekeningInputTmb.addEventListener('input', function() {
-    this.value = this.value.replace(/\D/g, '');
-});
-
-// AJAX Cari Rekening
-rekeningInputTmb.addEventListener('keyup', async function() {
-    let rekening = this.value.trim();
-    if (rekening.length === 0) {
-        namaInputTmb.value = '';
-        saldoRekeningTmb = 0;
-        return;
+    function formatAngka(num) {
+        return new Intl.NumberFormat('id-ID').format(num);
     }
 
-    try {
-        let response = await fetch(`/cari-rekening/${rekening}`);
-        let data = await response.json();
+    function bersihkanAngka(angka) {
+        if (!angka) return 0;
+        // Hanya ambil karakter angka saja
+        let cleaned = angka.toString().replace(/\D/g, '');
+        return parseInt(cleaned) || 0;
+    }
 
-        if (data.success) {
-            namaInputTmb.value = data.nama;
-            saldoRekeningTmb = parseInt(data.saldo);
-        } else {
-            namaInputTmb.value = 'Rekening tidak ditemukan';
-            saldoRekeningTmb = 0;
+    function hitungTotal() {
+        if (!jumlahInputTmb || !biayaInputTmb) return;
+
+        // Ambil value langsung dari elemen input
+        let rawNominal = jumlahInputTmb.value;
+        let nominal = bersihkanAngka(rawNominal);
+        
+        let rawBiaya = biayaInputTmb.value;
+        let biaya = bersihkanAngka(rawBiaya);
+
+        // Update tampilan Biaya Transaksi
+        let elemBiayaView = document.getElementById('tambah_biaya_transaksi_view');
+        if (elemBiayaView) {
+            elemBiayaView.value = formatAngka(biaya);
         }
-    } catch (err) {
-        namaInputTmb.value = 'Terjadi kesalahan';
-        saldoRekeningTmb = 0;
-    }
-});
 
-// LOGIKA UTILITY ANGKA
-function formatAngka(num) {
-    return new Intl.NumberFormat('id-ID').format(num);
-}
+        // Kalkulasi Total
+        let total = nominal + biaya;
 
-function bersihkanAngka(angka) {
-    return parseInt(angka.toString().replace(/\D/g, '')) || 0;
-}
+        if (totalBiayaInputTmb) totalBiayaInputTmb.value = total;
+        if (totalBiayaViewTmb) totalBiayaViewTmb.value = formatAngka(total);
 
-function hitungTotal() {
-    let nominal = bersihkanAngka(jumlahInputTmb.value);
-    let metode = pilihanBiayaTmb.value;
-    
-    // Logika: jika cash, biaya admin di form jadi 0. Jika potong saldo, pakai biaya asli.
-    let biaya = (metode === 'cash') ? 0 : BIAYA_ADMIN_ASLI; 
-
-    // Update view biaya transaksi secara dinamis
-    document.getElementById('tambah_biaya_transaksi_view').value = formatAngka(biaya);
-    
-    let total = nominal + biaya;
-    totalBiayaInputTmb.value = total;
-    totalBiayaViewTmb.value = formatAngka(total);
-}
-
-// Aksi ketika dropdown pilihan biaya transaksi berubah
-pilihanBiayaTmb.addEventListener('change', function() {
-    hitungTotal();
-});
-
-// AUTO FORMAT NOMINAL SAAT INPUT
-jumlahInputTmb.addEventListener('input', function() {
-    let value = this.value.replace(/\D/g, '');
-    this.value = value ? formatAngka(value) : '';
-    hitungTotal();
-});
-
-// VALIDASI SAAT SUBMIT
-formTambahPenarikan.addEventListener('submit', function(e) {
-    let nominal = bersihkanAngka(jumlahInputTmb.value);
-    let metode = pilihanBiayaTmb.value;
-    
-    // Di backend/database saldo akan berkurang sebesar nominal penarikan,
-    // DAN jika potong_saldo, saldo berkurang lagi sebesar biaya admin.
-    let totalPotongKeSaldo = (metode === 'potong_saldo') ? (nominal + BIAYA_ADMIN_ASLI) : nominal;
-
-    let sisaSaldo = saldoRekeningTmb - totalPotongKeSaldo;
-
-    // VALIDASI SALDO MINIMUM
-    if (sisaSaldo < saldoMinimum) {
-        e.preventDefault();
-        alert(
-            'Penarikan gagal!\n' +
-            'Saldo tidak mencukupi. Sisa saldo minimum setelah penarikan dan biaya admin harus tersisa Rp ' +
-            formatAngka(saldoMinimum)
-        );
-        return;
+        // CONSOLE DEBUGGER
+        console.group('=== DEBUG HITUNG TOTAL ===');
+        console.log('Nominal Input Raw    :', `"${rawNominal}"`);
+        console.log('Nominal Parsed       :', nominal);
+        console.log('Biaya Admin Raw      :', `"${rawBiaya}"`);
+        console.log('Biaya Admin Parsed   :', biaya);
+        console.log('Total Kalkulasi      :', total);
+        console.log('Total Displayed      :', formatAngka(total));
+        console.groupEnd();
     }
 
-    // SANITASI ANGKA SEBELUM SUBMIT
-    jumlahInputTmb.value = nominal;
-});
+    // Event Listener Input Nominal
+    if (jumlahInputTmb) {
+        jumlahInputTmb.addEventListener('input', function() {
+            let value = this.value.replace(/\D/g, '');
+            this.value = value ? formatAngka(value) : '';
+            hitungTotal();
+        });
+    }
 
-// Initial Run
-hitungTotal();
+    if (pilihanBiayaTmb) {
+        pilihanBiayaTmb.addEventListener('change', hitungTotal);
+    }
+
+    if (rekeningInputTmb) {
+        rekeningInputTmb.addEventListener('input', function() {
+            this.value = this.value.replace(/\D/g, '');
+        });
+
+        rekeningInputTmb.addEventListener('keyup', async function() {
+            let rekening = this.value.trim();
+            if (rekening.length === 0) {
+                if (namaInputTmb) namaInputTmb.value = '';
+                saldoRekeningTmb = 0;
+                return;
+            }
+
+            try {
+                let response = await fetch(`/cari-rekening/${rekening}`);
+                let data = await response.json();
+
+                if (data.success) {
+                    if (namaInputTmb) namaInputTmb.value = data.nama;
+                    saldoRekeningTmb = parseInt(data.saldo);
+                } else {
+                    if (namaInputTmb) namaInputTmb.value = 'Rekening tidak ditemukan';
+                    saldoRekeningTmb = 0;
+                }
+            } catch (err) {
+                if (namaInputTmb) namaInputTmb.value = 'Terjadi kesalahan';
+                saldoRekeningTmb = 0;
+            }
+        });
+    }
+
+    if (formTambahPenarikan) {
+        formTambahPenarikan.addEventListener('submit', function(e) {
+            let nominal = bersihkanAngka(jumlahInputTmb.value);
+            let biaya = bersihkanAngka(biayaInputTmb.value);
+            let metode = pilihanBiayaTmb ? pilihanBiayaTmb.value : '';
+            
+            let totalPotongKeSaldo = (metode === 'potong_saldo') ? (nominal + biaya) : nominal;
+            let sisaSaldo = saldoRekeningTmb - totalPotongKeSaldo;
+
+            if (sisaSaldo < saldoMinimum) {
+                e.preventDefault();
+                alert(
+                    'Penarikan gagal!\n' +
+                    'Saldo tidak mencukupi. Sisa saldo minimum setelah penarikan harus tersisa Rp ' +
+                    formatAngka(saldoMinimum)
+                );
+                return;
+            }
+
+            jumlahInputTmb.value = nominal;
+        });
+    }
+
+    // Jalankan hitung awal
+    hitungTotal();
+});
 </script>

@@ -22,6 +22,7 @@ class Setoran extends Model
         'alamat_penyetor',
         'no_hp_penyetor',
         'total_biaya',
+        'pilihan_biaya_transaksi',
         'nominal_admin'
     ];
 

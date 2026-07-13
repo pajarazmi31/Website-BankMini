@@ -138,6 +138,7 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::get('/supervisor/verifikasi-login', [superVisorController::class, 'verifikasiLogin'])->name('supervisor.verifikasi.login');
     Route::post('/supervisor/verifikasi-login/{id}/setujui', [superVisorController::class, 'setujuiLogin'])->name('supervisor.verifikasi.login.setujui');
     Route::post('/supervisor/verifikasi-login/{id}/tolak', [superVisorController::class, 'tolakLogin'])->name('supervisor.verifikasi.login.tolak');
+    Route::delete('/supervisor/verifikasi/login/destroy-all', [SupervisorController::class, 'destroyAllLogin'])->name('supervisor.verifikasi.login.destroyAll');
 });
 /// logika login na
 

@@ -58,40 +58,43 @@
                         <i class="ph ph-magnifying-glass text-lg"></i>
                     </button>
                 </form>
-                @if ($bukti_tf->isNotEmpty())
-                <div class="relative inline-block text-left" id="filterDropdownContainer">
-                    <button type="button" onclick="toggleFilterDropdown()" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-2 rounded-xl transition">
-                        <i class="ph-bold ph-sliders-horizontal"></i> Filter Tanggal Export
-                    </button>
-
-                    <div id="filterDropdownMenu" class="hidden absolute right-0 mt-2 w-72 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none p-4 z-50 border border-gray-100">
-                        <form action="{{ route('supervisor.exportTransfer') }}" method="GET" class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1">Dari Tanggal</label>
-                                <input type="date" name="start_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-gray-500 mb-1">Sampai Tanggal</label>
-                                <input type="date" name="end_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
-                            </div>
-
-                            <div class="border-t border-gray-100 pt-3 flex justify-end">
-                                <button type="submit" class="w-full bg-[#059669] hover:bg-[#047857] text-white font-semibold text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition">
-                                    <i class="ph-bold ph-file-xls text-sm"></i> Unduh Excel
-                                </button>
-                            </div>
-                        </form>
+                <div>
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                        <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                            <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                            <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                            <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                            <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+                        </select>
                     </div>
-                </div>
-                @endif
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-                    <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
-                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
-                        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
-                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
-                        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
-                    </select>
+                    @if ($bukti_tf->isNotEmpty())
+                    <div class="relative inline-block text-left" id="filterDropdownContainer">
+                        <button type="button" onclick="toggleFilterDropdown()" class="inline-flex items-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold px-4 py-1.5 rounded-xl transition">
+                            <i class="ph-bold ph-sliders-horizontal"></i> Filter Tanggal Export
+                        </button>
+
+                        <div id="filterDropdownMenu" class="hidden absolute right-0 mt-2 w-72 origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none p-4 z-50 border border-gray-100">
+                            <form action="{{ route('supervisor.exportTransfer') }}" method="GET" class="space-y-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Dari Tanggal</label>
+                                    <input type="date" name="start_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-500 mb-1">Sampai Tanggal</label>
+                                    <input type="date" name="end_date" class="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#1c3a5a]">
+                                </div>
+
+                                <div class="border-t border-gray-100 pt-3 flex justify-end">
+                                    <button type="submit" class="w-full bg-[#059669] hover:bg-[#047857] text-white font-semibold text-xs py-2 rounded-lg flex items-center justify-center gap-2 transition">
+                                        <i class="ph-bold ph-file-xls text-sm"></i> Unduh Excel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    @endif
+
                 </div>
             </div>
             <div class="overflow-x-auto">
@@ -111,7 +114,7 @@
                         @forelse ($bukti_tf as $index => $item)
                         <tr class="hover:bg-gray-50/50 transition-colors">
                             <td class="py-4 px-2 border-b border-gray-50 text-gray-600 pl-4">
-                                {{ $userNasabah->firstItem() + $index }}.
+                                {{ $bukti_tf->firstItem() + $index }}.
                             </td>
                             <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_pengirim }}</td>
                             <td class="py-4 px-2 border-b border-gray-50">{{ $item->nama_penerima }}</td>

@@ -32,14 +32,14 @@
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                             No. Rekening
                         </label>
-                            <input type="text"
-                                id="tambah_id_rekening"
-                                name="id_rekening"
-                                placeholder="Masukkan nomor rekening"
-                                inputmode="numeric"
-                                required
-                                class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">                   
-                            </div>
+                        <input type="text"
+                            id="tambah_id_rekening"
+                            name="id_rekening"
+                            placeholder="Masukkan nomor rekening"
+                            inputmode="numeric"
+                            required
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all">
+                    </div>
 
                     <!-- KANAN = NAMA LENGKAP -->
                     <div>
@@ -157,7 +157,20 @@
                     </h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-5 mb-5">
+                    <div>
+                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">
+                            Pilihan Biaya Transaksi
+                        </label>
+                        <select
+                            name="pilihan_biaya_transaksi"
+                            id="tambah_pilihan_biaya_transaksi"
+                            class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-[#c0860b] transition-all"
+                            required>
+                            <option value="Cash">Cash</option>
+                            <option value="Potong Saldo">Potong Saldo</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">
                             Biaya Transaksi
@@ -257,10 +270,11 @@
         const rekeningInput = document.getElementById('tambah_id_rekening');
         const namaInput = document.getElementById('tambah_nama_lengkap');
         const noHpTambah = document.querySelector('input[name="no_hp_penyetor"]');
+        const pilihanBiayaTmb = document.getElementById('tambah_pilihan_biaya_transaksi');
 
         //bole angka saja
         if (noHpTambah) {
-            noHpTambah.addEventListener('input', function () {
+            noHpTambah.addEventListener('input', function() {
                 this.value = this.value.replace(/\D/g, '');
             });
         }
@@ -279,8 +293,14 @@
             let setoran = bersihkan(jumlahInput.value);
             let biaya = bersihkan(biayaInput.value);
             let total = setoran + biaya;
-
+    
             totalBiayaInput.value = total > 0 ? formatAngka(total) : '0';
+        }
+
+        if (pilihanBiayaTmb) {
+            pilihanBiayaTmb.addEventListener('change', function() {
+                hitungTotalBiaya();
+            });
         }
 
         // Jalankan pertama kali saat halaman dimuat (untuk menangkap nilai Biaya Transaksi dari Backend)

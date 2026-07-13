@@ -37,6 +37,7 @@ return new class extends Migration
 
             $table->decimal('total_biaya', 15, 2);
             $table->decimal('nominal_admin',15,2);
+            $table->string('pilihan_biaya_transaksi', 100);
 
             $table->string('nama_lengkap');
 
