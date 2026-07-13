@@ -94,6 +94,7 @@
                         <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
+                <a href="{{ route('password.request') }}">Lupa Password?</a>
 
                 <!-- Tombol Masuk -->
                 <div class="pt-2">

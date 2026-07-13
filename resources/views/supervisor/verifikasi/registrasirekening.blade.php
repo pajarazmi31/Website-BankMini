@@ -53,9 +53,9 @@
                 </thead>
                 <tbody class="text-[14px] text-gray-800 font-medium">
                     <!-- Row 1 -->
-                    @foreach ( $allNasabah as $nasabah )
+                    @foreach ( $allNasabah as $urutan => $nasabah )
                     <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="py-4 px-2 border-b border-gray-50">1.</td>
+                        <td class="py-4 px-2 border-b border-gray-50">{{ $urutan + 1}}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->jabatan }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $nasabah->rekening->id }}</td>

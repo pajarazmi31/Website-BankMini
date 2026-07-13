@@ -279,4 +279,10 @@ class superVisorController extends Controller
             'success' => true
         ]);
     }
+
+    public function print(String $id) {
+        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+
+        return view('supervisor.crud_datanasabah.print', compact('nasabah'));
+    }
 }

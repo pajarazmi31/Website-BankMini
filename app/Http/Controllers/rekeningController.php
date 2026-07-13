@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Imports\NasabahImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class rekeningController extends Controller
 {
@@ -113,13 +115,13 @@ class rekeningController extends Controller
                         if ( $request->jabatan == 'Guru' ) {
                             $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
                             $urutan = Nasabah::where('jabatan', 'Guru')->count() + 1;
-                            $no_rekening = '01' . $urutan . $tanggal;
+                            $no_rekening = '01' . $tanggal . $urutan;
                         }
 
                         if ( $request->jabatan == 'TU' ) {
                             $tanggal = Carbon::parse($request->tanggal_lahir)->format('Ymd');
                             $urutan = Nasabah::where('jabatan', 'TU')->count() + 1;
-                            $no_rekening = '02' . $urutan . $tanggal;
+                            $no_rekening = '02' . $tanggal . $urutan;
                         }
 
                         Rekening::create([
@@ -254,6 +256,26 @@ class rekeningController extends Controller
 
 
         return redirect()->route('costumerservice.keloladata')->with('success','data nasabah berhasil di hapus');
+    }
+
+    public function halamanImport() {
+        return view('costumerservice.crudnasabah.import');
+    }
+
+    public function import(Request $request) {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        Excel::import( new NasabahImport, $request->file('file'));
+
+        return redirect()->route('costumerservice.keloladata')->with('success', 'data import berhasil ditambah');
+    }
+
+    public function print(String $id) {
+        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+
+        return view('costumerservice.crudnasabah.print', compact('nasabah'));
     }
 
 

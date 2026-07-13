@@ -66,9 +66,11 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
+                        <a href="{{ route('detail.nasabah.cs', $nsbh->id) }}">
                         <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
                             <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
                         </button>
+                        </a>
                         <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-red-100 flex items-center justify-center cursor-default">
                             <i class="ph ph-x-circle text-[20px] text-red-800 " title="Non Aktif"></i>
                         </button>
@@ -84,9 +86,11 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="window.location.href='{{ route('costumerservice.keloladata') }}'" class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
+                        <a href="{{ route('detail.nasabah.cs', $nsbh->id) }}">
+                        <button  class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors">
                             <i class="ph-fill ph-eye text-[14px] md:text-[16px]"></i>
                         </button>
+                        </a>
                         <button class="w-[28px] md:w-[30px] h-[28px] md:h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center cursor-default">
                             <i class="ph-bold ph-warning-circle text-[15px]"></i>
                         </button>
