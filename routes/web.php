@@ -16,6 +16,8 @@ use App\Models\User;
 use App\Models\VerifikasiLogin;
 use Illuminate\Support\Facades\Auth;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\Auth\lupaPasswordController;
+use App\Models\Rekening;
 
 //halaman utama
 Route::get('/', [landingPageController::class, 'index'])->name('/');
@@ -81,13 +83,16 @@ Route::middleware(['role:customerservice'])->group(function () {
 
     Route::get('/siswa/{nis}', [siswaController::class, 'getSiswa']);
 
-    route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
-    Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
-    Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
-    Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
-    Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
-    Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
-    Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
+route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
+Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
+Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
+Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
+Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
+Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
+Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
+Route::post('/customer/import', [rekeningController::class, 'import'])->name('import.nasabah');
+Route::get('/customer/import/nasabah', [rekeningController::class, 'halamanImport'])->name('halaman.import');
+Route::get('costumer/print/{id}', [rekeningController::class, 'print'])->name('print');
 });
 
 //ROLE SUPERVISOR
@@ -142,6 +147,10 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::post('/supervisor/verifikasi-login/{id}/setujui', [superVisorController::class, 'setujuiLogin'])->name('supervisor.verifikasi.login.setujui');
     Route::post('/supervisor/verifikasi-login/{id}/tolak', [superVisorController::class, 'tolakLogin'])->name('supervisor.verifikasi.login.tolak');
     Route::delete('/supervisor/verifikasi/login/destroy-all', [SupervisorController::class, 'destroyAllLogin'])->name('supervisor.verifikasi.login.destroyAll');
+ 
+//print
+Route::get('supervisor/print/{id}', [superVisorController::class, 'print'])->name('print.super');
+
 });
 /// logika login na
 
@@ -157,6 +166,18 @@ Route::post('/logout', [loginController::class, 'logout'])->name('logout');
 Route::get('/verifikasi-login', function () {
     return view('auth.verifikasi');
 })->name('auth.verifikasi');
+Route::get('/lupa-password', [lupaPasswordController::class, 'index'])
+    ->name('password.request');
+
+Route::post('/lupa-password', [lupaPasswordController::class, 'sendResetLink'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [lupaPasswordController::class, 'showResetForm'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [lupaPasswordController::class, 'resetPassword'])
+    ->name('password.update');
+
 
 Route::get('/cek-verifikasi-login/{id}', function ($id) {
 
@@ -186,3 +207,5 @@ Route::get('/cek-rekening/{id}', [Bukti_tfController::class, 'cekRekening']);
 Route::get('/get-kabupaten/{id}', [alamatController::class, 'getKabupaten']);
 Route::get('/get-kecamatan/{id}', [alamatController::class, 'getKecamatan']);
 Route::get('/get-desa/{id}', [alamatController::class, 'getDesa']);
+
+

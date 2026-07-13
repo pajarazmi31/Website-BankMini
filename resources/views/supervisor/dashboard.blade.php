@@ -83,9 +83,11 @@ Selamat Datang, {{ $user->name }}!
                             <p class="text-[12px] text-gray-400 font-medium">Registrasi Akun</p>
                         </div>
                     </div>
-                    <button onclick="window.location.href='{{ route('supervisor.verifikasi.registrasi') }}'" class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat">
+                    <a href="{{ route('detail.nasabah', $item->id) }}">
+                    <button class="w-[36px] h-[36px] rounded-full bg-[#f1f5f9] text-[#1e293b] flex items-center justify-center hover:bg-[#e2e8f0] transition-colors border border-gray-100" title="Lihat">
                         <i class="ph-fill ph-eye text-[18px]"></i>
                     </button>
+                    </a>
                 </div>
                 @endforeach
                 @forelse ($nasabahTfPending as $item)
@@ -181,9 +183,11 @@ Selamat Datang, {{ $user->name }}!
                         <p class="text-[13px] lg:text-[15px] text-gray-500 mt-0.5">Registrasi Akun • {{ $item->nis_nip }}</p>
                     </div>
                 </div>
-                <button onclick="window.location.href='{{ route('supervisor.verifikasi.registrasi') }}'" class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
+                <a href="{{ route('detail.nasabah', $item->id) }}">
+                <button class="w-[32px] h-[32px] rounded-full bg-[#f1f5f9] text-brand-blue flex items-center justify-center hover:bg-gray-200 transition-colors">
                     <i class="ph-fill ph-eye text-[16px]"></i>
                 </button>
+                </a>
             </div>
             @endforeach
 

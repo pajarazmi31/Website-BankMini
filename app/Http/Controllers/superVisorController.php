@@ -383,4 +383,10 @@ class superVisorController extends Controller
         'message' => 'Biaya transaksi berhasil disimpan!'
     ]); 
     }
+    
+    public function print(String $id) {
+        $nasabah = Nasabah::with('rekening')->FindOrFail($id);
+
+        return view('supervisor.crud_datanasabah.print', compact('nasabah'));
+    }
 }

@@ -47,6 +47,11 @@ selamat datang {{ $user->name }}!
         <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
             <i class="ph ph-plus text-base"></i> Tambah Data
         </button>
+        <a href="{{ route('halaman.import') }}">
+            <button>
+                Import
+            </button>
+        </a>
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
@@ -146,6 +151,13 @@ selamat datang {{ $user->name }}!
                                         <i class="ph-fill ph-trash text-[15px]"></i>
                                     </button>
                                 </form>
+                                <a href="{{ route('print', $nasabah->id) }}">
+                                <button type="button"
+                                        class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors focus:outline-none"
+                                        title="Cetak Struk">
+                                    <i class="ph-fill ph-printer text-[15px]"></i>
+                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>
