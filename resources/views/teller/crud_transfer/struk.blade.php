@@ -50,7 +50,7 @@ td{
 </style>
 
 </head>
-<body>
+<body onload="window.print()">
 
 <div class="title">
     <h2>BANK MINI</h2>
@@ -133,6 +133,12 @@ td{
     <div class="line"></div>
     Terima Kasih Telah Menggunakan Layanan Kami
 </div>
+
+<script>
+    window.onafterprint = function() {
+        window.location.href = "{{ route('teller.transfer') }}"
+    }
+</script>
 
 </body>
 </html>

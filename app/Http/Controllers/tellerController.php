@@ -51,7 +51,7 @@ class tellerController extends Controller
         $biayaAdminTransfer = Transfer::whereDate('created_at', Carbon::today())
             ->sum('nominal_admin');
 
-        // TRANSAKSI TERBARU 
+        // TRANSAKSI TERBARU
         // Ambil semua transaksi tanpa limit agar bisa di-paginate di view history
         $setor = Setoran::with('rekening.nasabah')->latest('created_at')->get();
         $tarik = Penarikan::with('rekening.nasabah')->latest('created_at')->get();
@@ -146,8 +146,28 @@ class tellerController extends Controller
     }
 
 
-    public function cetakStruk($id)
-    {
+    // public function cetakStruk($id)
+    // {
+    //     $setoran = Setoran::with([
+    //         'petugas',
+    //         'transaksi'
+    //     ])->findOrFail($id);
+
+    //     $user = Auth::user();
+
+    //     $pdf = Pdf::loadView(
+    //         'teller.crud_setoran.struk',
+    //         compact('setoran', 'user')
+    //     );
+
+    //     return $pdf->download(
+    //         'Struk-Setoran-' .
+    //         str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
+    //         '.pdf'
+    //     );
+    // }
+
+    public function cetakStruk($id) {
         $setoran = Setoran::with([
             'petugas',
             'transaksi'
@@ -155,16 +175,7 @@ class tellerController extends Controller
 
         $user = Auth::user();
 
-        $pdf = Pdf::loadView(
-            'teller.crud_setoran.struk',
-            compact('setoran', 'user')
-        );
-
-        return $pdf->download(
-            'Struk-Setoran-' .
-            str_pad($setoran->id, 5, '0', STR_PAD_LEFT) .
-            '.pdf'
-        );
+        return view('teller.crud_setoran.struk', compact('setoran','user'));
     }
 
     public function setoran(Request $request)
@@ -216,8 +227,8 @@ public function storeSetoran(Request $request)
     $pilihanBiaya = $request->pilihan_biaya_transaksi;
 
     // Kalkulasi saldo bersih yang akan masuk ke rekening
-    $setoranMasukSaldo = ($pilihanBiaya === 'Potong Saldo') 
-        ? ($jumlahSetoran - $biayaAdmin) 
+    $setoranMasukSaldo = ($pilihanBiaya === 'Potong Saldo')
+        ? ($jumlahSetoran - $biayaAdmin)
         : $jumlahSetoran;
 
     if ($setoranMasukSaldo < 0) {
@@ -275,8 +286,8 @@ public function updateSetoran(Request $request, $id)
         $biayaAdminLama = $masterTransaksiLama ? (int)$masterTransaksiLama->nominal : 0;
 
         // Hitung berapa saldo yang tadinya pernah ditambahkan pada transaksi lama
-        $setoranMasukSaldoLama = ($setoran->pilihan_biaya_transaksi === 'Potong Saldo') 
-            ? ($setoran->jumlah_penyetoran - $biayaAdminLama) 
+        $setoranMasukSaldoLama = ($setoran->pilihan_biaya_transaksi === 'Potong Saldo')
+            ? ($setoran->jumlah_penyetoran - $biayaAdminLama)
             : $setoran->jumlah_penyetoran;
 
         // 1. BALIKAN DULU SALDO REKENING LAMA
@@ -290,8 +301,8 @@ public function updateSetoran(Request $request, $id)
         $biayaAdminBaru = (int) $masterTransaksiBaru->nominal;
         $pilihanBiayaBaru = $request->pilihan_biaya_transaksi;
 
-        $setoranMasukSaldoBaru = ($pilihanBiayaBaru === 'Potong Saldo') 
-            ? ($jumlahBaru - $biayaAdminBaru) 
+        $setoranMasukSaldoBaru = ($pilihanBiayaBaru === 'Potong Saldo')
+            ? ($jumlahBaru - $biayaAdminBaru)
             : $jumlahBaru;
 
         if ($setoranMasukSaldoBaru < 0) {
@@ -456,8 +467,28 @@ public function updateSetoran(Request $request, $id)
     }
 
 
-    public function cetakStrukPenarikan($id)
-    {
+    // public function cetakStrukPenarikan($id)
+    // {
+    //     $penarikan = Penarikan::with([
+    //         'petugas',
+    //         'transaksi'
+    //     ])->findOrFail($id);
+
+    //     $user = Auth::user();
+
+    //     $pdf = Pdf::loadView(
+    //         'teller.crud_penarikan.struk',
+    //         compact('penarikan', 'user')
+    //     );
+
+    //     return $pdf->download(
+    //         'Struk-Penarikan-' .
+    //             str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
+    //             '.pdf'
+    //     );
+    // }
+
+    public function cetakStrukPenarikan(String $id) {
         $penarikan = Penarikan::with([
             'petugas',
             'transaksi'
@@ -465,16 +496,7 @@ public function updateSetoran(Request $request, $id)
 
         $user = Auth::user();
 
-        $pdf = Pdf::loadView(
-            'teller.crud_penarikan.struk',
-            compact('penarikan', 'user')
-        );
-
-        return $pdf->download(
-            'Struk-Penarikan-' .
-                str_pad($penarikan->id, 5, '0', STR_PAD_LEFT) .
-                '.pdf'
-        );
+        return view('teller.crud_penarikan.struk', compact('penarikan','user'));
     }
 
 
@@ -623,7 +645,7 @@ public function updatePenarikan(Request $request, $id)
             'transaksi_id'            => $request->transaksi_id,
             'nominal_admin'           => $biayaAdmin,
             'total_biaya'             => $jumlahBaru + $biayaAdmin,
-            'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi, 
+            'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi,
         ]);
 
         DB::commit();
@@ -714,9 +736,31 @@ public function updatePenarikan(Request $request, $id)
         );
     }
 
-    public function cetakStrukTransfer($id)
-    {
+    // public function cetakStrukTransfer($id)
+    // {
 
+    //     $transfer = Transfer::with([
+    //         'rekeningPengirim.nasabah',
+    //         'rekeningPenerima.nasabah',
+    //         'petugas',
+    //         'transaksi'
+    //     ])->findOrFail($id);
+
+    //     $user = Auth::user();
+
+    //     $pdf = Pdf::loadView(
+    //         'teller.crud_transfer.struk',
+    //         compact('transfer', 'user')
+    //     );
+
+    //     return $pdf->download(
+    //         'Struk-Transfer-' .
+    //             str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
+    //             '.pdf'
+    //     );
+    // }
+
+    public function cetakStrukTransfer(String $id) {
         $transfer = Transfer::with([
             'rekeningPengirim.nasabah',
             'rekeningPenerima.nasabah',
@@ -726,16 +770,7 @@ public function updatePenarikan(Request $request, $id)
 
         $user = Auth::user();
 
-        $pdf = Pdf::loadView(
-            'teller.crud_transfer.struk',
-            compact('transfer', 'user')
-        );
-
-        return $pdf->download(
-            'Struk-Transfer-' .
-                str_pad($transfer->id, 5, '0', STR_PAD_LEFT) .
-                '.pdf'
-        );
+        return view('teller.crud_transfer.struk', compact('transfer','user'));
     }
 
     public function transfer(Request $request)
@@ -845,7 +880,7 @@ public function updatePenarikan(Request $request, $id)
             return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage())->withInput();
         }
     }
-    
+
     public function updateTransfer(Request $request, $id)
     {
         $request->validate([

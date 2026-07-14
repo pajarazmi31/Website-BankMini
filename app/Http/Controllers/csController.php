@@ -6,6 +6,7 @@ use App\Models\Nasabah;
 use App\Models\User;
 use App\Models\Rekening;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class csController extends Controller
 {
@@ -29,5 +30,11 @@ class csController extends Controller
         $cs = $user->petugas;
         $nasabah = Nasabah::with('rekening','jurusan')->findOrFail($id);
         return view('costumerservice.crudnasabah.detail',compact('user','cs','nasabah'));
+    }
+
+    public function TemplateImport() {
+        $path = storage_path('app/public/template/import_data_nasabah.xlsx');
+
+        return response()->download($path);
     }
 }

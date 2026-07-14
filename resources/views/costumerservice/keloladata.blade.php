@@ -52,6 +52,11 @@ selamat datang {{ $user->name }}!
                 Import
             </button>
         </a>
+        <a href="{{ route('template.nasabah') }}">
+            <button>
+                template import
+            </button>
+        </a>
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
