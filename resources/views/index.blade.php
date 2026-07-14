@@ -39,6 +39,20 @@
                             hijau: '#1A8F6A', // Hijau aksen
                             bg: '#F4F6F9' // Latar belakang abu-abu terang utama
                         }
+                    },
+                    keyframes: {
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        'scale-in': {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fade-in 0.2s ease-out forwards',
+                        'scale-in': 'scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards'
                     }
                 }
             }
@@ -119,7 +133,7 @@
 
                 <!-- Gambar Utama -->
                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl max-w-lg mx-auto lg:ml-auto -mt-4 lg:mt-0">
-                    <img src="{{ asset('img/kone.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px] hidden lg:flex">
+                    <img src="{{ asset('img/konefix.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px] hidden lg:flex">
                     <!-- Lapisan bayangan untuk meniru efek desain -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-[#143657]/60 to-transparent"></div>
                 </div>
@@ -370,12 +384,7 @@
 
                 <!-- Formulir Kanan -->
                 <div class="lg:col-span-8 bg-white rounded-[20px] p-8 sm:p-12 shadow-xl border border-gray-100">
-                    @if(session('success'))
-                    <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#1A8F6A] text-[#1A8F6A] rounded-r-lg flex items-center gap-3">
-                        <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
-                        <p class="text-sm font-medium">{{ session('success') }}</p>
-                    </div>
-                    @endif
+
 
                     <!--
                         BAGIAN BACKEND: FORM TRANSFER (GUEST/UMUM)
@@ -653,7 +662,7 @@
 
             window.addEventListener('scroll', () => {
                 // 1. Efek bayangan pada Navbar saat menggulir
-                if (window.scrollY > 20) {
+                if (window.scrollY > 20) { 
                     navbar.classList.add('shadow-md', 'bg-opacity-95', 'backdrop-blur-sm');
                     navbar.classList.remove('border-gray-100');
                 } else {
@@ -782,5 +791,99 @@
         }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
     });
     </script>
+
+    @if(session('success') || session('error') || $errors->any())
+    <!-- Modal Alert Transfer -->
+    <div id="transfer-modal" class="fixed inset-0 z-50 flex items-center justify-center px-4 animate-fade-in transition-opacity duration-200">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity" onclick="closeTransferModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center border border-gray-100 transform transition-all duration-300 scale-100 animate-scale-in">
+            @if(session('success'))
+                <!-- Ikon Berhasil -->
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-emerald-50 mb-6 border border-emerald-100">
+                    <i class="ph ph-check-circle text-5xl text-emerald-500 animate-pulse"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">Transfer Berhasil!</h3>
+                <p class="text-slate-500 text-sm mb-6 leading-relaxed">
+                    {{ session('success') }}
+                </p>
+                <button onclick="closeTransferModal()" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition duration-200 shadow-md hover:shadow-lg active:scale-[0.98]">
+                    Selesai
+                </button>
+            @else
+                <!-- Ikon Gagal -->
+                <div class="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-rose-50 mb-6 border border-rose-100">
+                    <i class="ph ph-warning-circle text-5xl text-rose-500"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">Transfer Gagal!</h3>
+                <div class="text-slate-500 text-sm mb-6 leading-relaxed">
+                    @if(session('error'))
+                        <p>{{ session('error') }}</p>
+                    @elseif($errors->any())
+                        <p class="font-medium text-slate-600 mb-2">Mohon perbaiki kesalahan berikut:</p>
+                        <ul class="text-xs text-rose-500 space-y-1 text-left list-disc list-inside bg-rose-50/50 p-3 rounded-lg border border-rose-100 max-h-36 overflow-y-auto">
+                            @foreach ($errors->all() as $error)
+                                @php
+                                    $cleanError = $error;
+                                    
+                                    // Pemetaan manual untuk pesan error default Laravel agar lebih wajar
+                                    $replacements = [
+                                        'The nama pengirim field is required.' => 'Nama pengirim wajib diisi.',
+                                        'The no hp pengirim field is required.' => 'Nomor telepon wajib diisi.',
+                                        'The id rekening field is required.' => 'Nomor rekening wajib diisi.',
+                                        'The jumlah transfer field is required.' => 'Jumlah transfer wajib diisi.',
+                                        'The bukti foto field is required.' => 'Bukti transfer wajib diunggah.',
+                                        'The nama penerima field is required.' => 'Nama penerima wajib diisi.',
+                                        'The datetime tgl field is required.' => 'Tanggal transfer wajib diisi.',
+                                        'The bukti foto must be an image.' => 'Bukti transfer harus berupa gambar.',
+                                        'The bukti foto must be a file of type: jpg, jpeg, png.' => 'Format bukti transfer harus jpg, jpeg, atau png.',
+                                        'The jumlah transfer must be a number.' => 'Jumlah transfer harus berupa angka.',
+                                        'The jumlah transfer must be at least 500.' => 'Jumlah transfer minimal Rp 500.',
+                                    ];
+
+                                    if (array_key_exists($cleanError, $replacements)) {
+                                        $cleanError = $replacements[$cleanError];
+                                    } else {
+                                        // Pembersihan dinamis fallback jika ada format lainnya
+                                        $cleanError = str_replace(
+                                            ['The ', ' field is required.', ' must be ', 'an image', 'a number', 'at least ', 'bukti foto', 'no hp pengirim', 'id rekening', 'jumlah transfer', 'nama pengirim', 'nama penerima', 'datetime tgl'], 
+                                            ['', ' wajib diisi.', ' harus ', 'gambar', 'angka', 'minimal ', 'bukti transfer', 'nomor telepon', 'nomor rekening', 'jumlah transfer', 'nama pengirim', 'nama penerima', 'tanggal transfer'], 
+                                            $cleanError
+                                        );
+                                    }
+                                @endphp
+                                <li>{{ $cleanError }}</li>
+                            @endforeach
+                        </ul>
+                    @endif
+                </div>
+                <button onclick="closeTransferModal()" class="w-full py-3.5 px-4 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition duration-200 shadow-md hover:shadow-lg active:scale-[0.98]">
+                    Coba Lagi
+                </button>
+            @endif
+        </div>
+    </div>
+
+    <script>
+        function closeTransferModal() {
+            const modal = document.getElementById('transfer-modal');
+            if (modal) {
+                // Add fade out and scale down transition
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                const content = modal.querySelector('.animate-scale-in');
+                if (content) {
+                    content.classList.remove('scale-100');
+                    content.classList.add('scale-95');
+                }
+                // Remove from DOM after transition completes
+                setTimeout(() => {
+                    modal.remove();
+                }, 200);
+            }
+        }
+    </script>
+    @endif
 </body>
 </html>
