@@ -181,7 +181,7 @@
                                             {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
-                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at->format('d-m-Y H:i') }}</p>
                                 </div>
                             </div>
                             @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
@@ -234,7 +234,7 @@
                                             {{ $item->pengirim->nasabah->user->name }}
                                             @endif
                                     </p>
-                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at }}</p>
+                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at->format('d-m-Y H:i') }}</p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">Catatan: {{$item->catatan}}</p>
                                 </div>
                             </div>
