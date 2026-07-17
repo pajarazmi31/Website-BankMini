@@ -177,7 +177,7 @@
 
             <!-- BUTTONS -->
             <div class="flex justify-center mt-12">
-                <a href="{{ route('verifikasi.rekening') }}" class="w-full md:w-[400px] bg-[#797979] hover:bg-gray-600 text-white font-bold py-4 rounded-xl transition-colors text-[15px] flex items-center justify-center">Kembali</a>
+                <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="w-full md:w-[400px] bg-[#797979] hover:bg-gray-600 text-white font-bold py-4 rounded-xl transition-colors text-[15px] flex items-center justify-center">Kembali</a>
             </div>
         </form>
     </div>

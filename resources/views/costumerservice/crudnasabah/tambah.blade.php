@@ -200,7 +200,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                            <input type="tel" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input type="number" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>
