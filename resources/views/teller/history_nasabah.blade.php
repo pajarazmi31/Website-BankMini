@@ -61,6 +61,14 @@ History Transaksi Nasabah
                     <a href="#" class="block px-4 py-3 hover:bg-gray-50 text-sm">Tahun Ini</a>
                 </div>
             </div>
+            <!-- TOMBOL CETAK BUKU TABUNGAN -->
+            <button
+                type="button"
+                onclick="bukaModalCetak()"
+                class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-4 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
+                <i class="ph ph-printer text-base"></i>
+                Cetak Buku Tabungan
+            </button>
 
         </div>
 
@@ -161,7 +169,32 @@ History Transaksi Nasabah
         <p class="text-gray-500 text-center py-10">Tampilan detail akan dirender di sini menggunakan JavaScript/Ajax.</p>
     </div>
 </div>
-
+<!-- ================= MODAL CETAK BUKU TABUNGAN ================= -->
+<div id="modalCetakBuku" class="hidden fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 class="font-bold text-gray-800 text-[16px]">Cetak Buku Tabungan</h3>
+            <button type="button" onclick="tutupModalCetak()" class="text-gray-400 hover:text-red-500 transition-colors">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan No. Rekening Nasabah</label>
+            <div class="relative">
+                <i class="ph ph-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                <input type="number" id="inputNoRekening" placeholder="Contoh: 10029384" 
+                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Sistem hanya akan mencetak riwayat transaksi milik nomor rekening ini.</p>
+        </div>
+        <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+            <button type="button" onclick="tutupModalCetak()" class="px-4 py-2 rounded-xl text-[13px] font-bold text-gray-600 hover:bg-gray-200 transition-colors">Batal</button>
+            <button type="button" onclick="prosesCetak()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-brand-blue text-white hover:opacity-90 transition-colors flex items-center gap-2">
+                <i class="ph ph-printer"></i> Cetak Sekarang
+            </button>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -220,6 +253,28 @@ History Transaksi Nasabah
         // Nanti disini kamu bisa buat logika AJAX untuk memanggil data detail
         // berdasarkan ID dan Jenis Transaksi-nya, lalu memunculkan modal/viewDetailData
         switchView('detail');
+    }
+
+    // FUNGSI MODAL CETAK BUKU
+    function bukaModalCetak() {
+        document.getElementById('modalCetakBuku').classList.remove('hidden');
+        document.getElementById('inputNoRekening').value = '';
+        setTimeout(() => document.getElementById('inputNoRekening').focus(), 100);
+    }
+
+    function tutupModalCetak() {
+        document.getElementById('modalCetakBuku').classList.add('hidden');
+    }
+
+    function prosesCetak() {
+        const noRek = document.getElementById('inputNoRekening').value.trim();
+        if (!noRek) {
+            alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
+            return;
+        }
+        // Redirect ke route cetak di Tab Baru
+        window.open(`/teller/cetak-buku/${noRek}`, '_blank');
+        tutupModalCetak();
     }
 </script>
 @endsection

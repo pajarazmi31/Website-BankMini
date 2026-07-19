@@ -1295,4 +1295,67 @@ class tellerController extends Controller
             throw $e;
         }
     }
+
+    public function cetakBuku($id_rekening)
+    {
+        // Pastikan rekening ada
+        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+
+        // 1. Ambil Setoran
+        $setoran = Setoran::where('id_rekening', $id_rekening)->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
+                'tanggal' => $item->created_at,
+                'sandi' => 'SETORAN',
+                'debit' => 0,
+                'kredit' => $item->jumlah_penyetoran - $potongan,
+                'saldo' => $item->saldo_transaksi
+            ];
+        });
+
+        // 2. Ambil Penarikan
+        $penarikan = Penarikan::where('id_rekening', $id_rekening)->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
+                'tanggal' => $item->created_at,
+                'sandi' => 'TARIK',
+                'debit' => $item->jumlah_penarikan + $potongan,
+                'kredit' => 0,
+                'saldo' => $item->saldo_transaksi
+            ];
+        });
+
+        // 3. Ambil Transfer Keluar (Pengirim)
+        $transferKeluar = Transfer::where('id_rekening_pengirim', $id_rekening)->get()->map(function ($t) {
+            $potongan = str_contains(strtolower($t->pilihan_biaya_transaksi), 'potong') ? $t->nominal_admin : 0;
+            return (object)[
+                'tanggal' => $t->created_at,
+                'sandi' => 'TRF KELUAR',
+                'debit' => $t->jumlah_transfer + $potongan,
+                'kredit' => 0,
+                'saldo' => $t->saldo_transaksi_pengirim
+            ];
+        });
+
+        // 4. Ambil Transfer Masuk (Penerima)
+        $transferMasuk = Transfer::where('id_rekening_penerima', $id_rekening)->get()->map(function ($t) {
+            return (object)[
+                'tanggal' => $t->created_at,
+                'sandi' => 'TRF MASUK',
+                'debit' => 0,
+                'kredit' => $t->jumlah_transfer,
+                'saldo' => $t->saldo_transaksi_penerima
+            ];
+        });
+
+        // Gabungkan dan urutkan secara ASCENDING (Dari yang terlama ke terbaru untuk format buku fisik)
+        $transaksi = collect()->concat($setoran)
+            ->concat($penarikan)
+            ->concat($transferKeluar)
+            ->concat($transferMasuk)
+            ->sortBy('tanggal') // ASC
+            ->values();
+
+        return view('teller.cetak_buku', compact('rekening', 'transaksi'));
+    }
 }
