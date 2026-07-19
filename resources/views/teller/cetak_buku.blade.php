@@ -81,7 +81,7 @@
             <tr>
                 <th style="width: 5%;">NO</th>
                 <th style="width: 15%;">TANGGAL</th>
-                <th style="width: 15%;">SANDI</th>
+                <th style="width: 15%;">ADM</th>
                 <th class="text-right" style="width: 20%;">DEBIT (KELUAR)</th>
                 <th class="text-right" style="width: 20%;">KREDIT (MASUK)</th>
                 <th class="text-right" style="width: 25%;">SALDO</th>
@@ -89,18 +89,29 @@
         </thead>
         <tbody>
             @forelse($transaksi as $index => $t)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}</td>
-                <td>{{ $t->sandi }}</td>
-                <td class="text-right">{{ $t->debit > 0 ? number_format($t->debit, 0, ',', '.') : '-' }}</td>
-                <td class="text-right">{{ $t->kredit > 0 ? number_format($t->kredit, 0, ',', '.') : '-' }}</td>
-                <td class="text-right" style="font-weight: bold;">{{ number_format($t->saldo, 0, ',', '.') }}</td>
-            </tr>
+                
+                @if(($index + 1) < $mulai_baris)
+                    <!-- BARIS KOSONG (SUDAH PERNAH DICETAK) -->
+                    <!-- Fungsi ini murni untuk menekan kertas / head printer turun ke baris selanjutnya -->
+                    <tr style="height: 25px;"> 
+                        <td colspan="6"></td>
+                    </tr>
+                @else
+                    <!-- BARIS DATA ASLI (YANG BELUM DICETAK) -->
+                    <tr style="height: 25px;">
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}</td>
+                        <td class="text-right">{{ $t->biaya_admin > 0 ? number_format($t->biaya_admin, 0, ',', '.') : '-' }}</td>
+                        <td class="text-right">{{ $t->debit > 0 ? number_format($t->debit, 0, ',', '.') : '-' }}</td>
+                        <td class="text-right">{{ $t->kredit > 0 ? number_format($t->kredit, 0, ',', '.') : '-' }}</td>
+                        <td class="text-right" style="font-weight: bold;">{{ number_format($t->saldo, 0, ',', '.') }}</td>
+                    </tr>
+                @endif
+
             @empty
-            <tr>
-                <td colspan="6" style="text-align: center; padding-top: 20px;">Belum ada riwayat transaksi.</td>
-            </tr>
+                <tr>
+                    <td colspan="6" style="text-align: center; padding-top: 20px;">Belum ada riwayat transaksi.</td>
+                </tr>
             @endforelse
         </tbody>
     </table>

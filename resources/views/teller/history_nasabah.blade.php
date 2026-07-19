@@ -185,6 +185,13 @@ History Transaksi Nasabah
                 <input type="number" id="inputNoRekening" placeholder="Contoh: 10029384" 
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
+            <!-- INPUT BARU: MULAI BARIS -->
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Mulai Cetak dari Baris ke-?</label>
+            <div class="relative">
+                <i class="ph ph-list-numbers absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                <input type="number" id="inputBaris" value="1" min="1" 
+                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
+            </div>
             <p class="text-xs text-gray-500 mt-2">Sistem hanya akan mencetak riwayat transaksi milik nomor rekening ini.</p>
         </div>
         <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
@@ -266,14 +273,17 @@ History Transaksi Nasabah
         document.getElementById('modalCetakBuku').classList.add('hidden');
     }
 
-    function prosesCetak() {
+function prosesCetak() {
         const noRek = document.getElementById('inputNoRekening').value.trim();
+        const baris = document.getElementById('inputBaris').value.trim() || 1; // Default ke 1
+        
         if (!noRek) {
             alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
             return;
         }
-        // Redirect ke route cetak di Tab Baru
-        window.open(`/teller/cetak-buku/${noRek}`, '_blank');
+        
+        // Kirim nomor rekening dan baris melalui URL parameter
+        window.open(`/teller/cetak-buku/${noRek}?baris=${baris}`, '_blank');
         tutupModalCetak();
     }
 </script>

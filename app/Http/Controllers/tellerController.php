@@ -1296,20 +1296,23 @@ class tellerController extends Controller
         }
     }
 
-    public function cetakBuku($id_rekening)
+    public function cetakBuku(Request $request, $id_rekening)
     {
+
+        // Tangkap parameter baris, jika kosong setel default 1
+        $mulai_baris = $request->query('baris', 1);
         // Pastikan rekening ada
         $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
 
-        // 1. Ambil Setoran
+// 1. Ambil Setoran
         $setoran = Setoran::where('id_rekening', $id_rekening)->get()->map(function ($item) {
             $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
             return (object)[
-                'tanggal' => $item->created_at,
-                'sandi' => 'SETORAN',
-                'debit' => 0,
-                'kredit' => $item->jumlah_penyetoran - $potongan,
-                'saldo' => $item->saldo_transaksi
+                'tanggal'     => $item->created_at,
+                'biaya_admin' => $item->nominal_admin ?? 0, // Ambil angka biaya admin
+                'debit'       => 0,
+                'kredit'      => $item->jumlah_penyetoran - $potongan,
+                'saldo'       => $item->saldo_transaksi
             ];
         });
 
@@ -1317,11 +1320,11 @@ class tellerController extends Controller
         $penarikan = Penarikan::where('id_rekening', $id_rekening)->get()->map(function ($item) {
             $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
             return (object)[
-                'tanggal' => $item->created_at,
-                'sandi' => 'TARIK',
-                'debit' => $item->jumlah_penarikan + $potongan,
-                'kredit' => 0,
-                'saldo' => $item->saldo_transaksi
+                'tanggal'     => $item->created_at,
+                'biaya_admin' => $item->nominal_admin ?? 0,
+                'debit'       => $item->jumlah_penarikan + $potongan,
+                'kredit'      => 0,
+                'saldo'       => $item->saldo_transaksi
             ];
         });
 
@@ -1329,22 +1332,22 @@ class tellerController extends Controller
         $transferKeluar = Transfer::where('id_rekening_pengirim', $id_rekening)->get()->map(function ($t) {
             $potongan = str_contains(strtolower($t->pilihan_biaya_transaksi), 'potong') ? $t->nominal_admin : 0;
             return (object)[
-                'tanggal' => $t->created_at,
-                'sandi' => 'TRF KELUAR',
-                'debit' => $t->jumlah_transfer + $potongan,
-                'kredit' => 0,
-                'saldo' => $t->saldo_transaksi_pengirim
+                'tanggal'     => $t->created_at,
+                'biaya_admin' => $t->nominal_admin ?? 0,
+                'debit'       => $t->jumlah_transfer + $potongan,
+                'kredit'      => 0,
+                'saldo'       => $t->saldo_transaksi_pengirim
             ];
         });
 
         // 4. Ambil Transfer Masuk (Penerima)
         $transferMasuk = Transfer::where('id_rekening_penerima', $id_rekening)->get()->map(function ($t) {
             return (object)[
-                'tanggal' => $t->created_at,
-                'sandi' => 'TRF MASUK',
-                'debit' => 0,
-                'kredit' => $t->jumlah_transfer,
-                'saldo' => $t->saldo_transaksi_penerima
+                'tanggal'     => $t->created_at,
+                'biaya_admin' => 0, // Penerima transfer biasanya tidak kena biaya admin
+                'debit'       => 0,
+                'kredit'      => $t->jumlah_transfer,
+                'saldo'       => $t->saldo_transaksi_penerima
             ];
         });
 
@@ -1356,6 +1359,6 @@ class tellerController extends Controller
             ->sortBy('tanggal') // ASC
             ->values();
 
-        return view('teller.cetak_buku', compact('rekening', 'transaksi'));
+        return view('teller.cetak_buku', compact('rekening', 'transaksi', 'mulai_baris'));
     }
 }
