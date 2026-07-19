@@ -114,10 +114,10 @@ class tellerController extends Controller
 
         $data = $query->get();
 
-    return Excel::download(
-        new SetoranExport($data, $judul),
-        'Setoran-' . now()->timestamp . '.xlsx'
-    );
+        return Excel::download(
+            new SetoranExport($data, $judul),
+            'Setoran-' . now()->timestamp . '.xlsx'
+        );
     }
 
     public function exportSetoranCustom(Request $request)
@@ -169,7 +169,8 @@ class tellerController extends Controller
     //     );
     // }
 
-    public function cetakStruk($id) {
+    public function cetakStruk($id)
+    {
         $setoran = Setoran::with([
             'petugas',
             'transaksi'
@@ -177,7 +178,7 @@ class tellerController extends Controller
 
         $user = Auth::user();
 
-        return view('teller.crud_setoran.struk', compact('setoran','user'));
+        return view('teller.crud_setoran.struk', compact('setoran', 'user'));
     }
 
     public function setoran(Request $request)
@@ -207,142 +208,147 @@ class tellerController extends Controller
         return view('teller.setoran', compact('user', 'teller', 'data', 'transaksi', 'perPage'));
     }
 
-public function storeSetoran(Request $request)
-{
-    $request->validate([
-        'id_rekening'             => 'required|numeric|exists:rekening,id',
-        'jumlah_penyetoran'        => 'required',
-        'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
-        'setoran'                 => 'required',
-        'nama_penyetor'           => 'required',
-        'transaksi_id'            => 'required|exists:transaksi,id',
-        'nominal_admin'           => 'nullable'
-    ]);
-
-    $user = Auth::user();
-    $teller = $user->petugas;
-
-    $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
-    $biayaAdmin = (int) $masterTransaksi->nominal;
-
-    $jumlahSetoran = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
-    $pilihanBiaya = $request->pilihan_biaya_transaksi;
-
-    // Kalkulasi saldo bersih yang akan masuk ke rekening
-    $setoranMasukSaldo = ($pilihanBiaya === 'Potong Saldo')
-        ? ($jumlahSetoran - $biayaAdmin)
-        : $jumlahSetoran;
-
-    if ($setoranMasukSaldo < 0) {
-        return back()->with('error', 'Jumlah setoran tidak cukup untuk dipotong biaya admin!')->withInput();
-    }
-
-    DB::beginTransaction();
-    try {
-        $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
-        $rekening->saldo_saat_ini += $setoranMasukSaldo;
-        $rekening->save();
-
-        Setoran::create([
-            'id_rekening'             => $request->id_rekening,
-            'id_petugas'              => $teller->id,
-            'setoran'                 => $request->setoran,
-            'pilihan_biaya_transaksi' => $pilihanBiaya,
-            'mata_uang'               => $request->mata_uang ?? 'IDR',
-            'uang_terbilang'          => $request->uang_terbilang,
-            'catatan'                => $request->catatan,
-            'jumlah_penyetoran'      => $jumlahSetoran,
-            'transaksi_id'            => $request->transaksi_id,
-            'total_biaya'             => $jumlahSetoran + $biayaAdmin,
-            'nominal_admin'           => $biayaAdmin,
-            'nama_lengkap'            => $request->nama_lengkap,
-            'nama_penyetor'           => $request->nama_penyetor,
-            'alamat_penyetor'         => $request->alamat_penyetor,
-            'no_hp_penyetor'          => $request->no_hp_penyetor,
+    public function storeSetoran(Request $request)
+    {
+        $request->validate([
+            'id_rekening'             => 'required|numeric|exists:rekening,id',
+            'jumlah_penyetoran'        => 'required',
+            'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
+            'setoran'                 => 'required',
+            'nama_penyetor'           => 'required',
+            'transaksi_id'            => 'required|exists:transaksi,id',
+            'nominal_admin'           => 'nullable'
         ]);
 
-        DB::commit();
-        return back()->with('success', 'Penyetoran berhasil disimpan!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
-    }
-}
+        $user = Auth::user();
+        $teller = $user->petugas;
 
+        $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
+        $biayaAdmin = (int) $masterTransaksi->nominal;
 
-public function updateSetoran(Request $request, $id)
-{
-    $request->validate([
-        'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penyetoran'        => 'required',
-        'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
-        'transaksi_id'            => 'required|exists:transaksi,id'
-    ]);
+        $jumlahSetoran = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
+        $pilihanBiaya = $request->pilihan_biaya_transaksi;
 
-    DB::beginTransaction();
+        // Kalkulasi saldo bersih yang akan masuk ke rekening
+        $setoranMasukSaldo = ($pilihanBiaya === 'Potong Saldo')
+            ? ($jumlahSetoran - $biayaAdmin)
+            : $jumlahSetoran;
 
-    try {
-        $setoran = Setoran::findOrFail($id);
-
-        $masterTransaksiLama = Transaksi::find($setoran->transaksi_id);
-        $biayaAdminLama = $masterTransaksiLama ? (int)$masterTransaksiLama->nominal : 0;
-
-        // Hitung berapa saldo yang tadinya pernah ditambahkan pada transaksi lama
-        $setoranMasukSaldoLama = ($setoran->pilihan_biaya_transaksi === 'Potong Saldo')
-            ? ($setoran->jumlah_penyetoran - $biayaAdminLama)
-            : $setoran->jumlah_penyetoran;
-
-        // 1. BALIKAN DULU SALDO REKENING LAMA
-        $rekeningLama = Rekening::lockForUpdate()->findOrFail($setoran->id_rekening);
-        $rekeningLama->saldo_saat_ini -= $setoranMasukSaldoLama;
-        $rekeningLama->save();
-
-        // 2. HITUNG NOMINAL DAN BIAYA ADMIN BARU
-        $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
-        $masterTransaksiBaru = Transaksi::findOrFail($request->transaksi_id);
-        $biayaAdminBaru = (int) $masterTransaksiBaru->nominal;
-        $pilihanBiayaBaru = $request->pilihan_biaya_transaksi;
-
-        $setoranMasukSaldoBaru = ($pilihanBiayaBaru === 'Potong Saldo')
-            ? ($jumlahBaru - $biayaAdminBaru)
-            : $jumlahBaru;
-
-        if ($setoranMasukSaldoBaru < 0) {
-            DB::rollBack();
+        if ($setoranMasukSaldo < 0) {
             return back()->with('error', 'Jumlah setoran tidak cukup untuk dipotong biaya admin!')->withInput();
         }
 
-        // 3. TAMBAHKAN SALDO KE REKENING BARU
-        $rekeningBaru = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
-        $rekeningBaru->saldo_saat_ini += $setoranMasukSaldoBaru;
-        $rekeningBaru->save();
+        DB::beginTransaction();
+        try {
+            $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
+            $rekening->saldo_saat_ini += $setoranMasukSaldo;
+            $rekening->save();
 
-        // 4. UPDATE DATA SETORAN
-        $setoran->update([
-            'id_rekening'             => $request->id_rekening,
-            'nama_lengkap'            => $request->nama_lengkap,
-            'jumlah_penyetoran'      => $jumlahBaru,
-            'pilihan_biaya_transaksi' => $pilihanBiayaBaru,
-            'transaksi_id'            => $request->transaksi_id,
-            'total_biaya'             => $jumlahBaru + $biayaAdminBaru,
-            'nominal_admin'           => $biayaAdminBaru,
-            'setoran'                 => $request->setoran,
-            'mata_uang'               => $request->mata_uang,
-            'uang_terbilang'          => $request->uang_terbilang,
-            'nama_penyetor'           => $request->nama_penyetor,
-            'no_hp_penyetor'          => $request->no_hp_penyetor,
-            'alamat_penyetor'         => $request->alamat_penyetor,
-            'catatan'                => $request->catatan,
+            Setoran::create([
+                'id_rekening'             => $request->id_rekening,
+                'id_petugas'              => $teller->id,
+                'setoran'                 => $request->setoran,
+                'pilihan_biaya_transaksi' => $pilihanBiaya,
+                'mata_uang'               => $request->mata_uang ?? 'IDR',
+                'uang_terbilang'          => $request->uang_terbilang,
+                'catatan'                => $request->catatan,
+                'jumlah_penyetoran'      => $jumlahSetoran,
+                'transaksi_id'            => $request->transaksi_id,
+                'total_biaya'             => $jumlahSetoran + $biayaAdmin,
+                'nominal_admin'           => $biayaAdmin,
+                'nama_lengkap'            => $request->nama_lengkap,
+                'nama_penyetor'           => $request->nama_penyetor,
+                'alamat_penyetor'         => $request->alamat_penyetor,
+                'no_hp_penyetor'          => $request->no_hp_penyetor,
+            ]);
+            $this->sinkronisasiSaldo($request->id_rekening);
+            DB::commit();
+            return back()->with('success', 'Penyetoran berhasil disimpan!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage());
+        }
+    }
+
+
+    public function updateSetoran(Request $request, $id)
+    {
+        $request->validate([
+            'id_rekening'             => 'required|exists:rekening,id',
+            'jumlah_penyetoran'        => 'required',
+            'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
+            'transaksi_id'            => 'required|exists:transaksi,id'
         ]);
 
-        DB::commit();
+        DB::beginTransaction();
 
-        return back()->with('success', 'Data setoran berhasil diupdate!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Gagal update: ' . $e->getMessage());
+        try {
+            $setoran = Setoran::findOrFail($id);
+
+            $masterTransaksiLama = Transaksi::find($setoran->transaksi_id);
+            $biayaAdminLama = $masterTransaksiLama ? (int)$masterTransaksiLama->nominal : 0;
+
+            // Hitung berapa saldo yang tadinya pernah ditambahkan pada transaksi lama
+            $setoranMasukSaldoLama = ($setoran->pilihan_biaya_transaksi === 'Potong Saldo')
+                ? ($setoran->jumlah_penyetoran - $biayaAdminLama)
+                : $setoran->jumlah_penyetoran;
+
+            // 1. BALIKAN DULU SALDO REKENING LAMA
+            $rekeningLama = Rekening::lockForUpdate()->findOrFail($setoran->id_rekening);
+            $rekeningLama->saldo_saat_ini -= $setoranMasukSaldoLama;
+            $rekeningLama->save();
+
+            // 2. HITUNG NOMINAL DAN BIAYA ADMIN BARU
+            $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penyetoran);
+            $masterTransaksiBaru = Transaksi::findOrFail($request->transaksi_id);
+            $biayaAdminBaru = (int) $masterTransaksiBaru->nominal;
+            $pilihanBiayaBaru = $request->pilihan_biaya_transaksi;
+
+            $setoranMasukSaldoBaru = ($pilihanBiayaBaru === 'Potong Saldo')
+                ? ($jumlahBaru - $biayaAdminBaru)
+                : $jumlahBaru;
+
+            if ($setoranMasukSaldoBaru < 0) {
+                DB::rollBack();
+                return back()->with('error', 'Jumlah setoran tidak cukup untuk dipotong biaya admin!')->withInput();
+            }
+
+            // 3. TAMBAHKAN SALDO KE REKENING BARU
+            $rekeningBaru = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
+            $rekeningBaru->saldo_saat_ini += $setoranMasukSaldoBaru;
+            $rekeningBaru->save();
+
+            // 4. UPDATE DATA SETORAN
+            $setoran->update([
+                'id_rekening'             => $request->id_rekening,
+                'nama_lengkap'            => $request->nama_lengkap,
+                'jumlah_penyetoran'      => $jumlahBaru,
+                'pilihan_biaya_transaksi' => $pilihanBiayaBaru,
+                'transaksi_id'            => $request->transaksi_id,
+                'total_biaya'             => $jumlahBaru + $biayaAdminBaru,
+                'nominal_admin'           => $biayaAdminBaru,
+                'setoran'                 => $request->setoran,
+                'mata_uang'               => $request->mata_uang,
+                'uang_terbilang'          => $request->uang_terbilang,
+                'nama_penyetor'           => $request->nama_penyetor,
+                'no_hp_penyetor'          => $request->no_hp_penyetor,
+                'alamat_penyetor'         => $request->alamat_penyetor,
+                'catatan'                => $request->catatan,
+            ]);
+            // Sinkronisasi rekening lama (jika id rekening diubah)
+            if ($setoran->getOriginal('id_rekening') != $request->id_rekening) {
+                $this->sinkronisasiSaldo($setoran->getOriginal('id_rekening'));
+            }
+            // Sinkronisasi rekening baru / saat ini
+            $this->sinkronisasiSaldo($request->id_rekening);
+            DB::commit();
+
+            return back()->with('success', 'Data setoran berhasil diupdate!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal update: ' . $e->getMessage());
+        }
     }
-}
     public function cariRekening($rekening)
     {
         $data = Rekening::with('nasabah')
@@ -391,7 +397,14 @@ public function updateSetoran(Request $request, $id)
 
     public function destroySetoran($id)
     {
-        Setoran::findOrFail($id)->delete();
+        $setoran = Setoran::findOrFail($id);
+        $id_rek = $setoran->id_rekening; // Ambil ID rekeningnya dulu
+
+        $setoran->delete();
+
+        // Panggil fungsi sinkronisasi untuk nasabah tersebut
+        $this->sinkronisasiSaldo($id_rek);
+
         return back()->with('success', 'History setoran berhasil dihapus!');
     }
 
@@ -461,10 +474,10 @@ public function updateSetoran(Request $request, $id)
         return Excel::download(
             new PenarikanExport($data, $judul),
             'Penarikan-' .
-            $request->start_date .
-            '_sampai_' .
-            $request->end_date .
-            '.xlsx'
+                $request->start_date .
+                '_sampai_' .
+                $request->end_date .
+                '.xlsx'
         );
     }
 
@@ -490,7 +503,8 @@ public function updateSetoran(Request $request, $id)
     //     );
     // }
 
-    public function cetakStrukPenarikan(String $id) {
+    public function cetakStrukPenarikan(String $id)
+    {
         $penarikan = Penarikan::with([
             'petugas',
             'transaksi'
@@ -498,7 +512,7 @@ public function updateSetoran(Request $request, $id)
 
         $user = Auth::user();
 
-        return view('teller.crud_penarikan.struk', compact('penarikan','user'));
+        return view('teller.crud_penarikan.struk', compact('penarikan', 'user'));
     }
 
 
@@ -523,144 +537,155 @@ public function updateSetoran(Request $request, $id)
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
-        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi','saldoMinimum', 'perPage'));
+        return view('teller.penarikan', compact('user', 'teller', 'data', 'transaksi', 'saldoMinimum', 'perPage'));
     }
 
-public function storePenarikan(Request $request)
-{
-    $request->validate([
-        'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penarikan'        => 'required',
-        'nama_penarik'            => 'required',
-        'transaksi_id'            => 'required|exists:transaksi,id',
-        'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
-    ]);
+    public function storePenarikan(Request $request)
+    {
+        $request->validate([
+            'id_rekening'             => 'required|exists:rekening,id',
+            'jumlah_penarikan'        => 'required',
+            'nama_penarik'            => 'required',
+            'transaksi_id'            => 'required|exists:transaksi,id',
+            'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
+        ]);
 
-    $user = Auth::user();
-    $teller = $user->petugas;
+        $user = Auth::user();
+        $teller = $user->petugas;
 
-    $jumlahPenarikan = (int) str_replace('.', '', $request->jumlah_penarikan);
-    $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
+        $jumlahPenarikan = (int) str_replace('.', '', $request->jumlah_penarikan);
+        $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
 
-    // Biaya admin selalu diambil dari data master transaksi
-    $biayaAdminAsli = (int) $masterTransaksi->nominal;
+        // Biaya admin selalu diambil dari data master transaksi
+        $biayaAdminAsli = (int) $masterTransaksi->nominal;
 
-    // Tentukan nominal yang memotong saldo di rekening nasabah
-    $totalPotongSaldo = $jumlahPenarikan;
-    if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
-        $totalPotongSaldo += $biayaAdminAsli;
-    }
+        // Tentukan nominal yang memotong saldo di rekening nasabah
+        $totalPotongSaldo = $jumlahPenarikan;
+        if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
+            $totalPotongSaldo += $biayaAdminAsli;
+        }
 
         $saldoMinimum = Minimum_saldo::where('id', 1)->value('nominal');
 
-    DB::beginTransaction();
-    try {
-        $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
+        DB::beginTransaction();
+        try {
+            $rekening = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
 
-        if (($rekening->saldo_saat_ini - $totalPotongSaldo) < $saldoMinimum) {
+            if (($rekening->saldo_saat_ini - $totalPotongSaldo) < $saldoMinimum) {
+                DB::rollBack();
+                return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk memproses penarikan.');
+            }
+
+            $pilihanBiayaFormatted = ($request->pilihan_biaya_transaksi === 'potong_saldo') ? 'Potong Saldo' : 'Cash';
+
+            // Potong saldo sesuai skema pilihan
+            $rekening->saldo_saat_ini -= $totalPotongSaldo;
+            $rekening->save();
+
+            // Tetap catat nominal_admin & total_biaya secara utuh di database
+            Penarikan::create([
+                'id_rekening'             => $request->id_rekening,
+                'id_petugas'              => $teller->id,
+                'nama_penarik'            => $request->nama_penarik,
+                'jumlah_penarikan'        => $jumlahPenarikan,
+                'transaksi_id'            => $request->transaksi_id,
+                'total_biaya'             => $jumlahPenarikan + $biayaAdminAsli,
+                'nominal_admin'           => $biayaAdminAsli,
+                'pilihan_biaya_transaksi' => $pilihanBiayaFormatted,
+            ]);
+            $this->sinkronisasiSaldo($request->id_rekening);
+            DB::commit();
+
+            if ($request->pilihan_biaya_transaksi === 'cash') {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin Rp ' . number_format($biayaAdminAsli, 0, ',', '.') . ' dibayarkan tunai (saldo hanya terpotong nominal penarikan).');
+            } else {
+                return back()->with('success', 'Penarikan berhasil! Biaya admin otomatis memotong saldo.');
+            }
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Penarikan gagal! Saldo tidak cukup untuk memproses penarikan.');
+            return back()->with('error', 'Gagal memproses penarikan: ' . $e->getMessage());
         }
+    }
 
-        $pilihanBiayaFormatted = ($request->pilihan_biaya_transaksi === 'potong_saldo') ? 'Potong Saldo' : 'Cash';
-
-        // Potong saldo sesuai skema pilihan
-        $rekening->saldo_saat_ini -= $totalPotongSaldo;
-        $rekening->save();
-
-        // Tetap catat nominal_admin & total_biaya secara utuh di database
-        Penarikan::create([
-            'id_rekening'             => $request->id_rekening,
-            'id_petugas'              => $teller->id,
-            'nama_penarik'            => $request->nama_penarik,
-            'jumlah_penarikan'        => $jumlahPenarikan,
-            'transaksi_id'            => $request->transaksi_id,
-            'total_biaya'             => $jumlahPenarikan + $biayaAdminAsli,
-            'nominal_admin'           => $biayaAdminAsli,
-            'pilihan_biaya_transaksi' => $pilihanBiayaFormatted,
+    public function updatePenarikan(Request $request, $id)
+    {
+        $request->validate([
+            'id_rekening'             => 'required|exists:rekening,id',
+            'jumlah_penarikan'        => 'required',
+            'nama_penarik'            => 'required',
+            'transaksi_id'            => 'required|exists:transaksi,id',
+            'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
         ]);
 
-        DB::commit();
+        DB::beginTransaction();
+        try {
+            $penarikan = Penarikan::findOrFail($id);
 
-        if ($request->pilihan_biaya_transaksi === 'cash') {
-            return back()->with('success', 'Penarikan berhasil! Biaya admin Rp ' . number_format($biayaAdminAsli, 0, ',', '.') . ' dibayarkan tunai (saldo hanya terpotong nominal penarikan).');
-        } else {
-            return back()->with('success', 'Penarikan berhasil! Biaya admin otomatis memotong saldo.');
-        }
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Gagal memproses penarikan: ' . $e->getMessage());
-    }
-}
+            // 1. Rollback saldo berdasarkan skema lama
+            $rekeningLama = Rekening::lockForUpdate()->findOrFail($penarikan->id_rekening);
+            $potonganLama = $penarikan->jumlah_penarikan;
+            if ($penarikan->pilihan_biaya_transaksi === 'potong_saldo') {
+                $potonganLama += $penarikan->nominal_admin;
+            }
+            $rekeningLama->saldo_saat_ini += $potonganLama;
+            $rekeningLama->save();
 
-public function updatePenarikan(Request $request, $id)
-{
-    $request->validate([
-        'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penarikan'        => 'required',
-        'nama_penarik'            => 'required',
-        'transaksi_id'            => 'required|exists:transaksi,id',
-        'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
-    ]);
+            // 2. Hitung penarikan & biaya baru
+            $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penarikan);
+            $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
+            $biayaAdmin = (int) $masterTransaksi->nominal;
 
-    DB::beginTransaction();
-    try {
-        $penarikan = Penarikan::findOrFail($id);
+            $totalPotongBaru = $jumlahBaru;
+            if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
+                $totalPotongBaru += $biayaAdmin;
+            }
 
-        // 1. Rollback saldo berdasarkan skema lama
-        $rekeningLama = Rekening::lockForUpdate()->findOrFail($penarikan->id_rekening);
-        $potonganLama = $penarikan->jumlah_penarikan;
-        if ($penarikan->pilihan_biaya_transaksi === 'potong_saldo') {
-            $potonganLama += $penarikan->nominal_admin;
-        }
-        $rekeningLama->saldo_saat_ini += $potonganLama;
-        $rekeningLama->save();
+            // 3. Cek & Potong saldo rekening baru
+            $rekeningBaru = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
+            $saldoMinimum = 10000;
+            $sisaSaldo = $rekeningBaru->saldo_saat_ini - $totalPotongBaru;
 
-        // 2. Hitung penarikan & biaya baru
-        $jumlahBaru = (int) preg_replace('/\D/', '', $request->jumlah_penarikan);
-        $masterTransaksi = Transaksi::findOrFail($request->transaksi_id);
-        $biayaAdmin = (int) $masterTransaksi->nominal;
+            if ($sisaSaldo < $saldoMinimum) {
+                DB::rollBack();
+                return back()->with('error', 'Update gagal! Saldo minimum harus tersisa Rp ' . number_format($saldoMinimum, 0, ',', '.'));
+            }
 
-        $totalPotongBaru = $jumlahBaru;
-        if ($request->pilihan_biaya_transaksi === 'potong_saldo') {
-            $totalPotongBaru += $biayaAdmin;
-        }
+            $rekeningBaru->saldo_saat_ini -= $totalPotongBaru;
+            $rekeningBaru->save();
 
-        // 3. Cek & Potong saldo rekening baru
-        $rekeningBaru = Rekening::lockForUpdate()->findOrFail($request->id_rekening);
-        $saldoMinimum = 10000;
-        $sisaSaldo = $rekeningBaru->saldo_saat_ini - $totalPotongBaru;
+            // 4. Update record penarikan
+            $penarikan->update([
+                'id_rekening'             => $request->id_rekening,
+                'nama_penarik'            => $request->nama_penarik,
+                'jumlah_penarikan'        => $jumlahBaru,
+                'transaksi_id'            => $request->transaksi_id,
+                'nominal_admin'           => $biayaAdmin,
+                'total_biaya'             => $jumlahBaru + $biayaAdmin,
+                'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi,
+            ]);
+            if ($penarikan->getOriginal('id_rekening') != $request->id_rekening) {
+                $this->sinkronisasiSaldo($penarikan->getOriginal('id_rekening'));
+            }
+            $this->sinkronisasiSaldo($request->id_rekening);
 
-        if ($sisaSaldo < $saldoMinimum) {
+            DB::commit();
+            return back()->with('success', 'Data penarikan berhasil diupdate!');
+        } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Update gagal! Saldo minimum harus tersisa Rp ' . number_format($saldoMinimum, 0, ',', '.'));
+            return back()->with('error', 'Gagal mengupdate penarikan: ' . $e->getMessage());
         }
-
-        $rekeningBaru->saldo_saat_ini -= $totalPotongBaru;
-        $rekeningBaru->save();
-
-        // 4. Update record penarikan
-        $penarikan->update([
-            'id_rekening'             => $request->id_rekening,
-            'nama_penarik'            => $request->nama_penarik,
-            'jumlah_penarikan'        => $jumlahBaru,
-            'transaksi_id'            => $request->transaksi_id,
-            'nominal_admin'           => $biayaAdmin,
-            'total_biaya'             => $jumlahBaru + $biayaAdmin,
-            'pilihan_biaya_transaksi' => $request->pilihan_biaya_transaksi,
-        ]);
-
-        DB::commit();
-        return back()->with('success', 'Data penarikan berhasil diupdate!');
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return back()->with('error', 'Gagal mengupdate penarikan: ' . $e->getMessage());
     }
-}
 
     public function destroyPenarikan($id)
     {
-        Penarikan::findOrFail($id)->delete();
+        $penarikan = Penarikan::findOrFail($id);
+        $id_rek = $penarikan->id_rekening; // Ambil ID rekeningnya dulu
+
+        $penarikan->delete();
+
+        // Panggil fungsi sinkronisasi untuk nasabah tersebut
+        $this->sinkronisasiSaldo($id_rek);
+
         return back()->with('success', 'History penarikan berhasil dihapus!');
     }
 
@@ -731,10 +756,10 @@ public function updatePenarikan(Request $request, $id)
         return Excel::download(
             new TransferExport($data, 'LAPORAN DATA TRANSFER'),
             'Transfer-' .
-            $request->start_date .
-            '-sampai-' .
-            $request->end_date .
-            '.xlsx'
+                $request->start_date .
+                '-sampai-' .
+                $request->end_date .
+                '.xlsx'
         );
     }
 
@@ -762,7 +787,8 @@ public function updatePenarikan(Request $request, $id)
     //     );
     // }
 
-    public function cetakStrukTransfer(String $id) {
+    public function cetakStrukTransfer(String $id)
+    {
         $transfer = Transfer::with([
             'rekeningPengirim.nasabah',
             'rekeningPenerima.nasabah',
@@ -772,7 +798,7 @@ public function updatePenarikan(Request $request, $id)
 
         $user = Auth::user();
 
-        return view('teller.crud_transfer.struk', compact('transfer','user'));
+        return view('teller.crud_transfer.struk', compact('transfer', 'user'));
     }
 
     public function transfer(Request $request)
@@ -808,7 +834,7 @@ public function updatePenarikan(Request $request, $id)
     }
 
 
- public function storeTransfer(Request $request)
+    public function storeTransfer(Request $request)
     {
         $user = Auth::user();
         $teller = $user->petugas;
@@ -874,7 +900,8 @@ public function updatePenarikan(Request $request, $id)
                 'catatan'                 => $request->catatan,
                 'id_petugas'              => $teller->id,
             ]);
-
+            $this->sinkronisasiSaldo($norekPengirim);
+            $this->sinkronisasiSaldo($norekPenerima);
             DB::commit();
             return redirect()->back();
         } catch (\Exception $e) {
@@ -1004,7 +1031,17 @@ public function updatePenarikan(Request $request, $id)
                 'transaksi_id'         => $request->transaksi_id,
                 'catatan'              => $request->catatan,
             ]);
+            // 1. Sinkronisasi Rekening Pengirim (Lama & Baru)
+            if ($transfer->getOriginal('id_rekening_pengirim') != $request->id_rekening_pengirim) {
+                $this->sinkronisasiSaldo($transfer->getOriginal('id_rekening_pengirim'));
+            }
+            $this->sinkronisasiSaldo($request->id_rekening_pengirim);
 
+            // 2. Sinkronisasi Rekening Penerima (Lama & Baru)
+            if ($transfer->getOriginal('id_rekening_penerima') != $request->id_rekening_penerima) {
+                $this->sinkronisasiSaldo($transfer->getOriginal('id_rekening_penerima'));
+            }
+            $this->sinkronisasiSaldo($request->id_rekening_penerima);
             DB::commit();
 
             return back();
@@ -1020,12 +1057,20 @@ public function updatePenarikan(Request $request, $id)
     }
     public function destroyTransfer($id)
     {
-        Transfer::findOrFail($id)->delete();
+        $transfer = Transfer::findOrFail($id);
+        $id_rek_pengirim = $transfer->id_rekening_pengirim;
+        $id_rek_penerima = $transfer->id_rekening_penerima;
+
+        $transfer->delete();
+
+        // Panggil untuk kedua rekening yang terlibat
+        $this->sinkronisasiSaldo($id_rek_pengirim);
+        $this->sinkronisasiSaldo($id_rek_penerima);
 
         return back();
     }
 
-// ======================================================
+    // ======================================================
     // ================= HISTORY NASABAH ====================
     // ======================================================
     public function historyNasabah(Request $request)
@@ -1035,22 +1080,16 @@ public function updatePenarikan(Request $request, $id)
         $perPage = $request->input('per_page', 10);
         $search = $request->input('search');
 
-        // 1. Ambil SEMUA data transaksi terlebih dahulu
-        $querySetoran = Setoran::with('rekening.nasabah')->get();
-        $queryPenarikan = Penarikan::with('rekening.nasabah')->get();
-        $queryTransfer = Transfer::with(['rekeningPengirim.nasabah', 'rekeningPenerima.nasabah'])->get();
-
-        $allTransactions = collect();
-
-        // --- FORMAT DATA SETORAN (KREDIT / UANG MASUK) ---
-        foreach ($querySetoran as $item) {
-            $pilihanBiaya = strtolower($item->pilihan_biaya_transaksi);
-            $potongan = str_contains($pilihanBiaya, 'potong') ? $item->nominal_admin : 0;
-            
-            // Jika potong saldo, maka uang yang masuk ke rekening adalah: Jumlah Setoran - Admin
-            $kredit = $item->jumlah_penyetoran - $potongan; 
-
-            $allTransactions->push((object)[
+        // 1. Ambil & Format Data Setoran
+        $querySetoran = Setoran::with('rekening.nasabah');
+        if ($search) {
+            $querySetoran->whereHas('rekening.nasabah', function ($q) use ($search) {
+                $q->where('nama_nasabah', 'like', '%' . $search . '%');
+            })->orWhere('id_rekening', 'like', '%' . $search . '%');
+        }
+        $setoran = $querySetoran->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
                 'id' => $item->id,
                 'created_at' => $item->created_at,
                 'nama_nasabah' => $item->rekening->nasabah->nama_nasabah ?? '-',
@@ -1058,120 +1097,202 @@ public function updatePenarikan(Request $request, $id)
                 'jenis_transaksi' => 'Setoran',
                 'admin' => $item->nominal_admin ?? 0,
                 'debit' => 0,
-                'kredit' => $kredit,
+                'kredit' => $item->jumlah_penyetoran - $potongan,
+                'saldo' => $item->saldo_transaksi, // <-- Langsung ambil dari database
                 'original_type' => 'setoran'
-            ]);
+            ];
+        });
+
+        // 2. Ambil & Format Data Penarikan
+        $queryPenarikan = Penarikan::with('rekening.nasabah');
+        if ($search) {
+            $queryPenarikan->whereHas('rekening.nasabah', function ($q) use ($search) {
+                $q->where('nama_nasabah', 'like', '%' . $search . '%');
+            })->orWhere('id_rekening', 'like', '%' . $search . '%');
         }
-
-        // --- FORMAT DATA PENARIKAN (DEBIT / UANG KELUAR) ---
-        foreach ($queryPenarikan as $item) {
-            $pilihanBiaya = strtolower($item->pilihan_biaya_transaksi);
-            $potongan = str_contains($pilihanBiaya, 'potong') ? $item->nominal_admin : 0;
-            
-            // Jika potong saldo, maka uang yang keluar dari rekening adalah: Jumlah Tarik + Admin
-            $debit = $item->jumlah_penarikan + $potongan;
-
-            $allTransactions->push((object)[
+        $penarikan = $queryPenarikan->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
                 'id' => $item->id,
                 'created_at' => $item->created_at,
                 'nama_nasabah' => $item->rekening->nasabah->nama_nasabah ?? '-',
                 'no_rek' => $item->id_rekening,
                 'jenis_transaksi' => 'Penarikan',
                 'admin' => $item->nominal_admin ?? 0,
-                'debit' => $debit,
+                'debit' => $item->jumlah_penarikan + $potongan,
                 'kredit' => 0,
+                'saldo' => $item->saldo_transaksi, // <-- Langsung ambil dari database
                 'original_type' => 'penarikan'
-            ]);
-        }
+            ];
+        });
 
-        // --- FORMAT DATA TRANSFER ---
+        // 3. Ambil & Format Data Transfer
+        $transferKeluar = collect();
+        $transferMasuk = collect();
+
+        $queryTransfer = Transfer::with(['rekeningPengirim.nasabah', 'rekeningPenerima.nasabah'])->get();
+
         foreach ($queryTransfer as $t) {
-            // A. Sebagai Pengirim (DEBIT / UANG KELUAR)
-            $pilihanBiaya = strtolower($t->pilihan_biaya_transaksi);
-            $potongan = str_contains($pilihanBiaya, 'potong') ? $t->nominal_admin : 0;
-            $debit = $t->jumlah_transfer + $potongan;
+            $potongan = str_contains(strtolower($t->pilihan_biaya_transaksi), 'potong') ? $t->nominal_admin : 0;
 
-            $allTransactions->push((object)[
-                'id' => $t->id,
-                'created_at' => $t->created_at,
-                'nama_nasabah' => $t->rekeningPengirim->nasabah->nama_nasabah ?? '-',
-                'no_rek' => $t->id_rekening_pengirim,
-                'jenis_transaksi' => 'Transfer Keluar',
-                'admin' => $t->nominal_admin ?? 0,
-                'debit' => $debit,
-                'kredit' => 0,
-                'original_type' => 'transfer_keluar'
-            ]);
+            // Jika nasabah bertindak sebagai PENGIRIM
+            $matchPengirim = !$search ||
+                stripos($t->rekeningPengirim->nasabah->nama_nasabah ?? '', $search) !== false ||
+                stripos($t->id_rekening_pengirim, $search) !== false;
 
-            // B. Sebagai Penerima (KREDIT / UANG MASUK)
-            $allTransactions->push((object)[
-                'id' => $t->id,
-                'created_at' => $t->created_at,
-                'nama_nasabah' => $t->rekeningPenerima->nasabah->nama_nasabah ?? '-',
-                'no_rek' => $t->id_rekening_penerima,
-                'jenis_transaksi' => 'Transfer Masuk',
-                'admin' => 0,
-                'debit' => 0,
-                'kredit' => $t->jumlah_transfer,
-                'original_type' => 'transfer_masuk'
-            ]);
-        }
-
-        // ==============================================================
-        // 2. LOGIKA RUNNING BALANCE (MENGHITUNG SALDO BERJALAN)
-        // ==============================================================
-        
-        // Urutkan dari transaksi PALING LAMA ke TERBARU agar perhitungan urut
-        $sortedTransactions = $allTransactions->sortBy('created_at');
-
-        $balances = []; // Array untuk menyimpan memori saldo per rekening
-        $finalTransactions = collect();
-
-        foreach ($sortedTransactions as $tx) {
-            // Jika rekening belum ada di memori, set saldo awal 0
-            if (!isset($balances[$tx->no_rek])) {
-                $balances[$tx->no_rek] = 0;
+            if ($matchPengirim) {
+                $transferKeluar->push((object)[
+                    'id' => $t->id,
+                    'created_at' => $t->created_at,
+                    'nama_nasabah' => $t->rekeningPengirim->nasabah->nama_nasabah ?? '-',
+                    'no_rek' => $t->id_rekening_pengirim,
+                    'jenis_transaksi' => 'Transfer Keluar',
+                    'admin' => $t->nominal_admin ?? 0,
+                    'debit' => $t->jumlah_transfer + $potongan,
+                    'kredit' => 0,
+                    'saldo' => $t->saldo_transaksi_pengirim, // <-- Field khusus pengirim
+                    'original_type' => 'transfer_keluar'
+                ]);
             }
 
-            // Kurangi dengan pengeluaran (debit) & Tambah dengan pemasukan (kredit)
-            $balances[$tx->no_rek] -= $tx->debit;
-            $balances[$tx->no_rek] += $tx->kredit;
+            // Jika nasabah bertindak sebagai PENERIMA
+            $matchPenerima = !$search ||
+                stripos($t->rekeningPenerima->nasabah->nama_nasabah ?? '', $search) !== false ||
+                stripos($t->id_rekening_penerima, $search) !== false;
 
-            // Simpan hasil saldo ke dalam record transaksi saat itu juga (Ini kuncinya!)
-            $tx->saldo = $balances[$tx->no_rek];
-
-            $finalTransactions->push($tx);
+            if ($matchPenerima) {
+                $transferMasuk->push((object)[
+                    'id' => $t->id,
+                    'created_at' => $t->created_at,
+                    'nama_nasabah' => $t->rekeningPenerima->nasabah->nama_nasabah ?? '-',
+                    'no_rek' => $t->id_rekening_penerima,
+                    'jenis_transaksi' => 'Transfer Masuk',
+                    'admin' => 0,
+                    'debit' => 0,
+                    'kredit' => $t->jumlah_transfer,
+                    'saldo' => $t->saldo_transaksi_penerima, // <-- Field khusus penerima
+                    'original_type' => 'transfer_masuk'
+                ]);
+            }
         }
 
-        // ==============================================================
-        // 3. KEMBALIKAN URUTAN DAN TERAPKAN PENCARIAN & PAGINASI
-        // ==============================================================
-        
-        // Kembalikan urutan agar yang TERBARU tampil di atas
-        $finalTransactions = $finalTransactions->sortByDesc('created_at')->values();
+        // 4. Gabungkan, Urutkan dari yang Terbaru, dan Buat Paginasi
+        $allData = collect()->concat($setoran)
+            ->concat($penarikan)
+            ->concat($transferKeluar)
+            ->concat($transferMasuk)
+            ->sortByDesc('created_at')
+            ->values();
 
-        // Terapkan pencarian (Search) jika ada
-        if ($search) {
-            $finalTransactions = $finalTransactions->filter(function ($item) use ($search) {
-                return stripos($item->nama_nasabah, $search) !== false || 
-                       stripos($item->no_rek, $search) !== false;
-            })->values();
-        }
-
-        // Lakukan pemotongan array manual (Pagination)
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
-        $currentPageItems = $finalTransactions->slice(($currentPage - 1) * $perPage, $perPage)->all();
-        
+        $currentPageItems = $allData->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
         $data = new LengthAwarePaginator(
-            $currentPageItems, 
-            $finalTransactions->count(), 
-            $perPage, 
-            $currentPage, [
+            $currentPageItems,
+            $allData->count(),
+            $perPage,
+            $currentPage,
+            [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
-                'query' => $request->query()
+                'query' => $request->query() // Mempertahankan parameter 'search' saat pindah halaman
             ]
         );
 
         return view('teller.history_nasabah', compact('user', 'teller', 'data', 'perPage'));
+    }
+
+    private function sinkronisasiSaldo($id_rekening)
+    {
+        // 1. Ambil semua transaksi Setoran
+        $setoran = \App\Models\Setoran::where('id_rekening', $id_rekening)->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
+                'type'   => 'setoran',
+                'model'  => $item,
+                'waktu'  => $item->created_at,
+                'debit'  => 0,
+                'kredit' => $item->jumlah_penyetoran - $potongan
+            ];
+        });
+
+        // 2. Ambil semua transaksi Penarikan
+        $penarikan = \App\Models\Penarikan::where('id_rekening', $id_rekening)->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
+                'type'   => 'penarikan',
+                'model'  => $item,
+                'waktu'  => $item->created_at,
+                'debit'  => $item->jumlah_penarikan + $potongan,
+                'kredit' => 0
+            ];
+        });
+
+        // 3. Ambil semua Transfer Keluar (Sebagai Pengirim)
+        $transferKeluar = \App\Models\Transfer::where('id_rekening_pengirim', $id_rekening)->get()->map(function ($item) {
+            $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
+            return (object)[
+                'type'   => 'transfer_keluar',
+                'model'  => $item,
+                'waktu'  => $item->created_at,
+                'debit'  => $item->jumlah_transfer + $potongan,
+                'kredit' => 0
+            ];
+        });
+
+        // 4. Ambil semua Transfer Masuk (Sebagai Penerima)
+        $transferMasuk = \App\Models\Transfer::where('id_rekening_penerima', $id_rekening)->get()->map(function ($item) {
+            return (object)[
+                'type'   => 'transfer_masuk',
+                'model'  => $item,
+                'waktu'  => $item->created_at,
+                'debit'  => 0,
+                'kredit' => $item->jumlah_transfer
+            ];
+        });
+
+        // Gabungkan semua transaksi dan urutkan dari yang PALING LAMA
+        $semuaTransaksi = collect()->concat($setoran)->concat($penarikan)->concat($transferKeluar)->concat($transferMasuk);
+
+        // Sort berdasarkan waktu, lalu ID agar urutannya konsisten
+        $sorted = $semuaTransaksi->sortBy([
+            ['waktu', 'asc'],
+            ['model.id', 'asc'],
+        ]);
+
+        // Lakukan Perhitungan & Update Database
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $saldoBerjalan = 0;
+
+            foreach ($sorted as $tx) {
+                $saldoBerjalan -= $tx->debit;
+                $saldoBerjalan += $tx->kredit;
+
+                // Simpan saldo ke baris tabel masing-masing (tanpa men-trigger timestamps/event lain)
+                if ($tx->type === 'setoran' || $tx->type === 'penarikan') {
+                    \Illuminate\Support\Facades\DB::table($tx->type)
+                        ->where('id', $tx->model->id)
+                        ->update(['saldo_transaksi' => $saldoBerjalan]);
+                } elseif ($tx->type === 'transfer_keluar') {
+                    \Illuminate\Support\Facades\DB::table('transfer')
+                        ->where('id', $tx->model->id)
+                        ->update(['saldo_transaksi_pengirim' => $saldoBerjalan]);
+                } elseif ($tx->type === 'transfer_masuk') {
+                    \Illuminate\Support\Facades\DB::table('transfer')
+                        ->where('id', $tx->model->id)
+                        ->update(['saldo_transaksi_penerima' => $saldoBerjalan]);
+                }
+            }
+
+            // Sinkronisasi keamanan: pastikan saldo utama di tabel Rekening juga match dengan perhitungan terakhir
+            \Illuminate\Support\Facades\DB::table('rekening')
+                ->where('id', $id_rekening)
+                ->update(['saldo_saat_ini' => $saldoBerjalan]);
+
+            \Illuminate\Support\Facades\DB::commit();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            throw $e;
+        }
     }
 }
