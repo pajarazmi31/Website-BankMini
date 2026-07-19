@@ -27,6 +27,8 @@ return new class extends Migration
             ->default(0);
             
             $table->decimal('total_biaya', 15, 2);
+
+            $table->bigInteger('saldo_transaksi')->default(0);
             
             $table->string('pilihan_biaya_transaksi', 100);
             

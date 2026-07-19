@@ -143,6 +143,18 @@
                         <span class="text-[14px]">Transfer</span>
                     </a>
                 </div>
+
+                <!-- History Nasabah -->
+                <div class="relative">
+                    @if($route == 'teller.history_nasabah')
+                    <div class="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-8 bg-brand-blue rounded-r-md"></div>
+                    @endif
+                    <a href="{{ route('teller.history_nasabah') }}" class="flex items-center gap-3 px-6 py-3 {{ $route == 'teller.history_nasabah' ? 'text-brand-textDark font-bold bg-gray-50/50' : 'text-[#a3a3a3] font-medium hover:bg-gray-50' }} transition-colors group">
+                        <i class="ph{{ $route == 'teller.history_nasabah' ? '-fill' : '' }} ph-folder text-[22px] {{ $route == 'teller.history_nasabah' ? 'text-brand-blue' : 'group-hover:text-gray-600' }}"></i>
+                        <span class="text-[14px]">History Nasabah</span>
+                    </a>
+                </div>
+
                 <!-- Logout -->
                 <div class="px-6 mt-4">
                     <form action="{{ route('logout') }}" method="POST">

@@ -251,6 +251,7 @@ class superVisorController extends Controller
         $perPage = $request->input('per_page', 10);
 
         $data = VerifikasiLogin::with(['user'])
+            ->latest()
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
@@ -358,33 +359,36 @@ class superVisorController extends Controller
         ]);
     }
 
-    public function saldoMinimum(){
+    public function saldoMinimum()
+    {
         $user = Auth::user();
         $super = $user->petugas;
 
-        
+
         $saldoMinimum = Minimum_saldo::where('jenis_minimum', 'penarikan')->first();
-        return view('supervisor.saldominimum', compact('user','super','saldoMinimum'));
+        return view('supervisor.saldominimum', compact('user', 'super', 'saldoMinimum'));
     }
 
-    public function saldoMinimumUpdate(Request $request){
-// 1. Validasi data yang masuk
-    $request->validate([
-        'minimum_saldo' => 'required|numeric',
-    ]);
+    public function saldoMinimumUpdate(Request $request)
+    {
+        // 1. Validasi data yang masuk
+        $request->validate([
+            'minimum_saldo' => 'required|numeric',
+        ]);
 
-    $saldo = Minimum_saldo::first();
-    $saldo->nominal = $request->minimum_saldo;
-    $saldo->save();
+        $saldo = Minimum_saldo::first();
+        $saldo->nominal = $request->minimum_saldo;
+        $saldo->save();
 
-    // 3. WAJIB: Kembalikan respons berupa JSON sukses
-    return response()->json([
-        'success' => true,
-        'message' => 'Biaya transaksi berhasil disimpan!'
-    ]); 
+        // 3. WAJIB: Kembalikan respons berupa JSON sukses
+        return response()->json([
+            'success' => true,
+            'message' => 'Biaya transaksi berhasil disimpan!'
+        ]);
     }
-    
-    public function print(String $id) {
+
+    public function print(String $id)
+    {
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 
         return view('supervisor.crud_datanasabah.print', compact('nasabah'));

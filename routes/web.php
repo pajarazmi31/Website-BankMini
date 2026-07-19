@@ -70,6 +70,9 @@ Route::middleware(['role:teller'])->group(function () {
     Route::get('/transfer/export/{filter}', [tellerController::class, 'exportTransfer'])->name('transfer.export');
     Route::get('/transfer/export-custom', [tellerController::class, 'exportTransferCustom'])->name('transfer.export.custom');
 
+    // Route History Nasabah
+Route::get('/teller/history-nasabah', [tellerController::class, 'historyNasabah'])->name('teller.history_nasabah');
+
     //cari nama si norek
     Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
     Route::get('/search-rekening', [tellerController::class, 'searchRekening'])->name('teller.search_rekening');

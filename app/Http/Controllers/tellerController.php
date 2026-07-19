@@ -18,6 +18,8 @@ use App\Exports\PenarikanExport;
 use App\Exports\TransferExport;
 use App\Models\Minimum_saldo;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 
 
 class tellerController extends Controller
@@ -1021,5 +1023,155 @@ public function updatePenarikan(Request $request, $id)
         Transfer::findOrFail($id)->delete();
 
         return back();
+    }
+
+// ======================================================
+    // ================= HISTORY NASABAH ====================
+    // ======================================================
+    public function historyNasabah(Request $request)
+    {
+        $user = Auth::user();
+        $teller = $user->petugas;
+        $perPage = $request->input('per_page', 10);
+        $search = $request->input('search');
+
+        // 1. Ambil SEMUA data transaksi terlebih dahulu
+        $querySetoran = Setoran::with('rekening.nasabah')->get();
+        $queryPenarikan = Penarikan::with('rekening.nasabah')->get();
+        $queryTransfer = Transfer::with(['rekeningPengirim.nasabah', 'rekeningPenerima.nasabah'])->get();
+
+        $allTransactions = collect();
+
+        // --- FORMAT DATA SETORAN (KREDIT / UANG MASUK) ---
+        foreach ($querySetoran as $item) {
+            $pilihanBiaya = strtolower($item->pilihan_biaya_transaksi);
+            $potongan = str_contains($pilihanBiaya, 'potong') ? $item->nominal_admin : 0;
+            
+            // Jika potong saldo, maka uang yang masuk ke rekening adalah: Jumlah Setoran - Admin
+            $kredit = $item->jumlah_penyetoran - $potongan; 
+
+            $allTransactions->push((object)[
+                'id' => $item->id,
+                'created_at' => $item->created_at,
+                'nama_nasabah' => $item->rekening->nasabah->nama_nasabah ?? '-',
+                'no_rek' => $item->id_rekening,
+                'jenis_transaksi' => 'Setoran',
+                'admin' => $item->nominal_admin ?? 0,
+                'debit' => 0,
+                'kredit' => $kredit,
+                'original_type' => 'setoran'
+            ]);
+        }
+
+        // --- FORMAT DATA PENARIKAN (DEBIT / UANG KELUAR) ---
+        foreach ($queryPenarikan as $item) {
+            $pilihanBiaya = strtolower($item->pilihan_biaya_transaksi);
+            $potongan = str_contains($pilihanBiaya, 'potong') ? $item->nominal_admin : 0;
+            
+            // Jika potong saldo, maka uang yang keluar dari rekening adalah: Jumlah Tarik + Admin
+            $debit = $item->jumlah_penarikan + $potongan;
+
+            $allTransactions->push((object)[
+                'id' => $item->id,
+                'created_at' => $item->created_at,
+                'nama_nasabah' => $item->rekening->nasabah->nama_nasabah ?? '-',
+                'no_rek' => $item->id_rekening,
+                'jenis_transaksi' => 'Penarikan',
+                'admin' => $item->nominal_admin ?? 0,
+                'debit' => $debit,
+                'kredit' => 0,
+                'original_type' => 'penarikan'
+            ]);
+        }
+
+        // --- FORMAT DATA TRANSFER ---
+        foreach ($queryTransfer as $t) {
+            // A. Sebagai Pengirim (DEBIT / UANG KELUAR)
+            $pilihanBiaya = strtolower($t->pilihan_biaya_transaksi);
+            $potongan = str_contains($pilihanBiaya, 'potong') ? $t->nominal_admin : 0;
+            $debit = $t->jumlah_transfer + $potongan;
+
+            $allTransactions->push((object)[
+                'id' => $t->id,
+                'created_at' => $t->created_at,
+                'nama_nasabah' => $t->rekeningPengirim->nasabah->nama_nasabah ?? '-',
+                'no_rek' => $t->id_rekening_pengirim,
+                'jenis_transaksi' => 'Transfer Keluar',
+                'admin' => $t->nominal_admin ?? 0,
+                'debit' => $debit,
+                'kredit' => 0,
+                'original_type' => 'transfer_keluar'
+            ]);
+
+            // B. Sebagai Penerima (KREDIT / UANG MASUK)
+            $allTransactions->push((object)[
+                'id' => $t->id,
+                'created_at' => $t->created_at,
+                'nama_nasabah' => $t->rekeningPenerima->nasabah->nama_nasabah ?? '-',
+                'no_rek' => $t->id_rekening_penerima,
+                'jenis_transaksi' => 'Transfer Masuk',
+                'admin' => 0,
+                'debit' => 0,
+                'kredit' => $t->jumlah_transfer,
+                'original_type' => 'transfer_masuk'
+            ]);
+        }
+
+        // ==============================================================
+        // 2. LOGIKA RUNNING BALANCE (MENGHITUNG SALDO BERJALAN)
+        // ==============================================================
+        
+        // Urutkan dari transaksi PALING LAMA ke TERBARU agar perhitungan urut
+        $sortedTransactions = $allTransactions->sortBy('created_at');
+
+        $balances = []; // Array untuk menyimpan memori saldo per rekening
+        $finalTransactions = collect();
+
+        foreach ($sortedTransactions as $tx) {
+            // Jika rekening belum ada di memori, set saldo awal 0
+            if (!isset($balances[$tx->no_rek])) {
+                $balances[$tx->no_rek] = 0;
+            }
+
+            // Kurangi dengan pengeluaran (debit) & Tambah dengan pemasukan (kredit)
+            $balances[$tx->no_rek] -= $tx->debit;
+            $balances[$tx->no_rek] += $tx->kredit;
+
+            // Simpan hasil saldo ke dalam record transaksi saat itu juga (Ini kuncinya!)
+            $tx->saldo = $balances[$tx->no_rek];
+
+            $finalTransactions->push($tx);
+        }
+
+        // ==============================================================
+        // 3. KEMBALIKAN URUTAN DAN TERAPKAN PENCARIAN & PAGINASI
+        // ==============================================================
+        
+        // Kembalikan urutan agar yang TERBARU tampil di atas
+        $finalTransactions = $finalTransactions->sortByDesc('created_at')->values();
+
+        // Terapkan pencarian (Search) jika ada
+        if ($search) {
+            $finalTransactions = $finalTransactions->filter(function ($item) use ($search) {
+                return stripos($item->nama_nasabah, $search) !== false || 
+                       stripos($item->no_rek, $search) !== false;
+            })->values();
+        }
+
+        // Lakukan pemotongan array manual (Pagination)
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPageItems = $finalTransactions->slice(($currentPage - 1) * $perPage, $perPage)->all();
+        
+        $data = new LengthAwarePaginator(
+            $currentPageItems, 
+            $finalTransactions->count(), 
+            $perPage, 
+            $currentPage, [
+                'path' => LengthAwarePaginator::resolveCurrentPath(),
+                'query' => $request->query()
+            ]
+        );
+
+        return view('teller.history_nasabah', compact('user', 'teller', 'data', 'perPage'));
     }
 }
