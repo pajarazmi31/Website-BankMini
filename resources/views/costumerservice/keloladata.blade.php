@@ -53,6 +53,10 @@ selamat datang {{ $user->name }}!
             <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md w-full sm:w-auto justify-center">
                 <i class="ph ph-plus text-base"></i> Tambah Data
             </button>
+
+            <a href='{{ route('template.nasabah') }}'>
+                <button>template excell</button>
+            </a>
         </div>
     </div>
 

@@ -4,48 +4,73 @@
 <meta charset="utf-8">
 
 <style>
-body{
+@page {
+    size: 80mm 150mm;
+    margin: 0;
+}
+
+html, body {
+    width: 80mm;
+    height: 150mm;
+    margin: 0;
+    padding: 5mm;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
+    font-size: 11px;
+}
+
+body {
+    zoom: 100%;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.title h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.title strong {
+    font-size: 13px;
+}
+
+.line {
+    border-top: 1px dashed #000;
+    margin: 8px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 2px 0;
+    vertical-align: top;
+    word-break: break-word;
+}
+
+.label {
+    width: 32%;
+}
+
+.separator {
+    width: 5%;
+    text-align: center;
+}
+
+.total {
+    font-weight: bold;
     font-size: 12px;
-    margin: 20px;
 }
 
-.title{
-    text-align:center;
-    margin-bottom:20px;
-}
-
-.line{
-    border-top:1px dashed #000;
-    margin:10px 0;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-td{
-    padding:3px 0;
-    vertical-align:top;
-}
-
-.label{
-    width:100px;
-}
-
-.titik{
-    width:10px;
-}
-
-.total{
-    font-weight:bold;
-    font-size:14px;
-}
-
-.footer{
-    margin-top:20px;
-    text-align:center;
+.footer {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 11px;
 }
 </style>
 
@@ -53,35 +78,56 @@ td{
 <body onload="window.print()">
 
 <div class="title">
-    <h2>BANK MINI</h2>
-    <strong>STRUK TRANSFER</strong>
+    <h3 style="margin:0;">BANK MINI</h3>
+    <div style="font-weight:bold; margin-top:3px;">SMKN 1 KAWALI</div>
+    <div style="font-weight:bold; margin-top:3px;">JL.Talagasari, No.35, Kawalimukti</div>
+    <div style="font-weight:bold; margin-top:3px;">STRUK TRANSFER</div>
 </div>
 
 <div class="line"></div>
 
 <table>
+
+    <tr>
+        <td class="label">No Transaksi</td>
+        <td class="separator">:</td>
+        <td>{{ 'TF-' . str_pad($transfer->id, 5, '0', STR_PAD_LEFT) }}</td>
+    </tr>
+
+    <tr>
+        <td class="label">Tanggal</td>
+        <td class="separator">:</td>
+        <td>{{ $transfer->updated_at->format('d-m-Y H:i') }}</td>
+    </tr>
+
     <tr>
         <td class="label">Nama Pengirim</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>{{ optional($transfer->rekeningPengirim->nasabah)->nama_nasabah ?? '-' }}</td>
     </tr>
 
     <tr>
         <td class="label">Rek Pengirim</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>{{ $transfer->id_rekening_pengirim }}</td>
     </tr>
 
     <tr>
         <td class="label">Nama Penerima</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>{{ optional($transfer->rekeningPenerima->nasabah)->nama_nasabah ?? '-' }}</td>
     </tr>
 
     <tr>
         <td class="label">Rek Penerima</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>{{ $transfer->id_rekening_penerima }}</td>
+    </tr>
+
+    <tr>
+        <td class="label">Petugas</td>
+        <td class="separator">:</td>
+        <td>{{ optional($transfer->petugas)->user->name ?? '-' }}</td>
     </tr>
 </table>
 
@@ -90,7 +136,7 @@ td{
 <table>
     <tr>
         <td class="label">Nominal</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>
             Rp {{ number_format($transfer->jumlah_transfer,0,',','.') }}
         </td>
@@ -98,7 +144,7 @@ td{
 
     <tr>
         <td class="label">Biaya Admin</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>
             Rp {{ number_format($transfer->total_biaya - $transfer->jumlah_transfer,0,',','.') }}
         </td>
@@ -106,7 +152,7 @@ td{
 
     <tr class="total">
         <td class="label">Total Biaya</td>
-        <td class="titik">:</td>
+        <td class="separator">:</td>
         <td>
             Rp {{ number_format($transfer->total_biaya,0,',','.') }}
         </td>
@@ -116,28 +162,69 @@ td{
 <div class="line"></div>
 
 <table>
+
     <tr>
-        <td class="label">Catatan</td>
-        <td class="titik">:</td>
-        <td>{{ $transfer->catatan ?: '-' }}</td>
+        <td class="label">Pembayaran</td>
+        <td class="separator">:</td>
+        <td>
+            {{ $transfer->pilihan_biaya_transaksi ?? 'Cash' }}
+        </td>
     </tr>
 
     <tr>
-        <td class="label">Petugas</td>
-        <td class="titik">:</td>
-        <td>{{ $user->name }}</td>
+        <td class="label">Catatan</td>
+        <td class="separator">:</td>
+        <td>{{ $transfer->catatan ?: '-' }}</td>
     </tr>
 </table>
+
+<div style="margin-top:20px;">
+    <table style="width:100%; text-align:center;">
+        <tr>
+            <td style="width:50%;">
+                Teller
+            </td>
+            <td style="width:50%;">
+                Nasabah
+            </td>
+        </tr>
+
+        <!-- Ruang tanda tangan -->
+        <tr>
+            <td style="height:60px;"></td>
+            <td></td>
+        </tr>
+
+        <!-- Nama -->
+        <tr>
+            <td>
+                ( <strong>{{ optional($transfer->petugas)->user->name ?? '-' }}</strong> )
+            </td>
+
+            <td>
+                ( <strong>{{ optional($transfer->rekeningPengirim->nasabah)->nama_nasabah ?? '-' }}</strong> )
+            </td>
+        </tr>
+    </table>
+</div>
 
 <div class="footer">
     <div class="line"></div>
     Terima Kasih Telah Menggunakan Layanan Kami
+    <div style="margin-top: 4px; font-weight: normal; font-size: 10px;">
+        SMS/WA 0812-3456-7890
+    </div>
 </div>
 
 <script>
     window.onafterprint = function() {
-        window.location.href = "{{ route('teller.transfer') }}"
+        window.close(); // Menutup tab struk ini secara otomatis
     }
+
+    // Jaga-jaga jika onafterprint tidak terpicu di beberapa browser
+    setTimeout(function() {
+        window.close();
+    }, 1000); // Tutup setelah 1 detik jika dialog cetak selesai/batal
 </script>
 
 </body>

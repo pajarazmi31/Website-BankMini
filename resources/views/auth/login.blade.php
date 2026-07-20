@@ -147,7 +147,7 @@
                     @error('password')
                         <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> --}}
 
                 <div class="flex items-center justify-end">
                     <a href="{{ route('password.request') }}" class="text-xs font-semibold text-primary-blue hover:text-[#143252] transition-colors">

@@ -35,7 +35,7 @@
 
     <!-- Container Utama -->
     <div class="print-container max-w-[800px] mx-auto bg-white p-6 print:p-0 shadow-md print:shadow-none rounded-xl print:rounded-none">
-        
+
         <!-- Kop Surat -->
         <div class="flex items-center justify-between pb-3 border-b-2 border-slate-800 mb-4">
             <div class="w-14 h-14 shrink-0 flex items-center justify-center">
@@ -188,7 +188,7 @@
                 window.print();
             }, 300);
         }
-        
+
         window.onafterprint = function() {
             window.location.href = "{{ route('costumerservice.keloladata') }}";
         }

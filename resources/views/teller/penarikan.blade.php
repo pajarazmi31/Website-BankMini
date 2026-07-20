@@ -197,7 +197,7 @@ Selamat Datang, {{ $user->name }}!
                         </td>
 
                         <td class="py-4 px-2 border-b border-gray-50">
-                            {{ $user->name }}
+                            {{ optional($d->petugas)->user->name ?? '-' }}
                         </td>
 
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
@@ -211,7 +211,7 @@ Selamat Datang, {{ $user->name }}!
                                         '{{ $d->id_rekening }}',
                                         '{{ $d->jumlah_penarikan }}', 
                                         '{{ $d->pilihan_biaya_transaksi }}', 
-                                        '{{ $user->name }}',
+                                        '{{ optional($d->petugas)->user->name ?? '-' }}',
                                         '{{ $d->nominal_admin }}'
                                     )"
                                     class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
@@ -515,7 +515,7 @@ Selamat Datang, {{ $user->name }}!
     }
 
     function confirmDeletePenarikan(id) {
-        const msg = 'Apakah Anda yakin ingin menghapus history transaksi penarikan ini? <span class="font-bold text-red-500">Saldo nasabah akan otomatis ditambahkan kembali!</span>';
+        const msg = 'Apakah Anda yakin ingin menghapus history transaksi penarikan ini?';
         openDeleteModal(function() {
             document.getElementById('delete-form-' + id).submit();
         }, msg);
