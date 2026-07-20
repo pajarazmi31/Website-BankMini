@@ -331,7 +331,7 @@
         // Ajax Cari Rekening
         if (rekeningInput) {
 
-            rekeningInput.addEventListener('change', async function() {
+            rekeningInput.addEventListener('input', async function() {
 
                 let rekening = this.value.trim();
 
@@ -376,11 +376,17 @@
         }
 
         // Sebelum submit, ubah format ke angka biasa agar tidak bermasalah di Backend
-        if (formSetoran) {
-            formSetoran.addEventListener('submit', function() {
-                if (jumlahInput) jumlahInput.value = bersihkan(jumlahInput.value);
-                if (totalBiayaInput) totalBiayaInput.value = bersihkan(totalBiayaInput.value);
-            });
-        }
+        formSetoran.addEventListener('submit', function() {
+
+            document.querySelector('button[type="submit"]').disabled = true;
+
+            if (jumlahInput)
+                jumlahInput.value = bersihkan(jumlahInput.value);
+
+            if (totalBiayaInput)
+                totalBiayaInput.value = bersihkan(totalBiayaInput.value);
+
+        });
+        
     })();
 </script>

@@ -18,10 +18,11 @@
                 <div class="w-full lg:max-w-[200px]">
                     <input
                         type="text"
+                        value="{{ $user->name }}"
                         id="edit_petugas"
                         name="id_petugas"
                         readonly
-                        class="w-full border border-gray-200 rounded-lg px-4 py-2.5 bg-gray-50 text-[14px]">
+                        class="w-full border border-gray-200 rounded-lg px-4 py-2 text-[13px] text-gray-500 bg-gray-50">
                 </div>
             </div>
 

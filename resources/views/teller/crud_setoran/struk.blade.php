@@ -4,57 +4,84 @@
 <meta charset="utf-8">
 
 <style>
-body{
+@page {
+    size: 80mm 150mm;
+    margin: 0;
+}
+
+html, body {
+    width: 80mm;
+    height: 150mm;
+    margin: 0;
+    padding: 5mm;
+    box-sizing: border-box;
     font-family: Arial, sans-serif;
-    font-size: 12px;
-    margin: 20px;
+    font-size: 11px;
+}
+
+body{
+    zoom: 100%;
 }
 
 .title{
-    text-align:center;
-    margin-bottom:20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.title h3{
+    margin: 0;
+    font-size: 18px;
+}
+
+.title strong{
+    font-size: 13px;
 }
 
 .line{
-    border-top:1px dashed #000;
-    margin:10px 0;
+    border-top: 1px dashed #000;
+    margin: 8px 0;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 td{
-    padding:3px 0;
-    vertical-align:top;
+    padding: 2px 0;
+    vertical-align: top;
+    word-break: break-word;
 }
 
 .label{
-    width:90px;
+    width: 32%;
 }
 
 .separator{
-    width:10px;
+    width: 5%;
+    text-align: center;
 }
 
 .total{
-    font-weight:bold;
-    font-size:14px;
+    font-weight: bold;
+    font-size: 12px;
 }
 
 .footer{
-    margin-top:20px;
-    text-align:center;
+    margin-top: 15px;
+    text-align: center;
+    font-size: 11px;
 }
 </style>
 
 </head>
-<body>
+<body onload="window.print()">
 
 <div class="title">
-    <h2>BANK MINI</h2>
-    <strong>STRUK PENYETORAN</strong>
+    <h3 style="margin:0;">BANK MINI</h3>
+    <div style="font-weight:bold; margin-top:3px;">SMKN 1 KAWALI</div>
+    <div style="font-weight:bold; margin-top:3px;">JL.Talagasari, No.35, Kawalimukti</div>
+    <div style="font-weight:bold; margin-top:3px;">STRUK SETORAN</div>
 </div>
 
 <div class="line"></div>
@@ -69,7 +96,7 @@ td{
     <tr>
         <td class="label">Tanggal</td>
         <td class="separator">:</td>
-        <td>{{ $setoran->created_at->format('d-m-Y H:i') }}</td>
+        <td>{{ $setoran->updated_at->format('d-m-Y H:i') }}</td>
     </tr>
 
     <tr>
@@ -93,7 +120,7 @@ td{
     <tr>
         <td class="label">Petugas</td>
         <td class="separator">:</td>
-        <td>{{ $user->name }}</td>
+        <td>{{ optional($setoran->petugas)->user->name ?? '-' }}</td> {{-- 🔥 Diubah agar dinamis --}}
     </tr>
 </table>
 
@@ -128,17 +155,77 @@ td{
 <div class="line"></div>
 
 <table>
+
+    <tr>
+        <td class="label">Pembayaran</td>
+        <td class="separator">:</td>
+        <td>
+            {{ $setoran->pilihan_biaya_transaksi ?? 'Cash' }}
+        </td>
+    </tr>
+
     <tr>
         <td class="label">Terbilang</td>
         <td class="separator">:</td>
         <td>{{ $setoran->uang_terbilang }}</td>
     </tr>
+
+    <tr>
+        <td class="label">Catatan</td>
+        <td class="separator">:</td>
+        <td>{{ $setoran->catatan ?? '-' }}</td>
+    </tr>
 </table>
+
+<div style="height: 15px;"></div>
+
+<div style="margin-top:20px;">
+    <table style="width:100%; text-align:center;">
+        <tr>
+            <td style="width:50%;">
+                Teller
+            </td>
+            <td style="width:50%;">
+                Nasabah
+            </td>
+        </tr>
+
+        <!-- Ruang tanda tangan -->
+        <tr>
+            <td style="height:40px;"></td> {{-- Dikecilkan sedikit dari 60px ke 40px agar hemat kertas struk --}}
+            <td></td>
+        </tr>
+
+        <!-- Nama -->
+        <tr>
+            <td>
+                ( <strong>{{ optional($setoran->petugas)->user->name ?? '-' }}</strong> ) {{-- 🔥 Diubah agar dinamis --}}
+            </td>
+
+            <td>
+                ( <strong>{{ $setoran->nama_lengkap }}</strong> )
+            </td>
+        </tr>
+    </table>
+</div>
 
 <div class="footer">
     <div class="line"></div>
-    Terima Kasih Telah Menabung
+    Terima Kasih Telah Menggunakan Layanan Kami
+    <div style="margin-top: 4px; font-weight: normal; font-size: 10px;">
+        SMS/WA 0812-3456-7890
+    </div>
 </div>
+
+<script>
+    window.onafterprint = function() {
+        window.close(); 
+    }
+    
+    setTimeout(function() {
+        window.close(); 
+    }, 1000); 
+</script>
 
 </body>
 </html>

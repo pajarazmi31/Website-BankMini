@@ -1,20 +1,20 @@
-     <table border="1">
+<table border="1">
 
         <!-- JUDUL -->
         <tr>
-            <td colspan="7" style="text-align:center; font-size:18px; font-weight:bold;">
+            <td colspan="8" style="text-align:center; font-size:18px; font-weight:bold;">
                 BANK MINI SMKN 1 KAWALI
             </td>
         </tr>
 
         <tr>
-            <td colspan="7" style="text-align:center; font-size:14px; font-weight:bold;">
+            <td colspan="8" style="text-align:center; font-size:14px; font-weight:bold;">
                 {{ $judul }}
             </td>
         </tr>
 
         <tr>
-            <td colspan="7" style="text-align:center;">
+            <td colspan="8" style="text-align:center;">
                 Dicetak pada :
                 {{ now()->format('d-m-Y H:i') }}
             </td>
@@ -54,6 +54,11 @@
                 Tanggal
             </th>
 
+            <!-- TAMBAHAN: Header Petugas -->
+            <th style="font-weight:bold; border:1px solid black;" width="25">
+                Petugas
+            </th>
+
         </tr>
 
         @foreach($data as $item)
@@ -88,12 +93,17 @@
                 {{ $item->created_at->format('d-m-Y') }}
             </td>
 
+            <!-- TAMBAHAN: Menampilkan Nama Petugas per Data -->
+            <td style="border:1px solid black;">
+                {{ optional($item->petugas)->user->name ?? '-' }}
+            </td>
+
         </tr>
 
         @endforeach
 
         <tr>
-            <td colspan="7"></td>
+            <td colspan="8"></td>
         </tr>
 
         <tr>
@@ -114,33 +124,31 @@
                 Rp {{ number_format($data->sum('total_biaya'),0,',','.') }}
             </td>
 
-            <td style="border:1px solid black;"></td>
-
         </tr>
 
-        <tr><td colspan="7"></td></tr>
-        <tr><td colspan="7"></td></tr>
+        <tr><td colspan="8"></td></tr>
+        <tr><td colspan="8"></td></tr>
 
         <tr>
-            <td colspan="5"></td>
+            <td colspan="6"></td> <!-- Diubah jadi 6 supaya pas posisinya -->
             <td colspan="2" align="center">
                 Kawali, {{ now()->format('d-m-Y') }}
             </td>
         </tr>
 
         <tr>
-            <td colspan="5"></td>
+            <td colspan="6"></td>
             <td colspan="2" align="center">
-                Petugas,
+                Petugas Cetak,
             </td>
         </tr>
 
-        <tr><td colspan="7"></td></tr>
-        <tr><td colspan="7"></td></tr>
-        <tr><td colspan="7"></td></tr>
+        <tr><td colspan="8"></td></tr>
+        <tr><td colspan="8"></td></tr>
+        <tr><td colspan="8"></td></tr>
 
         <tr>
-            <td colspan="5"></td>
+            <td colspan="6"></td>
             <td colspan="2" align="center">
                 <b>{{ auth()->user()->name }}</b>
             </td>
