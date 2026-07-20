@@ -1304,12 +1304,13 @@ class tellerController extends Controller
         // Pastikan rekening ada
         $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
 
-// 1. Ambil Setoran
+        // 1. Ambil Setoran
         $setoran = Setoran::where('id_rekening', $id_rekening)->get()->map(function ($item) {
             $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
             return (object)[
                 'tanggal'     => $item->created_at,
-                'biaya_admin' => $item->nominal_admin ?? 0, // Ambil angka biaya admin
+                'jenis'       => 'ST', // Kode Setoran
+                'biaya_admin' => $item->nominal_admin ?? 0,
                 'debit'       => 0,
                 'kredit'      => $item->jumlah_penyetoran - $potongan,
                 'saldo'       => $item->saldo_transaksi
@@ -1321,6 +1322,7 @@ class tellerController extends Controller
             $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
             return (object)[
                 'tanggal'     => $item->created_at,
+                'jenis'       => 'TT', // Kode Penarikan
                 'biaya_admin' => $item->nominal_admin ?? 0,
                 'debit'       => $item->jumlah_penarikan + $potongan,
                 'kredit'      => 0,
@@ -1333,6 +1335,7 @@ class tellerController extends Controller
             $potongan = str_contains(strtolower($t->pilihan_biaya_transaksi), 'potong') ? $t->nominal_admin : 0;
             return (object)[
                 'tanggal'     => $t->created_at,
+                'jenis'       => 'TFK', // Kode Transfer Keluar
                 'biaya_admin' => $t->nominal_admin ?? 0,
                 'debit'       => $t->jumlah_transfer + $potongan,
                 'kredit'      => 0,
@@ -1344,7 +1347,8 @@ class tellerController extends Controller
         $transferMasuk = Transfer::where('id_rekening_penerima', $id_rekening)->get()->map(function ($t) {
             return (object)[
                 'tanggal'     => $t->created_at,
-                'biaya_admin' => 0, // Penerima transfer biasanya tidak kena biaya admin
+                'jenis'       => 'TFM', // Kode Transfer Masuk
+                'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $t->jumlah_transfer,
                 'saldo'       => $t->saldo_transaksi_penerima
