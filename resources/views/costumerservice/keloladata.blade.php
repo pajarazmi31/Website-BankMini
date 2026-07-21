@@ -42,21 +42,18 @@ selamat datang {{ $user->name }}!
         <input type="text" id="searchMobile" placeholder="Cari nama atau no. rekening..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
     </div>
 
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 px-1">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Nasabah</h3>
-        <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-            <i class="ph ph-plus text-base"></i> Tambah Data
-        </button>
-        <a href="{{ route('halaman.import') }}">
-            <button>
-                Import
+        <div class="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
+            <a href="{{ route('halaman.import') }}" class="w-full sm:w-auto">
+                <button type="button" class="w-full bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all shadow-sm justify-center">
+                    <i class="ph ph-file-arrow-up text-base text-brand-blue"></i> Import Data
+                </button>
+            </a>
+            <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md w-full sm:w-auto justify-center">
+                <i class="ph ph-plus text-base"></i> Tambah Data
             </button>
-        </a>
-        <a href="{{ route('template.nasabah') }}">
-            <button>
-                template import
-            </button>
-        </a>
+        </div>
     </div>
 
     <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
