@@ -92,54 +92,49 @@ class superVisorController extends Controller
     }
 
     public function verifikasiTf(Request $request, $id)
-    {
-        // 1. Cari data bukti transfer berdasarkan ID-nya
-        $data = Bukti_Tf::findOrFail($id);
+{
+    $data = Bukti_Tf::findOrFail($id);
 
-        // 2. Kunci Status: Jika sudah 'berhasil' atau 'gagal', jangan diproses lagi
-        if ($data->status_verifikasi !== 'pending') {
-            return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
-        }
+    if ($data->status_verifikasi !== 'pending') {
+        return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
+    }
 
-        // 3. Validasi input tombol (berhasil/gagal)
-        $request->validate([
-            'status_verifikasi' => 'required|in:berhasil,gagal'
-        ]);
+    $request->validate([
+        'status_verifikasi' => 'required|in:berhasil,gagal'
+    ]);
 
-        try {
-            // Jalankan Database Transaction untuk keamanan mutasi saldo
-            DB::transaction(function () use ($request, $data) {
+    try {
+        DB::transaction(function () use ($request, $data) {
 
-                if ($request->status_verifikasi === 'berhasil') {
+            if ($request->status_verifikasi === 'berhasil') {
+                $rekening = Rekening::where('id', $data->id_rekening)->first();
 
-                    // MENCARI REKENING:
-                    // Kita tembak kolom 'id' di tabel rekening menggunakan nilai yang tersimpan
-                    // di kolom 'no_rekening_penerima' pada tabel Bukti_Tf.
-                    $rekening = Rekening::where('id', $data->id_rekening)->first();
-
-                    if (!$rekening) {
-                        throw new \Exception('Nomor rekening tujuan (' . $data->id_rekening . ') tidak ditemukan di sistem.');
-                    }
-
-                    // Tambahkan saldo ke kolom 'saldo_saat_ini' di tabel rekening
-                    $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+                if (!$rekening) {
+                    throw new \Exception('Nomor rekening tujuan tidak ditemukan.');
                 }
 
-                // 4. Update status verifikasi transaksi menjadi 'berhasil' atau 'gagal'
-                $data->status_verifikasi = $request->status_verifikasi;
+                // 1. Tambahkan saldo
+                $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+
+                // 2. Update status verifikasi
+                $data->status_verifikasi = 'berhasil';
                 $data->save();
-            });
 
-            $pesan = $request->status_verifikasi === 'berhasil'
-                ? 'Transaksi berhasil disetujui, saldo masuk ke rekening tujuan!'
-                : 'Transaksi telah ditolak.';
+                // 3. PANGGIL SINKRONISASI agar saldo transaksi di history terisi otomatis
+                // Pastikan fungsi ini sudah PUBLIC di tellerController.php
+                $teller = new \App\Http\Controllers\tellerController();
+                $teller->sinkronisasiSaldo($rekening->id);
+            } else {
+                $data->status_verifikasi = 'gagal';
+                $data->save();
+            }
+        });
 
-            return redirect()->back()->with('success', $pesan);
-        } catch (\Exception $e) {
-            // Jika ada eror di dalam blok DB::transaction, saldo batal bertambah
-            return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
-        }
+        return redirect()->back()->with('success', 'Transaksi berhasil diproses!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
     }
+}
 
     public function verifikasiNasabah(Request $request)
     {

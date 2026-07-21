@@ -43,24 +43,6 @@ History Transaksi Nasabah
         </h3>
 
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-
-            <!-- EXPORT EXCEL (Opsional, format disamakan) -->
-            <div class="relative">
-                <button
-                    id="btnExportExcel"
-                    type="button"
-                    class="bg-green-600 text-white px-3 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-green-700 transition-all shadow-md w-full sm:w-auto justify-center">
-                    <i class="ph ph-file-xls text-base"></i>
-                    Export Excel
-                    <i class="ph ph-caret-down"></i>
-                </button>
-
-                <!-- DROPDOWN EXPORT -->
-                <div id="dropdownExport" class="hidden absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-100 z-50">
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-50 text-sm">Bulan Ini</a>
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-50 text-sm">Tahun Ini</a>
-                </div>
-            </div>
             <!-- TOMBOL CETAK BUKU TABUNGAN -->
             <button
                 type="button"
@@ -105,15 +87,15 @@ History Transaksi Nasabah
                         <td class="py-4 px-2 border-b border-gray-50">{{ ($data->currentPage() - 1) * $data->perPage() + $loop->iteration }}.</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->nama_nasabah }}</td>
                         <td class="py-4 px-2 border-b border-gray-50">{{ $d->no_rek }}</td>
-                        
+
                         <!-- Pewarnaan Jenis Transaksi -->
                         <td class="py-4 px-2 border-b border-gray-50">
                             @if($d->jenis_transaksi == 'Setoran')
-                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-md text-xs font-bold">Setoran</span>
+                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-md text-xs font-bold">Setoran</span>
                             @elseif($d->jenis_transaksi == 'Penarikan')
-                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded-md text-xs font-bold">Penarikan</span>
+                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-md text-xs font-bold">Penarikan</span>
                             @else
-                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-bold">{{ $d->jenis_transaksi }}</span>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-bold">{{ $d->jenis_transaksi }}</span>
                             @endif
                         </td>
 
@@ -121,20 +103,21 @@ History Transaksi Nasabah
                         <td class="py-4 px-2 border-b border-gray-50 text-red-500 font-semibold">Rp {{ number_format($d->debit, 0, ',', '.') }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-green-500 font-semibold">Rp {{ number_format($d->kredit, 0, ',', '.') }}</td>
                         <td class="py-4 px-2 border-b border-gray-50 text-gray-800 font-bold">Rp {{ number_format($d->saldo, 0, ',', '.') }}</td>
-                        
+
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
                             <div class="flex items-center justify-center gap-2">
-                                <!-- Button Detail -->
-                                <button type="button" onclick="lihatDetail('{{ $d->id }}', '{{ $d->jenis_transaksi }}')" 
-                                    class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
+                                <button type="button" onclick="lihatDetailHistory(
+                                            '{{ $d->nama_nasabah }}',
+                                            '{{ $d->no_rek }}',
+                                            '{{ $d->jenis_transaksi }}',
+                                            '{{ $d->admin }}',
+                                            '{{ $d->debit }}',
+                                            '{{ $d->kredit }}',
+                                            '{{ $d->saldo }}',
+                                            '{{ \Carbon\Carbon::parse($d->created_at)->format('d M Y, H:i') }}'
+                                        )" class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail">
                                     <i class="ph-fill ph-eye text-[15px]"></i>
                                 </button>
-
-                                <!-- Button Print (Bisa diarahkan ke route cetak struk masing-masing transaksi) -->
-                                <a href="#" target="_blank"
-                                    class="download-pdf w-[28px] h-[28px] rounded-full bg-[#dbeafe] text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors" title="Cetak Struk">
-                                    <i class="ph-fill ph-printer text-[15px]"></i>
-                                </a>
                             </div>
                         </td>
                     </tr>
@@ -146,27 +129,86 @@ History Transaksi Nasabah
                 </tbody>
             </table>
         </div>
-        
+
         <!-- Pagination -->
-        @if(isset($data))
-            <div class="mt-4">
-                {{ $data->links() }}
-            </div>
-        @endif
+<x-pagination :paginator="$data" />
     </div>
 </div>
 
-<!-- ================= VIEW 2: DETAIL TRANSAKSI (Nanti disesuaikan) ================= -->
-<div id="viewDetailData" class="hidden fade-in flex-1 flex flex-col justify-start">
+<!-- ================= VIEW 2: DETAIL TRANSAKSI ================= -->
+<div id="viewDetailData" class="hidden fade-in flex-1 flex-col justify-start">
     <div class="flex items-center gap-3 mb-4 px-1">
         <button onclick="switchView('tabel')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all">
             <i class="ph ph-arrow-left text-lg"></i>
         </button>
-        <h3 class="text-[22px] font-bold text-gray-800">Detail Transaksi</h3>
+        <h3 class="text-[22px] font-bold text-gray-800">Detail Transaksi Nasabah</h3>
     </div>
     
-    <div class="bg-white rounded-[20px] shadow-card p-6">
-        <p class="text-gray-500 text-center py-10">Tampilan detail akan dirender di sini menggunakan JavaScript/Ajax.</p>
+    <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
+        
+        <!-- SECTION 1: DATA NASABAH -->
+        <div class="mb-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
+                <h3 class="text-[20px] font-bold text-gray-800">Informasi Rekening</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
+                    <input type="text" id="hist_no_rek" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none" readonly>
+                </div>
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Nasabah</label>
+                    <input type="text" id="hist_nama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: RINCIAN TRANSAKSI -->
+        <div class="mb-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
+                <h3 class="text-[20px] font-bold text-gray-800">Rincian Transaksi</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Transaksi</label>
+                    <input type="text" id="hist_jenis" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] font-bold text-brand-blue bg-gray-50 focus:outline-none" readonly>
+                </div>
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal & Waktu</label>
+                    <input type="text" id="hist_tanggal" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 bg-gray-50 focus:outline-none" readonly>
+                </div>
+                
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Debit (Uang Keluar)</label>
+                    <input type="text" id="hist_debit" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] font-bold text-red-500 bg-gray-50 focus:outline-none" readonly>
+                </div>
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kredit (Uang Masuk)</label>
+                    <input type="text" id="hist_kredit" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] font-bold text-green-500 bg-gray-50 focus:outline-none" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Biaya Admin</label>
+                    <input type="text" id="hist_admin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-500 bg-gray-50 focus:outline-none" readonly>
+                </div>
+                <div>
+                    <label class="block text-[13px] font-semibold text-gray-500 mb-2">Saldo Akhir</label>
+                    <input type="text" id="hist_saldo" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] font-bold text-gray-800 bg-gray-50 focus:outline-none" readonly>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUTTONS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-12">
+            <div class="hidden sm:block"></div>
+            <button type="button" onclick="switchView('tabel')" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] shadow-sm">
+                Kembali
+            </button>
+        </div>
     </div>
 </div>
 <!-- ================= MODAL CETAK BUKU TABUNGAN ================= -->
@@ -182,14 +224,14 @@ History Transaksi Nasabah
             <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan No. Rekening Nasabah</label>
             <div class="relative">
                 <i class="ph ph-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                <input type="number" id="inputNoRekening" placeholder="Contoh: 10029384" 
+                <input type="number" id="inputNoRekening" placeholder="Contoh: 10029384"
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
             <!-- INPUT BARU: MULAI BARIS -->
             <label class="block text-[13px] font-semibold text-gray-700 mb-2">Mulai Cetak dari Baris ke-?</label>
             <div class="relative">
                 <i class="ph ph-list-numbers absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                <input type="number" id="inputBaris" value="1" min="1" 
+                <input type="number" id="inputBaris" value="1" min="1"
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
             <p class="text-xs text-gray-500 mt-2">Sistem hanya akan mencetak riwayat transaksi milik nomor rekening ini.</p>
@@ -250,15 +292,32 @@ History Transaksi Nasabah
 
         document.addEventListener('click', function(e) {
             if (!e.target.closest('#dropdownExport') && !e.target.closest('#btnExportExcel')) {
-                if(dropdownExport) dropdownExport.classList.add('hidden');
+                if (dropdownExport) dropdownExport.classList.add('hidden');
             }
         });
     });
 
-    // FUNGSI LIHAT DETAIL
-    function lihatDetail(id, jenis) {
-        // Nanti disini kamu bisa buat logika AJAX untuk memanggil data detail
-        // berdasarkan ID dan Jenis Transaksi-nya, lalu memunculkan modal/viewDetailData
+// Fungsi untuk merubah angka biasa menjadi format Rp. 10.000
+    function formatRupiahJs(angka) {
+        if (!angka) return "0";
+        let clean = parseInt(angka.toString().replace(/\D/g, '')) || 0;
+        return new Intl.NumberFormat('id-ID').format(clean);
+    }
+
+    // Fungsi menangkap data dari tombol dan mengisi inputan
+    function lihatDetailHistory(nama, no_rek, jenis, admin, debit, kredit, saldo, tanggal) {
+        
+        document.getElementById('hist_nama').value = nama;
+        document.getElementById('hist_no_rek').value = no_rek;
+        document.getElementById('hist_jenis').value = jenis.toUpperCase();
+        document.getElementById('hist_tanggal').value = tanggal;
+        
+        document.getElementById('hist_admin').value = 'Rp ' + formatRupiahJs(admin);
+        document.getElementById('hist_debit').value = 'Rp ' + formatRupiahJs(debit);
+        document.getElementById('hist_kredit').value = 'Rp ' + formatRupiahJs(kredit);
+        document.getElementById('hist_saldo').value = 'Rp ' + formatRupiahJs(saldo);
+
+        // Setelah data terisi, buka view detail
         switchView('detail');
     }
 
@@ -273,15 +332,15 @@ History Transaksi Nasabah
         document.getElementById('modalCetakBuku').classList.add('hidden');
     }
 
-function prosesCetak() {
+    function prosesCetak() {
         const noRek = document.getElementById('inputNoRekening').value.trim();
         const baris = document.getElementById('inputBaris').value.trim() || 1; // Default ke 1
-        
+
         if (!noRek) {
             alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
             return;
         }
-        
+
         // Kirim nomor rekening dan baris melalui URL parameter
         window.open(`/teller/cetak-buku/${noRek}?baris=${baris}`, '_blank');
         tutupModalCetak();

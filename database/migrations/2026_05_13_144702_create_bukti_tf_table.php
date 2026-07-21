@@ -19,6 +19,7 @@ return new class extends Migration
             $table->String('id_rekening',20);
             $table->decimal('nominal_admin',15,2);
             $table->decimal('jumlah_transfer',15,2);
+            $table->bigInteger('saldo_transaksi')->default(0);
             $table->String('bukti_foto');
             $table->String('nama_penerima',100);
             $table->enum('status_verifikasi',['pending','berhasil','gagal'])->default('pending');

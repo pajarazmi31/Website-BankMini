@@ -270,11 +270,15 @@ class nasabahController extends Controller
                 }
 
                 // PROSES POTONG & TAMBAH SALDO
-                // A. Kurangi saldo pengirim
-                $rekeningPengirim->decrement('saldo_saat_ini', $totalPotongan);
+                // A. Kurangi saldo pengirim dan simpan ke variabel
+                $rekeningPengirim->saldo_saat_ini -= $totalPotongan;
+                $rekeningPengirim->save();
+                $saldoPengirimBaru = $rekeningPengirim->saldo_saat_ini; // <-- Tangkap saldo berjalan
 
-                // B. Tambah saldo penerima
-                $rekeningPenerima->increment('saldo_saat_ini', $nominal);
+                // B. Tambah saldo penerima dan simpan ke variabel
+                $rekeningPenerima->saldo_saat_ini += $nominal;
+                $rekeningPenerima->save();
+                $saldoPenerimaBaru = $rekeningPenerima->saldo_saat_ini; // <-- Tangkap saldo berjalan
 
                 // C. Catat ke tabel riwayat_tf
                 RiwayatTf::create([
@@ -285,7 +289,12 @@ class nasabahController extends Controller
                     'jumlah_transfer' => $nominal,
                     'nominal_admin' => $adminTransfer,
                     'catatan' => $request->catatan,
+                    'saldo_transaksi_pengirim' => $saldoPengirimBaru, // <-- Simpan saldo pengirim
+                    'saldo_transaksi_penerima' => $saldoPenerimaBaru, // <-- Simpan saldo penerima
                 ]);
+                $teller = new \App\Http\Controllers\tellerController();
+                $teller->sinkronisasiSaldo($idPengirim); // Update saldo pengirim
+                $teller->sinkronisasiSaldo($request->id_penerima); // Update saldo penerima
             });
 
             // Jika semua proses di dalam DB::transaction sukses:
