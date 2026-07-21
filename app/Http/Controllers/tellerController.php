@@ -209,7 +209,7 @@ public function storeSetoran(Request $request)
 {
     $request->validate([
         'id_rekening'             => 'required|numeric|exists:rekening,id',
-        'jumlah_penyetoran'        => 'required',
+        'jumlah_penyetoran'        => 'required|numeric|min:1',
         'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
         'setoran'                 => 'required',
         'nama_penyetor'           => 'required',
@@ -272,7 +272,7 @@ public function updateSetoran(Request $request, $id)
 {
     $request->validate([
         'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penyetoran'        => 'required',
+        'jumlah_penyetoran'       => 'required|numeric|min:1',
         'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
         'transaksi_id'            => 'required|exists:transaksi,id'
     ]);
@@ -280,6 +280,8 @@ public function updateSetoran(Request $request, $id)
     DB::beginTransaction();
 
     try {
+        $user = Auth::user();
+        $tellerBaru = $user->petugas;
         $setoran = Setoran::findOrFail($id);
 
         $masterTransaksiLama = Transaksi::find($setoran->transaksi_id);
@@ -315,11 +317,12 @@ public function updateSetoran(Request $request, $id)
         $rekeningBaru->saldo_saat_ini += $setoranMasukSaldoBaru;
         $rekeningBaru->save();
 
-        // 4. UPDATE DATA SETORAN
+        // 4. UPDATE DATA SETORAN (Masukkan id_petugas langsung di sini bray)
         $setoran->update([
             'id_rekening'             => $request->id_rekening,
+            'id_petugas'              => $tellerBaru->id, // 🔥 TARUH DI SINI BIAR LANGSUNG KESIMPAN
             'nama_lengkap'            => $request->nama_lengkap,
-            'jumlah_penyetoran'      => $jumlahBaru,
+            'jumlah_penyetoran'       => $jumlahBaru,
             'pilihan_biaya_transaksi' => $pilihanBiayaBaru,
             'transaksi_id'            => $request->transaksi_id,
             'total_biaya'             => $jumlahBaru + $biayaAdminBaru,
@@ -330,9 +333,10 @@ public function updateSetoran(Request $request, $id)
             'nama_penyetor'           => $request->nama_penyetor,
             'no_hp_penyetor'          => $request->no_hp_penyetor,
             'alamat_penyetor'         => $request->alamat_penyetor,
-            'catatan'                => $request->catatan,
+            'catatan'                 => $request->catatan,
         ]);
 
+        // Hapus baris yang di luar tadi karena sudah digabung ke dalam update() di atas
         DB::commit();
 
         return back()->with('success', 'Data setoran berhasil diupdate!');
@@ -528,7 +532,7 @@ public function storePenarikan(Request $request)
 {
     $request->validate([
         'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penarikan'        => 'required',
+        'jumlah_penarikan'        => 'required|numeric|min:1000',
         'nama_penarik'            => 'required',
         'transaksi_id'            => 'required|exists:transaksi,id',
         'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
@@ -595,7 +599,7 @@ public function updatePenarikan(Request $request, $id)
 {
     $request->validate([
         'id_rekening'             => 'required|exists:rekening,id',
-        'jumlah_penarikan'        => 'required',
+        'jumlah_penarikan'        => 'required|numeric|min:1',
         'nama_penarik'            => 'required',
         'transaksi_id'            => 'required|exists:transaksi,id',
         'pilihan_biaya_transaksi' => 'required|in:cash,potong_saldo'
@@ -603,6 +607,8 @@ public function updatePenarikan(Request $request, $id)
 
     DB::beginTransaction();
     try {
+        $user = Auth::user();
+        $tellerBaru = $user->petugas;
         $penarikan = Penarikan::findOrFail($id);
 
         // 1. Rollback saldo berdasarkan skema lama
@@ -639,6 +645,7 @@ public function updatePenarikan(Request $request, $id)
 
         // 4. Update record penarikan
         $penarikan->update([
+            'id_petugas'              => $tellerBaru->id,
             'id_rekening'             => $request->id_rekening,
             'nama_penarik'            => $request->nama_penarik,
             'jumlah_penarikan'        => $jumlahBaru,
@@ -926,7 +933,8 @@ public function updatePenarikan(Request $request, $id)
         DB::beginTransaction();
 
         try {
-
+            $user = Auth::user();
+            $tellerBaru = $user->petugas;
             $transfer = Transfer::findOrFail($id);
 
             // rollback transaksi lama
@@ -1000,6 +1008,7 @@ public function updatePenarikan(Request $request, $id)
                 'biaya_transaksi'      => $request->biaya_transaksi,
                 'total_biaya'          => $request->total_biaya,
                 'transaksi_id'         => $request->transaksi_id,
+                'id_petugas'           => $tellerBaru->id,
                 'catatan'              => $request->catatan,
             ]);
 

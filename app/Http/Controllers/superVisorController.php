@@ -162,7 +162,8 @@ class superVisorController extends Controller
 
         $rekening->save();
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'Rekening Telah Aktif');
+        //  Ubah nama route di bawah ini agar sesuai dengan web.php kamu
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'Rekening Telah Aktif');
     }
 
 

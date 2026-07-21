@@ -178,13 +178,13 @@ Selamat Datang, {{ $user->name }}!
                             {{ \Carbon\Carbon::parse($d->created_at)->format('d-m-Y') }}
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50">
-                            {{ $user->name }}
+                            {{ optional($d->petugas)->user->name ?? '-' }}
                         </td>
                         <td class="py-4 px-2 border-b border-gray-50 text-center">
                             <div class="flex items-center justify-center gap-2">
                                 <!-- Button Detail -->
                                 <button type="button" onclick="lihatDetailSetoran(
-                                    '{{ $user->name }}',
+                                    '{{ optional($d->petugas)->user->name ?? '-' }}',
                                     '{{ $d->nama_lengkap }}',
                                     '{{ $d->id_rekening }}',
                                     '{{ $d->setoran }}',
@@ -315,11 +315,6 @@ Selamat Datang, {{ $user->name }}!
         if (nilai < 1000000) return terbilang(Math.floor(nilai / 1000)) + " Ribu " + terbilang(nilai % 1000);
         if (nilai < 1000000000) return terbilang(Math.floor(nilai / 1000000)) + " Juta " + terbilang(nilai % 1000000);
         return "";
-    }
-
-    function bersihkan(angka) {
-        if (!angka) return 0;
-        return parseInt(angka.toString().replace(/\D/g, '')) || 0;
     }
 
     function formatAngka(angka) {
@@ -547,7 +542,7 @@ Selamat Datang, {{ $user->name }}!
     }
 
     function confirmDeleteSetoran(id) {
-        const msg = 'Apakah Anda yakin ingin menghapus history transaksi ini? <span class="font-bold text-red-500">Saldo nasabah akan otomatis dikurangi kembali!</span>';
+        const msg = 'Apakah Anda yakin ingin menghapus history transaksi ini?';
         openDeleteModal(function() {
             document.getElementById('delete-form-' + id).submit();
         }, msg);

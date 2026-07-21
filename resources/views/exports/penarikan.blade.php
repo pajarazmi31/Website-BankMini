@@ -2,19 +2,19 @@
 
     <!-- JUDUL -->
     <tr>
-        <td colspan="7" style="text-align:center; font-size:18px; font-weight:bold;">
+        <td colspan="8" style="text-align:center; font-size:18px; font-weight:bold;">
             BANK MINI SMKN 1 KAWALI
         </td>
     </tr>
 
     <tr>
-        <td colspan="7" style="text-align:center; font-size:14px; font-weight:bold;">
+        <td colspan="8" style="text-align:center; font-size:14px; font-weight:bold;">
             {{ $judul }}
         </td>
     </tr>
 
     <tr>
-        <td colspan="7" style="text-align:center;">
+        <td colspan="8" style="text-align:center;">
             Dicetak pada :
             {{ now()->format('d-m-Y H:i') }}
         </td>
@@ -48,6 +48,11 @@
 
         <th style="font-weight:bold; border:1px solid black;" width="20">
             Tanggal
+        </th>
+
+        <!-- TAMBAHAN: Header Petugas -->
+        <th style="font-weight:bold; border:1px solid black;" width="25">
+            Petugas
         </th>
 
     </tr>
@@ -87,20 +92,25 @@
             {{ $item->created_at->format('d-m-Y') }}
         </td>
 
+        <!-- TAMBAHAN: Menampilkan nama petugas relasi berantai -->
+        <td style="border:1px solid black;">
+            {{ optional($item->petugas)->user->name ?? '-' }}
+        </td>
+
     </tr>
 
     @endforeach
 
 
     <tr>
-        <td colspan="7"></td>
+        <td colspan="8"></td>
     </tr>
 
 
     <!-- TOTAL -->
     <tr>
 
-        <td colspan="4"
+        <td colspan="3"
             style="font-weight:bold;
             background:#D9EAD3;
             border:1px solid black;
@@ -121,12 +131,12 @@
     </tr>
 
 
-    <tr><td colspan="7"></td></tr>
-    <tr><td colspan="7"></td></tr>
+    <tr><td colspan="8"></td></tr>
+    <tr><td colspan="8"></td></tr>
 
 
     <tr>
-        <td colspan="5"></td>
+        <td colspan="6"></td> <!-- Diubah dari 5 ke 6 agar ttd pas di kanan -->
         <td colspan="2" align="center">
             Kawali, {{ now()->format('d-m-Y') }}
         </td>
@@ -134,28 +144,28 @@
 
 
     <tr>
-        <td colspan="5"></td>
+        <td colspan="6"></td>
         <td colspan="2" align="center">
-            Petugas,
+            Petugas Cetak,
         </td>
     </tr>
 
 
     <tr>
-        <td colspan="7"></td>
+        <td colspan="8"></td>
     </tr>
 
     <tr>
-        <td colspan="7"></td>
+        <td colspan="8"></td>
     </tr>
 
     <tr>
-        <td colspan="7"></td>
+        <td colspan="8"></td>
     </tr>
 
 
     <tr>
-        <td colspan="5"></td>
+        <td colspan="6"></td>
         <td colspan="2" align="center">
             <b>{{ auth()->user()->name }}</b>
         </td>

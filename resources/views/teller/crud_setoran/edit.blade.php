@@ -20,6 +20,7 @@
                     <div class="w-full lg:max-w-[200px]">
                         <input
                             type="text"
+                            value="{{ $user->name }}"
                             id="edit_petugas"
                             name="id_petugas"
                             readonly
