@@ -221,7 +221,7 @@ td{
     window.onafterprint = function() {
         window.close(); 
     }
-    
+
     setTimeout(function() {
         window.close(); 
     }, 1000); 

@@ -220,10 +220,10 @@ td {
     window.onafterprint = function() {
         window.close(); // Menutup tab struk ini secara otomatis
     }
-    
+
     // Jaga-jaga jika onafterprint tidak terpicu di beberapa browser
     setTimeout(function() {
-        window.close(); 
+        window.close();
     }, 1000); // Tutup setelah 1 detik jika dialog cetak selesai/batal
 </script>
 

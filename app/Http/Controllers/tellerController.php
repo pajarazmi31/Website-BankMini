@@ -1229,8 +1229,6 @@ $transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->m
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFK',
-                // TFK (Uang Keluar) -> Tampilkan siapa Penerimanya
-                // Menggunakan kolom nama_penerima yang sudah ada di tabel riwayat_tf
                 'keterangan'  => 'dikirim ke: ' . $t->id_penerima . ' | ' . $t->nama_penerima,
                 'biaya_admin' => $potongan,
                 'debit'       => $cleanNum($t->jumlah_transfer) + $potongan,
@@ -1243,8 +1241,6 @@ $transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->m
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFM',
-                // TFM (Uang Masuk) -> Tampilkan siapa Pengirimnya
-                // Mengambil nama nasabah dari relasi pengirim
                 'keterangan'  => 'dari: ' . $t->id_pengirim . ' | ' . ($t->pengirim->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => 0, 
                 'debit'       => 0,
