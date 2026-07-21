@@ -269,23 +269,32 @@ class nasabahController extends Controller
                     throw new \Exception('Saldo Anda tidak mencukupi untuk melakukan transfer ini.');
                 }
 
-                // PROSES POTONG & TAMBAH SALDO
-                // A. Kurangi saldo pengirim
-                $rekeningPengirim->decrement('saldo_saat_ini', $totalPotongan);
+// PROSES POTONG & TAMBAH SALDO
+// A. Kurangi saldo pengirim dan simpan ke variabel
+$rekeningPengirim->saldo_saat_ini -= $totalPotongan;
+$saldoPengirimBaru = $rekeningPengirim->saldo_saat_ini;
+$rekeningPengirim->save(); // <-- PERBAIKAN: Simpan perubahan saldo pengirim
 
-                // B. Tambah saldo penerima
-                $rekeningPenerima->increment('saldo_saat_ini', $nominal);
+// B. Tambah saldo penerima dan simpan ke variabel
+$rekeningPenerima->saldo_saat_ini += $nominal;
+$saldoPenerimaBaru = $rekeningPenerima->saldo_saat_ini;
+$rekeningPenerima->save(); // <-- PERBAIKAN: Simpan perubahan saldo penerima
 
-                // C. Catat ke tabel riwayat_tf
-                RiwayatTf::create([
-                    'transaksi_id'  => 5,
-                    'id_pengirim' => $idPengirim,
-                    'id_penerima' => $rekeningPenerima->id,
-                    'nama_penerima' => $request->nama_penerima ?? 'Nasabah Mini Bank',
-                    'jumlah_transfer' => $nominal,
-                    'nominal_admin' => $adminTransfer,
-                    'catatan' => $request->catatan,
-                ]);
+// C. Catat ke tabel riwayat_tf
+RiwayatTf::create([
+    'transaksi_id'  => 5,
+    'id_pengirim' => $idPengirim,
+    'id_penerima' => $rekeningPenerima->id,
+    'nama_penerima' => $request->nama_penerima ?? 'Nasabah Mini Bank',
+    'jumlah_transfer' => $nominal,
+    'nominal_admin' => $adminTransfer,
+    'catatan' => $request->catatan,
+    'saldo_transaksi_pengirim' => $saldoPengirimBaru,
+    'saldo_transaksi_penerima' => $saldoPenerimaBaru,
+]);
+                $teller = new \App\Http\Controllers\tellerController();
+                $teller->sinkronisasiSaldo($idPengirim); // Update saldo pengirim
+                $teller->sinkronisasiSaldo($request->id_penerima); // Update saldo penerima
             });
 
             // Jika semua proses di dalam DB::transaction sukses:

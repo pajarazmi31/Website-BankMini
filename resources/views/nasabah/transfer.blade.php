@@ -148,7 +148,7 @@
                         -->
                         <textarea rows="4" name="catatan" id="catatan" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="">{{ old('catatan') }}</textarea>
                     </div>
-                    <button type="submit" class="w-full bg-success-gradient hover:bg-green-700 text-white font-bold text-sm py-4 rounded-xl transition-colors mt-2 shadow-sm">Kirim</button>
+                    <button type="submit" id="btnSubmit" class="w-full bg-success-gradient hover:bg-green-700 text-white font-bold text-sm py-4 rounded-xl transition-colors mt-2 shadow-sm">Kirim</button>
                 </form>
             </div>
 
@@ -315,6 +315,9 @@
        // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
     let delayTimer;
 
+    const rekeningLogin = "{{ auth()->user()->nasabah->rekening->id ?? '' }}";
+    const btnSubmit = document.getElementById('btnSubmit');
+
     document.getElementById('id_penerima').addEventListener('input', function() {
         let noRekening = this.value;
         let inputNoRekening = this;
@@ -327,6 +330,16 @@
             inputNoRekening.style.borderColor = '#e5e7eb';
             inputNama.style.borderColor = '#e5e7eb';
             return;
+        }
+
+            // 2. VALIDASI: JIKA REKENING PENERIMA SAMAN DENGAN REKENING LOGIN
+        if (noRekening === rekeningLogin) {
+            clearTimeout(delayTimer); // Hentikan timer pencarian API
+            inputNama.value = 'Tidak bisa transfer ke rekening sendiri!';
+            inputNoRekening.style.borderColor = '#ef4444'; // Border merah halus
+            inputNama.style.borderColor = '#ef4444';
+            btnSubmit.disabled = true;
+            return; // Hentikan eksekusi, jangan jalankan fetch API
         }
 
         // Tampilkan status "Mencari..." agar user tahu sistem sedang bekerja
@@ -347,11 +360,13 @@
                         inputNama.value = data.nama;
                         inputNoRekening.style.borderColor = '#10b981'; // Hijau halus
                         inputNama.style.borderColor = '#10b981';
+                        btnSubmit.disabled = false;
                     } else {
                         // REKENING TIDAK ADA
                         inputNama.value = 'Rekening Tidak Ditemukan!';
                         inputNoRekening.style.borderColor = '#ef4444'; // Merah halus
                         inputNama.style.borderColor = '#ef4444';
+                        btnSubmit.disabled = true;
                     }
                 })
                 .catch(error => {
