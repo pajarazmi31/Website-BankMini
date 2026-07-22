@@ -59,9 +59,7 @@ class rekeningController extends Controller
         ]);
 
         $dataSiswa = DB::table('data_siswa')
-            ->where('nis', $request->nis_nip)
-            ->where('kode_pos', $request->kode_pos)
-            ->first();
+            ->where('nis', $request->nis_nip)->first();
 
         $dataEmail = Nasabah::where('email', $request->email)->first();
         $nis_nip = Nasabah::where('nis_nip', $request->nis_nip)->first();

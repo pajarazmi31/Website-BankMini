@@ -102,7 +102,7 @@
                         </td>
 
             <td class="py-4 px-2 border-b border-gray-50 text-center">
-                <div class="flex items-center justify-center">
+                <div class="flex items-center justify-center gap-2">
                     <a href="{{ route('detail.nasabah', $nasabah->id) }}">
                         <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
                     </a>

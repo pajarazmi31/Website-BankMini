@@ -234,7 +234,7 @@ class superVisorController extends Controller
             'status_akun' => $request->status_akun,
         ]);
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'data revisi berhasil di kirim');
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'data revisi berhasil di kirim');
     }
 
     public function halamanRevisi(String $id)
@@ -363,7 +363,7 @@ class superVisorController extends Controller
         $user = Auth::user();
         $super = $user->petugas;
 
-        
+
         $saldoMinimum = Minimum_saldo::where('jenis_minimum', 'penarikan')->first();
         return view('supervisor.saldominimum', compact('user','super','saldoMinimum'));
     }
@@ -382,9 +382,9 @@ class superVisorController extends Controller
     return response()->json([
         'success' => true,
         'message' => 'Biaya transaksi berhasil disimpan!'
-    ]); 
+    ]);
     }
-    
+
     public function print(String $id) {
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 

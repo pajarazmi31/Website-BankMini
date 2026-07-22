@@ -21,7 +21,7 @@ class NasabahImport implements ToCollection, WithHeadingRow
         foreach($collection as $row) {
             $user = User::create([
                 'name' => $row['name'],
-                'role_id' =>$row['role_id'],
+                'role_id' => 1,
                 'email' => $row['email'],
                 'password' => hash::make($row['password']),
             ]);
