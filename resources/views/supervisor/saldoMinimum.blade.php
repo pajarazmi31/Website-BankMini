@@ -31,8 +31,8 @@ Selamat Datang, {{ $user->name }}!
     
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-1">
         <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Kelola Biaya Transaksi</h3>
-        <button onclick="saveFees()" class="bg-[#1c3a5a] text-white px-7 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[#1a3552] transition-colors shadow-md w-full sm:w-auto text-center">
-            Simpan
+        <button id="btnSaveSaldoMin" onclick="saveFees()" class="bg-[#1c3a5a] text-white px-7 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[#1a3552] transition-all shadow-md w-full sm:w-auto text-center flex items-center justify-center gap-2">
+            <span>Simpan</span>
         </button>
     </div>
 
@@ -73,8 +73,14 @@ Selamat Datang, {{ $user->name }}!
 @section('scripts')
 <script>
 async function saveFees() {
-    // 1. Ambil nilai angka langsung dari input (sudah berupa angka murni karena type="number")
+    const btn = document.getElementById('btnSaveSaldoMin');
+    const originalContent = btn ? btn.innerHTML : '<span>Simpan</span>';
     const saldoValue = document.getElementById('minimum_saldo').value;
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> <span>Menyimpan...</span>`;
+    }
 
     try {
         const response = await fetch(
@@ -86,7 +92,7 @@ async function saveFees() {
                     "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify({
-                    minimum_saldo: saldoValue // Variabel yang benar dan sudah terisi
+                    minimum_saldo: saldoValue
                 })
             }
         );
@@ -94,14 +100,19 @@ async function saveFees() {
         const data = await response.json();
 
         if (data.success) {
-            showToast('Biaya transaksi berhasil disimpan!');
+            showToast('Saldo minimum berhasil disimpan!', 'success');
         } else {
-            showToast(data.message || 'Gagal menyimpan biaya transaksi!');
+            showToast(data.message || 'Gagal menyimpan saldo minimum!', 'error');
         }
 
     } catch (error) {
         console.error("Error Detail:", error);
-        showToast('Gagal mengirim data, periksa konsol browser!');
+        showToast('Gagal menyimpan data!', 'error');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
     }
 }
 </script>

@@ -45,6 +45,11 @@ selamat datang {{ $user->name }}!
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Nasabah</h3>
         <div class="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
+            <a href="{{ route('download.template') }}" class="w-full sm:w-auto">
+                <button type="button" class="w-full bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all shadow-sm justify-center">
+                    <i class="ph ph-file-xls text-base text-green-600"></i> Download Template
+                </button>
+            </a>
             <a href="{{ route('halaman.import') }}" class="w-full sm:w-auto">
                 <button type="button" class="w-full bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all shadow-sm justify-center">
                     <i class="ph ph-file-arrow-up text-base text-brand-blue"></i> Import Data
@@ -191,6 +196,17 @@ selamat datang {{ $user->name }}!
             'edit': document.getElementById('viewEditData'),
             'detail': document.getElementById('viewDetailData')
         };
+
+        const searchContainer = document.getElementById('searchBarContainer');
+        if (searchContainer) {
+            if (viewName === 'tabel') {
+                searchContainer.classList.remove('hidden', 'md:hidden');
+                searchContainer.classList.add('hidden', 'md:block');
+            } else {
+                searchContainer.classList.remove('md:block');
+                searchContainer.classList.add('hidden', 'md:hidden');
+            }
+        }
 
         Object.values(views).forEach(v => {
             if (v) {

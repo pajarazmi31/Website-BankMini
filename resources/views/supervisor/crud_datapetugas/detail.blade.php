@@ -15,10 +15,6 @@
                     <input type="text" id="detail_kelas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none bg-gray-50 cursor-default" readonly>
                 </div>
                 <div>
-                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
-                    <input type="password" value="********" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none bg-gray-50 cursor-default" readonly>
-                </div>
-                <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Email</label>
                     <input type="email" id="detail_email" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none bg-gray-50 cursor-default" readonly>
                 </div>

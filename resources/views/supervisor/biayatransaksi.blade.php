@@ -32,8 +32,8 @@ Selamat Datang, {{ $user->name }}!
     <!-- Header Page: Title & Save Button -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 px-1">
         <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Kelola Biaya Transaksi</h3>
-        <button onclick="saveFees()" class="bg-[#1c3a5a] text-white px-7 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[#1a3552] transition-colors shadow-md w-full sm:w-auto text-center">
-            Simpan
+        <button id="btnSaveFees" onclick="saveFees()" class="bg-[#1c3a5a] text-white px-7 py-2.5 rounded-[10px] text-[14px] font-semibold hover:bg-[#1a3552] transition-all shadow-md w-full sm:w-auto text-center flex items-center justify-center gap-2">
+            <span>Simpan</span>
         </button>
     </div>
 
@@ -192,46 +192,29 @@ Selamat Datang, {{ $user->name }}!
 @section('scripts')
 <script>
 async function saveFees() {
+    const btn = document.getElementById('btnSaveFees');
+    const originalContent = btn ? btn.innerHTML : '<span>Simpan</span>';
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ph ph-spinner animate-spin text-lg"></i> <span>Menyimpan...</span>`;
+    }
 
     try {
-
         const response = await fetch(
             "{{ route('supervisor.biayatransaksi.update') }}",
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "X-CSRF-TOKEN":
-                        document.querySelector(
-                            'meta[name="csrf-token"]'
-                        ).content
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
                 },
                 body: JSON.stringify({
-
-                    biaya_setoran:
-                        document.getElementById(
-                            'biaya_setoran'
-                        ).value,
-
-                    biaya_penarikan:
-                        document.getElementById(
-                            'biaya_penarikan'
-                        ).value,
-
-                    biaya_transfer:
-                        document.getElementById(
-                            'biaya_transfer'
-                        ).value,
-
-                    biaya_transfer_luar:
-                        document.getElementById(
-                            'biaya_transfer_luar'
-                        ).value,
-
-                    biaya_transfer_nasabah:
-                        document.getElementById(
-                            'biaya_transfer_nasabah'
-                        ).value,
+                    biaya_setoran: document.getElementById('biaya_setoran').value,
+                    biaya_penarikan: document.getElementById('biaya_penarikan').value,
+                    biaya_transfer: document.getElementById('biaya_transfer').value,
+                    biaya_transfer_luar: document.getElementById('biaya_transfer_luar').value,
+                    biaya_transfer_nasabah: document.getElementById('biaya_transfer_nasabah').value,
                 })
             }
         );
@@ -239,18 +222,19 @@ async function saveFees() {
         const data = await response.json();
 
         if (data.success) {
-            showToast(
-                'Biaya transaksi berhasil disimpan!'
-            );
+            showToast('Biaya transaksi berhasil disimpan!', 'success');
+        } else {
+            showToast('Gagal menyimpan biaya transaksi!', 'error');
         }
 
     } catch (error) {
-
         console.error(error);
-
-        showToast(
-            'Gagal menyimpan biaya transaksi!'
-        );
+        showToast('Gagal menyimpan biaya transaksi!', 'error');
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
     }
 }
 </script>

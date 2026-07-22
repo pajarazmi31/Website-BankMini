@@ -20,7 +20,9 @@ class DataPetugasController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
+        $search = $request->input('search');
+
         $petugas = Petugas::with(['user.role'])
             ->whereHas('user.role', function ($query) {
                 $query->whereIn('nama_role', [
@@ -29,8 +31,20 @@ class DataPetugasController extends Controller
                     'teller'
                 ]);
             })
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('kelas', 'LIKE', '%' . $search . '%')
+                        ->orWhereHas('user', function ($u) use ($search) {
+                            $u->where('name', 'LIKE', '%' . $search . '%')
+                                ->orWhere('email', 'LIKE', '%' . $search . '%')
+                                ->orWhereHas('role', function ($r) use ($search) {
+                                    $r->where('nama_role', 'LIKE', '%' . $search . '%');
+                                });
+                        });
+                });
+            })
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
+            ->appends(['per_page' => $perPage, 'search' => $search]);
 
         $roles = Role::whereIn('nama_role', [
             'customerservice',
@@ -42,7 +56,8 @@ class DataPetugasController extends Controller
             'roles',
             'user',
             'perPage',
-            'super'
+            'super',
+            'search'
         ));
     }
 
@@ -74,7 +89,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil ditambahkan');
         } catch (\Exception $e) {
 
@@ -118,7 +133,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil diupdate');
         } catch (\Exception $e) {
 
@@ -146,7 +161,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil dihapus');
         } catch (\Exception $e) {
 

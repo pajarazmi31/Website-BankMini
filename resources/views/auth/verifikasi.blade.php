@@ -79,8 +79,7 @@
                     }
 
                     if (data.status === 'ditolak') {
-                        alert('Permintaan login ditolak supervisor');
-                        window.location.href = "{{ route('login') }}";
+                        window.location.href = "{{ route('login') }}?error=Permintaan login ditolak supervisor";
                     }
 
                 });

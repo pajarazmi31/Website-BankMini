@@ -49,7 +49,7 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $bukti_tf = Bukti_Tf::latest()->paginate($perPage)
             ->appends(['per_page' => $perPage]);
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'perPage'));
@@ -140,7 +140,7 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
@@ -193,12 +193,25 @@ class superVisorController extends Controller
     public function nasabah(Request $request)
     {
         $user = Auth::user();
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
+        $search = $request->input('search');
 
-        $userNasabah = Nasabah::with('rekening')->orderByDesc('id')
+        $userNasabah = Nasabah::with('rekening')
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('nama_nasabah', 'LIKE', '%' . $search . '%')
+                        ->orWhere('jabatan', 'LIKE', '%' . $search . '%')
+                        ->orWhere('nis_nip', 'LIKE', '%' . $search . '%')
+                        ->orWhereHas('rekening', function ($r) use ($search) {
+                            $r->where('id', 'LIKE', '%' . $search . '%');
+                        });
+                });
+            })
+            ->orderByDesc('id')
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
-        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage',));
+            ->appends(['per_page' => $perPage, 'search' => $search]);
+
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage', 'search'));
     }
 
     public function detailNasabah(String $id)
@@ -244,7 +257,7 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
 
         $data = VerifikasiLogin::with(['user'])
             ->latest()
