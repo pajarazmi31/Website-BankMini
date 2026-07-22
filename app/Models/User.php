@@ -71,11 +71,16 @@ class User extends Authenticatable
         $this->notify(new ResetPasswordNotification($token));
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = ucwords(strtolower($value));
+    }
 
-public function rekening()
-{
-    // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
-    // Parameter ke-3: primary key di tabel users ('id')
-    return $this->hasOne(Rekening::class, 'nasabah_id', 'id');
-}
+
+    public function rekening()
+    {
+        // Parameter ke-2: nama kolom di tabel rekening kamu ('nasabah_id')
+        // Parameter ke-3: primary key di tabel users ('id')
+        return $this->hasOne(Rekening::class, 'nasabah_id', 'id');
+    }
 }

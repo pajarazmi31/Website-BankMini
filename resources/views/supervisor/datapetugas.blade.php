@@ -29,13 +29,26 @@
 
     @section('content')
 
-    @if ($errors->any())
+@if ($errors->any())
     <div style="color: red; background: #f8d7da; padding: 10px; margin-bottom: 10px;">
         <ul>
             @foreach ($errors->all() as $error)
             <li>{{ $error }}</li>
             @endforeach
         </ul>
+    </div>
+    @endif
+
+    <!-- Tambahkan blok kode ini untuk Session Success dan Error -->
+    @if (session('success'))
+    <div style="color: #155724; background: #d4edda; border: 1px solid #c3e6cb; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 14px;">
+        <i class="ph-bold ph-check-circle mr-1"></i> {{ session('success') }}
+    </div>
+    @endif
+
+    @if (session('error'))
+    <div style="color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb; padding: 12px; margin-bottom: 15px; border-radius: 8px; font-size: 14px;">
+        <i class="ph-bold ph-warning-circle mr-1"></i> {{ session('error') }}
     </div>
     @endif
     <!-- ================= VIEW 1: TABEL DATA PETUGAS ================= -->
@@ -73,14 +86,28 @@
 
         <!-- Table Card -->
         <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
-            <div class="flex items-center gap-2 mb-4">
-                <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-                <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
-                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
-                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
-                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
-                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
-                </select>
+            <div class="flex justify-between items-center mb-1 border-b border-gray-50">
+                <form action="{{ route('supervisor.datapetugas') }}" method="get" class="flex gap-2 items-center">
+                    <div class="relative">
+                        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                        <input type="text" placeholder="Cari data..."
+                            value="{{ request('keyword') }}" name="keyword"
+                            class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                    </div>
+
+                    <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                        <i class="ph ph-magnifying-glass text-lg"></i>
+                    </button>
+                </form>
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                    <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                        <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                        <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                        <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                        <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+                    </select>
+                </div>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">

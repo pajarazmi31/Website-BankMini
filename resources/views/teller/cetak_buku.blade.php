@@ -78,8 +78,8 @@
 
 <body>
     <div class="no-print" style="margin-bottom: 20px;">
-        <button onclick="window.print()" style="padding: 10px 20px; font-weight: bold; cursor: pointer;">Cetak Sekarang</button>
-        <button onclick="window.close()" style="padding: 10px 20px; cursor: pointer;">Tutup Tab</button>
+        <button onclick="window.print()" style="background-color: #143657; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: opacity 0.2s;"> 🖨️ Cetak Sekarang</button>
+        <button onclick="window.close()" style="background-color: #ffffff; color: #374151; border: 1px solid #d1d5db; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); transition: background-color 0.2s;"> ❌ Tutup Tab</button>
     </div>
 
     @php

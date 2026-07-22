@@ -121,8 +121,6 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::post('/supervisor/aktif/{id}', [superVisorController::class, 'aktif'])->name('rekening.aktif');
     Route::get('/supervisor/verifikasi/rekening/', [superVisorController::class, 'verifikasiNasabah'])->name('supervisor.verifikasi.registrasi');
 
-
-
     // data petugas
     Route::get('/supervisor/datapetugas', [DataPetugasController::class, 'index'])->name('supervisor.datapetugas');
     Route::post('/datapetugas/store', [DataPetugasController::class, 'store'])->name('datapetugas.store');

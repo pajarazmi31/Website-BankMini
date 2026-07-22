@@ -35,7 +35,7 @@ Selamat Datang, {{ $user->name }}!
 
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full">
         <div class="flex justify-between items-center mb-1 border-b border-gray-50">
-            <form action="{{ route('supervisor.searchData') }}" method="get" class="flex gap-2 items-center">
+            <form action="{{ route('supervisor.verifikasi.login') }}" method="get" class="flex gap-2 items-center">
                 <div class="relative">
                     <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                     <input type="text" placeholder="Cari data..."

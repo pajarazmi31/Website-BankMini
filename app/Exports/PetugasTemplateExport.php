@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace app\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -14,7 +14,7 @@ class PetugasTemplateExport implements FromCollection, WithHeadings, WithTitle
         return collect([
             [
                 'Nama Lengkap Contoh',
-                'XII RPL 1',
+                'XII AK 1',
                 'contoh@email.com',
                 'password123'
             ]

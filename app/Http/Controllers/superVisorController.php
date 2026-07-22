@@ -68,7 +68,7 @@ class superVisorController extends Controller
         })->latest()->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
-        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword','perPage'));
+        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword', 'perPage'));
     }
 
     public function exportExcel(Request $request)
@@ -94,61 +94,80 @@ class superVisorController extends Controller
     }
 
     public function verifikasiTf(Request $request, $id)
-{
-    $data = Bukti_Tf::findOrFail($id);
+    {
+        $data = Bukti_Tf::findOrFail($id);
 
-    if ($data->status_verifikasi !== 'pending') {
-        return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
-    }
+        if ($data->status_verifikasi !== 'pending') {
+            return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
+        }
 
-    $request->validate([
-        'status_verifikasi' => 'required|in:berhasil,gagal'
-    ]);
+        $request->validate([
+            'status_verifikasi' => 'required|in:berhasil,gagal'
+        ]);
 
-    try {
-        DB::transaction(function () use ($request, $data) {
+        try {
+            DB::transaction(function () use ($request, $data) {
 
-            if ($request->status_verifikasi === 'berhasil') {
-                $rekening = Rekening::where('id', $data->id_rekening)->first();
+                if ($request->status_verifikasi === 'berhasil') {
+                    $rekening = Rekening::where('id', $data->id_rekening)->first();
 
-                if (!$rekening) {
-                    throw new \Exception('Nomor rekening tujuan tidak ditemukan.');
+                    if (!$rekening) {
+                        throw new \Exception('Nomor rekening tujuan tidak ditemukan.');
+                    }
+
+                    // 1. Tambahkan saldo
+                    $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+
+                    // 2. Update status verifikasi
+                    $data->status_verifikasi = 'berhasil';
+                    $data->save();
+
+                    // 3. PANGGIL SINKRONISASI agar saldo transaksi di history terisi otomatis
+                    // Pastikan fungsi ini sudah PUBLIC di tellerController.php
+                    $teller = new \App\Http\Controllers\tellerController();
+                    $teller->sinkronisasiSaldo($rekening->id);
+                } else {
+                    $data->status_verifikasi = 'gagal';
+                    $data->save();
                 }
+            });
 
-                // 1. Tambahkan saldo
-                $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
-
-                // 2. Update status verifikasi
-                $data->status_verifikasi = 'berhasil';
-                $data->save();
-
-                // 3. PANGGIL SINKRONISASI agar saldo transaksi di history terisi otomatis
-                // Pastikan fungsi ini sudah PUBLIC di tellerController.php
-                $teller = new \App\Http\Controllers\tellerController();
-                $teller->sinkronisasiSaldo($rekening->id);
-            } else {
-                $data->status_verifikasi = 'gagal';
-                $data->save();
-            }
-        });
-
-        return redirect()->back()->with('success', 'Transaksi berhasil diproses!');
-    } catch (\Exception $e) {
-        return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
+            return redirect()->back()->with('success', 'Transaksi berhasil diproses!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
+        }
     }
-}
 
     public function verifikasiNasabah(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
         $perPage = $request->input('per_page', 10);
+        $keyword = $request->keyword;
+
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
-            })->orderByDesc('id')->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
-        return view('supervisor.verifikasi.registrasirekening', compact('user', 'super', 'allNasabah', 'perPage'));
+            })
+            // Tambahkan logika pencarian di sini
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('nama_nasabah', 'like', '%' . $keyword . '%')
+                        ->orWhere('jabatan', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('rekening', function ($qRekening) use ($keyword) {
+                            $qRekening->where('id', 'like', '%' . $keyword . '%');
+                        });
+                });
+            })
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            // Pastikan keyword ditambahkan ke appends agar tidak hilang saat pindah halaman
+            ->appends([
+                'per_page' => $perPage,
+                'keyword' => $keyword
+            ]);
+
+        return view('supervisor.verifikasi.registrasirekening', compact('user', 'super', 'allNasabah', 'perPage', 'keyword'));
     }
 
     public function aktif(String $id)
@@ -196,8 +215,20 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $perPage = $request->input('per_page', 10);
+        $keyword = $request->keyword;
 
         $userNasabah = Nasabah::with('rekening')->orderByDesc('id')
+                    // Tambahkan logika pencarian di sini
+            ->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('nama_nasabah', 'like', '%' . $keyword . '%')
+                        ->orWhere('jabatan', 'like', '%' . $keyword . '%')
+                        ->orWhereHas('rekening', function ($qRekening) use ($keyword) {
+                            $qRekening->where('id', 'like', '%' . $keyword . '%');
+                        });
+                });
+            })
+            ->orderByDesc('id')
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
         return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage',));
@@ -217,8 +248,6 @@ class superVisorController extends Controller
             'nama_perevisi' => 'required',
             'status_akun' => 'required',
         ]);
-
-
 
         $nasabah = Nasabah::FindOrFAil($id);
         $nasabah->update([
@@ -245,17 +274,28 @@ class superVisorController extends Controller
     public function verifikasiLogin(Request $request)
     {
         $user = Auth::user();
-
         $perPage = $request->input('per_page', 10);
+        $keyword = $request->keyword;
 
         $data = VerifikasiLogin::with(['user'])
+            // Tambahkan logika pencarian di sini
+            ->when($keyword, function ($query, $keyword) {
+                $query->whereHas('user', function ($q) use ($keyword) {
+                    $q->where('name', 'like', '%' . $keyword . '%')
+                        ->orWhere('email', 'like', '%' . $keyword . '%');
+                });
+            })
             ->latest()
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
+            // Pastikan keyword ikut ditambahkan ke pagination agar tidak hilang saat pindah halaman
+            ->appends([
+                'per_page' => $perPage,
+                'keyword' => $keyword
+            ]);
 
         return view(
             'supervisor.verifikasi.login',
-            compact('user', 'data', 'perPage')
+            compact('user', 'data', 'perPage', 'keyword')
         );
     }
     public function setujuiLogin($id)

@@ -21,18 +21,34 @@ class DataPetugasController extends Controller
         $user = Auth::user();
         $super = $user->petugas;
         $perPage = $request->input('per_page', 10);
-        $petugas = Petugas::with(['user.role'])
-            ->whereHas('user.role', function ($query) {
-                $query->whereIn('nama_role', [
-                    'supervisor',
-                    'customerservice',
-                    'teller'
-                ]);
-            })
-            ->latest()
-            ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
+        $keyword = $request->keyword;
 
+       $petugas = Petugas::with(['user.role'])
+        ->whereHas('user.role', function ($query) {
+            $query->whereIn('nama_role', [
+                'supervisor',
+                'customerservice',
+                'teller'
+            ]);
+        })->when($keyword, function ($query, $keyword) {
+            $query->where(function ($q) use ($keyword) {
+                // 1. Cari berdasarkan 'kelas' (berada langsung di tabel petugas)
+                $q->where('kelas', 'like', '%' . $keyword . '%')
+                  
+                  // 2. Cari berdasarkan 'name' (harus masuk ke relasi 'user')
+                  ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                      $userQuery->where('name', 'like', '%' . $keyword . '%');
+                  })
+                  
+                  // 3. Opsional: Cari berdasarkan nama role (masuk ke relasi 'user.role')
+                  ->orWhereHas('user.role', function ($roleQuery) use ($keyword) {
+                      $roleQuery->where('nama_role', 'like', '%' . $keyword . '%');
+                  });
+            });
+        })
+        ->orderByDesc('id')
+        ->paginate($perPage)
+        ->appends(['per_page' => $perPage]);
         $roles = Role::whereIn('nama_role', [
             'customerservice',
             'teller'
@@ -75,7 +91,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil ditambahkan');
         } catch (\Exception $e) {
 
@@ -119,7 +135,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil diupdate');
         } catch (\Exception $e) {
 

@@ -35,28 +35,32 @@
         </button>
     @endif
     
-    @for ($i = 1; $i <= $total; $i++)
-        @if ($i == $current)
-            <!-- Active Page (Text) -->
-            <span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">{{ $i }}</span>
-        @else
-            <!-- Other Pages (Buttons/Links) -->
-            @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
-                <a href="{{ $paginator->url($i) }}" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md flex justify-center items-center">
-                    {{ $i }}
-                </a>
+@for ($i = 1; $i <= $total; $i++)
+        
+        {{-- Aturan tampil: halaman 1, halaman terakhir, dan halaman di sebelah (kiri/kanan) halaman aktif --}}
+        @if ($i == 1 || $i == $total || ($i >= $current - 1 && $i <= $current + 1))
+            
+            @if ($i == $current)
+                <!-- Active Page (Text) -->
+                <span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">{{ $i }}</span>
             @else
-                <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
-                    {{ $i }}
-                </button>
+                <!-- Other Pages (Buttons/Links) -->
+                @if ($paginator instanceof \Illuminate\Contracts\Pagination\LengthAwarePaginator)
+                    <a href="{{ $paginator->url($i) }}" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md flex justify-center items-center">
+                        {{ $i }}
+                    </a>
+                @else
+                    <button class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[13px] font-bold hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md">
+                        {{ $i }}
+                    </button>
+                @endif
             @endif
-        @endif
-
-        {{-- Add ellipsis if there are many pages --}}
-        @if ($total > 5 && $i == 3 && $total > $i + 1)
+            
+        {{-- Logika baru untuk menampilkan elipsis (...) di kiri atau kanan area halaman aktif --}}
+        @elseif ($i == $current - 2 || $i == $current + 2)
             <span class="w-[20px] flex items-center justify-center text-[13px] font-bold text-gray-400 tracking-widest">...</span>
-            @php $i = $total - 1; @endphp
         @endif
+        
     @endfor
     
     <!-- Next Button -->
