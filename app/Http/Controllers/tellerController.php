@@ -1207,7 +1207,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 'tanggal'     => $t->created_at,
                 'jenis'       => 'TFK',
                 // Gunakan camelCase: rekeningPenerima
-                'keterangan'  => 'Dikirim ke: ' . $t->id_rekening_penerima . ' | ' . ($t->rekeningPenerima->nasabah->nama_nasabah ?? '-'),
+                'keterangan'  => 'Dikirim ke: ' . $t->id_rekening_penerima . ' | ' .  ($t->rekeningPenerima->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => $cleanNum($t->nominal_admin),
                 'debit'       => $cleanNum($t->jumlah_transfer) + $cleanNum($potongan),
                 'kredit'      => 0,

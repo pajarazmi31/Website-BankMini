@@ -11,11 +11,9 @@
             /* Font standar mesin printer bank */
             font-size: 12px;
             color: #000;
-            margin: 0;
-            padding: 20px;
-            width: 150mm;
+            padding-left: 5px;
+            width: 145mm;
             height: 85mm;
-
         }
 
         .header {
@@ -36,7 +34,7 @@
         }
 
         .space-header {
-            height: 50px;
+            height: 75px;
             /* SILAKAN UBAH ANGKA INI JIKA JARAKNYA KURANG ATAU TERLALU LEBAR */
         }
 
@@ -132,16 +130,16 @@
                                 @endphp
 
                                 <td class="text-left">{{ $slot_ke }}</td>
-                                <td>
+                                <td style="width: 90px;">
                                     {{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}
 
                                     <!-- Cek apakah jenis transaksinya termasuk kategori transfer -->
                                     @if(in_array($t->jenis, ['TFK', 'TFM', 'TFL']))
-                                    <br><span style="font-size: 10px; color: #555;">{{ $t->keterangan ?? '-' }}</span>
+                                    <br><span style="font-size: 12px; color: #141414;">{{ $t->keterangan ?? '-' }}</span>
                                     @endif
                                 </td>
                                 <td class="text-left">{{ $t->jenis }}</td>
-                                <td class="text-left">
+                                <td class="text-left"> 
                                     {{ $t->debit > 0 ? number_format($t->debit, 0, ',', '.') : '-' }}
                                     <br>ADM {{ number_format($t->biaya_admin, 0, ',', '.') }}
                                 </td>

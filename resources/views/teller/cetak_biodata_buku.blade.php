@@ -24,24 +24,17 @@
         /* Sesuaikan jarak margin (top dan left) agar pas tercetak di kolom biodata fisik buku */
         .biodata-container {
             position: absolute;
-            top: 2cm;
-            /* Jarak dari atas buku */
             left: 1cm;
             /* Jarak dari tepi kiri buku */
-        }
-
-        .baris-data {
-            margin-bottom: 0.5cm;
-            /* Jarak antar baris (Nama & No Rekening) */
         }
     </style>
 </head>
 
     <div class="biodata-container">
-        <div class="baris-data">
+        <div >
             <h3>Nama: <strong>{{ $rekening->nasabah->nama_nasabah ?? '-' }}</strong></h3> <!-- Nama Nasabah -->
         </div>
-        <div class="baris-data">
+        <div >
             <h3>No. Rek: <strong>{{ $rekening->id }}</strong></h3> <!-- Nomor Rekening -->
         </div>
     </div>

@@ -36,7 +36,7 @@ Selamat Datang, {{ $user->name }}!
         </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
     
         <div class="bg-white rounded-[24px] shadow-card p-6 md:p-8 flex flex-col border border-gray-100/50 min-h-[200px]">
             <div class="flex items-center gap-4">

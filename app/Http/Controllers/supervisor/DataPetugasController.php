@@ -29,6 +29,7 @@ class DataPetugasController extends Controller
                     'teller'
                 ]);
             })
+            ->latest()
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
