@@ -74,6 +74,7 @@ Route::middleware(['role:teller'])->group(function () {
     Route::get('/teller/history-nasabah', [tellerController::class, 'historyNasabah'])->name('teller.history_nasabah');
     // Route Cetak Buku Tabungan per Akun
     Route::get('/teller/cetak-buku/{id_rekening}', [App\Http\Controllers\tellerController::class, 'cetakBuku'])->name('teller.cetak_buku');
+Route::get('/teller/cetak-biodata/{id_rekening}', [tellerController::class, 'cetakBiodataBuku'])->name('teller.cetak_biodata');
 
     //cari nama si norek
     Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');

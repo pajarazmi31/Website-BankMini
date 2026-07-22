@@ -43,6 +43,14 @@ History Transaksi Nasabah
         </h3>
 
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+            <!-- TOMBOL CETAK BIODATA BUKU -->
+            <button
+                type="button"
+                onclick="bukaModalCetakBiodata()"
+                class="bg-white border border-gray-200 text-[#143657] px-4 py-1.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm w-full sm:w-auto justify-center">
+                <i class="ph ph-user-list text-base"></i>
+                Cetak Biodata Buku
+            </button>
             <!-- TOMBOL CETAK BUKU TABUNGAN -->
             <button
                 type="button"
@@ -132,7 +140,7 @@ History Transaksi Nasabah
         </div>
 
         <!-- Pagination -->
-<x-pagination :paginator="$data" />
+        <x-pagination :paginator="$data" />
     </div>
 </div>
 
@@ -144,16 +152,16 @@ History Transaksi Nasabah
         </button>
         <h3 class="text-[22px] font-bold text-gray-800">Detail Transaksi Nasabah</h3>
     </div>
-    
+
     <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
-        
+
         <!-- SECTION 1: DATA NASABAH -->
         <div class="mb-10">
             <div class="flex items-center gap-3 mb-8">
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                 <h3 class="text-[20px] font-bold text-gray-800">Informasi Rekening</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">No. Rekening</label>
@@ -172,7 +180,7 @@ History Transaksi Nasabah
                 <div class="w-[5px] h-6 bg-[#c0860b] rounded-full"></div>
                 <h3 class="text-[20px] font-bold text-gray-800">Rincian Transaksi</h3>
             </div>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5 mb-5">
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Transaksi</label>
@@ -187,7 +195,7 @@ History Transaksi Nasabah
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Keterangan Transaksi</label>
                     <input type="text" id="hist_keterangan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-600 bg-gray-50 focus:outline-none" readonly>
                 </div>
-                
+
                 <div>
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Debit (Uang Keluar)</label>
                     <input type="text" id="hist_debit" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] font-bold text-red-500 bg-gray-50 focus:outline-none" readonly>
@@ -250,6 +258,32 @@ History Transaksi Nasabah
         </div>
     </div>
 </div>
+<!-- ================= MODAL CETAK BIODATA BUKU ================= -->
+<div id="modalCetakBiodata" class="hidden fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
+        <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+            <h3 class="font-bold text-gray-800 text-[16px]">Cetak Biodata Buku Tabungan</h3>
+            <button type="button" onclick="tutupModalCetakBiodata()" class="text-gray-400 hover:text-red-500 transition-colors">
+                <i class="ph-bold ph-x text-lg"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan No. Rekening Nasabah</label>
+            <div class="relative">
+                <i class="ph ph-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+                <input type="number" id="inputNoRekeningBiodata" placeholder="Contoh: 10029384"
+                    class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
+            </div>
+            <p class="text-xs text-gray-500 mt-2">Sistem akan mencetak nama dan nomor rekening untuk halaman biodata fisik di buku tabungan.</p>
+        </div>
+        <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
+            <button type="button" onclick="tutupModalCetakBiodata()" class="px-4 py-2 rounded-xl text-[13px] font-bold text-gray-600 hover:bg-gray-200 transition-colors">Batal</button>
+            <button type="button" onclick="prosesCetakBiodata()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-[#143657] text-white hover:opacity-90 transition-colors flex items-center gap-2">
+                <i class="ph ph-printer"></i> Cetak Biodata
+            </button>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -303,7 +337,7 @@ History Transaksi Nasabah
         });
     });
 
-// Fungsi untuk merubah angka biasa menjadi format Rp. 10.000
+    // Fungsi untuk merubah angka biasa menjadi format Rp. 10.000
     function formatRupiahJs(angka) {
         if (!angka) return "0";
         let clean = parseInt(angka.toString().replace(/\D/g, '')) || 0;
@@ -311,16 +345,16 @@ History Transaksi Nasabah
     }
 
     // Fungsi menangkap data dari tombol dan mengisi inputan
-function lihatDetailHistory(nama, no_rek, jenis, admin, debit, kredit, saldo, tanggal, keterangan) {
-        
+    function lihatDetailHistory(nama, no_rek, jenis, admin, debit, kredit, saldo, tanggal, keterangan) {
+
         document.getElementById('hist_nama').value = nama;
         document.getElementById('hist_no_rek').value = no_rek;
         document.getElementById('hist_jenis').value = jenis.toUpperCase();
         document.getElementById('hist_tanggal').value = tanggal;
-        
+
         // MENAMPILKAN KETERANGAN
-        document.getElementById('hist_keterangan').value = keterangan; 
-        
+        document.getElementById('hist_keterangan').value = keterangan;
+
         document.getElementById('hist_admin').value = 'Rp ' + formatRupiahJs(admin);
         document.getElementById('hist_debit').value = 'Rp ' + formatRupiahJs(debit);
         document.getElementById('hist_kredit').value = 'Rp ' + formatRupiahJs(kredit);
@@ -353,6 +387,29 @@ function lihatDetailHistory(nama, no_rek, jenis, admin, debit, kredit, saldo, ta
         // Kirim nomor rekening dan baris melalui URL parameter
         window.open(`/teller/cetak-buku/${noRek}?baris=${baris}`, '_blank');
         tutupModalCetak();
+    }
+
+    function bukaModalCetakBiodata() {
+        document.getElementById('modalCetakBiodata').classList.remove('hidden');
+        document.getElementById('inputNoRekeningBiodata').value = '';
+        setTimeout(() => document.getElementById('inputNoRekeningBiodata').focus(), 100);
+    }
+
+    function tutupModalCetakBiodata() {
+        document.getElementById('modalCetakBiodata').classList.add('hidden');
+    }
+
+    function prosesCetakBiodata() {
+        const noRek = document.getElementById('inputNoRekeningBiodata').value.trim();
+
+        if (!noRek) {
+            alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
+            return;
+        }
+
+        // Arahkan ke route cetak biodata yang sudah dibuat di web.php
+        window.open(`/teller/cetak-biodata/${noRek}`, '_blank');
+        tutupModalCetakBiodata();
     }
 </script>
 @endsection

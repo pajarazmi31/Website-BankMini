@@ -168,7 +168,7 @@ class tellerController extends Controller
     {
         $request->validate([
             'id_rekening'             => 'required|numeric|exists:rekening,id',
-            'jumlah_penyetoran'       => 'required', 
+            'jumlah_penyetoran'       => 'required',
             'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
             'setoran'                 => 'required',
             'nama_penyetor'           => 'required',
@@ -299,7 +299,7 @@ class tellerController extends Controller
                 $this->sinkronisasiSaldo($setoran->getOriginal('id_rekening'));
             }
             $this->sinkronisasiSaldo($request->id_rekening);
-            
+
             DB::commit();
             return back()->with('success', 'Data setoran berhasil diupdate!');
         } catch (\Exception $e) {
@@ -633,7 +633,7 @@ class tellerController extends Controller
                 })->orWhereHas('rekeningPenerima.nasabah', function ($subQuery) use ($search) {
                     $subQuery->where('nama_nasabah', 'like', '%' . $search . '%');
                 })->orWhere('id_rekening_pengirim', 'like', '%' . $search . '%')
-                  ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
+                    ->orWhere('id_rekening_penerima', 'like', '%' . $search . '%');
             });
         }
 
@@ -807,7 +807,7 @@ class tellerController extends Controller
                 $this->sinkronisasiSaldo($transfer->getOriginal('id_rekening_penerima'));
             }
             $this->sinkronisasiSaldo($request->id_rekening_penerima);
-            
+
             DB::commit();
             return back();
         } catch (\Exception $e) {
@@ -831,8 +831,8 @@ class tellerController extends Controller
     // ======================================================
     // ================= HISTORY NASABAH ====================
     // ======================================================
-    
-public function historyNasabah(Request $request)
+
+    public function historyNasabah(Request $request)
     {
         $user = Auth::user();
         $teller = $user->petugas;
@@ -956,7 +956,7 @@ public function historyNasabah(Request $request)
                     'no_rek' => $t->id_pengirim,
                     'jenis_transaksi' => 'Transfer Keluar (Nasabah)',
                     // KELUAR -> Tampilkan Rek Penerima
-                    'keterangan' => 'Ke Rek: ' . $t->id_penerima, 
+                    'keterangan' => 'Ke Rek: ' . $t->id_penerima,
                     'admin' => $adminTf,
                     'debit' => $jumlahTf + $adminTf,
                     'kredit' => 0,
@@ -986,14 +986,14 @@ public function historyNasabah(Request $request)
 
         // 5. TRANSFER DARI LUAR
         $queryBuktiTf = \App\Models\Bukti_Tf::with('buktiTf.nasabah')
-            ->whereIn('status_verifikasi', ['berhasil','gagal']);
-            
+            ->whereIn('status_verifikasi', ['berhasil', 'gagal']);
+
         if ($search) {
-            $queryBuktiTf->where(function($q) use ($search) {
+            $queryBuktiTf->where(function ($q) use ($search) {
                 $q->whereHas('buktiTf.nasabah', function ($sub) use ($search) {
                     $sub->where('nama_nasabah', 'like', '%' . $search . '%');
                 })->orWhere('id_rekening', 'like', '%' . $search . '%')
-                  ->orWhere('nama_pengirim', 'like', '%' . $search . '%');
+                    ->orWhere('nama_pengirim', 'like', '%' . $search . '%');
             });
         }
         $buktiTf = $queryBuktiTf->get()->map(function ($item) use ($cleanNum) {
@@ -1034,7 +1034,7 @@ public function historyNasabah(Request $request)
             $currentPage,
             [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
-                'query' => $request->query() 
+                'query' => $request->query()
             ]
         );
 
@@ -1043,10 +1043,10 @@ public function historyNasabah(Request $request)
 
     public function sinkronisasiSaldo($id_rekening)
     {
-$cleanNum = function ($val) {
-        if (!$val) return 0;
-        return is_numeric($val) ? (int) $val : (int) preg_replace('/\D/', '', $val);
-    };
+        $cleanNum = function ($val) {
+            if (!$val) return 0;
+            return is_numeric($val) ? (int) $val : (int) preg_replace('/\D/', '', $val);
+        };
 
         $setoran = \App\Models\Setoran::where('id_rekening', $id_rekening)->get()->map(function ($item) use ($cleanNum) {
             $potongan = str_contains(strtolower($item->pilihan_biaya_transaksi), 'potong') ? $item->nominal_admin : 0;
@@ -1112,16 +1112,16 @@ $cleanNum = function ($val) {
         });
 
         $buktiTf = \App\Models\Bukti_Tf::where('id_rekening', $id_rekening)
-            ->whereIn('status_verifikasi', ['berhasil','gagal'])->get()->map(function ($item) use ($cleanNum) {
-            $waktu = $item->created_at ?? $item->datetime_tgl;
-            return (object)[
-                'type'   => 'bukti_tf',
-                'model'  => $item,
-                'waktu'  => $waktu ? Carbon::parse($waktu) : Carbon::now(),
-                'debit'  => 0,
-                'kredit' => $cleanNum($item->jumlah_transfer)
-            ];
-        });
+            ->whereIn('status_verifikasi', ['berhasil', 'gagal'])->get()->map(function ($item) use ($cleanNum) {
+                $waktu = $item->created_at ?? $item->datetime_tgl;
+                return (object)[
+                    'type'   => 'bukti_tf',
+                    'model'  => $item,
+                    'waktu'  => $waktu ? Carbon::parse($waktu) : Carbon::now(),
+                    'debit'  => 0,
+                    'kredit' => $cleanNum($item->jumlah_transfer)
+                ];
+            });
 
         $semuaTransaksi = collect()
             ->concat($setoran)->concat($penarikan)->concat($transferKeluar)
@@ -1132,44 +1132,44 @@ $cleanNum = function ($val) {
             ['model.id', 'asc'],
         ]);
 
-\Illuminate\Support\Facades\DB::beginTransaction();
-try {
-    // Ambil data rekening untuk mengecek saldo awal (jika ada kolom saldo_awal)
-    $rek = \App\Models\Rekening::find($id_rekening);
-    $saldoBerjalan = $rek->saldo_awal ?? 0; // <-- PERBAIKAN: Mulai dari saldo_awal, bukan 0
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            // Ambil data rekening untuk mengecek saldo awal (jika ada kolom saldo_awal)
+            $rek = \App\Models\Rekening::find($id_rekening);
+            $saldoBerjalan = $rek->saldo_awal ?? 0; // <-- PERBAIKAN: Mulai dari saldo_awal, bukan 0
 
-    foreach ($sorted as $tx) {
-        $saldoBerjalan -= $tx->debit;
-        $saldoBerjalan += $tx->kredit;
+            foreach ($sorted as $tx) {
+                $saldoBerjalan -= $tx->debit;
+                $saldoBerjalan += $tx->kredit;
 
-        if ($tx->type === 'setoran' || $tx->type === 'penarikan') {
-            \Illuminate\Support\Facades\DB::table($tx->type)->where('id', $tx->model->id)->update(['saldo_transaksi' => $saldoBerjalan]);
-        } elseif ($tx->type === 'transfer_keluar') {
-            \Illuminate\Support\Facades\DB::table('transfer')->where('id', $tx->model->id)->update(['saldo_transaksi_pengirim' => $saldoBerjalan]);
-        } elseif ($tx->type === 'transfer_masuk') {
-            \Illuminate\Support\Facades\DB::table('transfer')->where('id', $tx->model->id)->update(['saldo_transaksi_penerima' => $saldoBerjalan]);
-        } elseif ($tx->type === 'riwayat_tf_keluar') {
-            \Illuminate\Support\Facades\DB::table('riwayat_tf')->where('id', $tx->model->id)->update(['saldo_transaksi_pengirim' => $saldoBerjalan]);
-        } elseif ($tx->type === 'riwayat_tf_masuk') {
-            \Illuminate\Support\Facades\DB::table('riwayat_tf')->where('id', $tx->model->id)->update(['saldo_transaksi_penerima' => $saldoBerjalan]);
-        } elseif ($tx->type === 'bukti_tf') {
-            \Illuminate\Support\Facades\DB::table('bukti_tf')->where('id', $tx->model->id)->update(['saldo_transaksi' => $saldoBerjalan]);
+                if ($tx->type === 'setoran' || $tx->type === 'penarikan') {
+                    \Illuminate\Support\Facades\DB::table($tx->type)->where('id', $tx->model->id)->update(['saldo_transaksi' => $saldoBerjalan]);
+                } elseif ($tx->type === 'transfer_keluar') {
+                    \Illuminate\Support\Facades\DB::table('transfer')->where('id', $tx->model->id)->update(['saldo_transaksi_pengirim' => $saldoBerjalan]);
+                } elseif ($tx->type === 'transfer_masuk') {
+                    \Illuminate\Support\Facades\DB::table('transfer')->where('id', $tx->model->id)->update(['saldo_transaksi_penerima' => $saldoBerjalan]);
+                } elseif ($tx->type === 'riwayat_tf_keluar') {
+                    \Illuminate\Support\Facades\DB::table('riwayat_tf')->where('id', $tx->model->id)->update(['saldo_transaksi_pengirim' => $saldoBerjalan]);
+                } elseif ($tx->type === 'riwayat_tf_masuk') {
+                    \Illuminate\Support\Facades\DB::table('riwayat_tf')->where('id', $tx->model->id)->update(['saldo_transaksi_penerima' => $saldoBerjalan]);
+                } elseif ($tx->type === 'bukti_tf') {
+                    \Illuminate\Support\Facades\DB::table('bukti_tf')->where('id', $tx->model->id)->update(['saldo_transaksi' => $saldoBerjalan]);
+                }
+            }
+
+            \Illuminate\Support\Facades\DB::table('rekening')->where('id', $id_rekening)->update(['saldo_saat_ini' => $saldoBerjalan]);
+            \Illuminate\Support\Facades\DB::commit();
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            throw $e;
         }
-    }
-
-    \Illuminate\Support\Facades\DB::table('rekening')->where('id', $id_rekening)->update(['saldo_saat_ini' => $saldoBerjalan]);
-    \Illuminate\Support\Facades\DB::commit();
-} catch (\Exception $e) {
-    \Illuminate\Support\Facades\DB::rollBack();
-    throw $e;
-}
     }
 
     public function cetakBuku(Request $request, $id_rekening)
     {
         $mulai_baris = $request->query('baris', 1);
         $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
-        
+
         $cleanNum = function ($val) {
             if (!$val) return 0;
             return is_numeric($val) ? (int) $val : (int) preg_replace('/\D/', '', $val);
@@ -1199,12 +1199,15 @@ try {
             ];
         });
 
-        $transferKeluar = Transfer::where('id_rekening_pengirim', $id_rekening)->get()->map(function ($t) use ($cleanNum) {
+$transferKeluar = Transfer::with('rekeningPenerima.nasabah')
+            ->where('id_rekening_pengirim', $id_rekening)
+            ->get()->map(function ($t) use ($cleanNum) {
             $potongan = str_contains(strtolower($t->pilihan_biaya_transaksi), 'potong') ? $t->nominal_admin : 0;
             return (object)[
                 'tanggal'     => $t->created_at,
                 'jenis'       => 'TFK',
-                'keterangan' => 'Dari Rek: ' . $t->id_rekening_penerima . ($t->catatan ? ' | ' . $t->catatan : ''),
+                // Gunakan camelCase: rekeningPenerima
+                'keterangan'  => 'Dikirim ke: ' . $t->id_rekening_penerima . ' | ' . ($t->rekeningPenerima->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => $cleanNum($t->nominal_admin),
                 'debit'       => $cleanNum($t->jumlah_transfer) + $cleanNum($potongan),
                 'kredit'      => 0,
@@ -1212,11 +1215,14 @@ try {
             ];
         });
 
-        $transferMasuk = Transfer::where('id_rekening_penerima', $id_rekening)->get()->map(function ($t) use ($cleanNum) {
+        $transferMasuk = Transfer::with('rekeningPengirim.nasabah')
+            ->where('id_rekening_penerima', $id_rekening)
+            ->get()->map(function ($t) use ($cleanNum) {
             return (object)[
                 'tanggal'     => $t->created_at,
                 'jenis'       => 'TFM',
-                'keterangan' => 'Dari Rek: ' . $t->id_rekening_pengirim . ($t->catatan ? ' | ' . $t->catatan : ''),
+                // Gunakan camelCase: rekeningPengirim
+                'keterangan'  => 'Dari: ' . $t->id_rekening_pengirim . ' | ' . ($t->rekeningPengirim->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $cleanNum($t->jumlah_transfer),
@@ -1224,16 +1230,16 @@ try {
             ];
         });
 
-$transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->map(function ($t) use ($cleanNum) {
+        $transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->map(function ($t) use ($cleanNum) {
             $potongan = $cleanNum($t->nominal_admin);
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFK',
-                'keterangan'  => 'dikirim ke: ' . $t->id_penerima . ' | ' . $t->nama_penerima,
+                'keterangan'  => 'Dikirim ke: ' . $t->id_penerima . ' | ' . $t->nama_penerima,
                 'biaya_admin' => $potongan,
                 'debit'       => $cleanNum($t->jumlah_transfer) + $potongan,
                 'kredit'      => 0,
-                'saldo'       => $t->saldo_transaksi_pengirim 
+                'saldo'       => $t->saldo_transaksi_pengirim
             ];
         });
 
@@ -1241,27 +1247,27 @@ $transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->m
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFM',
-                'keterangan'  => 'dari: ' . $t->id_pengirim . ' | ' . ($t->pengirim->nasabah->nama_nasabah ?? '-'),
-                'biaya_admin' => 0, 
+                'keterangan'  => 'Dari: ' . $t->id_pengirim . ' | ' . ($t->pengirim->nasabah->nama_nasabah ?? '-'),
+                'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $cleanNum($t->jumlah_transfer),
-                'saldo'       => $t->saldo_transaksi_penerima 
+                'saldo'       => $t->saldo_transaksi_penerima
             ];
         });
 
         $transferDariLuar = Bukti_Tf::where('id_rekening', $id_rekening)
-            ->whereIn('status_verifikasi', ['berhasil','gagal'])
+            ->whereIn('status_verifikasi', ['berhasil', 'gagal'])
             ->get()
             ->map(function ($t) use ($cleanNum) {
                 $waktu = $t->created_at ?? $t->datetime_tgl;
                 return (object)[
                     'tanggal'     => $waktu ? Carbon::parse($waktu) : Carbon::now(),
-                    'jenis'       => 'TFL', 
+                    'jenis'       => 'TFL',
                     'keterangan' => 'Dari: ' . ($t->nama_pengirim ?? '-'),
                     'biaya_admin' => $cleanNum($t->nominal_admin),
                     'debit'       => 0,
                     'kredit'      => $cleanNum($t->jumlah_transfer),
-                    'saldo'       => $t->saldo_transaksi 
+                    'saldo'       => $t->saldo_transaksi
                 ];
             });
 
@@ -1271,5 +1277,14 @@ $transferKeluarNasabah = RiwayatTf::where('id_pengirim', $id_rekening)->get()->m
             ->sortBy('tanggal')->values();
 
         return view('teller.cetak_buku', compact('rekening', 'transaksi', 'mulai_baris'));
+    }
+
+    public function cetakBiodataBuku($id_rekening)
+    {
+        // Mengambil data rekening beserta data relasi nasabah 
+        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+
+        // Mengembalikan view untuk format cetak biodata di buku tabungan
+        return view('teller.cetak_biodata_buku', compact('rekening'));
     }
 }
