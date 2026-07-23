@@ -174,16 +174,16 @@
         <!-- Tanda Tangan -->
         <div class="mt-12 print:mt-18 grid grid-cols-2 gap-6 text-center text-xs print:text-[12.5px] text-slate-800 page-break-avoid">
             <div>
-                <p class="invisible mb-1 text-slate-500 font-normal">Placeholder</p>
-                <p class="mb-12 print:mb-14">Nasabah,</p>
-                <p class="font-bold underline text-slate-900">{{ $nasabah->nama_nasabah }}</p>
-                <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Tanda Tangan & Nama Terang</p>
-            </div>
-            <div>
                 <p class="text-slate-500 font-normal mb-1">Ciamis, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }} {{ \Carbon\Carbon::now()->format('H.i') }}</p>
                 <p class="mb-12 print:mb-14">Petugas Customer Service,</p>
                 <p class="font-bold underline text-slate-900">{{ auth()->user()->name }}</p>
                 <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Nama Lengkap & Paraf</p>
+            </div>
+            <div>
+                <p class="invisible mb-1 text-slate-500 font-normal">Placeholder</p>
+                <p class="mb-12 print:mb-14">Nasabah,</p>
+                <p class="font-bold underline text-slate-900">{{ $nasabah->nama_nasabah }}</p>
+                <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Tanda Tangan & Nama Terang</p>
             </div>
         </div>
 

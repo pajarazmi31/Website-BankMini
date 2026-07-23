@@ -42,7 +42,7 @@
 
     <!-- Container Utama -->
     <div class="print-container max-w-[800px] mx-auto bg-white p-6 print:p-0 shadow-md print:shadow-none rounded-xl print:rounded-none">
-        
+
         <!-- Kop Surat -->
         <div class="flex items-center justify-between pb-3 border-b-4 border-slate-900 mb-5">
             <div class="w-20 h-20 shrink-0 flex items-center justify-center">
@@ -148,7 +148,7 @@
             <!-- 3. Informasi Kontak Darurat -->
             <div class="page-break-avoid">
                 <h4 class="font-bold text-slate-900 border-b border-slate-200 pb-1 mb-2 uppercase tracking-wider text-[11px] print:text-xs flex items-center gap-2">
-                    <span class="w-1.5 h-3 bg-blue-600 rounded-sm"></span> Kontak Darurat (Emergency Contact)
+                    <span class="w-1.5 h-3 bg-blue-600 rounded-sm"></span> Kontak Darurat
                 </h4>
                 <div class="grid grid-cols-2 gap-x-8 gap-y-1.5 print:gap-y-2">
                     <div class="flex pb-1">
@@ -174,16 +174,16 @@
         <!-- Tanda Tangan -->
         <div class="mt-12 print:mt-18 grid grid-cols-2 gap-6 text-center text-xs print:text-[12.5px] text-slate-800 page-break-avoid">
             <div>
-                <p class="invisible mb-1 text-slate-500 font-normal">Placeholder</p>
-                <p class="mb-12 print:mb-14">Nasabah,</p>
-                <p class="font-bold underline text-slate-900">{{ $nasabah->nama_nasabah }}</p>
-                <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Tanda Tangan & Nama Terang</p>
-            </div>
-            <div>
                 <p class="text-slate-500 font-normal mb-1">Ciamis, {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }} {{ \Carbon\Carbon::now()->format('H.i') }}</p>
                 <p class="mb-12 print:mb-14">Petugas Supervisor,</p>
                 <p class="font-bold underline text-slate-900">{{ auth()->user()->name }}</p>
                 <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Nama Lengkap & Paraf</p>
+            </div>
+            <div>
+                <p class="invisible mb-1 text-slate-500 font-normal">Placeholder</p>
+                <p class="mb-12 print:mb-14">Nasabah,</p>
+                <p class="font-bold underline text-slate-900">{{ $nasabah->nama_nasabah }}</p>
+                <p class="text-[10px] print:text-[11px] text-slate-400 mt-1">Tanda Tangan & Nama Terang</p>
             </div>
         </div>
 
@@ -196,7 +196,7 @@
                 window.print();
             }, 300);
         }
-        
+
         window.onafterprint = function() {
             window.location.href = "{{ route('supervisor.datanasabah') }}";
         }

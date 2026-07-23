@@ -194,7 +194,7 @@ class superVisorController extends Controller
         $user->delete();
 
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'data nasabah berhasil di hapus');
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'data nasabah berhasil di hapus');
     }
 
     public function detail(String $id)
@@ -260,7 +260,7 @@ class superVisorController extends Controller
             'status_akun' => $request->status_akun,
         ]);
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'data revisi berhasil di kirim');
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'data revisi berhasil di kirim');
     }
 
     public function halamanRevisi(String $id)

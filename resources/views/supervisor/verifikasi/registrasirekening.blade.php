@@ -107,7 +107,7 @@ Selamat Datang, {{ $user->name }}!
                                     @csrf
                                     <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
                                 </form>
-                                <form action="{{ route('hapus.nasabah.super', $nasabah->id) }}" method="post">
+                                <form action="{{ route('hapus.nasabah.super', $nasabah->id) }}" onclick="confirm('yakin mau di hapus?')" method="post">
                                     @csrf
                                     @method('DELETE')
                                     <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
