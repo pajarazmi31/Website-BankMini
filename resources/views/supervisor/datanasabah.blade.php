@@ -28,12 +28,6 @@
 @section('content')
 <!-- ================= VIEW 1: TABEL DATA NASABAH ================= -->
 <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
-    <!-- Search Bar Mobile -->
-    <div class="md:hidden relative mb-5">
-        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-    </div>
-
 
     <div class="mb-4 px-1">
         <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Nasabah</h3>
@@ -41,14 +35,32 @@
 
     <!-- Table Card -->
     <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
-        <div class="flex items-center gap-2 mb-4">
-            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
-                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
-                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
-                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
-                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
-            </select>
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+            <div class="flex items-center gap-2">
+                <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                    <option value="5" {{ $perPage == 5 ? 'selected' : '' }}>5 data</option>
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                </select>
+            </div>
+
+            <!-- Search Bar Form (Instant Live Filter + Backend Search) -->
+            <form method="GET" action="{{ route('supervisor.datanasabah') }}" class="relative w-full sm:w-72">
+                <input type="hidden" name="per_page" value="{{ $perPage }}">
+                <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-base pointer-events-none"></i>
+                <input type="text" name="search" id="searchInput" value="{{ $search ?? '' }}" 
+                       placeholder="Cari nama, rekening, jabatan..." 
+                       oninput="liveSearchTable()"
+                       autocomplete="off"
+                       class="w-full pl-9 pr-8 py-2 bg-gray-50/60 border border-gray-200 rounded-[12px] text-[13px] font-medium text-gray-700 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-brand-blue focus:ring-1 focus:ring-brand-blue shadow-sm transition-all">
+                @if(!empty($search))
+                <button type="button" onclick="clearSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600" title="Bersihkan">
+                    <i class="ph-bold ph-x text-xs"></i>
+                </button>
+                @endif
+            </form>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse whitespace-nowrap">
@@ -128,10 +140,51 @@
 </div>
 
 <script>
+    function liveSearchTable() {
+        const input = document.getElementById('searchInput');
+        if (!input) return;
+        const filter = input.value.toLowerCase().trim();
+        const tbody = document.querySelector('table tbody');
+        if (!tbody) return;
+        const rows = tbody.querySelectorAll('tr:not(#noDataRow)');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        let noDataRow = document.getElementById('noDataRow');
+        if (visibleCount === 0) {
+            if (!noDataRow) {
+                noDataRow = document.createElement('tr');
+                noDataRow.id = 'noDataRow';
+                noDataRow.innerHTML = `<td colspan="6" class="py-8 text-center text-gray-400 text-[13px] font-medium">Data tidak ditemukan untuk "${filter}"</td>`;
+                tbody.appendChild(noDataRow);
+            } else {
+                noDataRow.querySelector('td').textContent = `Data tidak ditemukan untuk "${filter}"`;
+                noDataRow.style.display = '';
+            }
+        } else if (noDataRow) {
+            noDataRow.style.display = 'none';
+        }
+    }
+
+    function clearSearch() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('search');
+        window.location.href = url.toString();
+    }
+
     function changePerPage(value) {
         const url = new URL(window.location.href);
         url.searchParams.set('per_page', value);
-        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        url.searchParams.set('page', 1);
         window.location.href = url.toString();
     }
 </script>

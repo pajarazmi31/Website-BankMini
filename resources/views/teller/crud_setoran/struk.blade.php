@@ -219,12 +219,12 @@ td{
 
 <script>
     window.onafterprint = function() {
-        window.close();
+        window.close(); 
     }
 
     setTimeout(function() {
-        window.close();
-    }, 1000);
+        window.close(); 
+    }, 1000); 
 </script>
 
 </body>

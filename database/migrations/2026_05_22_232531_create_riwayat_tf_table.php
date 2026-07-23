@@ -22,6 +22,9 @@ return new class extends Migration
             $table->decimal('nominal_admin', 15, 2);
             $table->string('catatan')->nullable();
 
+            $table->bigInteger('saldo_transaksi_pengirim')->default(0);
+            $table->bigInteger('saldo_transaksi_penerima')->default(0);
+
             $table->timestamps();
 
             $table->foreign('id_pengirim')

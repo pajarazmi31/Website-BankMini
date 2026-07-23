@@ -43,16 +43,6 @@ Edit Data Nasabah
                     <h3 class="text-[20px] font-bold text-gray-800">Edit Data Nasabah</h3>
                 </div>
 
-                @if ($errors->any())
-                <div class="mb-6 p-4 bg-red-50 border border-red-200 text-red-700 rounded-xl text-sm">
-                    <ul class="list-disc pl-5">
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
@@ -60,11 +50,11 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                        <input type="number" name="nis_nip" value="{{ old('nis_nip', $nasabah->nis_nip) }}" id="edit_nis" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nis_nip" value="{{ old('nis_nip', $nasabah->nis_nip) }}" id="edit_nis" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                        <select name="jurusan" id="edit_jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select name="jurusan" id="edit_jurusan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="1" {{ old('jurusan', $nasabah->jurusan_id) == 1 ? 'selected' : '' }}>TKRO</option>
                             <option value="2" {{ old('jurusan', $nasabah->jurusan_id) == 2 ? 'selected' : '' }}>TJKT</option>
                             <option value="3" {{ old('jurusan', $nasabah->jurusan_id) == 3 ? 'selected' : '' }}>PPLG</option>
@@ -84,7 +74,7 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" id="edit_jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select name="jenis_kelamin" id="edit_jenis_kelamin" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="Laki-Laki" {{ old('jenis_kelamin', $nasabah->jenis_kelamin) == 'Laki-Laki' ? 'selected' : '' }}>Laki-laki</option>
                             <option value="Perempuan" {{ old('jenis_kelamin', $nasabah->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                         </select>
@@ -95,7 +85,7 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                        <select id="edit_agama" name="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select id="edit_agama" name="agama" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="Islam" {{ old('agama', $nasabah->agama) == 'Islam' ? 'selected' : '' }}>Islam</option>
                             <option value="Kristen" {{ old('agama', $nasabah->agama) == 'Kristen' ? 'selected' : '' }}>Kristen</option>
                             <option value="Katolik" {{ old('agama', $nasabah->agama) == 'Katolik' ? 'selected' : '' }}>Katolik</option>
@@ -106,7 +96,7 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
-                        <select name="pendidikan" id="edit_pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select name="pendidikan" id="edit_pendidikan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="SD" {{ old('pendidikan', $nasabah->pendidikan) == 'SD' ? 'selected' : '' }}>SD</option>
                             <option value="SMP" {{ old('pendidikan', $nasabah->pendidikan) == 'SMP' ? 'selected' : '' }}>SMP</option>
                             <option value="SMK" {{ old('pendidikan', $nasabah->pendidikan) == 'SMK' ? 'selected' : '' }}>SMK</option>
@@ -121,7 +111,7 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
-                        <select name="jabatan" id="edit_jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select name="jabatan" id="edit_jabatan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="Siswa" {{ old('jabatan', $nasabah->jabatan) == 'Siswa' ? 'selected' : '' }}>Siswa</option>
                             <option value="Guru" {{ old('jabatan', $nasabah->jabatan) == 'Guru' ? 'selected' : '' }}>Guru</option>
                             <option value="TU" {{ old('jabatan', $nasabah->jabatan) == 'TU' ? 'selected' : '' }}>TU</option>
@@ -129,7 +119,7 @@ Edit Data Nasabah
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                        <input type="number" name="no_hp" value="{{ old('no_hp', $nasabah->no_hp) }}" id="edit_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="no_hp" value="{{ old('no_hp', $nasabah->no_hp) }}" id="edit_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Email</label>
@@ -142,45 +132,45 @@ Edit Data Nasabah
                     <div class="col-span-1 flex flex-col gap-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                        <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                            <option value="">Pilih Provinsi</option>
+                        <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
+                            <option value="" disabled selected>Pilih Provinsi</option>
                             @foreach ($provinsi as $prov)
-                            <option value="{{ $prov->id }}" {{ old('provinsi', $nasabah->provinsi_id) == $prov->id ? 'selected' : '' }}>{{ $prov->name }}</option>
+                            <option value="{{ $prov->id }}" {{ old('provinsi', $nasabah->provinsi_id) == $prov->id ? 'selected' : '' }}>{{ ucwords(strtolower($prov->name)) }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kab/Kota</label>
-                        <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                            <option value="">Pilih Kabupaten</option>
+                        <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
+                            <option value="" disabled selected>Pilih Kabupaten</option>
                             @foreach ($kabupaten as $kab)
-                            <option value="{{ $kab->id }}" {{ old('kab_kota', $nasabah->kab_kota_id) == $kab->id ? 'selected' : '' }}>{{ $kab->name }}</option>
+                            <option value="{{ $kab->id }}" {{ old('kab_kota', $nasabah->kab_kota_id) == $kab->id ? 'selected' : '' }}>{{ ucwords(strtolower($kab->name)) }}</option>
                             @endforeach
                         </select>
                     </div>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                        <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                            <option value="">Pilih Kecamatan</option>
+                        <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
+                            <option value="" disabled selected>Pilih Kecamatan</option>
                             @foreach ($kecamatan as $kec)
-                            <option value="{{ $kec->id }}" {{ old('kecamatan', $nasabah->kecamatan_id) == $kec->id ? 'selected' : '' }}>{{ $kec->name }}</option>
+                            <option value="{{ $kec->id }}" {{ old('kecamatan', $nasabah->kecamatan_id) == $kec->id ? 'selected' : '' }}>{{ ucwords(strtolower($kec->name)) }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
-                        <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                            <option value="">Pilih Desa</option>
+                        <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
+                            <option value="" disabled selected>Pilih Desa</option>
                             @foreach ($desa as $ds)
-                            <option value="{{ $ds->id }}" {{ old('kelurahan', $nasabah->kelurahan_id) == $ds->id ? 'selected' : '' }}>{{ $ds->name }}</option>
+                            <option value="{{ $ds->id }}" {{ old('kelurahan', $nasabah->kelurahan_id) == $ds->id ? 'selected' : '' }}>{{ ucwords(strtolower($ds->name)) }}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                        <input type="number" name="kode_pos" value="{{ old('kode_pos', $nasabah->kode_pos) }}" id="edit_kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="kode_pos" value="{{ old('kode_pos', $nasabah->kode_pos) }}" id="edit_kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                 </div>
             </div>
@@ -199,7 +189,7 @@ Edit Data Nasabah
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                            <input type="number" name="nomor_kontak_darurat" value="{{ old('nomor_kontak_darurat', $nasabah->no_hp_kontak_darurat) }}" id="edit_kontak_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nomor_kontak_darurat" value="{{ old('nomor_kontak_darurat', $nasabah->no_hp_kontak_darurat) }}" id="edit_kontak_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>

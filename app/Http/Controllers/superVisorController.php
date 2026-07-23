@@ -49,7 +49,7 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $bukti_tf = Bukti_Tf::latest()->paginate($perPage)
             ->appends(['per_page' => $perPage]);
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'perPage'));
@@ -84,68 +84,63 @@ class superVisorController extends Controller
     // return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
     // }
 
-    public function detailTf($id)
+    public function detailTf(String $id)
     {
         $data = Bukti_Tf::find($id);
 
         return view('supervisor.verifikasi.transfer.detail', compact('data'));
     }
 
-    public function verifikasiTf(Request $request, $id)
-    {
-        // 1. Cari data bukti transfer berdasarkan ID-nya
-        $data = Bukti_Tf::findOrFail($id);
+    public function verifikasiTf(Request $request, String $id)
+{
+    $data = Bukti_Tf::findOrFail($id);
 
-        // 2. Kunci Status: Jika sudah 'berhasil' atau 'gagal', jangan diproses lagi
-        if ($data->status_verifikasi !== 'pending') {
-            return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
-        }
+    if ($data->status_verifikasi !== 'pending') {
+        return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
+    }
 
-        // 3. Validasi input tombol (berhasil/gagal)
-        $request->validate([
-            'status_verifikasi' => 'required|in:berhasil,gagal'
-        ]);
+    $request->validate([
+        'status_verifikasi' => 'required|in:berhasil,gagal'
+    ]);
 
-        try {
-            // Jalankan Database Transaction untuk keamanan mutasi saldo
-            DB::transaction(function () use ($request, $data) {
+    try {
+        DB::transaction(function () use ($request, $data) {
 
-                if ($request->status_verifikasi === 'berhasil') {
+            if ($request->status_verifikasi === 'berhasil') {
+                $rekening = Rekening::where('id', $data->id_rekening)->first();
 
-                    // MENCARI REKENING:
-                    // Kita tembak kolom 'id' di tabel rekening menggunakan nilai yang tersimpan
-                    // di kolom 'no_rekening_penerima' pada tabel Bukti_Tf.
-                    $rekening = Rekening::where('id', $data->id_rekening)->first();
-
-                    if (!$rekening) {
-                        throw new \Exception('Nomor rekening tujuan (' . $data->id_rekening . ') tidak ditemukan di sistem.');
-                    }
-
-                    // Tambahkan saldo ke kolom 'saldo_saat_ini' di tabel rekening
-                    $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+                if (!$rekening) {
+                    throw new \Exception('Nomor rekening tujuan tidak ditemukan.');
                 }
 
-                // 4. Update status verifikasi transaksi menjadi 'berhasil' atau 'gagal'
-                $data->status_verifikasi = $request->status_verifikasi;
+                // 1. Tambahkan saldo
+                $rekening->increment('saldo_saat_ini', $data->jumlah_transfer);
+
+                // 2. Update status verifikasi
+                $data->status_verifikasi = 'berhasil';
                 $data->save();
-            });
 
-            $pesan = $request->status_verifikasi === 'berhasil'
-                ? 'Transaksi berhasil disetujui, saldo masuk ke rekening tujuan!'
-                : 'Transaksi telah ditolak.';
+                // 3. PANGGIL SINKRONISASI agar saldo transaksi di history terisi otomatis
+                // Pastikan fungsi ini sudah PUBLIC di tellerController.php
+                $teller = new \App\Http\Controllers\tellerController();
+                $teller->sinkronisasiSaldo($rekening->id);
+            } else {
+                $data->status_verifikasi = 'gagal';
+                $data->save();
+            }
+        });
 
-            return redirect()->back()->with('success', $pesan);
-        } catch (\Exception $e) {
-            // Jika ada eror di dalam blok DB::transaction, saldo batal bertambah
-            return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
-        }
+        return redirect()->back()->with('success', 'Transaksi berhasil diproses!');
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Gagal memproses verifikasi: ' . $e->getMessage());
     }
+}
 
     public function verifikasiNasabah(Request $request)
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $allNasabah = Nasabah::with('rekening')
             ->whereHas('rekening', function ($query) {
                 $query->where('status_akun', 'non-aktif');
@@ -198,12 +193,25 @@ class superVisorController extends Controller
     public function nasabah(Request $request)
     {
         $user = Auth::user();
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
+        $search = $request->input('search');
 
-        $userNasabah = Nasabah::with('rekening')->orderByDesc('id')
+        $userNasabah = Nasabah::with('rekening')
+            ->when($search, function ($query, $search) {
+                return $query->where(function ($q) use ($search) {
+                    $q->where('nama_nasabah', 'LIKE', '%' . $search . '%')
+                        ->orWhere('jabatan', 'LIKE', '%' . $search . '%')
+                        ->orWhere('nis_nip', 'LIKE', '%' . $search . '%')
+                        ->orWhereHas('rekening', function ($r) use ($search) {
+                            $r->where('id', 'LIKE', '%' . $search . '%');
+                        });
+                });
+            })
+            ->orderByDesc('id')
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
-        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage',));
+            ->appends(['per_page' => $perPage, 'search' => $search]);
+
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage', 'search'));
     }
 
     public function detailNasabah(String $id)
@@ -249,9 +257,10 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
 
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
 
         $data = VerifikasiLogin::with(['user'])
+            ->latest()
             ->paginate($perPage)
             ->appends(['per_page' => $perPage]);
 
@@ -260,7 +269,7 @@ class superVisorController extends Controller
             compact('user', 'data', 'perPage')
         );
     }
-    public function setujuiLogin($id)
+    public function setujuiLogin(String $id)
     {
         VerifikasiLogin::findOrFail($id)
             ->update([
@@ -272,7 +281,7 @@ class superVisorController extends Controller
         return back()->with('success', 'Login disetujui');
     }
 
-    public function tolakLogin($id)
+    public function tolakLogin(String $id)
     {
         VerifikasiLogin::findOrFail($id)
             ->update([
@@ -359,33 +368,36 @@ class superVisorController extends Controller
         ]);
     }
 
-    public function saldoMinimum(){
+    public function saldoMinimum()
+    {
         $user = Auth::user();
         $super = $user->petugas;
 
 
         $saldoMinimum = Minimum_saldo::where('jenis_minimum', 'penarikan')->first();
-        return view('supervisor.saldominimum', compact('user','super','saldoMinimum'));
+        return view('supervisor.saldominimum', compact('user', 'super', 'saldoMinimum'));
     }
 
-    public function saldoMinimumUpdate(Request $request){
-// 1. Validasi data yang masuk
-    $request->validate([
-        'minimum_saldo' => 'required|numeric',
-    ]);
+    public function saldoMinimumUpdate(Request $request)
+    {
+        // 1. Validasi data yang masuk
+        $request->validate([
+            'minimum_saldo' => 'required|numeric',
+        ]);
 
-    $saldo = Minimum_saldo::first();
-    $saldo->nominal = $request->minimum_saldo;
-    $saldo->save();
+        $saldo = Minimum_saldo::first();
+        $saldo->nominal = $request->minimum_saldo;
+        $saldo->save();
 
-    // 3. WAJIB: Kembalikan respons berupa JSON sukses
-    return response()->json([
-        'success' => true,
-        'message' => 'Biaya transaksi berhasil disimpan!'
-    ]);
+        // 3. WAJIB: Kembalikan respons berupa JSON sukses
+        return response()->json([
+            'success' => true,
+            'message' => 'Biaya transaksi berhasil disimpan!'
+        ]);
     }
 
-    public function print(String $id) {
+    public function print(String $id)
+    {
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 
         return view('supervisor.crud_datanasabah.print', compact('nasabah'));

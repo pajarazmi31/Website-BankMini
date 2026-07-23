@@ -33,13 +33,11 @@ class loginController extends Controller
         $role = $user->role->nama_role;
 
         if ($role == 'nasabah') {
-            return redirect()->route('nasabah.dashboard')
-                ->with('success', 'Kamu Berhasil Masuk Ke Akun Nasabah');
+            return redirect()->route('nasabah.dashboard');
         }
 
         if ($role == 'supervisor') {
-            return redirect()->route('supervisor.dashboard')
-                ->with('success', 'Kamu Berhasil Masuk Ke Akun Supervisor');
+            return redirect()->route('supervisor.dashboard');
         }
 
         if (in_array($role, ['teller', 'customerservice'])) {

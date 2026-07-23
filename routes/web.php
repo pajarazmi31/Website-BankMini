@@ -70,6 +70,11 @@ Route::middleware(['role:teller'])->group(function () {
     Route::get('/transfer/export/{filter}', [tellerController::class, 'exportTransfer'])->name('transfer.export');
     Route::get('/transfer/export-custom', [tellerController::class, 'exportTransferCustom'])->name('transfer.export.custom');
 
+    // Route History Nasabah
+    Route::get('/teller/history-nasabah', [tellerController::class, 'historyNasabah'])->name('teller.history_nasabah');
+    // Route Cetak Buku Tabungan per Akun
+    Route::get('/teller/cetak-buku/{id_rekening}', [App\Http\Controllers\tellerController::class, 'cetakBuku'])->name('teller.cetak_buku');
+
     //cari nama si norek
     Route::get('/cari-rekening/{norek}', [tellerController::class, 'cariRekening'])->name('transfer.cari_rekening');
     Route::get('/search-rekening', [tellerController::class, 'searchRekening'])->name('teller.search_rekening');
@@ -83,17 +88,18 @@ Route::middleware(['role:customerservice'])->group(function () {
 
     Route::get('/siswa/{nis}', [siswaController::class, 'getSiswa']);
 
-route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
-Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
-Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
-Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
-Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
-Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
-Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
-Route::post('/customer/import', [rekeningController::class, 'import'])->name('import.nasabah');
-Route::get('/customer/import/nasabah', [rekeningController::class, 'halamanImport'])->name('halaman.import');
-Route::get('costumer/print/{id}', [rekeningController::class, 'print'])->name('print');
-Route::get('/template/nasabah/excel', [csController::class, 'templateImport'])->name('template.nasabah');
+    route::get('/customerservice/dashboard', [csController::class, 'index'])->name('cs.dashboard');
+    Route::get('/customerservice/keloladata', [rekeningController::class, 'keloladata'])->name('costumerservice.keloladata');
+    Route::post('/customer/tambah', [rekeningController::class, 'store'])->name('tambah.rekening');
+    Route::get('/customer/detail/{id}', [csController::class, 'detail'])->name('detail.nasabah.cs');
+    Route::get('/customerservice/edit/{id}', [rekeningController::class, 'edit'])->name('edit.nasabah');
+    Route::put('/customerservice/update/{id}', [rekeningController::class, 'update'])->name('update.nasabah');
+    Route::delete('/customerservice/hapus/{id}', [rekeningController::class, 'destroy'])->name('hapus.nasabah');
+    Route::post('/customer/import', [rekeningController::class, 'import'])->name('import.nasabah');
+    Route::get('/customer/import/nasabah', [rekeningController::class, 'halamanImport'])->name('halaman.import');
+    Route::get('costumer/print/{id}', [rekeningController::class, 'print'])->name('print');
+    Route::get('/template/nasabah/excel', [csController::class, 'templateImport'])->name('template.nasabah');
+    Route::get('/nasabah/download-template', [csController::class, 'downloadTemplate'])->name('download.template');
 });
 
 //ROLE SUPERVISOR
@@ -101,8 +107,6 @@ Route::middleware(['role:supervisor'])->group(function () {
     route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 
     Route::get('/supervisor/datanasabah', [superVisorController::class, 'nasabah'])->name('supervisor.datanasabah');
-
-    Route::get('/supervisor/datapetugas', [superVisorController::class, 'datapetugas'])->name('supervisor.datapetugas');
 
     Route::get('/supervisor/verifikasi', [superVisorController::class, 'transfer'])->name('supervisor.verifikasi');
 
@@ -149,9 +153,8 @@ Route::middleware(['role:supervisor'])->group(function () {
     Route::post('/supervisor/verifikasi-login/{id}/tolak', [superVisorController::class, 'tolakLogin'])->name('supervisor.verifikasi.login.tolak');
     Route::delete('/supervisor/verifikasi/login/destroy-all', [SupervisorController::class, 'destroyAllLogin'])->name('supervisor.verifikasi.login.destroyAll');
 
-//print
-Route::get('supervisor/print/{id}', [superVisorController::class, 'print'])->name('print.super');
-
+    //print
+    Route::get('supervisor/print/{id}', [superVisorController::class, 'print'])->name('print.super');
 });
 /// logika login na
 
@@ -192,9 +195,11 @@ Route::get('/cek-verifikasi-login/{id}', function ($id) {
 
         Auth::login($user);
 
+        $roleName = $user->role->nama_role;
+
         return response()->json([
             'status' => 'approved',
-            'role' => $user->role->nama_role
+            'role' => $roleName
         ]);
     }
 
@@ -208,5 +213,3 @@ Route::get('/cek-rekening/{id}', [Bukti_tfController::class, 'cekRekening']);
 Route::get('/get-kabupaten/{id}', [alamatController::class, 'getKabupaten']);
 Route::get('/get-kecamatan/{id}', [alamatController::class, 'getKecamatan']);
 Route::get('/get-desa/{id}', [alamatController::class, 'getDesa']);
-
-

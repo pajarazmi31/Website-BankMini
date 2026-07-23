@@ -10,8 +10,8 @@ use Carbon\Carbon;
 
 class Bukti_tfController extends Controller
 {
-    
-    public function cekRekening($id)
+
+    public function cekRekening(String $id)
     {
         // Cari ke tabel rekening berdasarkan NOMOR REKENING-nya (kolom 'id' di tabel rekening kamu)
         // Gunakan ->where() agar pencarian string nomor rekening akurat
@@ -68,6 +68,10 @@ public function transfer_luar(Request $request)
 
     $buktiPath = 'uploads/' . $namaFile;
 
+// AMBIL SALDO SAAT INI UNTUK DISIMPAN (KARENA STATUS MASIH PENDING)
+    $rekeningPenerima = Rekening::find($request->id_rekening);
+    $saldoBerjalan = $rekeningPenerima ? $rekeningPenerima->saldo_saat_ini : 0;
+
     Bukti_Tf::create([
         'transaksi_id'        => $request->transaksi_id,
         'nama_pengirim'       => $request->nama_pengirim,
@@ -80,6 +84,7 @@ public function transfer_luar(Request $request)
         'status_verifikasi'   => 'pending',
         'datetime_tgl'        => $hariIni,
         'catatan'             => $request->catatan,
+        'saldo_transaksi'     => $saldoBerjalan,
     ]);
 
     return redirect()->back()->with('success', 'Data berhasil ditambahkan.');

@@ -60,21 +60,21 @@ class RekeningSeeder extends Seeder
         Rekening::create([
             'id' => 242510190,
            'nasabah_id' => $nasabah->id,
-           'saldo_saat_ini' => 100000,
+           'saldo_saat_ini' => 0,
            'status_akun' => 'aktif' 
         ]);
 
-        $userNasabah2 = User::create([
-            'name' => 'Nasabah2',
+        $userSiswa = User::create([
+            'name' => 'Siswa',
             'role_id' => $roleNasabah->id,
-            'email' => 'nasabah2@gmail.com',
+            'email' => 'siswa@gmail.com',
             'password' => Hash::make('123456'),
         ]);
 
-        $nasabah2 = Nasabah::create([
-            'user_id' => $userNasabah2->id,
+        $siswa = Nasabah::create([
+            'user_id' => $userSiswa->id,
             'nis_nip' => '242510191',
-            'nama_nasabah' => 'Nasabah',
+            'nama_nasabah' => 'Siswa',
             'tempat_lahir' => 'Bandung',
             'tanggal_lahir' => '2005-01-01',
             'jurusan_id' => '3',
@@ -86,7 +86,7 @@ class RekeningSeeder extends Seeder
             'kab_kota_id' => 1101,
             'provinsi_id' => 11,
             'kode_pos' => '40236',
-            'email' => 'nasabah2@gmail.com',
+            'email' => 'siswa@gmail.com',
             'agama' => 'Islam',
             'no_hp' => '08193456789',
             'password' => Hash::make('123456'),
@@ -102,8 +102,8 @@ class RekeningSeeder extends Seeder
 
         Rekening::create([
             'id' => 242510191,
-           'nasabah_id' => $nasabah2->id,
-           'saldo_saat_ini' => 100000,
+           'nasabah_id' => $siswa->id,
+           'saldo_saat_ini' => 0,
            'status_akun' => 'aktif' 
         ]);
     }

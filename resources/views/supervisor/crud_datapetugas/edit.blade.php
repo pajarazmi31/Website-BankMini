@@ -25,8 +25,14 @@
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
-                    <input type="password"
-                        name="password" placeholder="Kosongkan jika tidak ingin mengubah" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                    <div class="relative">
+                        <input type="password"
+                            id="edit_password"
+                            name="password" placeholder="Kosongkan jika tidak ingin mengubah" class="w-full border border-gray-200 rounded-lg pl-4 pr-11 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                        <button type="button" onclick="togglePasswordVisibility('edit_password', 'icon_edit_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none p-1">
+                            <i id="icon_edit_password" class="ph ph-eye text-[20px]"></i>
+                        </button>
+                    </div>
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Email</label>

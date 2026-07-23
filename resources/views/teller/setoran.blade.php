@@ -28,6 +28,12 @@ Selamat Datang, {{ $user->name }}!
 
 @section('content')
 
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
 <!-- ================= VIEW 1: TABEL DATA SETORAN ================= -->
 <div id="viewTabelData" class="fade-in block flex-1 flex flex-col justify-start">
     <!-- Search Bar Mobile -->
