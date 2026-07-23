@@ -49,7 +49,7 @@
 
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                        <select name="jurusan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
+                        <select name="jurusan" id="jurusan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="1" {{ old('jurusan') == '1' ? 'selected' : '' }}>TKRO</option>
                             <option value="2" {{ old('jurusan') == '2' ? 'selected' : '' }}>TJKT</option>
@@ -240,6 +240,7 @@
                     $('#agama').val(response.data.agama);
                     $('#kode_pos').val(response.data.kode_pos);
                     $('#no_hp').val(response.data.no_hp);
+                    $('#jurusan').val(response.data.jurusan_id);
                     showToast('Data siswa berhasil dimuat', 'success');
                 } else {
                     showToast('Data siswa dengan NIS/NIP tersebut tidak ditemukan', 'error');
