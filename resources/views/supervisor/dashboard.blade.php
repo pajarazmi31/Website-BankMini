@@ -217,7 +217,11 @@ Selamat Datang, {{ $user->name }}!
         </div>
 
         <!-- Pagination -->
-        <x-pagination total="3" />
+        @php
+            $totalPendingItems = $nasabahPending->count() + $nasabahTfPending->count();
+            $totalPages = max(1, ceil($totalPendingItems / 5));
+        @endphp
+        <x-pagination :total="$totalPages" />
 
     </div>
 </div>

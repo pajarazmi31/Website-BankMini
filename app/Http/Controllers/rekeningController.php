@@ -265,11 +265,17 @@ class rekeningController extends Controller
     public function import(Request $request) {
         $request->validate([
             'file' => 'required|mimes:xlsx,xls',
+        ], [
+            'file.required' => 'Silakan pilih file Excel terlebih dahulu.',
+            'file.mimes' => 'Format file harus berupa Excel (.xlsx atau .xls).',
         ]);
 
-        Excel::import( new NasabahImport, $request->file('file'));
-
-        return redirect()->route('costumerservice.keloladata')->with('success', 'data import berhasil ditambah');
+        try {
+            Excel::import(new NasabahImport, $request->file('file'));
+            return redirect()->route('costumerservice.keloladata')->with('success', 'Data nasabah berhasil di-import dari Excel!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengimpor file: ' . $e->getMessage());
+        }
     }
 
     public function print(String $id) {

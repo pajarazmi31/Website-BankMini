@@ -69,17 +69,17 @@
                     - action="#": Perlu diisi dengan route transfer untuk nasabah login (misal: route('nasabah.transfer.store')).
                     - method="POST": Menggunakan metode POST untuk transaksi.
                 -->
-                <form action="{{ route('transfer.proses') }}" method="POST" class="space-y-6">
+                <form id="form-transfer-nasabah" action="{{ route('transfer.proses') }}" method="POST" class="space-y-6">
                     <!-- 
                         BAGIAN BACKEND: CSRF TOKEN
                     -->
                     @csrf
-                    <div class="space-y-3 mb-4">
+                    <div id="alertContainer" class="space-y-3 mb-4">
                         {{-- 1. ALERT UNTUK LOGIKA ERROR / PROSES GAGAL --}}
                         @if (session('error'))
-                            <div class="flex items-center gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
-                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0"></i>
-                                <div class="font-medium">
+                            <div class="flex items-center gap-3 p-4 text-xs lg:text-sm text-red-700 border border-red-200 rounded-xl bg-red-50 animate-fade-in" role="alert">
+                                <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div class="font-semibold">
                                     {{ session('error') }}
                                 </div>
                             </div>
@@ -87,11 +87,11 @@
 
                         {{-- 2. ALERT UNTUK VALIDASI FORM YANG SALAH --}}
                         @if ($errors->any())
-                            <div class="flex gap-3 p-4 text-[13px] text-red-800 border border-red-200 rounded-xl bg-red-50" role="alert">
-                                <i class="ph-bold ph-warning-circle text-xl flex-shrink-0 mt-0.5"></i>
+                            <div class="flex gap-3 p-4 text-xs lg:text-sm text-red-700 border border-red-200 rounded-xl bg-red-50 animate-fade-in" role="alert">
+                                <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                 <div>
                                     <span class="font-bold block mb-1">Periksa kembali inputan Anda:</span>
-                                    <ul class="list-disc list-inside space-y-0.5 pl-1 opacity-90">
+                                    <ul class="list-disc list-inside space-y-1 pl-1 opacity-90 font-medium">
                                         @foreach ($errors->all() as $error)
                                             <li>{{ $error }}</li>
                                         @endforeach
@@ -100,11 +100,11 @@
                             </div>
                         @endif
 
-                        {{-- BONUS: ALERT UNTUK NOTIFIKASI SUKSES (Biar serasi) --}}
+                        {{-- 3. ALERT UNTUK NOTIFIKASI SUKSES --}}
                         @if (session('success'))
-                            <div class="flex items-center gap-3 p-4 text-[13px] text-green-800 border border-green-200 rounded-xl bg-green-50" role="alert">
-                                <i class="ph-bold ph-check-circle text-xl flex-shrink-0"></i>
-                                <div class="font-medium">
+                            <div class="flex items-center gap-3 p-4 text-xs lg:text-sm text-emerald-700 border border-emerald-200 rounded-xl bg-emerald-50 animate-fade-in" role="alert">
+                                <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div class="font-semibold">
                                     {{ session('success') }}
                                 </div>
                             </div>
@@ -376,5 +376,56 @@
 
         }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
     });
+
+    // CLIENT SIDE FORM SUBMIT VALIDATOR
+    document.getElementById('form-transfer-nasabah').addEventListener('submit', function(e) {
+        let errors = [];
+        const alertContainer = document.getElementById('alertContainer');
+        const idPenerima = document.getElementById('id_penerima').value.trim();
+        const namaPenerima = document.getElementById('nama_penerima').value.trim();
+        const jumlahTransfer = document.getElementById('jumlah_transfer').value.trim();
+
+        if (!idPenerima) {
+            errors.push('Nomor Rekening Penerima wajib diisi.');
+        } else if (namaPenerima === 'Rekening Tidak Ditemukan!' || namaPenerima === 'Mencari data...' || namaPenerima === 'Tidak bisa transfer ke rekening sendiri!' || !namaPenerima) {
+            errors.push('Rekening Penerima tidak valid atau tidak ditemukan.');
+        }
+        if (!jumlahTransfer || jumlahTransfer === '0') {
+            errors.push('Nominal Transfer wajib diisi.');
+        }
+
+        if (errors.length > 0) {
+            e.preventDefault(); // Mencegah form dikirim
+
+            // Buat HTML alert merah simple
+            let errorHTML = `
+                <div class="flex gap-3 p-4 text-xs lg:text-sm text-red-700 border border-red-200 rounded-xl bg-red-50 animate-fade-in" role="alert">
+                    <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <span class="font-bold block mb-1">Periksa kembali inputan Anda:</span>
+                        <ul class="list-disc list-inside space-y-1 pl-1 opacity-90 font-medium">
+            `;
+            errors.forEach(function(err) {
+                errorHTML += `<li>${err}</li>`;
+            });
+            errorHTML += `
+                        </ul>
+                    </div>
+                </div>
+            `;
+            alertContainer.innerHTML = errorHTML;
+            alertContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+
+    // Auto-scroll to alert container on load if backend redirects with error/success
+    @if(session('success') || session('error') || $errors->any())
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('alertContainer');
+            if (container) {
+                container.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    @endif
 </script>
 @endsection

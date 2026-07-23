@@ -50,6 +50,33 @@
 
 <body class="font-sans text-gray-800 bg-merek-bg antialiased selection:bg-merek-kuning selection:text-white">
 
+    <!-- Global Notification Modal Center -->
+    <div id="notificationModal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4">
+        <!-- Overlay background blur -->
+        <div class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300" onclick="closeNotificationModal()"></div>
+        <!-- Modal Content (Kotak Sedang) -->
+        <div class="bg-white rounded-[24px] w-full max-w-[420px] p-6 shadow-2xl relative z-10 transform transition-all scale-95 opacity-0 duration-300" id="notificationModalContent">
+            <div class="flex flex-col items-center text-center">
+                <!-- Icon Container -->
+                <div id="notificationIconBg" class="w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                    <!-- SVG Icon dynamically set -->
+                </div>
+                
+                <!-- Judul -->
+                <h3 class="text-lg font-bold text-gray-900 mb-2" id="notificationModalTitle">Notifikasi</h3>
+                <!-- Pesan/Detail -->
+                <div class="text-gray-500 text-xs md:text-sm leading-relaxed mb-6 w-full text-left bg-gray-50 p-4 rounded-xl border border-gray-100 max-h-[180px] overflow-y-auto" id="notificationModalMessage">
+                    Detail notifikasi akan tampil di sini.
+                </div>
+                
+                <!-- Tombol Aksi -->
+                <button id="notificationModalBtn" onclick="closeNotificationModal()" class="w-full px-6 py-3.5 rounded-xl text-white font-bold text-[14px] transition-colors shadow-lg active:scale-95 focus:outline-none">
+                    Mengerti
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bilah Navigasi -->
     <!-- Ditambahkan id="navbar" dan class transition untuk efek animasi -->
     <nav id="navbar" class="bg-white border-b border-gray-100 sticky top-0 z-50 transition-all duration-300 ease-in-out">
@@ -112,14 +139,14 @@
                     <p class="text-base md:text-lg text-gray-300 mb-8 max-w-lg leading-relaxed">
                         Membangun kebiasaan finansial yang cerdas melalui pengalaman perbankan nyata di lingkungan sekolah yang aman dan edukatif.
                     </p>
-                    <a href="#alur-layanan" class="inline-block bg-merek-kuning text-white font-semibold px-8 py-3 rounded-md hover:bg-opacity-90 transition shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200">
+                    <a href="#form-transfer" class="inline-block bg-merek-kuning text-white font-semibold px-8 py-3 rounded-md hover:bg-opacity-90 transition shadow-lg hover:shadow-xl hover:-translate-y-1 transform duration-200">
                         Buka Tabungan
                     </a>
                 </div>
 
                 <!-- Gambar Utama -->
                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl max-w-lg mx-auto lg:ml-auto -mt-4 lg:mt-0">
-                    <img src="{{ asset('img/kone.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px] hidden lg:flex">
+                    <img src="{{ asset('img/konefix.png') }}" alt="Smkn 1 Kawali" class="w-full h-full object-cover sm:h-[300px] lg:h-[400px] hidden lg:flex">
                     <!-- Lapisan bayangan untuk meniru efek desain -->
                     <div class="absolute inset-0 bg-gradient-to-tr from-[#143657]/60 to-transparent"></div>
                 </div>
@@ -370,12 +397,7 @@
 
                 <!-- Formulir Kanan -->
                 <div class="lg:col-span-8 bg-white rounded-[20px] p-8 sm:p-12 shadow-xl border border-gray-100">
-                    @if(session('success'))
-                    <div class="mb-6 p-4 bg-green-50 border-l-4 border-[#1A8F6A] text-[#1A8F6A] rounded-r-lg flex items-center gap-3">
-                        <img src="{{ asset('img/icon/landingpage/check-circle.png') }}" alt="Check Icon" class="w-5 h-5 object-contain">
-                        <p class="text-sm font-medium">{{ session('success') }}</p>
-                    </div>
-                    @endif
+
 
                     <!--
                         BAGIAN BACKEND: FORM TRANSFER (GUEST/UMUM)
@@ -807,6 +829,127 @@ function previewImage(input) {
 
         }, 500); // <-- 500 milidetik (0.5 detik). Silakan dipercepat ke 300 jika dirasa kurang kilat
     });
+
+    let notificationTimeout;
+
+    // GLOBAL NOTIFICATION MODAL CONTROL
+    function showNotificationModal(title, messageHTML, type = 'success') {
+        clearTimeout(notificationTimeout);
+        const modal = document.getElementById('notificationModal');
+        const content = document.getElementById('notificationModalContent');
+        const titleEl = document.getElementById('notificationModalTitle');
+        const msgEl = document.getElementById('notificationModalMessage');
+        const iconBg = document.getElementById('notificationIconBg');
+        const btn = document.getElementById('notificationModalBtn');
+
+        titleEl.textContent = title;
+        msgEl.innerHTML = messageHTML;
+
+        if (type === 'error' || type === 'failed') {
+            iconBg.className = 'w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mb-4';
+            iconBg.innerHTML = '<svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>';
+            btn.className = 'w-full px-6 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[14px] transition-colors shadow-lg shadow-red-500/20 active:scale-95 focus:outline-none';
+        } else {
+            iconBg.className = 'w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center mb-4';
+            iconBg.innerHTML = '<svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>';
+            btn.className = 'w-full px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[14px] transition-colors shadow-lg shadow-emerald-500/20 active:scale-95 focus:outline-none';
+        }
+
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 10);
+    }
+
+    function closeNotificationModal() {
+        const modal = document.getElementById('notificationModal');
+        const content = document.getElementById('notificationModalContent');
+        if (!modal) return;
+
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    // FORM SUBMIT VALIDATOR
+    document.getElementById('form-transfer').addEventListener('submit', function(e) {
+        let errors = [];
+
+        const namaPengirim = document.getElementsByName('nama_pengirim')[0].value.trim();
+        const idRekening = document.getElementById('id_rekening').value.trim();
+        const namaPenerima = document.getElementById('nama_penerima').value.trim();
+        const noHpPengirim = document.getElementsByName('no_hp_pengirim')[0].value.trim();
+        const jumlahTransfer = document.getElementById('jumlah_transfer').value.trim();
+        const fileUpload = document.getElementById('file-upload').files;
+
+        if (!namaPengirim) {
+            errors.push('Nama Pengirim wajib diisi.');
+        }
+        if (!idRekening) {
+            errors.push('Nomor Rekening Penerima wajib diisi.');
+        } else if (namaPenerima === 'Rekening Tidak Ditemukan!' || namaPenerima === 'Mencari data...' || !namaPenerima) {
+            errors.push('Rekening Penerima tidak valid atau tidak ditemukan.');
+        }
+        if (!noHpPengirim) {
+            errors.push('Nomor Telepon wajib diisi.');
+        }
+        if (!jumlahTransfer || jumlahTransfer === '0') {
+            errors.push('Jumlah Transfer wajib diisi.');
+        }
+        if (fileUpload.length === 0) {
+            errors.push('Bukti Transfer wajib diunggah.');
+        }
+
+        if (errors.length > 0) {
+            e.preventDefault(); // Mencegah submit form
+            
+            // Susun list error dalam format HTML yang rapi
+            let errorListHTML = '<ul class="list-disc list-inside space-y-1.5 text-red-600 font-medium">';
+            errors.forEach(function(err) {
+                errorListHTML += `<li>${err}</li>`;
+            });
+            errorListHTML += '</ul>';
+
+            showNotificationModal('Gagal Mengirim Data', errorListHTML, 'error');
+        }
+    });
+
+    // TRIGGER BACKEND SESSION MESSAGES
+    @if(session('success'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotificationModal('Transfer Berhasil', "{{ session('success') }}", 'success');
+        });
+    @endif
+
+    @if(session('error'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotificationModal('Gagal', "{{ session('error') }}", 'error');
+        });
+    @endif
+
+    @if(session('failed'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showNotificationModal('Gagal', "{{ session('failed') }}", 'error');
+        });
+    @endif
+
+    // TRIGGER BACKEND ERRORS ON LOAD
+    @if($errors->any())
+        document.addEventListener('DOMContentLoaded', function() {
+            let backendErrors = '<ul class="list-disc list-inside space-y-1.5 text-red-600 font-medium">';
+            @foreach($errors->all() as $error)
+                backendErrors += `<li>{{ $error }}</li>`;
+            @endforeach
+            backendErrors += '</ul>';
+            
+            showNotificationModal('Validasi Gagal', backendErrors, 'error');
+        });
+    @endif
     </script>
 </body>
 </html>

@@ -45,16 +45,19 @@
 
             <div class="mb-6">
                 <label class="block text-[13px] font-semibold text-gray-500 mb-2">Bukti Transfer</label>
-                <div class="w-full h-[220px] border border-gray-200 rounded-xl bg-white flex items-center justify-center overflow-hidden">
+                <div class="w-full h-[320px] border border-gray-200 rounded-xl bg-gray-50 flex items-center justify-center p-3 overflow-hidden relative">
                     
                     <!-- 1. PLACEHOLDER (Muncul kalau belum ada file) -->
                     <div id="detail_bukti_container" class="flex flex-col items-center justify-center text-gray-400 gap-2">
-                        <i class="ph ph-image text-4xl"></i>
-                        <p class="text-[12px]">Bukti transfer belum diunggah</p>
+                        <i class="ph ph-image text-5xl"></i>
+                        <p class="text-[13px] font-medium">Bukti transfer belum diunggah</p>
                     </div>
 
-                    <!-- 2. TAG TUNGGAL SERBAGUNA (Bisa jadi foto atau PDF) -->
-                    <object id="detail_bukti_content" data="" type="" class="hidden w-full h-full object-contain"></object>
+                    <!-- 2. GAMBAR -->
+                    <img id="detail_bukti_img" src="" alt="Bukti Transfer" class="hidden max-h-full max-w-full object-contain rounded-lg shadow-sm border border-gray-200">
+
+                    <!-- 3. PDF -->
+                    <iframe id="detail_bukti_pdf" src="" class="hidden w-full h-full rounded-lg border-0"></iframe>
                     
                 </div>
             </div>

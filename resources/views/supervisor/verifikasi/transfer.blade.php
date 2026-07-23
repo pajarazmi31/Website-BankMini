@@ -142,7 +142,7 @@
                             <td class="py-4 px-2 border-b border-gray-50">
                                 <div class="flex items-center justify-center gap-2">
                                     <!-- Tombol Lihat (Mata) memanggil view Form -->
-                                    <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}','Rp{{number_format($item->nominal_admin,0, ',', '.') }}', '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset('storage/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                                    <button onclick="viewDetail('{{ $item->nama_pengirim }}', '{{ $item->nama_penerima }}', 'Rp{{ number_format($item->jumlah_transfer, 0, ',', '.')}}', '{{ $item->id_rekening }}','Rp{{number_format($item->nominal_admin,0, ',', '.') }}', '{{ $item->no_hp_pengirim }}' ,  '{{ $item->catatan }}', '{{ $item->datetime_tgl }}', '{{ asset(str_starts_with($item->bukti_foto, 'uploads/') || str_starts_with($item->bukti_foto, 'storage/') ? $item->bukti_foto : 'uploads/' . $item->bukti_foto) }}' )" class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
 
                                     <!-- 
                                                     BAGIAN BACKEND: AKSI VERIFIKASI (SETUJUI / TOLAK)
@@ -150,24 +150,36 @@
                                                     yang mengirim status verifikasi ke controller, atau menggunakan request AJAX.
                                                 -->
                                     @if($item->status_verifikasi == 'pending')
-                                    <!-- Tombol Aksi Hanya Muncul Jika Status Masih Pending -->
-                                    <form action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline" onsubmit="alert('Data Berhasil Diubah')">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="status_verifikasi" value="berhasil">
-                                        <button onclick="return confirm('Apakah Anda yakin ingin menyetujui transaksi ini?')" type="submit" class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui">
-                                            <i class="ph-bold ph-check-circle text-[16px]"></i>
-                                        </button>
-                                    </form>
+                                     <!-- Tombol Aksi Hanya Muncul Jika Status Masih Pending -->
+                                     <form id="form-approve-tf-{{ $item->id }}" action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline">
+                                         @csrf
+                                         @method('PATCH')
+                                         <input type="hidden" name="status_verifikasi" value="berhasil">
+                                         <button type="button" onclick="openConfirmModal({
+                                             title: 'Setujui Transaksi?',
+                                             message: 'Apakah Anda yakin ingin menyetujui verifikasi transfer ini?',
+                                             type: 'success',
+                                             confirmText: 'Ya, Setujui',
+                                             onConfirm: () => document.getElementById('form-approve-tf-{{ $item->id }}').submit()
+                                         })" class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui">
+                                             <i class="ph-bold ph-check-circle text-[16px]"></i>
+                                         </button>
+                                     </form>
 
-                                    <form action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline" onsubmit="alert('Data Berhasil Diubah')">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="status_verifikasi" value="gagal">
-                                        <button onclick="return confirm('Apakah Anda yakin ingin membatalkan transaksi ini?')" type="submit" class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak">
-                                            <i class="ph-bold ph-x-circle text-[16px]"></i>
-                                        </button>
-                                    </form>
+                                     <form id="form-reject-tf-{{ $item->id }}" action="{{ route('supervisor.verifikasiTf', $item->id) }}" method="POST" class="inline">
+                                         @csrf
+                                         @method('PATCH')
+                                         <input type="hidden" name="status_verifikasi" value="gagal">
+                                         <button type="button" onclick="openConfirmModal({
+                                             title: 'Tolak Transaksi?',
+                                             message: 'Apakah Anda yakin ingin membatalkan verifikasi transfer ini?',
+                                             type: 'danger',
+                                             confirmText: 'Ya, Tolak',
+                                             onConfirm: () => document.getElementById('form-reject-tf-{{ $item->id }}').submit()
+                                         })" class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak">
+                                             <i class="ph-bold ph-x-circle text-[16px]"></i>
+                                         </button>
+                                     </form>
                                     @else
                                     <!-- Tampilkan indikator bahwa aksi sudah terkunci -->
                                     <span class="text-[9px] text-gray-400 font-italic">
@@ -207,39 +219,33 @@
             document.getElementById('detail_telepon').value = telp;
             document.getElementById('detail_admin').value = admin;
 
-            // Dummy data untuk field tambahan
             document.getElementById('detail_tanggal').value = tgl_pengirim;
             document.getElementById('detail_catatan').value = catatan;
-            // --- BAGIAN PERUBAHAN UNTUK BUKTI TRANSFER ---
+
             const placeholder = document.getElementById('detail_bukti_container');
-            const contentTag = document.getElementById('detail_bukti_content'); // ID baru dari tag <object>
+            const imgTag = document.getElementById('detail_bukti_img');
+            const pdfTag = document.getElementById('detail_bukti_pdf');
 
-            // 1. Reset state awal agar bersih
+            // Reset state
             placeholder.classList.add('hidden');
-            contentTag.classList.add('hidden');
-            contentTag.removeAttribute('data');
-            contentTag.removeAttribute('type');
+            imgTag.classList.add('hidden');
+            pdfTag.classList.add('hidden');
+            imgTag.src = '';
+            pdfTag.src = '';
 
-            // 2. Cek apakah link bukti ada atau kosong dari database
-            if (bukti) {
-                // Ambil ekstensi filenya (PDF atau gambar) dari variabel 'bukti'
-                const ekstensi = bukti.split('.').pop().toLowerCase();
+            if (bukti && bukti.trim() !== '' && !bukti.endsWith('/')) {
+                const ekstensi = bukti.split('?')[0].split('.').pop().toLowerCase();
 
                 if (ekstensi === 'pdf') {
-                    contentTag.setAttribute('data', bukti);
-                    contentTag.setAttribute('type', 'application/pdf');
+                    pdfTag.src = bukti;
+                    pdfTag.classList.remove('hidden');
                 } else {
-                    contentTag.setAttribute('data', bukti);
-                    contentTag.setAttribute('type', 'image/jpeg'); // Standar untuk semua tipe gambar
+                    imgTag.src = bukti;
+                    imgTag.classList.remove('hidden');
                 }
-
-                // Tampilkan tag object
-                contentTag.classList.remove('hidden');
             } else {
-                // Jika dari database tidak ada file bukti, munculkan teks placeholder
                 placeholder.classList.remove('hidden');
             }
-            // ---------------------------------------------
 
             switchView('detail');
         }

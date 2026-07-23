@@ -1,4 +1,4 @@
-@props(['total' => 3, 'current' => 1, 'paginator' => null])
+@props(['total' => 1, 'current' => 1, 'paginator' => null])
 
 @php
     $showPagination = true;

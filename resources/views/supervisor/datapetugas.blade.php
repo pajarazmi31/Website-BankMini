@@ -53,11 +53,6 @@
     @endif
     <!-- ================= VIEW 1: TABEL DATA PETUGAS ================= -->
     <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
-        <!-- Search Bar Mobile -->
-        <div class="md:hidden relative mb-5">
-            <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-            <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-        </div>
 
 
         <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-4 px-1">
@@ -231,11 +226,68 @@
             });
         }
 
+        function liveSearchTable() {
+            const input = document.getElementById('searchInput');
+            if (!input) return;
+            const filter = input.value.toLowerCase().trim();
+            const tbody = document.querySelector('table tbody');
+            if (!tbody) return;
+            const rows = tbody.querySelectorAll('tr:not(#noDataRow)');
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+
+            let noDataRow = document.getElementById('noDataRow');
+            if (visibleCount === 0) {
+                if (!noDataRow) {
+                    noDataRow = document.createElement('tr');
+                    noDataRow.id = 'noDataRow';
+                    noDataRow.innerHTML = `<td colspan="6" class="py-8 text-center text-gray-400 text-[13px] font-medium">Data tidak ditemukan untuk "${filter}"</td>`;
+                    tbody.appendChild(noDataRow);
+                } else {
+                    noDataRow.querySelector('td').textContent = `Data tidak ditemukan untuk "${filter}"`;
+                    noDataRow.style.display = '';
+                }
+            } else if (noDataRow) {
+                noDataRow.style.display = 'none';
+            }
+        }
+
+        function clearSearch() {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('search');
+            window.location.href = url.toString();
+        }
+
         function changePerPage(value) {
             const url = new URL(window.location.href);
             url.searchParams.set('per_page', value);
             url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
             window.location.href = url.toString();
+        }
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (!input || !icon) return;
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('ph-eye');
+                icon.classList.add('ph-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('ph-eye-slash');
+                icon.classList.add('ph-eye');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {

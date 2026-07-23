@@ -58,10 +58,16 @@ Selamat Datang, {{ $user->name }}!
                     </select>
                 </div>
                 @if($data->count() > 0)
-                <form action="{{ route('supervisor.verifikasi.login.destroyAll') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus SELURUH data verifikasi login? Tindakan ini tidak dapat dibatalkan!');">
+                <form id="form-destroy-all-login" action="{{ route('supervisor.verifikasi.login.destroyAll') }}" method="POST" class="inline">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-0.5 bg-red-50 text-red-600 hover:bg-red-100 font-medium text-[13px] rounded-xl transition-all border border-red-200">
+                    <button type="button" onclick="openConfirmModal({
+                        title: 'Hapus Seluruh Data Login?',
+                        message: 'Apakah Anda yakin ingin menghapus <strong>SELURUH data verifikasi login</strong>? Tindakan ini tidak dapat dibatalkan.',
+                        type: 'danger',
+                        confirmText: 'Ya, Hapus Semua',
+                        onConfirm: () => document.getElementById('form-destroy-all-login').submit()
+                    })" class="inline-flex items-center gap-1.5 px-4 py-0.5 bg-red-50 text-red-600 hover:bg-red-100 font-medium text-[13px] rounded-xl transition-all border border-red-200">
                         <i class="ph ph-trash text-lg"></i>
                         <span>Hapus Semua Data</span>
                     </button>
@@ -151,36 +157,30 @@ Selamat Datang, {{ $user->name }}!
 
                                 @if($item->status == 'pending')
 
-                                <form
-                                    action="{{ route('supervisor.verifikasi.login.setujui',$item->id) }}"
-                                    method="POST">
-
+                                <form id="form-approve-login-{{ $item->id }}" action="{{ route('supervisor.verifikasi.login.setujui',$item->id) }}" method="POST" class="inline">
                                     @csrf
-
-                                    <button
-                                        onclick="return confirm('Setujui login ini?')"
-                                        class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center">
-
-                                        <i class="ph-bold ph-check-circle"></i>
-
+                                    <button type="button" onclick="openConfirmModal({
+                                        title: 'Setujui Login?',
+                                        message: 'Apakah Anda yakin ingin menyetujui permintaan login untuk <strong>{{ $item->user->name }}</strong>?',
+                                        type: 'success',
+                                        confirmText: 'Ya, Setujui',
+                                        onConfirm: () => document.getElementById('form-approve-login-{{ $item->id }}').submit()
+                                    })" class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui">
+                                        <i class="ph-bold ph-check-circle text-[16px]"></i>
                                     </button>
-
                                 </form>
 
-                                <form
-                                    action="{{ route('supervisor.verifikasi.login.tolak',$item->id) }}"
-                                    method="POST">
-
+                                <form id="form-reject-login-{{ $item->id }}" action="{{ route('supervisor.verifikasi.login.tolak',$item->id) }}" method="POST" class="inline">
                                     @csrf
-
-                                    <button
-                                        onclick="return confirm('Tolak login ini?')"
-                                        class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center">
-
-                                        <i class="ph-bold ph-x-circle"></i>
-
+                                    <button type="button" onclick="openConfirmModal({
+                                        title: 'Tolak Login?',
+                                        message: 'Apakah Anda yakin ingin menolak permintaan login untuk <strong>{{ $item->user->name }}</strong>?',
+                                        type: 'danger',
+                                        confirmText: 'Ya, Tolak',
+                                        onConfirm: () => document.getElementById('form-reject-login-{{ $item->id }}').submit()
+                                    })" class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak">
+                                        <i class="ph-bold ph-x-circle text-[16px]"></i>
                                     </button>
-
                                 </form>
 
                                 @else

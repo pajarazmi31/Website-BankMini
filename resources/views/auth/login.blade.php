@@ -36,25 +36,38 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
 </head>
-<body class="font-sans antialiased text-gray-800 bg-white min-h-full lg:min-h-screen flex flex-col-reverse lg:flex-row overflow-x-hidden">
+<body class="font-sans antialiased text-gray-800 bg-white min-h-screen flex flex-col lg:flex-row overflow-x-hidden">
 
     <!-- Custom Message Box (Pengganti alert) -->
-    <div id="messageBox" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 hidden opacity-0 transition-opacity">
-        <div class="bg-primary-blue text-white px-6 py-3 rounded-xl shadow-xl flex items-center gap-3">
-            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            <span id="messageText" class="font-medium">Pesan di sini</span>
+    <div id="messageBox" class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden opacity-0 transition-all duration-300 translate-y-2">
+        <div id="messageBg" class="bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-gray-100/80 min-w-[320px] max-w-[420px]">
+            <div id="messageIcon" class="flex items-center justify-center w-10 h-10 rounded-xl">
+                <!-- Icon dynamically set -->
+            </div>
+            <div class="flex-1 flex flex-col text-left">
+                <span id="messageTitle" class="font-semibold text-sm text-gray-900 leading-tight">Berhasil</span>
+                <span id="messageText" class="text-xs text-gray-500 font-medium mt-0.5">Pesan di sini</span>
+            </div>
+            <button type="button" onclick="closeMessage()" class="text-gray-400 hover:text-gray-600 transition-colors ml-2 focus:outline-none">
+                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
     </div>
 
     <!-- Sisi Kiri (Form Login) -->
-    <div class="w-full lg:w-1/2 min-h-screen lg:min-h-0 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative">
-        <div class="w-full max-w-[360px]">
+    <div class="w-full lg:w-1/2 min-h-screen flex items-center justify-center p-6 sm:p-12 lg:p-16 bg-white relative">
+        <div class="w-full max-w-[360px] py-6">
+            <!-- Logo Section for Mobile/Desktop Branding -->
+            <div class="flex flex-col items-center mb-6 lg:mb-8">
+                <img src="{{ asset('img/bankmini2.png') }}" alt="Logo Bank Mini" class="w-16 h-16 lg:w-20 lg:h-20 object-contain mb-3 drop-shadow-sm">
+                <span class="text-[10px] lg:text-xs font-bold text-gray-400 tracking-widest uppercase">Bank Mini K-One</span>
+            </div>
 
-            <h1 class="text-3xl lg:text-[32px] font-bold text-primary-blue mb-3 text-center tracking-tight">
-                Masuk
+            <h1 class="text-2xl lg:text-[28px] font-bold text-primary-blue mb-2 text-center tracking-tight">
+                Masuk ke Akun
             </h1>
-            <p class="text-gray-500 text-center mb-8 text-sm">
-                Untuk masuk ke akun anda, lengkapi form di bawah ini.
+            <p class="text-gray-400 text-center mb-8 text-xs lg:text-sm">
+                Silakan isi formulir di bawah ini untuk masuk.
             </p>
 
             {{--
@@ -126,8 +139,8 @@
         </div>
     </div>
 
-    <!-- Sisi Kanan (Banner Halo) -->
-    <div class="w-full lg:w-1/2 bg-gradient-merek lg:rounded-l-[4.5rem] flex items-center justify-center p-10 py-10 lg:p-16 relative overflow-hidden">
+    <!-- Sisi Kanan (Banner Halo) - Tersembunyi di Mobile -->
+    <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-merek lg:rounded-l-[4.5rem] items-center justify-center p-10 py-10 lg:p-16 relative overflow-hidden">
 
 
         <div class="text-center text-white max-w-[460px] z-10">
@@ -173,38 +186,79 @@
         });
 
         // Fungsi untuk menampilkan pesan (menggantikan fungsi alert default browser)
-        function showMessage(text) {
+        function showMessage(text, type = 'success') {
             clearTimeout(messageTimeout);
 
+            const messageBox = document.getElementById('messageBox');
+            const messageBg = document.getElementById('messageBg');
+            const messageTitle = document.getElementById('messageTitle');
+            const messageIcon = document.getElementById('messageIcon');
+            const messageText = document.getElementById('messageText');
+
             messageText.textContent = text;
-            messageBox.classList.remove('hidden', 'toast-leave');
-            messageBox.classList.add('toast-enter');
 
-            // Sembunyikan setelah 3 detik
-            messageTimeout = setTimeout(() => {
-                messageBox.classList.remove('toast-enter');
-                messageBox.classList.add('toast-leave');
+            if (type === 'error' || type === 'failed') {
+                messageTitle.textContent = 'Gagal';
+                messageTitle.className = 'font-semibold text-sm text-red-600 leading-tight';
+                messageIcon.className = 'flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 text-red-500';
+                messageIcon.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                messageBg.className = 'bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-red-100/50 min-w-[320px] max-w-[420px]';
+            } else {
+                messageTitle.textContent = 'Berhasil';
+                messageTitle.className = 'font-semibold text-sm text-emerald-600 leading-tight';
+                messageIcon.className = 'flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500';
+                messageIcon.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`;
+                messageBg.className = 'bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-emerald-100/50 min-w-[320px] max-w-[420px]';
+            }
 
-                // Hapus class hidden setelah animasi selesai
-                setTimeout(() => {
-                    messageBox.classList.add('hidden');
-                }, 400);
-            }, 3000);
+            messageBox.classList.remove('hidden');
+            setTimeout(() => {
+                messageBox.classList.remove('opacity-0', 'translate-y-2');
+                messageBox.classList.add('opacity-100', 'translate-y-0');
+            }, 10);
+
+            // Sembunyikan setelah 4 detik
+            messageTimeout = setTimeout(closeMessage, 4000);
+        }
+
+        function closeMessage() {
+            const messageBox = document.getElementById('messageBox');
+            if (!messageBox) return;
+            messageBox.classList.remove('opacity-100', 'translate-y-0');
+            messageBox.classList.add('opacity-0', 'translate-y-2');
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 300);
+            if (messageTimeout) {
+                clearTimeout(messageTimeout);
+            }
         }
 
         // ==========================================
         // SISTEM NOTIFIKASI BACKEND
         // ==========================================
-        // Script ini otomatis menangkap pesan 'success' atau 'error' dari session.
-        // Dapat dipicu via controller: return redirect()->back()->with('success', 'Isi Pesan');
+        // Script ini otomatis menangkap pesan 'success', 'failed', atau 'error' dari session.
 
         @if(session('success'))
-            showMessage("{{ session('success') }}");
+            showMessage("{{ session('success') }}", 'success');
+        @endif
+
+        @if(session('failed'))
+            showMessage("{{ session('failed') }}", 'error');
         @endif
 
         @if(session('error'))
-            showMessage("{{ session('error') }}");
+            showMessage("{{ session('error') }}", 'error');
         @endif
+
+        // Ambil query parameter error (misal dialihkan dari halaman verifikasi)
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorParam = urlParams.get('error');
+        if (errorParam) {
+            showMessage(errorParam, 'error');
+            // Bersihkan parameter query dari URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
 
     </script>
 </body>

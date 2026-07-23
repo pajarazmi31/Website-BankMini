@@ -59,7 +59,8 @@ class DataPetugasController extends Controller
             'roles',
             'user',
             'perPage',
-            'super'
+            'super',
+            'search'
         ));
     }
 
@@ -163,7 +164,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil dihapus');
         } catch (\Exception $e) {
 

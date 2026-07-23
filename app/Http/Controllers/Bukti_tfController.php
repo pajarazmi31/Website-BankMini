@@ -10,8 +10,8 @@ use Carbon\Carbon;
 
 class Bukti_tfController extends Controller
 {
-    
-    public function cekRekening($id)
+
+    public function cekRekening(String $id)
     {
         // Cari ke tabel rekening berdasarkan NOMOR REKENING-nya (kolom 'id' di tabel rekening kamu)
         // Gunakan ->where() agar pencarian string nomor rekening akurat

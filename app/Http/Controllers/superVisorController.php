@@ -49,7 +49,7 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 10);
+        $perPage = $request->input('per_page', 5);
         $bukti_tf = Bukti_Tf::latest()->paginate($perPage)
             ->appends(['per_page' => $perPage]);
         return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'perPage'));
@@ -86,16 +86,16 @@ class superVisorController extends Controller
     // return Excel::download(new BuktiTfExport, 'laporan-transfer-supervisor.xlsx');
     // }
 
-    public function detailTf($id)
+    public function detailTf(String $id)
     {
         $data = Bukti_Tf::find($id);
 
         return view('supervisor.verifikasi.transfer.detail', compact('data'));
     }
 
-    public function verifikasiTf(Request $request, $id)
-    {
-        $data = Bukti_Tf::findOrFail($id);
+    public function verifikasiTf(Request $request, String $id)
+{
+    $data = Bukti_Tf::findOrFail($id);
 
         if ($data->status_verifikasi !== 'pending') {
             return redirect()->back()->with('error', 'Transaksi ini sudah diproses sebelumnya.');
@@ -230,8 +230,9 @@ class superVisorController extends Controller
             })
             ->orderByDesc('id')
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
-        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage',));
+            ->appends(['per_page' => $perPage, 'search' => $search]);
+
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage', 'search'));
     }
 
     public function detailNasabah(String $id)
@@ -298,7 +299,7 @@ class superVisorController extends Controller
             compact('user', 'data', 'perPage', 'keyword')
         );
     }
-    public function setujuiLogin($id)
+    public function setujuiLogin(String $id)
     {
         VerifikasiLogin::findOrFail($id)
             ->update([
@@ -310,7 +311,7 @@ class superVisorController extends Controller
         return back()->with('success', 'Login disetujui');
     }
 
-    public function tolakLogin($id)
+    public function tolakLogin(String $id)
     {
         VerifikasiLogin::findOrFail($id)
             ->update([
@@ -418,14 +419,15 @@ class superVisorController extends Controller
         $saldo->nominal = $request->minimum_saldo;
         $saldo->save();
 
-    // 3. WAJIB: Kembalikan respons berupa JSON sukses
-    return response()->json([
-        'success' => true,
-        'message' => 'Biaya transaksi berhasil disimpan!'
-    ]);
+        // 3. WAJIB: Kembalikan respons berupa JSON sukses
+        return response()->json([
+            'success' => true,
+            'message' => 'Biaya transaksi berhasil disimpan!'
+        ]);
     }
 
-    public function print(String $id) {
+    public function print(String $id)
+    {
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 
         return view('supervisor.crud_datanasabah.print', compact('nasabah'));
