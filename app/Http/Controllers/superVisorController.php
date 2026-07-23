@@ -260,7 +260,7 @@ class superVisorController extends Controller
             'status_akun' => $request->status_akun,
         ]);
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'data revisi berhasil di kirim');
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'data revisi berhasil di kirim');
     }
 
     public function halamanRevisi(String $id)
@@ -418,15 +418,14 @@ class superVisorController extends Controller
         $saldo->nominal = $request->minimum_saldo;
         $saldo->save();
 
-        // 3. WAJIB: Kembalikan respons berupa JSON sukses
-        return response()->json([
-            'success' => true,
-            'message' => 'Biaya transaksi berhasil disimpan!'
-        ]);
+    // 3. WAJIB: Kembalikan respons berupa JSON sukses
+    return response()->json([
+        'success' => true,
+        'message' => 'Biaya transaksi berhasil disimpan!'
+    ]);
     }
 
-    public function print(String $id)
-    {
+    public function print(String $id) {
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 
         return view('supervisor.crud_datanasabah.print', compact('nasabah'));

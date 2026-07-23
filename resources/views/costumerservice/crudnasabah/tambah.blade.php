@@ -12,15 +12,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-                        <input type="number" value="{{ old('nis_nip') }}" id="nis" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="number" required value="{{ old('nis_nip') }}" id="nis" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                        <input type="text" value="{{ old('nama_lengkap') }}" id="nama_lengkap" name="nama_lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" required value="{{ old('nama_lengkap') }}" id="nama_lengkap" name="nama_lengkap" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" id="jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                        <select required name="jenis_kelamin" id="jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                                 <option value="Laki-Laki"
@@ -35,16 +35,16 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tempat Lahir</label>
-                        <input type="text" value="{{ old('tempat_lahir') }}" id="tempat_lahir" name="tempat_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input type="text" required value="{{ old('tempat_lahir') }}" id="tempat_lahir" name="tempat_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal Lahir</label>
-                        <input type="date" value="{{ old('tanggal_lahir') }}" id="tanggal_lahir" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
+                        <input type="date" required value="{{ old('tanggal_lahir') }}" id="tanggal_lahir" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                        <select name="agama" id="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                        <select required name="agama" id="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
@@ -58,7 +58,7 @@
 
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-                        <select name="jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
+                        <select required name="jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
                             onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="1" {{ old('jurusan' == '1' ? 'selected' : '') }}>TKRO</option>
@@ -72,7 +72,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
-                        <select name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select required name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="" disabled selected>Pilih Pendidikan</option>
                             <option value= {{ old('pendidikan' == 'SD' ? 'selected' : '') }}>SD</option>
                             <option value="SMP" {{ old('pendidikan' == 'SMP' ? 'selected' : '') }}>SMP</option>
@@ -88,7 +88,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
-                        <select name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select required name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="" disabled selected>Pilih Jabatan</option>
                             <option value="Siswa" {{ old('jabatan' == 'Siswa' ? 'selected' : '') }}>Siswa</option>
                             <option value="Guru" {{ old('jabatan' == 'Guru' ? 'selected' : '') }}>Guru</option>
@@ -97,7 +97,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Identitas Utama</label>
-                        <select name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                        <select required name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                             <option value="" disabled selected>Pilih Jenis Identitas</option>
                             <option value="KTP" {{ old('jenis_identitas' == 'KTP' ? 'selected' : '') }}>KTP</option>
                             <option value="Kartu Keluarga" {{ old('jenis_identitas' == 'Kartu Keluarga' ? 'selected' : '') }}>Kartu Keluarga</option>
@@ -105,15 +105,15 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                        <input type="tel" value="{{ old('no_hp') }}" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input required type="tel" value="{{ old('no_hp') }}" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                        <input type="text" value="{{ old('kode_pos') }}" id="kode_pos" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                        <input required type="text" value="{{ old('kode_pos') }}" id="kode_pos" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                            <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <select required name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                                 <option value="">Pilih Provinsi</option>
                                 @foreach ($provinsi as $prov)
                                 <option value="{{ $prov->id }}">
@@ -124,25 +124,25 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kabupaten/Kota</label>
-                            <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <select required name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                                 <option value="">Pilih Kabupaten</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-                            <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <select required name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                                 <option value="">Pilih Kecamatan</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
-                            <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
+                            <select required name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
                                 <option value="">Pilih Desa</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Email</label>
-                            <input type="email" value="{{ old('email') }}" name="email" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input required type="email" value="{{ old('email') }}" name="email" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">
@@ -153,6 +153,7 @@
                                 <input
                                     type="password"
                                     id="password"
+                                    required
                                     name="password"
                                     value="{{ old('password') }}"
                                     class="w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
@@ -181,7 +182,7 @@
                         </div>
                     <div class="col-span-2 md:col-span-2">
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Alamat</label>
-                        <textarea name="alamat" class="w-full h-[115px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">{{ old('alamat') }}</textarea>
+                        <textarea required name="alamat" class="w-full h-[115px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">{{ old('alamat') }}</textarea>
                     </div>
                 </div>
             </div>
@@ -196,20 +197,20 @@
                     <div class="flex flex-col gap-5">
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
-                            <input type="text" value="{{ old('nama_kontak_darurat') }}" name="nama_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input required type="text" value="{{ old('nama_kontak_darurat') }}" name="nama_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-                            <input type="number" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input required type="number" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>
-                            <input type="text" value="{{ old('hubungan_kontak_darurat') }}" name="hubungan_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
+                            <input required type="text" value="{{ old('hubungan_kontak_darurat') }}" name="hubungan_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                         </div>
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Alamat</label>
-                        <textarea name="alamat_kontak_darurat" class="w-full h-[225px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">{{ old('alamat_kontak_darurat') }}</textarea>
+                        <textarea required name="alamat_kontak_darurat" class="w-full h-[225px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 resize-none focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">{{ old('alamat_kontak_darurat') }}</textarea>
                     </div>
                 </div>
             </div>

@@ -60,7 +60,7 @@
 
             <!-- Buttons -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10">
-                <a href="{{ route('verifikasi.rekening') }}" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] flex items-center justify-center shadow-sm">
+                <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="w-full bg-[#797979] hover:bg-gray-600 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] flex items-center justify-center shadow-sm">
                     Kembali
                 </a>
                 <button type="submit" class="w-full bg-brand-blue hover:opacity-95 text-white font-bold py-3.5 rounded-xl transition-colors text-[15px] shadow-lg shadow-brand-blue/10">
