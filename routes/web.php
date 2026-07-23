@@ -100,6 +100,7 @@ Route::middleware(['role:customerservice'])->group(function () {
     Route::get('/customer/import/nasabah', [rekeningController::class, 'halamanImport'])->name('halaman.import');
     Route::get('costumer/print/{id}', [rekeningController::class, 'print'])->name('print');
     Route::get('/template/nasabah/excel', [csController::class, 'templateImport'])->name('template.nasabah');
+    Route::get('/nasabah/download-template', [csController::class, 'downloadTemplate'])->name('download.template');
 });
 
 //ROLE SUPERVISOR
@@ -107,8 +108,6 @@ Route::middleware(['role:supervisor'])->group(function () {
     route::get('/supervisor/dashboard', [superVisorController::class, 'index'])->name('supervisor.dashboard');
 
     Route::get('/supervisor/datanasabah', [superVisorController::class, 'nasabah'])->name('supervisor.datanasabah');
-
-    Route::get('/supervisor/datapetugas', [superVisorController::class, 'datapetugas'])->name('supervisor.datapetugas');
 
     Route::get('/supervisor/verifikasi', [superVisorController::class, 'transfer'])->name('supervisor.verifikasi');
 
@@ -195,9 +194,11 @@ Route::get('/cek-verifikasi-login/{id}', function ($id) {
 
         Auth::login($user);
 
+        $roleName = $user->role->nama_role;
+
         return response()->json([
             'status' => 'approved',
-            'role' => $user->role->nama_role
+            'role' => $roleName
         ]);
     }
 

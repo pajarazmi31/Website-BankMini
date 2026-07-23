@@ -72,7 +72,7 @@ class tellerController extends Controller
     // ===================== SETORAN ========================
     // ======================================================
 
-    public function exportSetoran($filter)
+    public function exportSetoran( String $filter)
     {
         $query = Setoran::query();
 
@@ -132,7 +132,7 @@ class tellerController extends Controller
         );
     }
 
-    public function cetakStruk($id)
+    public function cetakStruk(String $id)
     {
         $setoran = Setoran::with(['petugas', 'transaksi'])->findOrFail($id);
         $user = Auth::user();
@@ -168,6 +168,7 @@ class tellerController extends Controller
     {
         $request->validate([
             'id_rekening'             => 'required|numeric|exists:rekening,id',
+            'jumlah_penyetoran'       => 'required',
             'jumlah_penyetoran'       => 'required',
             'pilihan_biaya_transaksi' => 'required|in:Cash,Potong Saldo',
             'setoran'                 => 'required',
@@ -228,7 +229,7 @@ class tellerController extends Controller
         }
     }
 
-    public function updateSetoran(Request $request, $id)
+    public function updateSetoran(Request $request, String $id)
     {
         $request->validate([
             'id_rekening'             => 'required|exists:rekening,id',
@@ -300,6 +301,7 @@ class tellerController extends Controller
             }
             $this->sinkronisasiSaldo($request->id_rekening);
 
+
             DB::commit();
             return back()->with('success', 'Data setoran berhasil diupdate!');
         } catch (\Exception $e) {
@@ -308,7 +310,7 @@ class tellerController extends Controller
         }
     }
 
-    public function cariRekening($rekening)
+    public function cariRekening(String $rekening)
     {
         $data = Rekening::with('nasabah')->where('id', $rekening)->first();
         if ($data && $data->nasabah) {
@@ -346,7 +348,7 @@ class tellerController extends Controller
         return response()->json($results);
     }
 
-    public function destroySetoran($id)
+    public function destroySetoran(String $id)
     {
         $setoran = Setoran::findOrFail($id);
         $id_rek = $setoran->id_rekening;
@@ -359,7 +361,7 @@ class tellerController extends Controller
     // ===================== PENARIKAN ======================
     // ======================================================
 
-    public function exportPenarikan($filter)
+    public function exportPenarikan(String $filter)
     {
         $query = Penarikan::query();
         switch ($filter) {
@@ -485,7 +487,7 @@ class tellerController extends Controller
         }
     }
 
-    public function updatePenarikan(Request $request, $id)
+    public function updatePenarikan(Request $request, String $id)
     {
         $request->validate([
             'id_rekening'             => 'required|exists:rekening,id',
@@ -559,7 +561,7 @@ class tellerController extends Controller
         }
     }
 
-    public function destroyPenarikan($id)
+    public function destroyPenarikan(String $id)
     {
         $penarikan = Penarikan::findOrFail($id);
         $id_rek = $penarikan->id_rekening;
@@ -572,7 +574,7 @@ class tellerController extends Controller
     // ===================== TRANSFER =======================
     // ======================================================
 
-    public function exportTransfer($filter)
+    public function exportTransfer(String $filter)
     {
         $query = Transfer::with(['rekeningPengirim.nasabah', 'rekeningPenerima.nasabah']);
         switch ($filter) {
@@ -712,7 +714,7 @@ class tellerController extends Controller
         }
     }
 
-    public function updateTransfer(Request $request, $id)
+    public function updateTransfer(Request $request,String $id)
     {
         $request->validate([
             'id_rekening_pengirim' => 'required',
@@ -808,6 +810,7 @@ class tellerController extends Controller
             }
             $this->sinkronisasiSaldo($request->id_rekening_penerima);
 
+
             DB::commit();
             return back();
         } catch (\Exception $e) {
@@ -816,7 +819,7 @@ class tellerController extends Controller
         }
     }
 
-    public function destroyTransfer($id)
+    public function destroyTransfer(String $id)
     {
         $transfer = Transfer::findOrFail($id);
         $id_rek_pengirim = $transfer->id_rekening_pengirim;
@@ -957,6 +960,7 @@ class tellerController extends Controller
                     'jenis_transaksi' => 'Transfer Keluar (Nasabah)',
                     // KELUAR -> Tampilkan Rek Penerima
                     'keterangan' => 'Ke Rek: ' . $t->id_penerima,
+                    'keterangan' => 'Ke Rek: ' . $t->id_penerima,
                     'admin' => $adminTf,
                     'debit' => $jumlahTf + $adminTf,
                     'kredit' => 0,
@@ -1041,7 +1045,7 @@ class tellerController extends Controller
         return view('teller.history_nasabah', compact('user', 'teller', 'data', 'perPage'));
     }
 
-    public function sinkronisasiSaldo($id_rekening)
+    public function sinkronisasiSaldo(String $id_rekening)
     {
         $cleanNum = function ($val) {
             if (!$val) return 0;
@@ -1165,10 +1169,11 @@ class tellerController extends Controller
         }
     }
 
-    public function cetakBuku(Request $request, $id_rekening)
+    public function cetakBuku(Request $request, String $id_rekening)
     {
         $mulai_baris = $request->query('baris', 1);
         $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+
 
         $cleanNum = function ($val) {
             if (!$val) return 0;
@@ -1262,6 +1267,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 $waktu = $t->created_at ?? $t->datetime_tgl;
                 return (object)[
                     'tanggal'     => $waktu ? Carbon::parse($waktu) : Carbon::now(),
+                    'jenis'       => 'TFL',
                     'jenis'       => 'TFL',
                     'keterangan' => 'Dari: ' . ($t->nama_pengirim ?? '-'),
                     'biaya_admin' => $cleanNum($t->nominal_admin),

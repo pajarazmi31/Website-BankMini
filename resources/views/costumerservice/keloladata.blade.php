@@ -45,6 +45,11 @@ selamat datang {{ $user->name }}!
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-1">
         <h3 class="text-[22px] font-bold text-gray-800">Data Nasabah</h3>
         <div class="flex flex-col sm:flex-row gap-2.5 w-full sm:w-auto">
+            <a href="{{ route('download.template') }}" class="w-full sm:w-auto">
+                <button type="button" class="w-full bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all shadow-sm justify-center">
+                    <i class="ph ph-file-xls text-base text-green-600"></i> Download Template
+                </button>
+            </a>
             <a href="{{ route('halaman.import') }}" class="w-full sm:w-auto">
                 <button type="button" class="w-full bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 active:scale-95 transition-all shadow-sm justify-center">
                     <i class="ph ph-file-arrow-up text-base text-brand-blue"></i> Import Data
@@ -133,7 +138,8 @@ selamat datang {{ $user->name }}!
                                     '{{ $nasabah->alamat_kontak_darurat }}',
                                     '{{ $nasabah->rekening->id ?? 'rekening belum dibuat' }}',
                                     '{{ $nasabah->rekening->status_akun ?? 'status belum ada'}}',
-                                    '{{ $nasabah->pesan }}'
+                                    '{{ $nasabah->pesan }}',
+                                    '{{ $nasabah->nama_perevisi ?? '-' }}' 
                                     )"
                                     class="w-[28px] h-[28px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors"
                                     title="Lihat Detail">
@@ -146,19 +152,25 @@ selamat datang {{ $user->name }}!
                                         <i class="ph-fill ph-pencil-simple text-[15px]"></i>
                                     </button>
                                 </a>
-                                <form action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post" onsubmit="return confirm('Yakin ingin menghapus data nasabah ini?')">
+                                <form id="form-delete-nasabah-{{ $nasabah->id }}" action="{{ route('hapus.nasabah', $nasabah->id) }}" method="post" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
+                                    <button type="button" onclick="openConfirmModal({
+                                                title: 'Hapus Data Nasabah?',
+                                                message: 'Apakah Anda yakin ingin menghapus data nasabah <strong>{{ $nasabah->nama_nasabah }}</strong>? Tindakan ini tidak dapat dibatalkan.',
+                                                type: 'danger',
+                                                confirmText: 'Ya, Hapus Data',
+                                                onConfirm: () => document.getElementById('form-delete-nasabah-{{ $nasabah->id }}').submit()
+                                            })" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus">
                                         <i class="ph-fill ph-trash text-[15px]"></i>
                                     </button>
                                 </form>
                                 <a href="{{ route('print', $nasabah->id) }}">
-                                <button type="button"
+                                    <button type="button"
                                         class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors focus:outline-none"
                                         title="Cetak Struk">
-                                    <i class="ph-fill ph-printer text-[15px]"></i>
-                                </button>
+                                        <i class="ph-fill ph-printer text-[15px]"></i>
+                                    </button>
                                 </a>
                             </div>
                         </td>
@@ -179,7 +191,30 @@ selamat datang {{ $user->name }}!
 @if(isset($nasabah))
 @include('costumerservice.crudnasabah.detail')
 @endif
+<!-- ================= MODAL KONFIRMASI (GLOBAL) ================= -->
+<div id="confirmModal" class="fixed inset-0 z-50 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity opacity-0">
+    <div class="bg-white rounded-[24px] shadow-xl w-full max-w-sm p-6 transform scale-95 transition-all transition-transform duration-300">
+        
+        <!-- Icon & Title -->
+        <div class="flex flex-col items-center text-center mb-6">
+            <div id="confirmIconContainer" class="w-16 h-16 rounded-full flex items-center justify-center mb-4">
+                <i id="confirmIcon" class="text-[32px]"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-[18px] font-bold text-gray-800 mb-2">Konfirmasi</h3>
+            <p id="confirmMessage" class="text-[14px] text-gray-500 leading-relaxed"></p>
+        </div>
 
+        <!-- Buttons -->
+        <div class="flex gap-3 w-full">
+            <button onclick="closeConfirmModal()" class="flex-1 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-[14px] transition-colors">
+                Batal
+            </button>
+            <button id="confirmBtn" class="flex-1 py-2.5 text-white font-semibold rounded-xl text-[14px] transition-colors shadow-sm">
+                Ya, Lanjutkan
+            </button>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -191,6 +226,17 @@ selamat datang {{ $user->name }}!
             'edit': document.getElementById('viewEditData'),
             'detail': document.getElementById('viewDetailData')
         };
+
+        const searchContainer = document.getElementById('searchBarContainer');
+        if (searchContainer) {
+            if (viewName === 'tabel') {
+                searchContainer.classList.remove('hidden', 'md:hidden');
+                searchContainer.classList.add('hidden', 'md:block');
+            } else {
+                searchContainer.classList.remove('md:block');
+                searchContainer.classList.add('hidden', 'md:hidden');
+            }
+        }
 
         Object.values(views).forEach(v => {
             if (v) {
@@ -255,7 +301,8 @@ selamat datang {{ $user->name }}!
         kontak_alamat,
         rekening,
         status,
-        pesan
+        pesan,
+        nama_perevisi
     ) {
         document.getElementById('detail_nama').value = nama;
         document.getElementById('detail_nis').value = nis;
@@ -286,10 +333,12 @@ selamat datang {{ $user->name }}!
 
         const revisiSection = document.getElementById('revisi_section');
         const detailPesan = document.getElementById('detail_pesan');
+        const labelPerevisi = document.getElementById('label_perevisi');
 
         if (status === 'revisi') {
             revisiSection.classList.remove('hidden');
             detailPesan.innerText = pesan;
+            labelPerevisi.innerText = `📝 Pesan Revisi dari ${nama_perevisi}`;
         } else {
             revisiSection.classList.add('hidden');
             detailPesan.innerText = '';
@@ -432,5 +481,66 @@ selamat datang {{ $user->name }}!
         }
 
     });
+    // Fungsi untuk memunculkan Modal
+    function openConfirmModal({ title, message, type = 'danger', confirmText = 'Ya', onConfirm }) {
+        const modal = document.getElementById('confirmModal');
+        const iconContainer = document.getElementById('confirmIconContainer');
+        const icon = document.getElementById('confirmIcon');
+        const btnConfirm = document.getElementById('confirmBtn');
+
+        // Reset class warna
+        iconContainer.className = 'w-16 h-16 rounded-full flex items-center justify-center mb-4';
+        btnConfirm.className = 'flex-1 py-2.5 text-white font-semibold rounded-xl text-[14px] transition-colors shadow-sm';
+
+        // Set Warna & Ikon berdasarkan 'type' (danger atau success)
+        if (type === 'danger') {
+            iconContainer.classList.add('bg-red-100', 'text-red-500');
+            icon.className = 'ph-fill ph-warning-circle text-[32px] text-red-500';
+            btnConfirm.classList.add('bg-red-500', 'hover:bg-red-600');
+        } else if (type === 'success') {
+            iconContainer.classList.add('bg-green-100', 'text-green-500');
+            icon.className = 'ph-fill ph-check-circle text-[32px] text-green-500';
+            btnConfirm.classList.add('bg-green-500', 'hover:bg-green-600');
+        } else {
+            // Default (biru)
+            iconContainer.classList.add('bg-blue-100', 'text-blue-500');
+            icon.className = 'ph-fill ph-info text-[32px] text-blue-500';
+            btnConfirm.classList.add('bg-brand-blue', 'hover:bg-blue-800');
+        }
+
+        // Set Teks
+        document.getElementById('confirmTitle').innerText = title;
+        document.getElementById('confirmMessage').innerHTML = message;
+        btnConfirm.innerText = confirmText;
+
+        // Set Fungsi saat tombol "Ya" ditekan
+        btnConfirm.onclick = function() {
+            onConfirm();
+            closeConfirmModal(); // Tutup modal sambil memproses
+        };
+
+        // Tampilkan Modal dengan animasi
+        modal.classList.remove('hidden');
+        // Sedikit delay agar transisi CSS berjalan
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.firstElementChild.classList.remove('scale-95');
+            modal.firstElementChild.classList.add('scale-100');
+        }, 10);
+    }
+
+    // Fungsi untuk menutup Modal
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        
+        // Animasi keluar
+        modal.classList.add('opacity-0');
+        modal.firstElementChild.classList.remove('scale-100');
+        modal.firstElementChild.classList.add('scale-95');
+
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300); // Sesuaikan dengan durasi transisi CSS (duration-300)
+    }
 </script>
 @endsection

@@ -103,14 +103,26 @@ Selamat Datang, {{ $user->name }}!
                                 <a href="{{ route('detail.rekening.super', $nasabah->id) }}">
                                     <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
                                 </a>
-                                <form action="{{ route('rekening.aktif', $nasabah->rekening->id ) }}" method="post">
+                                <form id="form-approve-rek-{{ $nasabah->rekening->id }}" action="{{ route('rekening.aktif', $nasabah->rekening->id ) }}" method="post" class="inline">
                                     @csrf
-                                    <button class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
+                                    <button type="button" onclick="openConfirmModal({
+                                        title: 'Setujui Rekening?',
+                                        message: 'Apakah Anda yakin ingin mengaktifkan akun rekening untuk <strong>{{ $nasabah->nama_nasabah }}</strong>?',
+                                        type: 'success',
+                                        confirmText: 'Ya, Aktifkan',
+                                        onConfirm: () => document.getElementById('form-approve-rek-{{ $nasabah->rekening->id }}').submit()
+                                    })" class="w-[30px] h-[30px] rounded-full bg-[#d1fae5] text-[#10a163] flex items-center justify-center hover:bg-green-200 transition-colors" title="Setujui"><i class="ph-bold ph-check-circle text-[16px]"></i></button>
                                 </form>
-                                <form action="{{ route('hapus.nasabah.super', $nasabah->id) }}" onclick="confirm('yakin mau di hapus?')" method="post">
+                                <form id="form-delete-nasabah-{{ $nasabah->id }}" action="{{ route('hapus.nasabah.super', $nasabah->id) }}" method="post" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
+                                    <button type="button" onclick="openConfirmModal({
+                                        title: 'Hapus & Tolak Registrasi?',
+                                        message: 'Apakah Anda yakin ingin menolak dan menghapus pendaftaran <strong>{{ $nasabah->nama_nasabah }}</strong>?',
+                                        type: 'danger',
+                                        confirmText: 'Ya, Hapus',
+                                        onConfirm: () => document.getElementById('form-delete-nasabah-{{ $nasabah->id }}').submit()
+                                    })" class="w-[30px] h-[30px] rounded-full bg-[#fee2e2] text-red-500 flex items-center justify-center hover:bg-red-200 transition-colors" title="Tolak"><i class="ph-bold ph-x-circle text-[16px]"></i></button>
                                 </form>
                                 <a href="{{ route('halaman.revisi', $nasabah->id) }}">
                                     <button class="w-[30px] h-[30px] rounded-full bg-[#fef3c7] text-[#d97706] flex items-center justify-center hover:bg-[#fde68a] transition-colors" title="Revisi">

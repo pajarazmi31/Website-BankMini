@@ -139,11 +139,11 @@
                     </li>
                     @endif
                     <li class="pt-4 px-4">
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="globalLogoutForm" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
-                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="flex items-center gap-3 text-red-500 font-medium py-2 hover:text-red-600 transition-colors">
-                            <img src="{{ asset('img/icon/sidebar/logout.png') }}" alt="Logout" class="w-5 h-5">
+                        <a href="#" onclick="event.preventDefault(); openLogoutModal();" class="flex items-center gap-3 text-red-500 font-medium py-2 hover:text-red-600 transition-colors">
+                            <i class="ph ph-sign-out text-[22px]"></i>
                             <span class="text-[14px]">Keluar</span>
                         </a>
                     </li>
@@ -206,7 +206,47 @@
         </div>
     </main>
 
+    <!-- Global Toast Notification -->
+    <div id="toastAlert" class="fixed top-6 right-6 z-[110] hidden opacity-0 transform translate-y-2 transition-all duration-300">
+        <div id="toastBg" class="bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-gray-100/80 min-w-[320px] max-w-[420px]">
+            <div id="toastIcon" class="flex items-center justify-center w-10 h-10 rounded-xl">
+                <!-- Icon dynamically set -->
+            </div>
+            <div class="flex-1 flex flex-col text-left">
+                <span id="toastTitle" class="font-semibold text-sm text-gray-900 leading-tight">Berhasil</span>
+                <span id="toastMessage" class="text-xs text-gray-500 font-medium mt-0.5">Pesan berhasil disimpan!</span>
+            </div>
+            <button onclick="closeToast()" class="text-gray-400 hover:text-gray-600 transition-colors ml-2 focus:outline-none">
+                <i class="ph ph-x text-lg"></i>
+            </button>
+        </div>
+    </div>
+
     @yield('modals')
+
+    <!-- Global Logout Confirmation Modal -->
+    <div id="logoutModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <div class="fixed inset-0 bg-black/40 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
+        <div class="bg-white rounded-[28px] w-full max-w-[400px] p-8 shadow-2xl relative z-10 transform transition-all scale-95 opacity-0 duration-300" id="logoutModalContent">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-20 h-20 rounded-full bg-red-50 flex items-center justify-center mb-6">
+                    <i class="ph-fill ph-sign-out text-[44px] text-red-500"></i>
+                </div>
+                <h3 class="text-[22px] font-bold text-gray-900 mb-2">Konfirmasi Keluar</h3>
+                <p class="text-gray-500 text-[14px] leading-relaxed mb-8">
+                    Apakah Anda yakin ingin keluar dari akun Anda?
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 w-full">
+                    <button type="button" onclick="closeLogoutModal()" class="flex-1 px-6 py-3.5 rounded-xl bg-gray-100 text-gray-700 font-bold text-[14px] hover:bg-gray-200 transition-colors">
+                        Batal
+                    </button>
+                    <button type="button" onclick="confirmLogout()" class="flex-1 px-6 py-3.5 rounded-xl bg-red-500 text-white font-bold text-[14px] hover:bg-red-600 transition-colors shadow-lg shadow-red-500/30">
+                        Ya, Keluar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         function toggleSidebar() {
@@ -214,6 +254,106 @@
             const overlay = document.getElementById('sidebarOverlay');
             sidebar.classList.toggle('-translate-x-full');
             overlay.classList.toggle('hidden');
+        }
+
+        let toastTimeout;
+
+        // TOAST SYSTEM
+        function showToast(message, type = 'success') {
+            clearTimeout(toastTimeout);
+            const toast = document.getElementById('toastAlert');
+            const toastBg = document.getElementById('toastBg');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMsg.textContent = message;
+
+            if (type === 'error' || type === 'failed') {
+                toastTitle.textContent = 'Gagal';
+                toastTitle.className = 'font-semibold text-sm text-red-600 leading-tight';
+                toastIcon.className = 'flex items-center justify-center w-10 h-10 rounded-xl bg-red-50 text-red-500';
+                toastIcon.innerHTML = '<i class="ph-fill ph-x-circle text-[22px]"></i>';
+                toastBg.className = 'bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-red-100/50 min-w-[320px] max-w-[420px]';
+            } else {
+                toastTitle.textContent = 'Berhasil';
+                toastTitle.className = 'font-semibold text-sm text-emerald-600 leading-tight';
+                toastIcon.className = 'flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-50 text-emerald-500';
+                toastIcon.innerHTML = '<i class="ph-fill ph-check-circle text-[22px]"></i>';
+                toastBg.className = 'bg-white text-gray-800 px-5 py-4 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] flex items-center gap-3.5 border border-emerald-100/50 min-w-[320px] max-w-[420px]';
+            }
+
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+                toast.classList.add('opacity-100', 'translate-y-0');
+            }, 10);
+
+            toastTimeout = setTimeout(closeToast, 4000);
+        }
+
+        function closeToast() {
+            const toast = document.getElementById('toastAlert');
+            if (!toast) return;
+            toast.classList.remove('opacity-100', 'translate-y-0');
+            toast.classList.add('opacity-0', 'translate-y-2');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 300);
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+        }
+
+        // Trigger toast on page load if session exists
+        @if(session('success'))
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast("{{ session('success') }}", 'success');
+            });
+        @endif
+
+        @if(session('error'))
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast("{{ session('error') }}", 'error');
+            });
+        @endif
+
+        @if(session('failed'))
+            document.addEventListener('DOMContentLoaded', function() {
+                showToast("{{ session('failed') }}", 'error');
+            });
+        @endif
+
+        // LOGOUT MODAL LOGIC
+        function openLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            const content = document.getElementById('logoutModalContent');
+            if (!modal || !content) return;
+
+            modal.classList.replace('hidden', 'flex');
+            setTimeout(() => {
+                content.classList.replace('scale-95', 'scale-100');
+                content.classList.replace('opacity-0', 'opacity-100');
+            }, 10);
+        }
+
+        function closeLogoutModal() {
+            const modal = document.getElementById('logoutModal');
+            const content = document.getElementById('logoutModalContent');
+            if (!modal || !content) return;
+
+            content.classList.replace('scale-100', 'scale-95');
+            content.classList.replace('opacity-100', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.replace('flex', 'hidden');
+            }, 300);
+        }
+
+        function confirmLogout() {
+            const form = document.getElementById('globalLogoutForm');
+            if (form) {
+                form.submit();
+            }
         }
     </script>
     @yield('scripts')

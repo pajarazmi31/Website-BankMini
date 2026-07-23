@@ -163,7 +163,7 @@ class DataPetugasController extends Controller
             });
 
             return redirect()
-                ->route('datapetugas.index')
+                ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil dihapus');
         } catch (\Exception $e) {
 

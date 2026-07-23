@@ -205,7 +205,7 @@ class nasabahController extends Controller
         return view('nasabah.transfer', compact('biaya_admin', 'user', 'rekening', 'nasabah', 'riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
     }
 
-    public function cekRekening($id)
+    public function cekRekening(String $id)
     {
         // Cari rekening beserta data user-nya
         $rekening = Rekening::with('user')->find($id);

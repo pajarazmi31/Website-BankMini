@@ -132,8 +132,9 @@
 
             <!-- PESAN REVISI - DIPERBAIKI -->
             <div id="revisi_section" class="mt-6 hidden">
-                <label class="block text-[13px] font-semibold text-gray-500 mb-2">
-                    📝 Pesan Revisi dari {{ $nasabah->nama_perevisi }}
+                <!-- Tambahkan id="label_perevisi" dan hapus variabel bladenya -->
+                <label id="label_perevisi" class="block text-[13px] font-semibold text-gray-500 mb-2">
+                    📝 Pesan Revisi dari -
                 </label>
 
                 <div id="detail_pesan"

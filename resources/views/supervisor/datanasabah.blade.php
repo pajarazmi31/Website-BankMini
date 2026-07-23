@@ -28,12 +28,6 @@
 @section('content')
 <!-- ================= VIEW 1: TABEL DATA NASABAH ================= -->
 <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
-    <!-- Search Bar Mobile -->
-    <div class="md:hidden relative mb-5">
-        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-    </div>
-
 
     <div class="mb-4 px-1">
         <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Nasabah</h3>
@@ -115,23 +109,23 @@
                             @endif
                         </td>
 
-                        <td class="py-4 px-2 border-b border-gray-50 text-center">
-                            <div class="flex gap-2 items-center justify-center">
-                                <a href="{{ route('detail.nasabah', $nasabah->id) }}">
-                                    <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
-                                </a>
-                                <a href="{{ route('print.super', $nasabah->id) }}">
-                                    <button type="button"
-                                        class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors focus:outline-none"
-                                        title="Cetak Struk">
-                                        <i class="ph-fill ph-printer text-[15px]"></i>
-                                    </button>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+            <td class="py-4 px-2 border-b border-gray-50 text-center">
+                <div class="flex items-center justify-center gap-2">
+                    <a href="{{ route('detail.nasabah', $nasabah->id) }}">
+                        <button class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i></button>
+                    </a>
+                    <a href="{{ route('print.super', $nasabah->id) }}">
+                        <button type="button"
+                                class="download-struk w-[28px] h-[28px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-200 transition-colors focus:outline-none"
+                                title="Cetak Struk">
+                            <i class="ph-fill ph-printer text-[15px]"></i>
+                        </button>
+                    </a>
+                </div>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
             </table>
         </div>
 
@@ -142,10 +136,51 @@
 </div>
 
 <script>
+    function liveSearchTable() {
+        const input = document.getElementById('searchInput');
+        if (!input) return;
+        const filter = input.value.toLowerCase().trim();
+        const tbody = document.querySelector('table tbody');
+        if (!tbody) return;
+        const rows = tbody.querySelectorAll('tr:not(#noDataRow)');
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            if (text.includes(filter)) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+
+        let noDataRow = document.getElementById('noDataRow');
+        if (visibleCount === 0) {
+            if (!noDataRow) {
+                noDataRow = document.createElement('tr');
+                noDataRow.id = 'noDataRow';
+                noDataRow.innerHTML = `<td colspan="6" class="py-8 text-center text-gray-400 text-[13px] font-medium">Data tidak ditemukan untuk "${filter}"</td>`;
+                tbody.appendChild(noDataRow);
+            } else {
+                noDataRow.querySelector('td').textContent = `Data tidak ditemukan untuk "${filter}"`;
+                noDataRow.style.display = '';
+            }
+        } else if (noDataRow) {
+            noDataRow.style.display = 'none';
+        }
+    }
+
+    function clearSearch() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('search');
+        window.location.href = url.toString();
+    }
+
     function changePerPage(value) {
         const url = new URL(window.location.href);
         url.searchParams.set('per_page', value);
-        url.searchParams.set('page', 1); // Reset kembali ke halaman 1 setiap kali jumlah data diubah
+        url.searchParams.set('page', 1);
         window.location.href = url.toString();
     }
 </script>
