@@ -194,7 +194,7 @@ class superVisorController extends Controller
         $user->delete();
 
 
-        return redirect()->route('verifikasi.rekening')->with('success', 'data nasabah berhasil di hapus');
+        return redirect()->route('supervisor.verifikasi.registrasi')->with('success', 'data nasabah berhasil di hapus');
     }
 
     public function detail(String $id)
@@ -230,9 +230,9 @@ class superVisorController extends Controller
             })
             ->orderByDesc('id')
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage, 'search' => $search]);
+            ->appends(['per_page' => $perPage]);
 
-        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage', 'search'));
+        return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage'));
     }
 
     public function detailNasabah(String $id)

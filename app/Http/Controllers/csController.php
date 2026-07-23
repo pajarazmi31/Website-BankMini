@@ -24,11 +24,34 @@ class csController extends Controller
         return view('costumerservice.dashboard', compact('user','cs','jumlahNasabah','revisi','jumlahPending','nasabah'));
     }
 
-    public function keloladata() {
+public function keloladata(Request $request) {
         $user = Auth::user();
         $cs = $user->petugas;
-        $nasabah = Nasabah::with('rekening')->get();
-        return view('costumerservice.keloladata',compact('user','cs','nasabah'));
+        
+        // Ambil nilai filter dari URL (jika ada)
+        $perPage = $request->input('per_page', 10);
+        $keyword = $request->input('keyword');
+
+        // Mulai query untuk Nasabah
+        $query = Nasabah::with('rekening');
+
+        // Jika user mengetikkan sesuatu di kolom pencarian
+        if ($keyword) {
+            $query->where(function($q) use ($keyword) {
+                $q->where('nama_nasabah', 'like', "%{$keyword}%")
+                  ->orWhere('nis_nip', 'like', "%{$keyword}%")
+                  ->orWhere('jabatan', 'like', "%{$keyword}%")
+                  ->orWhereHas('rekening', function($rekQuery) use ($keyword) {
+                      $rekQuery->where('id', 'like', "%{$keyword}%");
+                  });
+            });
+        }
+
+        // Terapkan paginasi dan bawa serta query (keyword & per_page) ke halaman selanjutnya
+        $allNasabah = $query->paginate($perPage)->appends(request()->query());
+
+        // Kirim $allNasabah dan $perPage agar tidak error di Blade
+        return view('costumerservice.keloladata', compact('user', 'cs', 'allNasabah', 'perPage'));
     }
 
     public function detail(String $id) {

@@ -12,11 +12,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">NIS/NIP</label>
-<<<<<<< HEAD
-                        <input type="number" required value="{{ old('nis_nip') }}" id="nis" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-=======
                         <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="{{ old('nis_nip') }}" id="nis" name="nis_nip" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nama Lengkap</label>
@@ -24,12 +20,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Kelamin</label>
-<<<<<<< HEAD
-                        <select required name="jenis_kelamin" id="jenis_kelamin" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
-                            onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
-=======
                         <select name="jenis_kelamin" id="jenis_kelamin" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Jenis Kelamin</option>
                             <option value="Laki-Laki" {{ old('jenis_kelamin') == 'Laki-Laki' ? 'selected' : '' }}>Laki-laki</option>
                             <option value="Perempuan" {{ old('jenis_kelamin') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
@@ -41,21 +32,11 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Tanggal Lahir</label>
-<<<<<<< HEAD
-                        <input type="date" required value="{{ old('tanggal_lahir') }}" id="tanggal_lahir" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors"
-                            onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
-                        <select required name="agama" id="agama" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
-                            onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
-=======
                         <input type="date" value="{{ old('tanggal_lahir') }}" id="tanggal_lahir" name="tanggal_lahir" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Agama</label>
                         <select name="agama" id="agama" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Agama</option>
                             <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                             <option value="Protestan" {{ old('agama') == 'Protestan' ? 'selected' : '' }}>Protestan</option>
@@ -68,12 +49,7 @@
 
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jurusan</label>
-<<<<<<< HEAD
-                        <select required name="jurusan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white"
-                            onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
-=======
                         <select name="jurusan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Jurusan</option>
                             <option value="1" {{ old('jurusan') == '1' ? 'selected' : '' }}>TKRO</option>
                             <option value="2" {{ old('jurusan') == '2' ? 'selected' : '' }}>TJKT</option>
@@ -86,11 +62,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Pendidikan</label>
-<<<<<<< HEAD
-                        <select required name="pendidikan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-=======
                         <select name="pendidikan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Pendidikan</option>
                             <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD</option>
                             <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP</option>
@@ -106,11 +78,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jabatan</label>
-<<<<<<< HEAD
-                        <select required name="jabatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-=======
                         <select name="jabatan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Jabatan</option>
                             <option value="Siswa" {{ old('jabatan') == 'Siswa' ? 'selected' : '' }}>Siswa</option>
                             <option value="Guru" {{ old('jabatan') == 'Guru' ? 'selected' : '' }}>Guru</option>
@@ -119,11 +87,7 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Jenis Identitas Utama</label>
-<<<<<<< HEAD
-                        <select required name="jenis_identitas" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-=======
                         <select name="jenis_identitas" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             <option value="" disabled selected>Pilih Jenis Identitas</option>
                             <option value="KTP" {{ old('jenis_identitas') == 'KTP' ? 'selected' : '' }}>KTP</option>
                             <option value="Kartu Keluarga" {{ old('jenis_identitas') == 'Kartu Keluarga' ? 'selected' : '' }}>Kartu Keluarga</option>
@@ -131,18 +95,6 @@
                     </div>
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-<<<<<<< HEAD
-                        <input required type="tel" value="{{ old('no_hp') }}" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kode Pos</label>
-                        <input required type="text" value="{{ old('kode_pos') }}" id="kode_pos" name="kode_pos" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-                    </div>
-                        <div>
-                            <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
-                            <select required name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Provinsi</option>
-=======
                         <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="{{ old('no_hp') }}" name="no_hp" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
                     </div>
                     <div>
@@ -153,7 +105,6 @@
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Provinsi</label>
                             <select name="provinsi" id="provinsi" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                                 <option value="" disabled selected>Pilih Provinsi</option>
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                                 @foreach ($provinsi as $prov)
                                 <option value="{{ $prov->id }}">
                                     {{ ucwords(strtolower($prov->name)) }}
@@ -163,35 +114,20 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kabupaten/Kota</label>
-<<<<<<< HEAD
-                            <select required name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Kabupaten</option>
-=======
                             <select name="kab_kota" id="kabupaten" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                                 <option value="" disabled selected>Pilih Kabupaten</option>
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kecamatan</label>
-<<<<<<< HEAD
-                            <select required name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Kecamatan</option>
-=======
                             <select name="kecamatan" id="kecamatan" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                                 <option value="" disabled selected>Pilih Kecamatan</option>
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             </select>
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Kelurahan/Desa</label>
-<<<<<<< HEAD
-                            <select required name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors bg-white">
-                                <option value="">Pilih Desa</option>
-=======
                             <select name="kelurahan" id="desa" class="w-full border border-gray-200 rounded-xl px-4 py-2.5 pr-10 text-[14px] text-gray-800 bg-white appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%236B7280%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22%2F%3E%3C%2Fsvg%3E')] bg-[length:18px] bg-[right_1rem_center] bg-no-repeat focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm hover:border-gray-300 cursor-pointer">
                                 <option value="" disabled selected>Pilih Desa</option>
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                             </select>
                         </div>
                         <div>
@@ -255,11 +191,7 @@
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Telepon Selular</label>
-<<<<<<< HEAD
-                            <input required type="number" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
-=======
                             <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" id="no_hp" value="{{ old('nomor_kontak_darurat') }}" name="nomor_kontak_darurat" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-colors">
->>>>>>> a387c258b9cfb2ce79f4502f8e8543fd8d8dd46e
                         </div>
                         <div>
                             <label class="block text-[13px] font-semibold text-gray-500 mb-2">Hubungan dengan Pemohon</label>

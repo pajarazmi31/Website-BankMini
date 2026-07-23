@@ -1039,7 +1039,6 @@ class tellerController extends Controller
             [
                 'path' => LengthAwarePaginator::resolveCurrentPath(),
                 'query' => $request->query()
-                'query' => $request->query()
             ]
         );
 
@@ -1246,7 +1245,6 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 'debit'       => $cleanNum($t->jumlah_transfer) + $potongan,
                 'kredit'      => 0,
                 'saldo'       => $t->saldo_transaksi_pengirim
-                'saldo'       => $t->saldo_transaksi_pengirim
             ];
         });
 
@@ -1258,7 +1256,6 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $cleanNum($t->jumlah_transfer),
-                'saldo'       => $t->saldo_transaksi_penerima
                 'saldo'       => $t->saldo_transaksi_penerima
             ];
         });
@@ -1276,7 +1273,6 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                     'biaya_admin' => $cleanNum($t->nominal_admin),
                     'debit'       => 0,
                     'kredit'      => $cleanNum($t->jumlah_transfer),
-                    'saldo'       => $t->saldo_transaksi
                     'saldo'       => $t->saldo_transaksi
                 ];
             });

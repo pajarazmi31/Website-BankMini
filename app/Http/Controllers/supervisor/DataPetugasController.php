@@ -59,8 +59,7 @@ class DataPetugasController extends Controller
             'roles',
             'user',
             'perPage',
-            'super',
-            'search'
+            'super'
         ));
     }
 
