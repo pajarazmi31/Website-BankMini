@@ -17,7 +17,7 @@
 
 @section('content')
 <div id="viewDetailData" class="fade-in flex-1 mt-4">
-    <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50">
+    <div class="bg-white rounded-2xl sm:rounded-[24px] shadow-card p-4 sm:p-6 md:p-10 w-full border border-gray-50">
 
         <!-- SECTION 1: DATA PRIBADI -->
         <div class="mb-12">

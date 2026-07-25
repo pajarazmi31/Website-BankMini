@@ -1,5 +1,5 @@
 <div id="viewTambahData" class="fade-in hidden flex-1 mt-4">
-    <div class="bg-white rounded-[24px] shadow-card p-6 md:p-10 w-full border border-gray-50 overflow-y-auto custom-scrollbar">
+    <div class="bg-white rounded-2xl sm:rounded-[24px] shadow-card p-4 sm:p-6 md:p-10 w-full border border-gray-50 overflow-y-auto custom-scrollbar">
         <h3 class="text-[20px] font-bold text-gray-800 mb-8 flex items-center gap-3">
             <div class="w-[6px] h-7 bg-brand-green rounded-full"></div>
             Tambah Data Petugas

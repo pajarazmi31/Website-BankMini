@@ -5,7 +5,7 @@
 @section('header_subtitle', 'Pantau saldo dan transaksi Anda hari ini.')
 
 @section('content')
-<div id="viewMain" class="fade-in block">
+<div id="viewMain" class="fade-in {{ request()->has('page') ? 'hidden' : 'block' }}">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         <div class="lg:col-span-2 bg-primary-gradient rounded-[20px] p-8 lg:p-10 relative overflow-hidden shadow-lg text-white">
@@ -186,16 +186,16 @@
     </div>
 </div>
 
-<div id="viewHistory" class="fade-in hidden">
-    <div class="bg-white rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-12">
-        <div class="flex justify-between items-center gap-4 bg-white p-5 rounded-2xl">
-            <button onclick="switchView('main')" class="text-[10px] lg:text-[14px] font-bold text-textDark hover:text-primary transition-colors">
-                Kembali
+<div id="viewHistory" class="fade-in {{ request()->has('page') ? 'block' : 'hidden' }}">
+    <div class="bg-white rounded-2xl sm:rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-4 sm:p-6 lg:p-12">
+        <div class="flex justify-between items-center gap-4 bg-white p-3 sm:p-5 rounded-2xl mb-4">
+            <button onclick="switchView('main')" class="text-xs lg:text-[14px] font-bold text-textDark hover:text-primary transition-colors flex items-center gap-1">
+                <i class="ph ph-arrow-left"></i> Kembali
             </button>
-            <h3 class="text-[12px] lg:text-[22px] font-bold text-textDark">Riwayat Transaksi</h3>
+            <h3 class="text-base lg:text-[22px] font-bold text-textDark">Riwayat Transaksi</h3>
         </div>
 
-        <div class="space-y-6">
+        <div class="space-y-3 sm:space-y-4">
             @forelse($semuaRiwayat as $item)
 
             @php
@@ -210,9 +210,9 @@
                      || (isset($item->id_pengirim) && $item->id_pengirim == $rekening->id);
             @endphp
 
-            <div class="flex justify-between items-center bg-white p-4 px-6 rounded-[20px] border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all">
-                <div class="flex items-center gap-4">
-                    <div class="w-6 h-6 lg:w-12 lg:h-12 rounded-full flex items-center justify-center
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-3.5 sm:p-4 rounded-2xl border border-gray-50 hover:border-gray-100 hover:shadow-sm transition-all bg-white">
+                <div class="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                    <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center shrink-0
                     @if($isSetoran || $isTransferLuarMasuk)
                         bg-blue-100
                     @elseif($isPenarikan)
@@ -236,8 +236,8 @@
                         @endif
                     </div>
 
-                    <div>
-                        <p class="font-bold text-sm lg:text-lg text-textDark">
+                    <div class="min-w-0 flex-1">
+                        <p class="font-bold text-xs sm:text-base text-textDark truncate">
                             @if($isTransferLuarMasuk)
                                 Transfer dari Bank Luar
                             @elseif($isSetoran)
@@ -256,15 +256,15 @@
                         </p>
 
                         @if($isSetoran)
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">Top Up melalui Teller</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400">Top Up melalui Teller</p>
                         @elseif($isPenarikan)
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">Penarikan melalui Teller</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400">Penarikan melalui Teller</p>
                         @elseif($isTransferTellerKeluar)
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">Transfer Teller ke {{ $item->id_rekening_penerima }}</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400">Transfer Teller ke {{ $item->id_rekening_penerima }}</p>
                         @elseif($isTransferTellerMasuk)
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">Transfer Teller dari {{ $item->id_rekening_pengirim }}</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400">Transfer Teller dari {{ $item->id_rekening_pengirim }}</p>
                         @elseif($isTransferLuarMasuk)
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">
+                            <p class="text-[10px] sm:text-xs text-gray-400">
                                 Dari: {{ $item->nama_pengirim }}
                                 @if(isset($item->status_verifikasi))
                                     <span class="capitalize font-semibold text-xs {{ $item->status_verifikasi == 'pending' ? 'text-amber-500' : ($item->status_verifikasi == 'berhasil' ? 'text-green-500' : 'text-red-500') }}">
@@ -273,12 +273,12 @@
                                 @endif
                             </p>
                         @elseif(isset($item->jenis_transaksi) && $item->jenis_transaksi == 'transfer' && !empty($item->catatan))
-                            <p class="text-[8px] lg:text-[10px] text-gray-400">{{ $item->catatan }}</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400 break-words line-clamp-2">{{ $item->catatan }}</p>
                         @endif
                     </div>
                 </div>
 
-                <p class="font-bold text-xs lg:text-lg {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
+                <p class="font-bold text-xs sm:text-base self-end sm:self-center shrink-0 {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
                     @if($isTransferLuarMasuk)
                         + Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
                     @elseif($isSetoran)
@@ -292,13 +292,13 @@
             </div>
 
             @empty
-            <div class="text-center py-8 text-gray-500">
+            <div class="text-center py-8 text-gray-500 text-xs sm:text-sm">
                 Belum ada riwayat transaksi.
             </div>
             @endforelse
         </div>
 
-        <x-pagination total="3" />
+        <x-pagination :paginator="$semuaRiwayat" />
 
     </div>
 </div>

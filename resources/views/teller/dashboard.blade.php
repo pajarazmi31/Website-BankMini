@@ -227,10 +227,12 @@ Selamat Datang, {{ $user->name }}!
         }
 
         function renderPagination() {
-            if (totalPages <= 1) {
+            if (totalItems === 0) {
                 paginationContainer.innerHTML = '';
                 return;
             }
+
+            const pageCount = totalPages > 0 ? totalPages : 1;
 
             let html = `<div class="flex items-center justify-end gap-1.5 mt-5 pt-2">`;
 
@@ -243,7 +245,7 @@ Selamat Datang, {{ $user->name }}!
             `;
 
             // Page numbers
-            for (let i = 1; i <= totalPages; i++) {
+            for (let i = 1; i <= pageCount; i++) {
                 if (i === currentPage) {
                     html += `<span class="w-[28px] h-[28px] flex items-center justify-center text-[14px] font-extrabold text-brand-blue">${i}</span>`;
                 } else {
@@ -256,9 +258,9 @@ Selamat Datang, {{ $user->name }}!
             }
 
             // Next Button
-            const nextDisabled = currentPage === totalPages ? 'disabled opacity-50 cursor-not-allowed' : '';
+            const nextDisabled = currentPage === pageCount ? 'disabled opacity-50 cursor-not-allowed' : '';
             html += `
-                <button onclick="goToPage(${currentPage + 1})" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md ${nextDisabled}" ${currentPage === totalPages ? 'disabled' : ''}>
+                <button onclick="goToPage(${currentPage + 1})" class="w-[28px] h-[28px] rounded-[8px] bg-brand-blue text-white flex items-center justify-center text-[12px] hover:bg-[#152a42] transition-all duration-200 shadow-sm hover:shadow-md ${nextDisabled}" ${currentPage === pageCount ? 'disabled' : ''}>
                     <i class="ph-bold ph-caret-right"></i>
                 </button>
             `;

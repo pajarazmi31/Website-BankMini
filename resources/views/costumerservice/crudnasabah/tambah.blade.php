@@ -230,8 +230,9 @@
 
         $('#nis').on('change', function() {
             let nis = $(this).val();
+            if (!nis) return;
 
-            $.get('/siswa/' + nis, function(response) {
+            $.get("{{ url('/siswa') }}/" + nis, function(response) {
                 if(response.status) {
                     $('#nama_lengkap').val(response.data.nama_lengkap);
                     $('#tempat_lahir').val(response.data.tempat_lahir);

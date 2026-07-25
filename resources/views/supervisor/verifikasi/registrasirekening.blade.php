@@ -29,47 +29,40 @@ Selamat Datang, {{ $user->name }}!
 
 @section('content')
 <div id="viewTabelData" class="fade-in flex flex-1 flex-col justify-start">
-    <!-- Search Bar Mobile -->
-    <div class="md:hidden relative mb-5">
-        <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-        <input type="text" placeholder="Cari data..." class="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-100 rounded-2xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
-    </div>
-
-
     <!-- Section Title & Tabs -->
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 px-1">
-        <h3 class="text-[22px] font-bold text-gray-800">Verifikasi Registrasi</h3>
+        <h3 class="text-[20px] sm:text-[22px] font-bold text-gray-800">Verifikasi Registrasi</h3>
         <div class="flex bg-gray-100 p-1 rounded-xl w-full sm:w-[300px]">
-            <a href="{{ route('supervisor.verifikasi.login') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Login</a>
-            <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex-1 px-4 py-2 bg-white rounded-lg shadow-sm text-brand-blue font-bold text-[13px] text-center transition-all">Registrasi</a>
-            <a href="{{ route('supervisor.verifikasi') }}" class="flex-1 px-4 py-2 text-gray-500 font-medium text-[13px] hover:text-brand-blue transition-colors text-center">Transfer</a>
+            <a href="{{ route('supervisor.verifikasi.login') }}" class="flex-1 px-2 sm:px-4 py-2 text-gray-500 font-medium text-xs sm:text-[13px] hover:text-brand-blue transition-colors text-center">Login</a>
+            <a href="{{ route('supervisor.verifikasi.registrasi') }}" class="flex-1 px-2 sm:px-4 py-2 bg-white rounded-lg shadow-sm text-brand-blue font-bold text-xs sm:text-[13px] text-center transition-all">Registrasi</a>
+            <a href="{{ route('supervisor.verifikasi') }}" class="flex-1 px-2 sm:px-4 py-2 text-gray-500 font-medium text-xs sm:text-[13px] hover:text-brand-blue transition-colors text-center">Transfer</a>
         </div>
     </div>
 
     <!-- Table Card / Content -->
-    <div class="bg-white rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
-        <div class="flex justify-between items-center mb-1 border-b border-gray-50">
-            <form action="{{ route('supervisor.verifikasi.registrasi') }}" method="get" class="flex gap-2 items-center">
-                <div class="relative">
+    <div class="bg-white rounded-2xl sm:rounded-[20px] shadow-card p-4 md:p-6 w-full flex flex-col">
+        <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+            <form action="{{ route('supervisor.verifikasi.registrasi') }}" method="get" class="flex gap-2 items-center w-full md:w-auto">
+                <div class="relative flex-1 md:flex-initial">
                     <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                     <input type="text" placeholder="Cari data..."
                         value="{{ request('keyword') }}" name="keyword"
-                        class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                        class="w-full md:w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
                 </div>
 
-                <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                <button type="submit" class="px-3.5 py-2 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all shrink-0">
                     <i class="ph ph-magnifying-glass text-lg"></i>
                 </button>
             </form>
-                    <div class="flex items-center gap-2 mb-4">
-            <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-            <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
-                <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
-                <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
-                <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
-                <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
-            </select>
-        </div>
+            <div class="flex items-center gap-2 justify-between md:justify-end w-full md:w-auto">
+                <span class="text-xs sm:text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-xs sm:text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                    <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
+                    <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
+                    <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
+                    <option value="100" {{ $perPage == 100 ? 'selected' : '' }}>100 data</option>
+                </select>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">

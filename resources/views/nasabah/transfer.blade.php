@@ -13,7 +13,7 @@
     </div>
 
     <!-- MAIN VIEW (Form & Recent History) -->
-    <div id="viewMain" class="fade-in block">
+    <div id="viewMain" class="fade-in {{ request()->has('page') ? 'hidden' : 'block' }}">
     <div id="transferMainView">
         <!-- TOP SECTION: Saldo Cards -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4 lg:mt-0">
@@ -64,18 +64,9 @@
                     <div class="w-1.5 h-7 bg-accentYellow rounded-full"></div>
                     <h3 class="text-lg lg:text-2xl font-bold text-textDark">Formulir Transfer</h3>
                 </div>
-                <!-- 
-                    BAGIAN BACKEND: FORM TRANSFER (NASABAH)
-                    - action="#": Perlu diisi dengan route transfer untuk nasabah login (misal: route('nasabah.transfer.store')).
-                    - method="POST": Menggunakan metode POST untuk transaksi.
-                -->
                 <form id="form-transfer-nasabah" action="{{ route('transfer.proses') }}" method="POST" class="space-y-6">
-                    <!-- 
-                        BAGIAN BACKEND: CSRF TOKEN
-                    -->
                     @csrf
                     <div id="alertContainer" class="space-y-3 mb-4">
-                        {{-- 1. ALERT UNTUK LOGIKA ERROR / PROSES GAGAL --}}
                         @if (session('error'))
                             <div class="flex items-center gap-3 p-4 text-xs lg:text-sm text-red-700 border border-red-200 rounded-xl bg-red-50 animate-fade-in" role="alert">
                                 <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -85,7 +76,6 @@
                             </div>
                         @endif
 
-                        {{-- 2. ALERT UNTUK VALIDASI FORM YANG SALAH --}}
                         @if ($errors->any())
                             <div class="flex gap-3 p-4 text-xs lg:text-sm text-red-700 border border-red-200 rounded-xl bg-red-50 animate-fade-in" role="alert">
                                 <svg class="w-5 h-5 text-red-500 shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -100,7 +90,6 @@
                             </div>
                         @endif
 
-                        {{-- 3. ALERT UNTUK NOTIFIKASI SUKSES --}}
                         @if (session('success'))
                             <div class="flex items-center gap-3 p-4 text-xs lg:text-sm text-emerald-700 border border-emerald-200 rounded-xl bg-emerald-50 animate-fade-in" role="alert">
                                 <svg class="w-5 h-5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -113,39 +102,23 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">No Rekening Penerima</label>
-                        <!-- 
-                            BAGIAN BACKEND: INPUT PENERIMA
-                            - Ditangkap sebagai $request->id_penerima di controller.
-                        -->
-                        <input type="text" name="id_penerima" id="id_penerima" value="{{ old('id_penerima') }}" required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" inputmode="numeric" name="id_penerima" id="id_penerima" value="{{ old('id_penerima') }}" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nama Penerima</label>
-                        <!-- 
-                            BAGIAN BACKEND: INPUT PENERIMA
-                            - Ditangkap sebagai $request->nama_penerima di controller.
-                        -->
                         <input type="text" name="nama_penerima" id="nama_penerima" value="{{ old('nama_penerima') }}" readonly required class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nominal Transfer (Rp)</label>
-                        <!-- 
-                            BAGIAN BACKEND: INPUT NOMINAL
-                            - Ditangkap sebagai $request->nominal di controller.
-                        -->
-                        <input type="text" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" inputmode="numeric" name="jumlah_transfer" id="jumlah_transfer" value="{{ old('jumlah_transfer') }}" required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="0">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Nominal Admin (Rp)</label>
-                        <input type="text" name="nominal_admin" id="nominal_admin" value="Rp {{ number_format($biaya_admin->nominal, 0, ',', '.') }}"  readonly required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
+                        <input type="text" name="nominal_admin" id="nominal_admin" value="Rp {{ number_format($biaya_admin->nominal, 0, ',', '.') }}" readonly required min="1000" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors" placeholder="">
                         <input type="hidden" name="transaksi_id" value="{{ $biaya_admin->id }}">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-textGray mb-2">Catatan (Opsional)</label>
-                        <!-- 
-                            BAGIAN BACKEND: INPUT CATATAN
-                            - Ditangkap sebagai $request->catatan di controller.
-                        -->
                         <textarea rows="4" name="catatan" id="catatan" class="w-full border border-formBorder rounded-xl p-3 text-textDark outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors resize-none" placeholder="">{{ old('catatan') }}</textarea>
                     </div>
                     <button type="submit" id="btnSubmit" class="w-full bg-success-gradient hover:bg-green-700 text-white font-bold text-sm py-4 rounded-xl transition-colors mt-2 shadow-sm">Kirim</button>
@@ -160,16 +133,12 @@
                 </div>
 
                 <div class="space-y-4 px-2">
-                    <!-- 
-                        BAGIAN BACKEND: RIWAYAT TERBARU
-                        - Data statis di bawah perlu diganti dengan data dari database (misal: mengambil 6 transaksi terakhir).
-                    -->
-                    @if($riwayatTransfer->isEmpty())
+                    @if($riwayatTerbaru->isEmpty())
                         <div class="text-center py-6 text-gray-500 text-[13px]">
                             <p>Belum ada riwayat transaksi.</p>
                         </div>
                     @endif
-                        @foreach( $riwayatTransfer as $item)
+                        @foreach( $riwayatTerbaru as $item)
                         <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2">
                                 <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
@@ -178,8 +147,8 @@
                                         @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
                                             {{ $item->nama_penerima }}
                                         @else
-                                            {{ $item->pengirim->nasabah->user->name }}
-                                            @endif
+                                            {{ $item->pengirim->nasabah->user->name ?? 'Nasabah' }}
+                                        @endif
                                     </p>
                                     <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at->format('d-m-Y H:i') }}</p>
                                 </div>
@@ -201,57 +170,56 @@
     </div>
     </div>
 
-    <!-- VIEW HISTORY: Riwayat Transaksi (10 Terakhir) -->
-    <div id="viewHistory" class="fade-in hidden">
-        <div class="bg-white rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-8 lg:p-12 mt-4 lg:mt-0">
-            <div class="flex justify-between items-center mb-12">
-                <button onclick="switchView('main')" class="text-[10px] lg:text-[14px] font-bold text-textDark hover:text-primary transition-colors">
-                    Kembali
+    <!-- VIEW HISTORY: Riwayat Transaksi -->
+    <div id="viewHistory" class="fade-in {{ request()->has('page') ? 'block' : 'hidden' }}">
+        <div class="bg-white rounded-2xl sm:rounded-[32px] shadow-[0_4px_24px_rgba(0,0,0,0.02)] border border-gray-50 p-4 sm:p-6 lg:p-12 mt-4 lg:mt-0">
+            <div class="flex justify-between items-center mb-6 lg:mb-10">
+                <button onclick="switchView('main')" class="text-xs lg:text-[14px] font-bold text-textDark hover:text-primary transition-colors flex items-center gap-1">
+                    <i class="ph ph-arrow-left"></i> Kembali
                 </button>
-                <h3 class="text-[12px] lg:text-[22px] font-bold text-textDark">Riwayat Transfer</h3>
+                <h3 class="text-base lg:text-[22px] font-bold text-textDark">Riwayat Transfer</h3>
             </div>
 
-            <div class="space-y-8">
-                <!-- 
-                    BAGIAN BACKEND: RIWAYAT TRANSAKSI PANJANG
-                    - Lakukan looping foreach untuk 10 transaksi terakhir (khusus transfer).
-                -->
-
-                    @if($riwayatTransfer->isEmpty())
-                        <div class="text-center py-6 text-gray-500 text-[13px]">
-                            <p>Belum ada riwayat transaksi.</p>
-                        </div>
-                    @endif
-                        @foreach( $riwayatTransfer as $item)
-                        <div class="flex justify-between items-center">
-                            <div class="flex items-center gap-2">
-                                <i class="ph-fill ph-user-circle text-[32px] lg:text-[44px] text-[#1c3a5a]"></i>
-                                <div>
-                                        <p class="font-bold text-[13px] lg:text-[14px] text-gray-800">
-                                        @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
-                                            {{ $item->nama_penerima }}
-                                        @else
-                                            {{ $item->pengirim->nasabah->user->name }}
-                                            @endif
-                                    </p>
-                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">{{ $item->created_at->format('d-m-Y H:i') }}</p>
-                                    <p class="text-[9px] lg:text-[10px] text-gray-500 mt-0.5">Catatan: {{$item->catatan}}</p>
-                                </div>
+            <div class="space-y-3 sm:space-y-4">
+                @if($riwayatTransfer->isEmpty())
+                    <div class="text-center py-8 text-gray-500 text-xs sm:text-[13px]">
+                        <p>Belum ada riwayat transaksi.</p>
+                    </div>
+                @endif
+                @foreach($riwayatTransfer as $item)
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 p-3.5 sm:p-4 rounded-2xl border border-gray-100 hover:border-gray-200 transition-all bg-white">
+                        <div class="flex items-start sm:items-center gap-3 min-w-0 flex-1">
+                            <i class="ph-fill ph-user-circle text-3xl sm:text-4xl text-[#1c3a5a] shrink-0"></i>
+                            <div class="min-w-0 flex-1">
+                                <p class="font-bold text-xs sm:text-sm text-gray-800 truncate">
+                                    @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
+                                        Transfer ke {{ $item->nama_penerima }}
+                                    @else
+                                        Transfer dari {{ $item->pengirim->nasabah->user->name ?? 'Nasabah' }}
+                                    @endif
+                                </p>
+                                <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5">{{ $item->created_at->format('d-m-Y H:i') }}</p>
+                                @if(!empty($item->catatan))
+                                    <p class="text-[10px] sm:text-xs text-gray-400 mt-0.5 break-words line-clamp-2">Catatan: {{ $item->catatan }}</p>
+                                @endif
                             </div>
+                        </div>
+                        <div class="self-end sm:self-center shrink-0">
                             @if ($item->id_pengirim == auth()->user()->nasabah->rekening->id)
-                                <p class="font-bold text-[12px] lg:text-[13px] text-red-500">
+                                <p class="font-bold text-xs sm:text-sm text-red-500">
                                     - Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
                                 </p>
                             @else
-                                <p class="font-bold text-[12px] lg:text-[13px] text-green-500">
+                                <p class="font-bold text-xs sm:text-sm text-green-500">
                                     + Rp. {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
                                 </p>
                             @endif
                         </div>
-                        @endforeach
+                    </div>
+                @endforeach
             </div>
             <!-- Pagination -->
-            <x-pagination total="3" />
+            <x-pagination :paginator="$riwayatTransfer" />
         </div>
     </div>
 
@@ -281,36 +249,36 @@
         document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-            const inputTransfer = document.getElementById('jumlah_transfer');
+    const inputTransfer = document.getElementById('jumlah_transfer');
 
-        // Fungsi untuk memformat angka menjadi format ribuan dengan titik
-        function formatRupiah(angka) {
-            // Hapus semua karakter selain angka
-            let numberString = angka.replace(/[^,\d]/g, '').toString();
-            let split = numberString.split(',');
-            let sisa = split[0].length % 3;
-            let rupiah = split[0].substr(0, sisa);
-            let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+    // Fungsi untuk memformat angka menjadi format ribuan dengan titik
+    function formatRupiah(angka) {
+        // Hapus semua karakter selain angka
+        let numberString = angka.replace(/[^,\d]/g, '').toString();
+        let split = numberString.split(',');
+        let sisa = split[0].length % 3;
+        let rupiah = split[0].substr(0, sisa);
+        let ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
-            if (ribuan) {
-                let separator = sisa ? '.' : '';
-                rupiah += separator + ribuan.join('.');
-            }
-
-            return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+        if (ribuan) {
+            let separator = sisa ? '.' : '';
+            rupiah += separator + ribuan.join('.');
         }
 
-        // Event saat pengguna mengetik
-        inputTransfer.addEventListener('keyup', function(e) {
-            this.value = formatRupiah(this.value);
-        });
+        return split[1] !== undefined ? rupiah + ',' + split[1] : rupiah;
+    }
 
-        // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
-        window.addEventListener('DOMContentLoaded', function() {
-            if (inputTransfer.value) {
-                inputTransfer.value = formatRupiah(inputTransfer.value);
-            }
-        });
+    // Event saat pengguna mengetik (input & keyup agar menolak non-digit secara penuh)
+    inputTransfer.addEventListener('input', function(e) {
+        this.value = formatRupiah(this.value.replace(/[^0-9]/g, ''));
+    });
+
+    // Jalankan fungsi saat halaman pertama kali dimuat (jika ada nilai old dari backend)
+    window.addEventListener('DOMContentLoaded', function() {
+        if (inputTransfer.value) {
+            inputTransfer.value = formatRupiah(inputTransfer.value.replace(/[^0-9]/g, ''));
+        }
+    });
 
        // Buat variabel timer di luar agar bisa di-reset setiap kali mengetik
     let delayTimer;

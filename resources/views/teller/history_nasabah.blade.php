@@ -318,8 +318,87 @@ History Transaksi Nasabah
         window.location.href = url.toString();
     }
 
-    // FUNGSI MUNCULKAN DROPDOWN EXPORT
+    // AJAX Live Search & PJAX Pagination
     document.addEventListener("DOMContentLoaded", function() {
+        let debounceTimeout = null;
+
+        function performAjaxSearch(searchVal) {
+            const query = new URLSearchParams(window.location.search);
+            query.set('search', searchVal);
+            query.delete('page');
+
+            const targetUrl = `${window.location.pathname}?${query.toString()}`;
+            window.history.replaceState({}, '', targetUrl);
+
+            document.querySelectorAll('input[name="search"]').forEach(input => {
+                if (input.value !== searchVal) {
+                    input.value = searchVal;
+                }
+            });
+
+            fetch(targetUrl)
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newCard = doc.getElementById('historyTableCard');
+                    const currentCard = document.getElementById('historyTableCard');
+                    if (newCard && currentCard) {
+                        currentCard.innerHTML = newCard.innerHTML;
+                    }
+                })
+                .catch(err => console.error('Gagal melakukan pencarian:', err));
+        }
+
+        document.querySelectorAll('input[name="search"]').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(debounceTimeout);
+                const val = this.value;
+                debounceTimeout = setTimeout(() => {
+                    performAjaxSearch(val);
+                }, 300);
+            });
+        });
+
+        document.querySelectorAll('form').forEach(form => {
+            const hasSearchInput = form.querySelector('input[name="search"]');
+            if (hasSearchInput) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    performAjaxSearch(hasSearchInput.value);
+                });
+            }
+        });
+
+        // AJAX Pagination click interceptor
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('#historyTableCard a');
+
+            if (!link) return;
+
+            if (link.target === '_blank') return;
+
+            const targetUrl = link.href;
+
+            if (targetUrl && targetUrl !== '#' && !targetUrl.startsWith('javascript:')) {
+                e.preventDefault();
+                window.history.pushState({}, '', targetUrl);
+
+                fetch(targetUrl)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const newCard = doc.getElementById('historyTableCard');
+                        const currentCard = document.getElementById('historyTableCard');
+                        if (newCard && currentCard) {
+                            currentCard.innerHTML = newCard.innerHTML;
+                        }
+                    })
+                    .catch(err => console.error('Gagal memuat halaman:', err));
+            }
+        });
+
         const btnExportExcel = document.getElementById('btnExportExcel');
         const dropdownExport = document.getElementById('dropdownExport');
 

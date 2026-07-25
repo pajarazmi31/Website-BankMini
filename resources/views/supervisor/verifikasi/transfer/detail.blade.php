@@ -33,7 +33,7 @@
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Nomor Telepon</label>
                     <input type="text" id="detail_telepon" class="w-full border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] text-gray-400 bg-white cursor-default focus:outline-none" readonly>
                 </div>
-                <div class="row-span-2">
+                <div class="md:row-span-2">
                     <label class="block text-[13px] font-semibold text-gray-500 mb-2">Catatan</label>
                     <textarea id="detail_catatan" class="w-full h-[125px] border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-400 bg-white cursor-default resize-none focus:outline-none" readonly></textarea>
                 </div>

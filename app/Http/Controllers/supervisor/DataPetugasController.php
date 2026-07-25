@@ -48,7 +48,7 @@ class DataPetugasController extends Controller
         })
         ->orderByDesc('id')
         ->paginate($perPage)
-        ->appends(['per_page' => $perPage]);
+        ->appends(['per_page' => $perPage, 'keyword' => $keyword]);
         $roles = Role::whereIn('nama_role', [
             'customerservice',
             'teller'

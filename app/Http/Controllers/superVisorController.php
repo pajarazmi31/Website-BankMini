@@ -49,10 +49,15 @@ class superVisorController extends Controller
     {
         $user = Auth::user();
         $super = $user->petugas;
-        $perPage = $request->input('per_page', 5);
-        $bukti_tf = Bukti_Tf::latest()->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
-        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'perPage'));
+        $perPage = $request->input('per_page', 10);
+        $keyword = $request->keyword;
+        $bukti_tf = Bukti_Tf::when($keyword, function ($query, $keyword) {
+            return $query->where('nama_penerima', 'LIKE', '%' . $keyword . '%')
+                ->orWhere('nama_pengirim', 'like', '%' . $keyword . '%')
+                ->orWhere('id_rekening', 'like', '%' . $keyword . '%');
+        })->latest()->paginate($perPage)
+            ->appends(['per_page' => $perPage, 'keyword' => $keyword]);
+        return view('supervisor.verifikasi.transfer', compact('bukti_tf', 'user', 'super', 'keyword', 'perPage'));
     }
 
     public function searchData(Request $request)
@@ -230,7 +235,7 @@ class superVisorController extends Controller
             })
             ->orderByDesc('id')
             ->paginate($perPage)
-            ->appends(['per_page' => $perPage]);
+            ->appends(['per_page' => $perPage, 'keyword' => $keyword]);
 
         return view('supervisor.datanasabah', compact('userNasabah', 'user', 'perPage'));
     }

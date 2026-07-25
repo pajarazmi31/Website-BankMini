@@ -521,6 +521,110 @@
                 modal.classList.replace('flex', 'hidden');
             }, 300);
         }
+
+        // GLOBAL LIVE SEARCH & AJAX AUTO-SEARCH FOR SUPERVISOR
+        document.addEventListener("DOMContentLoaded", function() {
+            let searchTimeout = null;
+
+            function filterTableRowsLocally(input, val) {
+                const query = val.toLowerCase().trim();
+                const container = input.closest('#viewTabel, #viewTabelData, .shadow-card, div') || document;
+                const tbody = container.querySelector('table tbody');
+                if (!tbody) return;
+
+                const rows = tbody.querySelectorAll('tr');
+                let foundAny = false;
+
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    if (!query || text.includes(query)) {
+                        row.style.display = '';
+                        foundAny = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            function performSupervisorAjaxSearch(form, searchVal) {
+                const actionUrl = form.getAttribute('action') || window.location.pathname;
+                const urlParams = new URLSearchParams(window.location.search);
+                if (searchVal) {
+                    urlParams.set('keyword', searchVal);
+                } else {
+                    urlParams.delete('keyword');
+                }
+                urlParams.delete('page'); // Reset ke halaman 1 saat pencarian baru
+
+                const targetUrl = `${actionUrl.split('?')[0]}?${urlParams.toString()}`;
+                window.history.replaceState({}, '', targetUrl);
+
+                // Sync all keyword search inputs
+                document.querySelectorAll('input[name="keyword"]').forEach(inp => {
+                    if (inp.value !== searchVal) {
+                        inp.value = searchVal;
+                    }
+                });
+
+                fetch(targetUrl, {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+
+                    // Replace table container
+                    const newTableCard = doc.querySelector('.overflow-x-auto') || doc.querySelector('table');
+                    const oldTableCard = document.querySelector('.overflow-x-auto') || document.querySelector('table');
+
+                    if (newTableCard && oldTableCard) {
+                        oldTableCard.innerHTML = newTableCard.innerHTML;
+                    }
+
+                    // Replace pagination container if present
+                    const newPagination = doc.querySelector('x-pagination, .flex.items-center.justify-end');
+                    const oldPagination = document.querySelector('x-pagination, .flex.items-center.justify-end');
+
+                    if (newPagination && oldPagination) {
+                        oldPagination.outerHTML = newPagination.outerHTML;
+                    }
+                })
+                .catch(err => console.error('Live search error:', err));
+            }
+
+            // Bind to all search inputs (input[name="keyword"])
+            document.querySelectorAll('input[name="keyword"]').forEach(input => {
+                // Instant client-side filter + debounced server fetch
+                input.addEventListener('input', function() {
+                    const val = this.value;
+                    
+                    // 1. Filter tabel secara instan (misal ketik 'kip' langsung memunculkan 'kipli')
+                    filterTableRowsLocally(this, val);
+
+                    // 2. Query server otomatis untuk pencarian seluruh database
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        const form = input.closest('form');
+                        if (form) {
+                            performSupervisorAjaxSearch(form, val);
+                        }
+                    }, 350);
+                });
+
+                // Mencegah submit reload halaman saat tekan Enter
+                const form = input.closest('form');
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        clearTimeout(searchTimeout);
+                        performSupervisorAjaxSearch(form, input.value);
+                    });
+                }
+            });
+        });
     </script>
     @yield('scripts')
 </body>

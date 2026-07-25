@@ -126,7 +126,7 @@ class nasabahController extends Controller
                 });
 
             // 4. GABUNGKAN DAN URUTKAN RIWAYAT
-            $semuaRiwayat = $transferNasabah
+            $semuaRiwayatCollection = $transferNasabah
                 ->concat($transferTeller)
                 ->concat($setoran)
                 ->concat($penarikan)
@@ -136,12 +136,22 @@ class nasabahController extends Controller
                 })
                 ->values();
 
-            $riwayatTransfer = $semuaRiwayat->take(5);
+            $riwayatTransfer = $semuaRiwayatCollection->take(5);
+
+            $page = request()->get('page', 1);
+            $perPage = 10;
+            $semuaRiwayat = new \Illuminate\Pagination\LengthAwarePaginator(
+                $semuaRiwayatCollection->forPage($page, $perPage)->values(),
+                $semuaRiwayatCollection->count(),
+                $perPage,
+                $page,
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
         } else {
             $totalPemasukanBulanIni = 0;
             $totalPengeluaranBulanIni = 0;
             $riwayatTransfer = collect();
-            $semuaRiwayat = collect();
+            $semuaRiwayat = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
         }
 
         return view('nasabah.dashboard', compact(
@@ -164,11 +174,18 @@ class nasabahController extends Controller
         if ($rekening) {
             $nomorRekening = $rekening->id;
 
-            $riwayatTransfer = RiwayatTf::with(['pengirim.nasabah.user', 'penerima']) // <-- Ditambahkan ini
+            $riwayatTerbaru = RiwayatTf::with(['pengirim.nasabah.user', 'penerima'])
                 ->where('id_pengirim', $nomorRekening)
                 ->orWhere('id_penerima', $nomorRekening)
                 ->orderBy('created_at', 'desc')
+                ->take(5)
                 ->get();
+
+            $riwayatTransfer = RiwayatTf::with(['pengirim.nasabah.user', 'penerima'])
+                ->where('id_pengirim', $nomorRekening)
+                ->orWhere('id_penerima', $nomorRekening)
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
 
             // Ambil waktu bulan dan tahun sekarang
             $bulanIni = Carbon::now()->month;
@@ -198,11 +215,12 @@ class nasabahController extends Controller
                 ->whereYear('created_at', $tahunIni)
                 ->sum('jumlah_transfer');
         } else {
-            $riwayatTransfer = collect();
+            $riwayatTerbaru = collect();
+            $riwayatTransfer = new \Illuminate\Pagination\LengthAwarePaginator([], 0, 10);
             $totalPemasukanBulanIni = 0;
             $totalPengeluaranBulanIni = 0;
         }
-        return view('nasabah.transfer', compact('biaya_admin', 'user', 'rekening', 'nasabah', 'riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
+        return view('nasabah.transfer', compact('biaya_admin', 'user', 'rekening', 'nasabah', 'riwayatTerbaru', 'riwayatTransfer', 'totalPemasukanBulanIni', 'totalPengeluaranBulanIni'));
     }
 
     public function cekRekening(String $id)
@@ -231,7 +249,7 @@ class nasabahController extends Controller
         }
         // 1. Validasi Input dari Form
         $request->validate([
-            'id_penerima' => 'required|string',
+            'id_penerima' => 'required|numeric',
             'nama_penerima' => 'required|string',
             'jumlah_transfer' => 'required|numeric|min:1000',
             'catatan' => 'nullable|string|max:255',

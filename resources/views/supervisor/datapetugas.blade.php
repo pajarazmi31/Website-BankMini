@@ -60,43 +60,45 @@
                 <h3 class="text-[20px] md:text-[22px] font-bold text-gray-800">Data Petugas</h3>
             </div>
 
-            <div class="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-auto">
-                <form action="{{ route('datapetugas.import') }}" method="POST" enctype="multipart/form-data" class="flex items-center gap-2 w-full sm:w-auto bg-gray-50 p-1.5 rounded-[12px] border border-gray-200">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+                <form action="{{ route('datapetugas.import') }}" method="POST" enctype="multipart/form-data" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto bg-gray-50 p-2 sm:p-1.5 rounded-[12px] border border-gray-200">
                     @csrf
-                    <input type="file" name="file_excel" required class="text-[12px] text-gray-500 file:mr-3 file:py-1 file:px-2 file:rounded-[8px] file:border-0 file:text-[12px] file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 cursor-pointer max-w-[180px]">
-                    <button type="submit" class="bg-emerald-600 text-white px-3 py-1.5 rounded-[8px] text-[12px] font-bold flex items-center gap-1.5 hover:bg-emerald-700 transition-all shadow-sm">
+                    <input type="file" name="file_excel" required class="text-[12px] text-gray-500 file:mr-2 file:py-1 file:px-2 file:rounded-[8px] file:border-0 file:text-[12px] file:font-semibold file:bg-blue-50 file:text-brand-blue hover:file:bg-blue-100 cursor-pointer w-full sm:w-auto sm:max-w-[180px]">
+                    <button type="submit" class="bg-emerald-600 text-white px-3 py-1.5 rounded-[8px] text-[12px] font-bold flex items-center justify-center gap-1.5 hover:bg-emerald-700 transition-all shadow-sm shrink-0">
                         <i class="ph ph-file-arrow-up text-base"></i> Import
                     </button>
                 </form>
 
-                <a href="{{ route('datapetugas.download-template') }}" class="border border-gray-300 text-gray-700 bg-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm w-full sm:w-auto justify-center text-center">
-                    <i class="ph ph-download text-base"></i> Template
-                </a>
+                <div class="flex items-center gap-2 w-full sm:w-auto">
+                    <a href="{{ route('datapetugas.download-template') }}" class="flex-1 sm:flex-initial border border-gray-300 text-gray-700 bg-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:bg-gray-50 transition-all shadow-sm justify-center text-center">
+                        <i class="ph ph-download text-base"></i> Template
+                    </a>
 
-                <button onclick="switchView('tambah')" class="bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md w-full sm:w-auto justify-center">
-                    <i class="ph ph-plus text-base"></i> Tambah Data
-                </button>
+                    <button onclick="switchView('tambah')" class="flex-1 sm:flex-initial bg-gradient-to-r from-[#143657] to-[#316392] text-white px-3 py-2 rounded-[10px] text-[13px] font-bold flex items-center gap-2 hover:opacity-90 transition-all shadow-md justify-center">
+                        <i class="ph ph-plus text-base"></i> Tambah Data
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Table Card -->
-        <div class="bg-white rounded-[20px] shadow-card p-6 w-full flex flex-col">
-            <div class="flex justify-between items-center mb-1 border-b border-gray-50">
-                <form action="{{ route('supervisor.datapetugas') }}" method="get" class="flex gap-2 items-center">
-                    <div class="relative">
+        <div class="bg-white rounded-2xl sm:rounded-[20px] shadow-card p-4 sm:p-6 w-full flex flex-col">
+            <div class="flex flex-col md:flex-row justify-between items-stretch md:items-center gap-3 mb-4 pb-3 border-b border-gray-100">
+                <form action="{{ route('supervisor.datapetugas') }}" method="get" class="flex gap-2 items-center w-full md:w-auto">
+                    <div class="relative flex-1 md:flex-initial">
                         <i class="ph ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                         <input type="text" placeholder="Cari data..."
                             value="{{ request('keyword') }}" name="keyword"
-                            class="w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
+                            class="w-full md:w-[250px] pl-12 pr-4 py-2 bg-white border border-gray-100 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue text-gray-700 placeholder-gray-400 shadow-sm transition-all">
                     </div>
 
-                    <button type="submit" class="px-3 py-1 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all">
+                    <button type="submit" class="px-3.5 py-2 bg-brand-blue text-white text-[14px] font-medium rounded-xl shadow-sm hover:opacity-90 transition-all shrink-0">
                         <i class="ph ph-magnifying-glass text-lg"></i>
                     </button>
                 </form>
-                <div class="flex items-center gap-2 mb-4">
-                    <span class="text-[13px] text-gray-600 font-medium">Tampilkan:</span>
-                    <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
+                <div class="flex items-center gap-2 justify-between md:justify-end w-full md:w-auto">
+                    <span class="text-xs sm:text-[13px] text-gray-600 font-medium">Tampilkan:</span>
+                    <select onchange="changePerPage(this.value)" class="bg-white border border-gray-200 text-gray-700 text-xs sm:text-[13px] rounded-[10px] px-3 py-1.5 font-semibold focus:outline-none focus:border-brand-blue shadow-sm cursor-pointer">
                         <option value="10" {{ $perPage == 10 ? 'selected' : '' }}>10 data</option>
                         <option value="20" {{ $perPage == 20 ? 'selected' : '' }}>20 data</option>
                         <option value="50" {{ $perPage == 50 ? 'selected' : '' }}>50 data</option>
