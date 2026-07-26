@@ -154,6 +154,10 @@ Route::middleware(['role:supervisor'])->group(function () {
 
     //print
     Route::get('supervisor/print/{id}', [superVisorController::class, 'print'])->name('print.super');
+
+    //data master
+    Route::get('supervisor/halaman/datamaster', [superVisorController::class, 'halamanDataMaster'])->name('halaman.datamaster.siswa');
+    Route::post('supervisor/datamaster', [superVisorController::class, 'dataMaster'])->name('datamaster.siswa');
 });
 /// logika login na
 

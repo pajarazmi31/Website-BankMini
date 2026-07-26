@@ -216,23 +216,40 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        // --- Bagian 1: Alert Notifikasi Laravel ---
-        @if(session('success'))
-            showToast("{{ session('success') }}", 'success');
-        @endif
+$(document).ready(function () {
 
-        @if(session('failed'))
-            showToast("{{ session('failed') }}", 'error');
-        @endif
+    // ============================
+    // TOAST NOTIFIKASI
+    // ============================
 
-        //////////
+    @if(session('success'))
+        showToast("{{ session('success') }}", 'success');
+    @endif
 
-        $('#nis').on('change', function() {
-            let nis = $(this).val();
+    @if(session('failed'))
+        showToast("{{ session('failed') }}", 'error');
+    @endif
 
-            $.get('/siswa/' + nis, function(response) {
-                if(response.status) {
+
+    // ============================
+    // AUTO ISI DATA SISWA
+    // ============================
+
+    $('#nis').on('change', function () {
+
+        let nis = $(this).val();
+
+        if (!nis) return;
+
+        $.ajax({
+
+            url: '/siswa/' + nis,
+            type: 'GET',
+
+            success: function (response) {
+
+                if (response.status) {
+
                     $('#nama_lengkap').val(response.data.nama_lengkap);
                     $('#tempat_lahir').val(response.data.tempat_lahir);
                     $('#tanggal_lahir').val(response.data.tanggal_lahir);
@@ -241,96 +258,192 @@
                     $('#kode_pos').val(response.data.kode_pos);
                     $('#no_hp').val(response.data.no_hp);
                     $('#jurusan').val(response.data.jurusan_id);
+
                     showToast('Data siswa berhasil dimuat', 'success');
+
                 } else {
-                    showToast('Data siswa dengan NIS/NIP tersebut tidak ditemukan', 'error');
+
+                    showToast('Data siswa tidak ditemukan', 'error');
+
                 }
-            });
+
+            },
+
+            error: function () {
+
+                showToast('Terjadi kesalahan saat mengambil data.', 'error');
+
+            }
+
         });
 
-        // --- Bagian 2: Fungsi Dinamis AJAX Wilayah ---
-        function toTitleCase(str) {
-            if (!str) return '';
-            return str.toLowerCase().replace(/(?:^|\s|-|\/)\S/g, function(m) { return m.toUpperCase(); });
-        }
-
-        function handleWilayahChange(elementId, targetId, urlPath, placeholder, dependentIds = []) {
-            $(`#${elementId}`).change(function() {
-                let id = $(this).val();
-
-                // Kosongkan target langsung dan semua elemen turunannya jika ada
-                $(`#${targetId}`).empty().append(`<option value="" disabled selected>Pilih ${placeholder}</option>`);
-                dependentIds.forEach(depId => {
-                    let depPlaceholder = $(`#${depId} option:first`).text() || 'Data';
-                    $(`#${depId}`).empty().append(`<option value="" disabled selected>${depPlaceholder}</option>`);
-                });
-
-                if (!id) return;
-
-                $.ajax({
-                    url: `${urlPath}/${id}`,
-                    type: 'GET',
-                    success: function(data) {
-                        data.forEach(function(item) {
-                            $(`#${targetId}`).append(`<option value="${item.id}">${toTitleCase(item.name)}</option>`);
-                        });
-                    },
-                    error: function(xhr) {
-                        console.error(`Gagal memuat data ${placeholder}:`, xhr);
-                    }
-                });
-            });
-        }
-
-        // --- Bagian 3: Inisialisasi Event Perubahan Wilayah ---
-        // Jika provinsi berubah -> isi kabupaten (serta kosongkan kecamatan & desa)
-        handleWilayahChange('provinsi', 'kabupaten', '/get-kabupaten', 'Kabupaten', ['kecamatan', 'desa']);
-
-        // Jika kabupaten berubah -> isi kecamatan (serta kosongkan desa)
-        handleWilayahChange('kabupaten', 'kecamatan', '/get-kecamatan', 'Kecamatan', ['desa']);
-
-        // Jika kecamatan berubah -> isi desa
-        handleWilayahChange('kecamatan', 'desa', '/get-desa', 'Desa');
     });
+
+
+    // ============================
+    // TITLE CASE
+    // ============================
+
+    function toTitleCase(text) {
+
+        if (!text) return '';
+
+        return text
+            .toLowerCase()
+            .replace(/\b\w/g, function (char) {
+                return char.toUpperCase();
+            });
+
+    }
+
+
+    // ============================
+    // LOAD DATA WILAYAH
+    // ============================
+
+    function loadWilayah(parent, target, url, placeholder, reset = []) {
+
+        $(parent).change(function () {
+
+            let id = $(this).val();
+
+            $(target).html(
+                `<option value="" selected disabled>Pilih ${placeholder}</option>`
+            );
+
+            reset.forEach(function(item){
+
+                $('#' + item).html(
+                    `<option value="" selected disabled>Pilih ${
+                        item == 'kecamatan'
+                            ? 'Kecamatan'
+                            : item == 'desa'
+                            ? 'Desa'
+                            : 'Data'
+                    }</option>`
+                );
+
+            });
+
+            if (!id) return;
+
+            $.ajax({
+
+                url: url + '/' + id,
+                type: 'GET',
+
+                success: function (data) {
+
+                    $.each(data, function (index, item) {
+
+                        $(target).append(
+                            `<option value="${item.id}">
+                                ${toTitleCase(item.name)}
+                            </option>`
+                        );
+
+                    });
+
+                },
+
+                error: function () {
+
+                    showToast('Gagal memuat data wilayah.', 'error');
+
+                }
+
+            });
+
+        });
+
+    }
+
+
+    // ============================
+    // PROVINSI
+    // ============================
+
+    loadWilayah(
+        '#provinsi',
+        '#kabupaten',
+        '/get-kabupaten',
+        'Kabupaten',
+        ['kecamatan', 'desa']
+    );
+
+
+    // ============================
+    // KABUPATEN
+    // ============================
+
+    loadWilayah(
+        '#kabupaten',
+        '#kecamatan',
+        '/get-kecamatan',
+        'Kecamatan',
+        ['desa']
+    );
+
+
+    // ============================
+    // KECAMATAN
+    // ============================
+
+    loadWilayah(
+        '#kecamatan',
+        '#desa',
+        '/get-desa',
+        'Desa'
+    );
+
+        // ============================
+    // TOGGLE PASSWORD
+    // ============================
 
     const password = document.getElementById('password');
-    const toggle = document.getElementById('togglePassword');
+    const togglePassword = document.getElementById('togglePassword');
     const eyeIcon = document.getElementById('eyeIcon');
 
-    toggle.addEventListener('click', () => {
-        if (password.type === 'password') {
-            password.type = 'text';
+    if (togglePassword) {
 
-            eyeIcon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3.98 8.223A10.477 10.477 0 001.934 12
-                    C3.226 16.338 7.244 19.5 12 19.5
-                    c1.658 0 3.236-.383 4.64-1.065M6.228
-                    6.228A10.45 10.45 0 0112 4.5
-                    c4.756 0 8.773 3.162 10.065
-                    7.5a10.523 10.523 0 01-4.293
-                    5.774M6.228 6.228L3 3m3.228
-                    3.228l3.65 3.65m7.894
-                    7.894L21 21m-3.228-3.228
-                    l-3.65-3.65m0 0a3 3 0
-                    10-4.243-4.243m4.243
-                    4.243L9.88 9.88"/>
-            `;
-        } else {
-            password.type = 'password';
+        togglePassword.addEventListener('click', function () {
 
-            eyeIcon.innerHTML = `
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423
-                    7.51 7.36 4.5 12 4.5c4.638 0
-                    8.573 3.007 9.963 7.178.07.207.07.431
-                    0 .639C20.577 16.49 16.64
-                    19.5 12 19.5c-4.638
-                    0-8.577-3.007-9.964-7.178z"/>
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M15 12a3 3 0 11-6 0
-                    3 3 0 016 0z"/>
-            `;
-        }
-    });
+            const isPassword = password.type === 'password';
+
+            password.type = isPassword ? 'text' : 'password';
+
+            eyeIcon.innerHTML = isPassword
+                ? `
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3.98 8.223A10.477 10.477 0 001.934 12
+                        C3.226 16.338 7.244 19.5 12 19.5
+                        c1.658 0 3.236-.383 4.64-1.065M6.228
+                        6.228A10.45 10.45 0 0112 4.5
+                        c4.756 0 8.773 3.162 10.065
+                        7.5a10.523 10.523 0 01-4.293
+                        5.774M6.228 6.228L3 3m3.228
+                        3.228l3.65 3.65m7.894
+                        7.894L21 21m-3.228-3.228
+                        l-3.65-3.65m0 0a3 3 0
+                        10-4.243-4.243m4.243
+                        4.243L9.88 9.88"/>
+                `
+                : `
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423
+                        7.51 7.36 4.5 12 4.5c4.638 0
+                        8.573 3.007 9.963 7.178.07.207.07.431
+                        0 .639C20.577 16.49 16.64
+                        19.5 12 19.5c-4.638
+                        0-8.577-3.007-9.964-7.178z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M15 12a3 3 0 11-6 0
+                        3 3 0 016 0z"/>
+                `;
+
+        });
+
+    }
+
+});
 </script>
