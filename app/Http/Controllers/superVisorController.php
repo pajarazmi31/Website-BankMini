@@ -17,6 +17,11 @@ use App\Models\Transaksi;
 use App\Models\Petugas;
 use App\Models\RiwayatTf;
 use App\Models\Minimum_saldo;
+use App\Models\data_siswa;
+use App\Models\Provinsi;
+use App\Models\Kabupaten;
+use App\Models\Kecamatan;
+use App\Models\Desa;
 
 class superVisorController extends Controller
 {
@@ -436,5 +441,54 @@ class superVisorController extends Controller
         $nasabah = Nasabah::with('rekening')->FindOrFail($id);
 
         return view('supervisor.crud_datanasabah.print', compact('nasabah'));
+    }
+
+    //data master
+    public function halamanDataMaster() {
+        $user = Auth::user();
+        $provinsi = DB::table('provinsi')->get();
+        $jurusan = DB::table('jurusan')->get();
+
+        return view('supervisor.crud_datanasabah.datamasterSiswa', compact('user', 'provinsi', 'jurusan'));
+    }
+
+    public function dataMaster( Request $request) {
+
+        $request->validate([
+            'nama_lengkap' => 'required',
+            'nis' => 'required',
+            'nisn' => 'required',
+            'jurusan_id' => 'required',
+            'jenis_kelamin' => 'required',
+            'tempat_lahir' => 'required',
+            'tanggal_lahir' => 'required|date',
+            'agama' => 'required',
+            'rt' => 'required',
+            'rw' => 'required',
+            'dusun' => 'required',
+            'kelurahan' => 'required',
+            'kecamatan' => 'required',
+            'kode_pos' => 'required',
+        ]);
+
+        data_siswa::create([
+            'nama_lengkap' => $request->nama_lengkap,
+            'nis' => $request->nis,
+            'nisn' => $request->nisn,
+            'jurusan_id' => $request->jurusan_id,
+            'jenis_kelamin'=> $request->jenis_kelamin,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'agama' => $request->agama,
+            'rt' => $request->rt,
+            'rw' => $request->rw,
+            'dusun' => $request->dusun,
+            'kelurahan_id' => $request->kelurahan,
+            'kecamatan_id' => $request->kecamatan,
+            'kode_pos' => $request->kode_pos,
+        ]);
+
+        return redirect()->route('halaman.datamaster.siswa')->with('success','Data siswa berhasil ditambahkan');
+
     }
 }

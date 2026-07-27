@@ -13,7 +13,7 @@ class DataSiswaSeeder extends Seeder
     public function run(): void
     {
         $csvFile = database_path('master/data_siswa.csv');
-        
+
         if (!file_exists($csvFile)) {
             $this->command->error("File CSV tidak ditemukan di: {$csvFile}");
             return;
@@ -39,14 +39,15 @@ class DataSiswaSeeder extends Seeder
                     'rt'            => $this->cleanValue($data['rt']),
                     'rw'            => $this->cleanValue($data['rw']),
                     'dusun'         => $this->cleanValue($data['dusun']),
-                    'kelurahan'     => $this->cleanValue($data['kelurahan']),
-                    'kecamatan'     => $this->cleanValue($data['kecamatan']),
+                    'kelurahan_id'     => $this->cleanValue($data['kelurahan']),
+                    'kecamatan_id'     => $this->cleanValue($data['kecamatan']),
                     'kode_pos'      => $this->cleanValue($data['kode_pos']),
+                    'jurusan_id'    => $this->cleanValue($data['jurusan']),
                     'created_at'    => now(),
                     'updated_at'    => now(),
                 ]);
             }
-            
+
             DB::commit();
             $this->command->info("Hore! Data dari file CSV berhasil ditambahkan ke tabel data_siswa.");
         } catch (\Exception $e) {
@@ -63,12 +64,12 @@ class DataSiswaSeeder extends Seeder
     private function cleanValue($value)
     {
         $trimmed = trim($value);
-        
+
         // Cek jika kosong, atau berisi teks 'NULL' / 'null'
         if ($trimmed === '' || strtolower($trimmed) === 'null') {
             return null;
         }
-        
+
         return $trimmed;
     }
 }
