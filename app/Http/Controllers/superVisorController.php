@@ -456,8 +456,8 @@ class superVisorController extends Controller
 
         $request->validate([
             'nama_lengkap' => 'required',
-            'nis' => 'required',
-            'nisn' => 'required',
+            'nis' => 'required|max:9',
+            'nisn' => 'required|max:10',
             'jurusan_id' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
