@@ -471,6 +471,14 @@ class superVisorController extends Controller
             'kode_pos' => 'required',
         ]);
 
+        $dataSiswa = DB::table('data_siswa')
+            ->where('nis', $request->nis)->first();
+
+        $dataNisn = DB::table('data_siswa')
+            ->where('nisn', $request->nisn)->first();
+
+        if (!$dataSiswa) {
+            if (!$dataNisn) {
         data_siswa::create([
             'nama_lengkap' => $request->nama_lengkap,
             'nis' => $request->nis,
@@ -489,6 +497,8 @@ class superVisorController extends Controller
         ]);
 
         return redirect()->route('halaman.datamaster.siswa')->with('success','Data siswa berhasil ditambahkan');
-
+            }
+        }
+        return redirect()->back()->with('success', 'data gagal ditambahkan');
     }
 }
