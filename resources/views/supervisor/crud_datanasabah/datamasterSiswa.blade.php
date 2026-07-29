@@ -192,23 +192,35 @@
                     <!-- NIS -->
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-600 mb-2">
-                            NIS
+                            NIS <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
-                            <i class="ph ph-identification-card absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                            <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nis" value="{{ old('nis') }}" required class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm">
+                            <i class="ph ph-identification-card absolute left-4 top-1/2 -translate-y-1/2 @error('nis') text-red-400 @else text-gray-400 @enderror text-lg"></i>
+                            <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nis" value="{{ old('nis') }}" required class="w-full border @error('nis') border-red-500 ring-2 ring-red-500/20 text-red-900 @else border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 text-gray-800 @enderror rounded-xl pl-11 pr-4 py-2.5 text-[14px] focus:outline-none transition-all shadow-sm">
                         </div>
+                        @error('nis')
+                            <p class="text-red-500 text-[12px] font-semibold mt-1.5 flex items-center gap-1.5">
+                                <i class="ph-bold ph-warning-circle text-sm shrink-0"></i>
+                                <span>{{ $message }}</span>
+                            </p>
+                        @enderror
                     </div>
 
                     <!-- NISN -->
                     <div>
                         <label class="block text-[13px] font-semibold text-gray-600 mb-2">
-                            NISN
+                            NISN <span class="text-red-500">*</span>
                         </label>
                         <div class="relative">
-                            <i class="ph ph-cardholder absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                            <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nisn" value="{{ old('nisn') }}" required class="w-full border border-gray-200 rounded-xl pl-11 pr-4 py-2.5 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 transition-all shadow-sm">
+                            <i class="ph ph-cardholder absolute left-4 top-1/2 -translate-y-1/2 @error('nisn') text-red-400 @else text-gray-400 @enderror text-lg"></i>
+                            <input type="text" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')" name="nisn" value="{{ old('nisn') }}" required class="w-full border @error('nisn') border-red-500 ring-2 ring-red-500/20 text-red-900 @else border-gray-200 focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 text-gray-800 @enderror rounded-xl pl-11 pr-4 py-2.5 text-[14px] focus:outline-none transition-all shadow-sm">
                         </div>
+                        @error('nisn')
+                            <p class="text-red-500 text-[12px] font-semibold mt-1.5 flex items-center gap-1.5">
+                                <i class="ph-bold ph-warning-circle text-sm shrink-0"></i>
+                                <span>{{ $message }}</span>
+                            </p>
+                        @enderror
                     </div>
 
                     <!-- Jenis Kelamin -->

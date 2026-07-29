@@ -456,8 +456,8 @@ class superVisorController extends Controller
 
         $request->validate([
             'nama_lengkap' => 'required',
-            'nis' => 'required',
-            'nisn' => 'required',
+            'nis' => 'required|unique:data_siswa,nis',
+            'nisn' => 'required|unique:data_siswa,nisn',
             'jurusan_id' => 'required',
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'required',
@@ -469,26 +469,48 @@ class superVisorController extends Controller
             'kelurahan' => 'required',
             'kecamatan' => 'required',
             'kode_pos' => 'required',
+        ], [
+            'nama_lengkap.required' => 'Nama lengkap wajib diisi.',
+            'nis.required' => 'NIS wajib diisi.',
+            'nis.unique' => 'NIS sudah terdaftar dalam sistem.',
+            'nisn.required' => 'NISN wajib diisi.',
+            'nisn.unique' => 'NISN sudah terdaftar dalam sistem.',
+            'jurusan_id.required' => 'Jurusan wajib dipilih.',
+            'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+            'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
+            'tanggal_lahir.required' => 'Tanggal lahir wajib diisi.',
+            'tanggal_lahir.date' => 'Format tanggal lahir tidak valid.',
+            'agama.required' => 'Agama wajib dipilih.',
+            'rt.required' => 'RT wajib diisi.',
+            'rw.required' => 'RW wajib diisi.',
+            'dusun.required' => 'Dusun wajib diisi.',
+            'kelurahan.required' => 'Desa/Kelurahan wajib dipilih.',
+            'kecamatan.required' => 'Kecamatan wajib dipilih.',
+            'kode_pos.required' => 'Kode pos wajib diisi.',
         ]);
 
-        data_siswa::create([
-            'nama_lengkap' => $request->nama_lengkap,
-            'nis' => $request->nis,
-            'nisn' => $request->nisn,
-            'jurusan_id' => $request->jurusan_id,
-            'jenis_kelamin'=> $request->jenis_kelamin,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'agama' => $request->agama,
-            'rt' => $request->rt,
-            'rw' => $request->rw,
-            'dusun' => $request->dusun,
-            'kelurahan_id' => $request->kelurahan,
-            'kecamatan_id' => $request->kecamatan,
-            'kode_pos' => $request->kode_pos,
-        ]);
+        try {
+            data_siswa::create([
+                'nama_lengkap' => $request->nama_lengkap,
+                'nis' => $request->nis,
+                'nisn' => $request->nisn,
+                'jurusan_id' => $request->jurusan_id,
+                'jenis_kelamin'=> $request->jenis_kelamin,
+                'tempat_lahir' => $request->tempat_lahir,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'agama' => $request->agama,
+                'rt' => $request->rt,
+                'rw' => $request->rw,
+                'dusun' => $request->dusun,
+                'kelurahan_id' => $request->kelurahan,
+                'kecamatan_id' => $request->kecamatan,
+                'kode_pos' => $request->kode_pos,
+            ]);
 
-        return redirect()->route('halaman.datamaster.siswa')->with('success','Data siswa berhasil ditambahkan');
+            return redirect()->route('halaman.datamaster.siswa')->with('success','Data siswa berhasil ditambahkan');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Gagal menyimpan data siswa. Silakan periksa kembali data yang Anda masukkan.');
+        }
 
     }
 }
