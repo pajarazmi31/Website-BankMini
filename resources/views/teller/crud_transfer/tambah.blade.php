@@ -1,15 +1,3 @@
-@if(session('success'))
-<div style="background: #d4edda; color: #155724; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-    {{ session('success') }}
-</div>
-@endif
-
-@if(session('error'))
-<div style="background: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; border-radius: 8px;">
-    <strong>Eror Terjadi Bray!</strong> {{ session('error') }}
-</div>
-@endif
-
 <form action="{{ route('transfer.store') }}" method="POST" id="formTransaksiTransfer">
     @csrf
 
@@ -249,8 +237,60 @@
         }
     }
 
-    // 4. JALANKAN TOTALAN PERTAMA KALI SAAT HALAMAN DIBUKA (Tanpa Intervensi Submit)
+    // 4. JALANKAN TOTALAN PERTAMA KALI SAAT HALAMAN DIBUKA & VALIDASI SUBMIT
     document.addEventListener('DOMContentLoaded', function() {
         calculateTotal();
+
+        const formTransferTmb = document.getElementById('formTransaksiTransfer');
+        if (formTransferTmb) {
+            formTransferTmb.addEventListener('submit', function(e) {
+                const pengirim = document.getElementById('tambah_id_rekening_pengirim')?.value.trim();
+                const penerima = document.getElementById('tambah_id_rekening_penerima')?.value.trim();
+                const transferInput = document.getElementById('tambah_jumlah_transfer');
+                const nominal = cleanNumber(transferInput ? transferInput.value : 0);
+
+                if (!pengirim) {
+                    e.preventDefault();
+                    if (typeof openTransferPopup === 'function') {
+                        openTransferPopup('Transfer Gagal', 'Nomor rekening pengirim wajib diisi.', 'error');
+                    } else {
+                        alert('Transfer Gagal!\nNomor rekening pengirim wajib diisi.');
+                    }
+                    return;
+                }
+
+                if (!penerima) {
+                    e.preventDefault();
+                    if (typeof openTransferPopup === 'function') {
+                        openTransferPopup('Transfer Gagal', 'Nomor rekening penerima wajib diisi.', 'error');
+                    } else {
+                        alert('Transfer Gagal!\nNomor rekening penerima wajib diisi.');
+                    }
+                    return;
+                }
+
+                if (pengirim === penerima) {
+                    e.preventDefault();
+                    if (typeof openTransferPopup === 'function') {
+                        openTransferPopup('Transfer Gagal', 'Nomor rekening pengirim & penerima tidak boleh sama!', 'error');
+                    } else {
+                        alert('Transfer Gagal!\nNomor rekening pengirim & penerima tidak boleh sama!');
+                    }
+                    return;
+                }
+
+                if (nominal <= 0) {
+                    e.preventDefault();
+                    if (typeof openTransferPopup === 'function') {
+                        openTransferPopup('Transfer Gagal', 'Nominal transfer harus lebih dari 0.', 'error');
+                    } else {
+                        alert('Transfer Gagal!\nNominal transfer harus lebih dari 0.');
+                    }
+                    return;
+                }
+
+                if (transferInput) transferInput.value = nominal;
+            });
+        }
     });
 </script>

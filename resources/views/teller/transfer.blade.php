@@ -244,6 +244,42 @@ Selamat Datang, {{ $user->name }}!
     </div>
 </div>
 
+<!-- ================= MODAL POPUP TRANSFER (BERHASIL / GAGAL) ================= -->
+<div id="transferPopupModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <!-- Overlay backdrop blur -->
+    <div class="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300" onclick="closeTransferPopup()"></div>
+
+    <!-- Modal Content Container -->
+    <div id="transferPopupContent" class="bg-white rounded-[28px] w-full max-w-[400px] p-8 shadow-2xl relative z-10 transform transition-all scale-95 opacity-0 duration-300">
+        <div class="flex flex-col items-center text-center">
+
+            <!-- Success Icon Badge -->
+            <div id="transferPopupSuccessBadge" class="hidden w-20 h-20 rounded-full bg-emerald-50 items-center justify-center mb-6">
+                <i class="ph-fill ph-check-circle text-[48px] text-emerald-500"></i>
+            </div>
+
+            <!-- Error Icon Badge -->
+            <div id="transferPopupErrorBadge" class="hidden w-20 h-20 rounded-full bg-red-50 items-center justify-center mb-6">
+                <i class="ph-fill ph-warning-circle text-[48px] text-red-500"></i>
+            </div>
+
+            <!-- Title -->
+            <h3 id="transferPopupTitle" class="text-[22px] font-bold text-gray-900 mb-2"></h3>
+
+            <!-- Description / Message -->
+            <div id="transferPopupMessage" class="text-gray-500 text-[14px] leading-relaxed mb-8 w-full"></div>
+
+            <!-- Action Button -->
+            <div class="w-full">
+                <button id="transferPopupButton" onclick="closeTransferPopup()" type="button" class="w-full px-6 py-3.5 rounded-xl font-bold text-[14px] transition-colors active:scale-95 cursor-pointer">
+                    OK
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <!-- ================= CRUD VIEWS MODULAR ================= -->
 @include('teller.crud_transfer.tambah')
 @include('teller.crud_transfer.detail')
@@ -769,5 +805,90 @@ Selamat Datang, {{ $user->name }}!
         });
 
     });
+
+    // =====================================
+    // FUNCTION POPUP ALERT TRANSFER (SUKSES / GAGAL)
+    // =====================================
+    function openTransferPopup(title, messageHTML, type = 'success') {
+        const modal = document.getElementById('transferPopupModal');
+        const content = document.getElementById('transferPopupContent');
+        const successBadge = document.getElementById('transferPopupSuccessBadge');
+        const errorBadge = document.getElementById('transferPopupErrorBadge');
+        const titleEl = document.getElementById('transferPopupTitle');
+        const messageEl = document.getElementById('transferPopupMessage');
+        const buttonEl = document.getElementById('transferPopupButton');
+
+        if (!modal || !content) return;
+
+        titleEl.textContent = title;
+        messageEl.innerHTML = messageHTML;
+
+        if (type === 'success') {
+            successBadge.classList.remove('hidden');
+            successBadge.classList.add('flex');
+            errorBadge.classList.add('hidden');
+            errorBadge.classList.remove('flex');
+
+            buttonEl.className = "w-full px-6 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-[14px] transition-colors shadow-lg shadow-emerald-500/20 active:scale-95 cursor-pointer";
+            buttonEl.textContent = "Selesai";
+        } else {
+            errorBadge.classList.remove('hidden');
+            errorBadge.classList.add('flex');
+            successBadge.classList.add('hidden');
+            successBadge.classList.remove('flex');
+
+            buttonEl.className = "w-full px-6 py-3.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-[14px] transition-colors shadow-lg shadow-red-500/30 active:scale-95 cursor-pointer";
+            buttonEl.textContent = "Mengerti";
+        }
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            content.classList.remove('scale-95', 'opacity-0');
+            content.classList.add('scale-100', 'opacity-100');
+        }, 50);
+    }
+
+    function closeTransferPopup() {
+        const modal = document.getElementById('transferPopupModal');
+        const content = document.getElementById('transferPopupContent');
+        if (!modal || !content) return;
+
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 250);
+    }
+
+    window.openTransferPopup = openTransferPopup;
+    window.closeTransferPopup = closeTransferPopup;
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeTransferPopup();
+        }
+    });
+
+    @if (session('success'))
+        document.addEventListener('DOMContentLoaded', function() {
+            const successMsg = @json(session('success'));
+            if (!successMsg.toLowerCase().includes('dihapus')) {
+                openTransferPopup('Transfer Berhasil!', successMsg, 'success');
+            }
+        });
+    @elseif (session('error') || $errors->any())
+        document.addEventListener('DOMContentLoaded', function() {
+            let errMessage = @json(session('error') ?? '');
+            @if($errors->any())
+                let errList = '<ul class="list-disc pl-5 text-left text-red-600 text-xs space-y-1 mt-2">';
+                @foreach($errors->all() as $err)
+                    errList += '<li>' + @json($err) + '</li>';
+                @endforeach
+                errList += '</ul>';
+                errMessage += errList;
+            @endif
+            openTransferPopup('Transfer Gagal', errMessage || 'Terjadi kesalahan saat memproses transfer.', 'error');
+        });
+    @endif
 </script>
 @endsection

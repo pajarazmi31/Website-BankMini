@@ -312,16 +312,24 @@ class tellerController extends Controller
 
     public function cariRekening(String $rekening)
     {
-        $data = Rekening::with('nasabah')->where('id', $rekening)->first();
+        $data = Rekening::with('nasabah')
+            ->where('id', $rekening)
+            ->orWhereHas('nasabah', function ($q) use ($rekening) {
+                $q->where('nis_nip', $rekening);
+            })
+            ->first();
+
         if ($data && $data->nasabah) {
             return response()->json([
-                'success' => true,
-                'nama'    => $data->nasabah->nama_nasabah,
-                'saldo'   => $data->saldo_saat_ini
+                'success'     => true,
+                'id_rekening' => $data->id,
+                'nama'        => $data->nasabah->nama_nasabah,
+                'saldo'       => $data->saldo_saat_ini
             ]);
         }
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false, 'message' => 'NIS / No. Rekening tidak terdaftar']);
     }
+
 
     public function searchRekening(Request $request)
     {
@@ -707,7 +715,7 @@ class tellerController extends Controller
             $this->sinkronisasiSaldo($norekPengirim);
             $this->sinkronisasiSaldo($norekPenerima);
             DB::commit();
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Transaksi transfer berhasil diproses!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage())->withInput();
@@ -812,7 +820,7 @@ class tellerController extends Controller
 
 
             DB::commit();
-            return back();
+            return back()->with('success', 'Data transfer berhasil diupdate!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal update data: ' . $e->getMessage())->withInput();
@@ -828,7 +836,7 @@ class tellerController extends Controller
         $transfer->delete();
         $this->sinkronisasiSaldo($id_rek_pengirim);
         $this->sinkronisasiSaldo($id_rek_penerima);
-        return back();
+        return back()->with('success', 'History transfer berhasil dihapus!');
     }
 
     // ======================================================
@@ -1172,7 +1180,14 @@ class tellerController extends Controller
     public function cetakBuku(Request $request, String $id_rekening)
     {
         $mulai_baris = $request->query('baris', 1);
-        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+        $rekening = Rekening::with('nasabah')
+            ->where('id', $id_rekening)
+            ->orWhereHas('nasabah', function ($q) use ($id_rekening) {
+                $q->where('nis_nip', $id_rekening);
+            })
+            ->firstOrFail();
+
+        $id_rekening = $rekening->id;
 
 
         $cleanNum = function ($val) {
@@ -1288,7 +1303,12 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
     public function cetakBiodataBuku($id_rekening)
     {
         // Mengambil data rekening beserta data relasi nasabah 
-        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+        $rekening = Rekening::with('nasabah')
+            ->where('id', $id_rekening)
+            ->orWhereHas('nasabah', function ($q) use ($id_rekening) {
+                $q->where('nis_nip', $id_rekening);
+            })
+            ->firstOrFail();
 
         // Mengembalikan view untuk format cetak biodata di buku tabungan
         return view('teller.cetak_biodata_buku', compact('rekening'));
