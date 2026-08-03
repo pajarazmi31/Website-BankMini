@@ -235,29 +235,30 @@ History Transaksi Nasabah
             </button>
         </div>
         <div class="p-6">
-            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan No. Rekening Nasabah</label>
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan NIS / No. Rekening Nasabah</label>
             <div class="relative">
                 <i class="ph ph-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                <input type="number" id="inputNoRekening" placeholder="Contoh: 10029384"
+                <input type="text" id="inputNoRekening" placeholder="Contoh: 10029384 atau NIS"
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
             <!-- INPUT BARU: MULAI BARIS -->
-            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Mulai Cetak dari Baris ke-?</label>
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2 mt-4">Mulai Cetak dari Baris ke-?</label>
             <div class="relative">
                 <i class="ph ph-list-numbers absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
                 <input type="number" id="inputBaris" value="1" min="1"
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
-            <p class="text-xs text-gray-500 mt-2">Sistem hanya akan mencetak riwayat transaksi milik nomor rekening ini.</p>
+            <p class="text-xs text-gray-500 mt-2">Sistem hanya akan mencetak riwayat transaksi milik NIS / nomor rekening ini.</p>
         </div>
         <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
             <button type="button" onclick="tutupModalCetak()" class="px-4 py-2 rounded-xl text-[13px] font-bold text-gray-600 hover:bg-gray-200 transition-colors">Batal</button>
-            <button type="button" onclick="prosesCetak()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-brand-blue text-white hover:opacity-90 transition-colors flex items-center gap-2">
+            <button type="button" id="btnProsesCetak" onclick="prosesCetak()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-brand-blue text-white hover:opacity-90 transition-colors flex items-center gap-2">
                 <i class="ph ph-printer"></i> Cetak Sekarang
             </button>
         </div>
     </div>
 </div>
+
 <!-- ================= MODAL CETAK BIODATA BUKU ================= -->
 <div id="modalCetakBiodata" class="hidden fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
     <div class="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden">
@@ -268,20 +269,36 @@ History Transaksi Nasabah
             </button>
         </div>
         <div class="p-6">
-            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan No. Rekening Nasabah</label>
+            <label class="block text-[13px] font-semibold text-gray-700 mb-2">Masukkan NIS / No. Rekening Nasabah</label>
             <div class="relative">
                 <i class="ph ph-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
-                <input type="number" id="inputNoRekeningBiodata" placeholder="Contoh: 10029384"
+                <input type="text" id="inputNoRekeningBiodata" placeholder="Contoh: 10029384 atau NIS"
                     class="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all">
             </div>
             <p class="text-xs text-gray-500 mt-2">Sistem akan mencetak nama dan nomor rekening untuk halaman biodata fisik di buku tabungan.</p>
         </div>
         <div class="p-5 border-t border-gray-100 bg-gray-50 flex justify-end gap-3">
             <button type="button" onclick="tutupModalCetakBiodata()" class="px-4 py-2 rounded-xl text-[13px] font-bold text-gray-600 hover:bg-gray-200 transition-colors">Batal</button>
-            <button type="button" onclick="prosesCetakBiodata()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-[#143657] text-white hover:opacity-90 transition-colors flex items-center gap-2">
+            <button type="button" id="btnProsesCetakBiodata" onclick="prosesCetakBiodata()" class="px-4 py-2 rounded-xl text-[13px] font-bold bg-[#143657] text-white hover:opacity-90 transition-colors flex items-center gap-2">
                 <i class="ph ph-printer"></i> Cetak Biodata
             </button>
         </div>
+    </div>
+</div>
+
+<!-- ================= MODAL POPUP NIS TIDAK TERDAFTAR ================= -->
+<div id="modalNisTidakTerdaftar" class="hidden fixed inset-0 z-[110] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 fade-in">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-sm overflow-hidden text-center p-6">
+        <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="ph-bold ph-warning-circle text-3xl"></i>
+        </div>
+        <h3 class="font-bold text-gray-800 text-[18px] mb-2">NIS / Rekening Tidak Terdaftar</h3>
+        <p class="text-[13px] text-gray-600 mb-6 leading-relaxed">
+            Data NIS / Nomor Rekening <span id="nisNotFoundText" class="font-bold text-gray-800"></span> tidak ditemukan dalam sistem. Harap periksa kembali nomor yang Anda masukkan.
+        </p>
+        <button type="button" onclick="tutupModalNisTidakTerdaftar()" class="w-full py-2.5 rounded-xl text-[14px] font-bold bg-red-500 hover:bg-red-600 text-white transition-colors shadow-md">
+            Tutup
+        </button>
     </div>
 </div>
 @endsection
@@ -443,6 +460,55 @@ History Transaksi Nasabah
         switchView('detail');
     }
 
+    // FUNGSI MODAL POPUP NIS TIDAK TERDAFTAR
+    function bukaModalNisTidakTerdaftar(nisValue) {
+        document.getElementById('nisNotFoundText').innerText = nisValue ? `"${nisValue}"` : '';
+        document.getElementById('modalNisTidakTerdaftar').classList.remove('hidden');
+    }
+
+    function tutupModalNisTidakTerdaftar() {
+        document.getElementById('modalNisTidakTerdaftar').classList.add('hidden');
+    }
+
+    // FUNGSI VERIFIKASI NIS / REKENING VIA AJAX
+    async function verifikasiDanDapatkanNorek(inputVal, btnElement) {
+        if (!inputVal) {
+            bukaModalNisTidakTerdaftar('');
+            return null;
+        }
+
+        const originalBtnText = btnElement ? btnElement.innerHTML : '';
+        if (btnElement) {
+            btnElement.disabled = true;
+            btnElement.innerHTML = '<i class="ph ph-spinner animate-spin"></i> Memeriksa...';
+        }
+
+        try {
+            const response = await fetch(`/cari-rekening/${encodeURIComponent(inputVal)}`);
+            const data = await response.json();
+
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = originalBtnText;
+            }
+
+            if (data && data.success && data.id_rekening) {
+                return data.id_rekening;
+            } else {
+                bukaModalNisTidakTerdaftar(inputVal);
+                return null;
+            }
+        } catch (err) {
+            console.error('Gagal verifikasi NIS/Rekening:', err);
+            if (btnElement) {
+                btnElement.disabled = false;
+                btnElement.innerHTML = originalBtnText;
+            }
+            bukaModalNisTidakTerdaftar(inputVal);
+            return null;
+        }
+    }
+
     // FUNGSI MODAL CETAK BUKU
     function bukaModalCetak() {
         document.getElementById('modalCetakBuku').classList.remove('hidden');
@@ -454,18 +520,21 @@ History Transaksi Nasabah
         document.getElementById('modalCetakBuku').classList.add('hidden');
     }
 
-    function prosesCetak() {
-        const noRek = document.getElementById('inputNoRekening').value.trim();
-        const baris = document.getElementById('inputBaris').value.trim() || 1; // Default ke 1
+    async function prosesCetak() {
+        const noRekInput = document.getElementById('inputNoRekening').value.trim();
+        const baris = document.getElementById('inputBaris').value.trim() || 1;
+        const btn = document.getElementById('btnProsesCetak');
 
-        if (!noRek) {
-            alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
+        if (!noRekInput) {
+            bukaModalNisTidakTerdaftar('');
             return;
         }
 
-        // Kirim nomor rekening dan baris melalui URL parameter
-        window.open(`/teller/cetak-buku/${noRek}?baris=${baris}`, '_blank');
-        tutupModalCetak();
+        const idRekening = await verifikasiDanDapatkanNorek(noRekInput, btn);
+        if (idRekening) {
+            tutupModalCetak();
+            window.open(`/teller/cetak-buku/${idRekening}?baris=${baris}`, '_blank');
+        }
     }
 
     function bukaModalCetakBiodata() {
@@ -478,17 +547,20 @@ History Transaksi Nasabah
         document.getElementById('modalCetakBiodata').classList.add('hidden');
     }
 
-    function prosesCetakBiodata() {
-        const noRek = document.getElementById('inputNoRekeningBiodata').value.trim();
+    async function prosesCetakBiodata() {
+        const noRekInput = document.getElementById('inputNoRekeningBiodata').value.trim();
+        const btn = document.getElementById('btnProsesCetakBiodata');
 
-        if (!noRek) {
-            alert('Silakan masukkan Nomor Rekening terlebih dahulu!');
+        if (!noRekInput) {
+            bukaModalNisTidakTerdaftar('');
             return;
         }
 
-        // Arahkan ke route cetak biodata yang sudah dibuat di web.php
-        window.open(`/teller/cetak-biodata/${noRek}`, '_blank');
-        tutupModalCetakBiodata();
+        const idRekening = await verifikasiDanDapatkanNorek(noRekInput, btn);
+        if (idRekening) {
+            tutupModalCetakBiodata();
+            window.open(`/teller/cetak-biodata/${idRekening}`, '_blank');
+        }
     }
 </script>
 @endsection

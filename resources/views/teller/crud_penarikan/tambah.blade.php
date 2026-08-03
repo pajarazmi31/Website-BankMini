@@ -243,20 +243,63 @@ const saldoMinimum = {{ $saldoMinimum }};
 
     if (formTambahPenarikan) {
         formTambahPenarikan.addEventListener('submit', function(e) {
+            let rekening = rekeningInputTmb ? rekeningInputTmb.value.trim() : '';
+            let nama = namaInputTmb ? namaInputTmb.value.trim() : '';
             let nominal = bersihkanAngka(jumlahInputTmb.value);
             let biaya = bersihkanAngka(biayaInputTmb.value);
             let metode = pilihanBiayaTmb ? pilihanBiayaTmb.value : '';
-            
+
+            if (!rekening) {
+                e.preventDefault();
+                if (typeof openPenarikanPopup === 'function') {
+                    openPenarikanPopup('Penarikan Gagal', 'Nomor rekening wajib diisi.', 'error');
+                } else {
+                    alert('Penarikan Gagal!\nNomor rekening wajib diisi.');
+                }
+                return;
+            }
+
+            if (!nama || nama === 'Rekening tidak ditemukan' || nama === 'Terjadi kesalahan') {
+                e.preventDefault();
+                if (typeof openPenarikanPopup === 'function') {
+                    openPenarikanPopup('Penarikan Gagal', 'Nomor rekening tidak valid atau tidak ditemukan.', 'error');
+                } else {
+                    alert('Penarikan Gagal!\nNomor rekening tidak valid atau tidak ditemukan.');
+                }
+                return;
+            }
+
+            if (nominal <= 0) {
+                e.preventDefault();
+                if (typeof openPenarikanPopup === 'function') {
+                    openPenarikanPopup('Penarikan Gagal', 'Nominal penarikan harus lebih dari 0.', 'error');
+                } else {
+                    alert('Penarikan Gagal!\nNominal penarikan harus lebih dari 0.');
+                }
+                return;
+            }
+
+            if (!metode) {
+                e.preventDefault();
+                if (typeof openPenarikanPopup === 'function') {
+                    openPenarikanPopup('Penarikan Gagal', 'Pilihan biaya transaksi belum dipilih.', 'error');
+                } else {
+                    alert('Penarikan Gagal!\nPilihan biaya transaksi belum dipilih.');
+                }
+                return;
+            }
+
             let totalPotongKeSaldo = (metode === 'potong_saldo') ? (nominal + biaya) : nominal;
             let sisaSaldo = saldoRekeningTmb - totalPotongKeSaldo;
 
             if (sisaSaldo < saldoMinimum) {
                 e.preventDefault();
-                alert(
-                    'Penarikan gagal!\n' +
-                    'Saldo tidak mencukupi. Sisa saldo minimum setelah penarikan harus tersisa Rp ' +
-                    formatAngka(saldoMinimum)
-                );
+                const errMsg = 'Saldo tidak mencukupi. Sisa saldo minimum setelah penarikan harus tersisa Rp ' + formatAngka(saldoMinimum);
+                if (typeof openPenarikanPopup === 'function') {
+                    openPenarikanPopup('Penarikan Gagal', errMsg, 'error');
+                } else {
+                    alert('Penarikan Gagal!\n' + errMsg);
+                }
                 return;
             }
 

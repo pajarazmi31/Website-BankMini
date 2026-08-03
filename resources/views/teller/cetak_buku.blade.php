@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>&nbsp;</title>
     <style>
+        @page {
+            size: 139mm 174mm;
+            margin: 0;
+        }
+
         body {
             font-family: 'Courier New', Courier, monospace;
-            /* Font standar mesin printer bank */
             font-size: 12px;
             color: #000;
-            padding-left: 5px;
+            margin: 0;
+            padding: 20px;
             width: 145mm;
-            height: 85mm;
         }
 
         .header {
@@ -33,10 +37,19 @@
             padding: 2px 5px;
         }
 
-        .space-header {
-            height: 75px;
-            /* SILAKAN UBAH ANGKA INI JIKA JARAKNYA KURANG ATAU TERLALU LEBAR */
+        /* --- PENGATURAN JARAK ATAS --- */
+        /* Ini jarak untuk halaman 1 */
+        .spasi-halaman-1 {
+            height: 35px; 
+            display: block; 
         }
+
+        /* INI YANG ANDA UBAH UNTUK HALAMAN 2 DAN SETERUSNYA */
+        .spasi-halaman-lanjutan {
+            height: 56px; /* <--- UBAH ANGKA INI (Misal: 60px, 90px, dst) SAMPAI PAS */
+            display: block;
+        }
+        /* ----------------------------- */
 
         .tabel-transaksi {
             width: 100%;
@@ -46,7 +59,7 @@
         .tabel-transaksi th {
             border-top: 1px solid #000;
             border-bottom: 1px solid #000;
-            padding: 8px 5px;
+            padding: 8px 5px; 
             text-align: left;
         }
 
@@ -62,6 +75,7 @@
         @media print {
             .halaman-baru {
                 page-break-before: always;
+                break-before: page;
             }
 
             .no-print {
@@ -69,101 +83,132 @@
             }
         }
 
+        /* --- INI YANG GW UBAH BIAR JATUH KE BAWAHNYA PAS --- */
         .baris-transaksi {
-            height: 50px;
-            /* Sesuaikan dengan jarak antar baris buku fisik Anda */
+            height: 62px; /* <--- Tadinya 50px. Kalau 10 barisnya masih kurang ke bawah, naikin angkanya jadi 68px atau 70px */
         }
     </style>
 </head>
 
 <body>
     <div class="no-print" style="margin-bottom: 20px;">
-        <button onclick="window.print()" style="background-color: #143657; color: #ffffff; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); transition: opacity 0.2s;"> 🖨️ Cetak Sekarang</button>
-        <button onclick="window.close()" style="background-color: #ffffff; color: #374151; border: 1px solid #d1d5db; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); transition: background-color 0.2s;"> ❌ Tutup Tab</button>
+        <button onclick="window.print()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Cetak Sekarang</button>
+        <button onclick="window.close()" style="padding: 10px 20px; font-weight: bold; cursor: pointer; background-color: #6c757d; color: white; border: none; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-left: 10px;">Tutup Tab</button>
     </div>
 
     @php
-    // 1. Hitung total seluruh data transaksi yang ada di database
-    $total_transaksi = count($transaksi);
+        $total_transaksi = count($transaksi);
+        $index_data = $mulai_baris - 1;
+        $sisa_transaksi = $total_transaksi - $index_data;
+        if ($sisa_transaksi < 0) $sisa_transaksi = 0; 
+        
+        $total_slot_dibutuhkan = ($mulai_baris - 1) + $sisa_transaksi;
+        $total_halaman = ceil($total_slot_dibutuhkan / 10);
+        if ($total_halaman < 1) $total_halaman = 1;
+    @endphp
 
-    // 2. SET POINTER DATA (Ini kunci masalahnya)
-    // Jika mulai_baris = 8, maka kita abaikan 7 transaksi pertama.
-    // Array dimulai dari 0, jadi data ke-8 ada di index 7.
-    $index_data = $mulai_baris - 1;
-
-    // 3. Hitung berapa sisa transaksi yang BENAR-BENAR akan dicetak
-    $sisa_transaksi = $total_transaksi - $index_data;
-    if ($sisa_transaksi < 0) $sisa_transaksi=0; // Jaga-jaga jika input baris melebihi total data
-
-        // 4. Hitung total slot fisik (baris kosong + sisa transaksi)
-        $total_slot_dibutuhkan=($mulai_baris - 1) + $sisa_transaksi;
-
-        // 5. Hitung butuh berapa halaman (1 halaman=10 baris)
-        $total_halaman=ceil($total_slot_dibutuhkan / 10);
-        if ($total_halaman < 1) $total_halaman=1;
-        @endphp
-
-        <!-- Looping berdasarkan jumlah halaman -->
+    <table class="tabel-transaksi">
         @for ($halaman = 1; $halaman <= $total_halaman; $halaman++)
 
-            <div class="{{ $halaman > 1 ? 'halaman-baru' : '' }}">
-            <div class="space-header"></div>
-            <table class="tabel-transaksi">
-                <tbody>
-                    <!-- Looping FIX 10 baris per halaman -->
-                    @for ($baris = 1; $baris <= 10; $baris++)
-                        @php
-                        // Menentukan ini baris ke-berapa secara keseluruhan (akumulasi dari halaman)
-                        $slot_ke=(($halaman - 1) * 10) + $baris;
-                        @endphp
+            <tbody class="{{ $halaman > 1 ? 'halaman-baru' : '' }}">
+                
+                <!-- Trik Kotak Kosong (DIV) agar tidak diabaikan saat print -->
+                <tr>
+                    <td colspan="6" style="padding: 0; border: none;">
+                        <div class="{{ $halaman > 1 ? 'spasi-halaman-lanjutan' : 'spasi-halaman-1' }}"></div>
+                    </td>
+                </tr>
 
-                        <tr class="baris-transaksi">
+                @for ($baris = 1; $baris <= 10; $baris++)
+                    @php
+                        $slot_ke = (($halaman - 1) * 10) + $baris;
+                    @endphp
+
+                    <tr class="baris-transaksi">
                         @if ($slot_ke < $mulai_baris)
-                            <!-- KONDISI A: Baris kosong karena dilewati (Transaksi 1-7) -->
-                            <td colspan="6"></td>
-                            @elseif ($index_data < $total_transaksi)
-                                <!-- KONDISI B: Cetak sisa data transaksi -->
-                                @php
-                                // Ambil data sesuai index_data saat ini
+                            <td style="width: 30px;"></td>
+                            <td style="width: 90px;"></td>
+                            <td style="width: 50px;"></td>
+                            <td style="width: 120px;"></td>
+                            <td style="width: 90px;"></td>
+                            <td></td>
+                        @elseif ($index_data < $total_transaksi)
+                            @php
                                 $t = $transaksi->get($index_data);
-                                $index_data++; // Naikkan penunjuk ke transaksi berikutnya
+                                $index_data++; 
+                            @endphp
+
+                            <td class="text-left" style="width: 30px;">{{ $baris }}</td>
+                            
+                            <td style="width: 90px;">
+                            {{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}
+                            @if(in_array($t->jenis, ['TFK', 'TFM', 'TFL']))
+                                @php
+                                    $nama = $t->keterangan ?? '-';
+                                    // Cek apakah ada spasi (berarti minimal 2 kata)
+                                    if ($nama !== '-' && strpos(trim($nama), ' ') !== false) {
+                                        $pecah = explode(' ', trim($nama));
+                                        $hasil = '';
+                                        
+                                        // 1. Cek apakah kata pertama adalah ANGKA (misal: NIS 242510191)
+                                        if (isset($pecah[0]) && is_numeric($pecah[0])) {
+                                            $hasil .= $pecah[0] . ' '; // Angka NIS dibiarkan utuh
+                                            array_shift($pecah); // Buang angka dari daftar singkatan
+                                        }
+                                        
+                                        // 2. Ambil kata berikutnya sebagai Nama Depan (contoh: Dinar / Siswa)
+                                        if (count($pecah) > 0) {
+                                            $hasil .= array_shift($pecah);
+                                        }
+                                        
+                                        // 3. Looping sisa kata buat diambil huruf pertamanya + kasih titik
+                                        $singkatan = '';
+                                        foreach($pecah as $kata) {
+                                            if (!empty($kata)) {
+                                                $singkatan .= strtoupper(substr($kata, 0, 1)) . '.';
+                                            }
+                                        }
+                                        
+                                        // 4. Gabungin hasil akhirnya
+                                        if ($singkatan !== '') {
+                                            $nama = $hasil . ' ' . $singkatan;
+                                        } else {
+                                            $nama = $hasil; // Kalau cuma 1 kata setelah NIS (misal: "242510191 Siswa")
+                                        }
+                                    }
                                 @endphp
+                                <br><span style="font-size: 12px; color: #141414;">{{ $nama }}</span>
+                            @endif
+                        </td>
+                            
+                            <td class="text-left" style="width: 50px;">{{ $t->jenis }}</td>
+                            <td class="text-left" style="width: 120px;">
+                                {{ $t->debit > 0 ? number_format($t->debit, 0, ',', '.') : '-' }}
+                                <br>ADM {{ number_format($t->biaya_admin, 0, ',', '.') }}
+                            </td>
+                            <td class="text-left" style="width: 90px;">{{ $t->kredit > 0 ? number_format($t->kredit, 0, ',', '.') : '-' }}</td>
+                            <td class="text-left" style="font-weight: bold;">{{ number_format($t->saldo, 0, ',', '.') }}</td>
+                        @else
+                            <td style="width: 30px;"></td>
+                            <td style="width: 90px;"></td>
+                            <td style="width: 50px;"></td>
+                            <td style="width: 120px;"></td>
+                            <td style="width: 90px;"></td>
+                            <td></td>
+                        @endif
+                    </tr>
+                @endfor
+            </tbody>
+        @endfor
+    </table>
 
-                                <td class="text-left">{{ $slot_ke }}</td>
-                                <td style="width: 90px;">
-                                    {{ \Carbon\Carbon::parse($t->tanggal)->format('d/m/Y') }}
-
-                                    <!-- Cek apakah jenis transaksinya termasuk kategori transfer -->
-                                    @if(in_array($t->jenis, ['TFK', 'TFM', 'TFL']))
-                                    <br><span style="font-size: 12px; color: #141414;">{{ $t->keterangan ?? '-' }}</span>
-                                    @endif
-                                </td>
-                                <td class="text-left">{{ $t->jenis }}</td>
-                                <td class="text-left"> 
-                                    {{ $t->debit > 0 ? number_format($t->debit, 0, ',', '.') : '-' }}
-                                    <br>ADM {{ number_format($t->biaya_admin, 0, ',', '.') }}
-                                </td>
-                                <td class="text-left">{{ $t->kredit > 0 ? number_format($t->kredit, 0, ',', '.') : '-' }}</td>
-                                <td class="text-left" style="font-weight: bold;">{{ number_format($t->saldo, 0, ',', '.') }}</td>
-                                @else
-                                <!-- KONDISI C: Baris kosong karena data sudah habis dicetak -->
-                                <td colspan="6"></td>
-                                @endif
-                                </tr>
-                                @endfor
-                </tbody>
-            </table>
-            </div>
-
-            @endfor
-
-            <script>
-                window.onload = function() {
-                    setTimeout(function() {
-                        window.print();
-                    }, 500);
-                }
-            </script>
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.print();
+            }, 500);
+        }
+    </script>
 </body>
 
 </html>

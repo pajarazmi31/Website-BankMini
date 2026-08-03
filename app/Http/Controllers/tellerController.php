@@ -312,16 +312,24 @@ class tellerController extends Controller
 
     public function cariRekening(String $rekening)
     {
-        $data = Rekening::with('nasabah')->where('id', $rekening)->first();
+        $data = Rekening::with('nasabah')
+            ->where('id', $rekening)
+            ->orWhereHas('nasabah', function ($q) use ($rekening) {
+                $q->where('nis_nip', $rekening);
+            })
+            ->first();
+
         if ($data && $data->nasabah) {
             return response()->json([
-                'success' => true,
-                'nama'    => $data->nasabah->nama_nasabah,
-                'saldo'   => $data->saldo_saat_ini
+                'success'     => true,
+                'id_rekening' => $data->id,
+                'nama'        => $data->nasabah->nama_nasabah,
+                'saldo'       => $data->saldo_saat_ini
             ]);
         }
-        return response()->json(['success' => false]);
+        return response()->json(['success' => false, 'message' => 'NIS / No. Rekening tidak terdaftar']);
     }
+
 
     public function searchRekening(Request $request)
     {
@@ -707,7 +715,7 @@ class tellerController extends Controller
             $this->sinkronisasiSaldo($norekPengirim);
             $this->sinkronisasiSaldo($norekPenerima);
             DB::commit();
-            return redirect()->back();
+            return redirect()->back()->with('success', 'Transaksi transfer berhasil diproses!');
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage())->withInput();
@@ -812,7 +820,7 @@ class tellerController extends Controller
 
 
             DB::commit();
-            return back();
+            return back()->with('success', 'Data transfer berhasil diupdate!');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Gagal update data: ' . $e->getMessage())->withInput();
@@ -828,7 +836,7 @@ class tellerController extends Controller
         $transfer->delete();
         $this->sinkronisasiSaldo($id_rek_pengirim);
         $this->sinkronisasiSaldo($id_rek_penerima);
-        return back();
+        return back()->with('success', 'History transfer berhasil dihapus!');
     }
 
     // ======================================================
@@ -912,7 +920,7 @@ class tellerController extends Controller
                     'no_rek' => $t->id_rekening_pengirim,
                     'jenis_transaksi' => 'Transfer Keluar',
                     // KELUAR -> Tampilkan Rek Penerima + Catatan
-                    'keterangan' => 'Ke Rek: ' . $t->id_rekening_penerima . ($t->catatan ? ' | ' . $t->catatan : ''),
+                    'keterangan' =>$t->id_rekening_penerima . ($t->catatan ? ' ' . $t->catatan : ''),
                     'admin' => $cleanNum($t->nominal_admin),
                     'debit' => $cleanNum($t->jumlah_transfer) + $cleanNum($potongan),
                     'kredit' => 0,
@@ -930,7 +938,7 @@ class tellerController extends Controller
                     'no_rek' => $t->id_rekening_penerima,
                     'jenis_transaksi' => 'Transfer Masuk',
                     // MASUK -> Tampilkan Rek Pengirim + Catatan
-                    'keterangan' => 'Dari Rek: ' . $t->id_rekening_pengirim . ($t->catatan ? ' | ' . $t->catatan : ''),
+                    'keterangan' =>$t->id_rekening_pengirim . ($t->catatan ? ' ' . $t->catatan : ''),
                     'admin' => 0,
                     'debit' => 0,
                     'kredit' => $cleanNum($t->jumlah_transfer),
@@ -959,8 +967,7 @@ class tellerController extends Controller
                     'no_rek' => $t->id_pengirim,
                     'jenis_transaksi' => 'Transfer Keluar (Nasabah)',
                     // KELUAR -> Tampilkan Rek Penerima
-                    'keterangan' => 'Ke Rek: ' . $t->id_penerima,
-                    'keterangan' => 'Ke Rek: ' . $t->id_penerima,
+                    'keterangan' =>$t->id_penerima,
                     'admin' => $adminTf,
                     'debit' => $jumlahTf + $adminTf,
                     'kredit' => 0,
@@ -978,7 +985,7 @@ class tellerController extends Controller
                     'no_rek' => $t->id_penerima,
                     'jenis_transaksi' => 'Transfer Masuk (Nasabah)',
                     // MASUK -> Tampilkan Rek Pengirim
-                    'keterangan' => 'Dari Rek: ' . $t->id_pengirim,
+                    'keterangan' =>$t->id_pengirim,
                     'admin' => 0,
                     'debit' => 0,
                     'kredit' => $jumlahTf,
@@ -1008,7 +1015,7 @@ class tellerController extends Controller
                 'nama_nasabah' => $item->buktiTf->nasabah->nama_nasabah ?? '-',
                 'no_rek' => $item->id_rekening,
                 'jenis_transaksi' => 'Transfer Dari Luar',
-                'keterangan' => 'Dari: ' . ($item->nama_pengirim ?? '-'),
+                'keterangan' =>($item->nama_pengirim ?? '-'),
                 'admin' => $cleanNum($item->nominal_admin),
                 'debit' => 0,
                 'kredit' => $cleanNum($item->jumlah_transfer),
@@ -1172,7 +1179,14 @@ class tellerController extends Controller
     public function cetakBuku(Request $request, String $id_rekening)
     {
         $mulai_baris = $request->query('baris', 1);
-        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+        $rekening = Rekening::with('nasabah')
+            ->where('id', $id_rekening)
+            ->orWhereHas('nasabah', function ($q) use ($id_rekening) {
+                $q->where('nis_nip', $id_rekening);
+            })
+            ->firstOrFail();
+
+        $id_rekening = $rekening->id;
 
 
         $cleanNum = function ($val) {
@@ -1212,7 +1226,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 'tanggal'     => $t->created_at,
                 'jenis'       => 'TFK',
                 // Gunakan camelCase: rekeningPenerima
-                'keterangan'  => 'Dikirim ke: ' . $t->id_rekening_penerima . ' | ' .  ($t->rekeningPenerima->nasabah->nama_nasabah ?? '-'),
+                'keterangan'  => $t->id_rekening_penerima . ' ' .  ($t->rekeningPenerima->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => $cleanNum($t->nominal_admin),
                 'debit'       => $cleanNum($t->jumlah_transfer) + $cleanNum($potongan),
                 'kredit'      => 0,
@@ -1227,7 +1241,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                 'tanggal'     => $t->created_at,
                 'jenis'       => 'TFM',
                 // Gunakan camelCase: rekeningPengirim
-                'keterangan'  => 'Dari: ' . $t->id_rekening_pengirim . ' | ' . ($t->rekeningPengirim->nasabah->nama_nasabah ?? '-'),
+                'keterangan'  => $t->id_rekening_pengirim . ' ' . ($t->rekeningPengirim->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $cleanNum($t->jumlah_transfer),
@@ -1240,7 +1254,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFK',
-                'keterangan'  => 'Dikirim ke: ' . $t->id_penerima . ' | ' . $t->nama_penerima,
+                'keterangan'  => $t->id_penerima . ' ' . $t->nama_penerima,
                 'biaya_admin' => $potongan,
                 'debit'       => $cleanNum($t->jumlah_transfer) + $potongan,
                 'kredit'      => 0,
@@ -1252,7 +1266,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
             return (object)[
                 'tanggal'     => $t->created_at ?? Carbon::now(),
                 'jenis'       => 'TFM',
-                'keterangan'  => 'Dari: ' . $t->id_pengirim . ' | ' . ($t->pengirim->nasabah->nama_nasabah ?? '-'),
+                'keterangan'  => $t->id_pengirim . ' ' . ($t->pengirim->nasabah->nama_nasabah ?? '-'),
                 'biaya_admin' => 0,
                 'debit'       => 0,
                 'kredit'      => $cleanNum($t->jumlah_transfer),
@@ -1269,7 +1283,7 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
                     'tanggal'     => $waktu ? Carbon::parse($waktu) : Carbon::now(),
                     'jenis'       => 'TFL',
                     'jenis'       => 'TFL',
-                    'keterangan' => 'Dari: ' . ($t->nama_pengirim ?? '-'),
+                    'keterangan' => ($t->nama_pengirim ?? '-'),
                     'biaya_admin' => $cleanNum($t->nominal_admin),
                     'debit'       => 0,
                     'kredit'      => $cleanNum($t->jumlah_transfer),
@@ -1288,7 +1302,12 @@ $transferKeluar = Transfer::with('rekeningPenerima.nasabah')
     public function cetakBiodataBuku($id_rekening)
     {
         // Mengambil data rekening beserta data relasi nasabah 
-        $rekening = Rekening::with('nasabah')->findOrFail($id_rekening);
+        $rekening = Rekening::with('nasabah')
+            ->where('id', $id_rekening)
+            ->orWhereHas('nasabah', function ($q) use ($id_rekening) {
+                $q->where('nis_nip', $id_rekening);
+            })
+            ->firstOrFail();
 
         // Mengembalikan view untuk format cetak biodata di buku tabungan
         return view('teller.cetak_biodata_buku', compact('rekening'));

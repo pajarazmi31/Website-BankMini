@@ -218,7 +218,7 @@
 <script>
 $(document).ready(function () {
 
-    // ============================
+// ============================
     // TOAST NOTIFIKASI
     // ============================
 
@@ -226,39 +226,25 @@ $(document).ready(function () {
         showToast("{{ session('success') }}", 'success');
     @endif
 
-<<<<<<< HEAD
-        $('#nis').on('change', function() {
-            let nis = $(this).val();
-            if (!nis) return;
-
-            $.get("{{ url('/siswa') }}/" + nis, function(response) {
-                if(response.status) {
-=======
     @if(session('failed'))
         showToast("{{ session('failed') }}", 'error');
     @endif
-
 
     // ============================
     // AUTO ISI DATA SISWA
     // ============================
 
     $('#nis').on('change', function () {
-
         let nis = $(this).val();
 
         if (!nis) return;
 
         $.ajax({
-
-            url: '/siswa/' + nis,
+            // Gunakan helper url() agar aman dan dinamis di server
+            url: "{{ url('/siswa') }}/" + nis,
             type: 'GET',
-
             success: function (response) {
-
                 if (response.status) {
-
->>>>>>> d290cd41b204efbe81667e4301468c62b768b254
                     $('#nama_lengkap').val(response.data.nama_lengkap);
                     $('#tempat_lahir').val(response.data.tempat_lahir);
                     $('#tanggal_lahir').val(response.data.tanggal_lahir);
@@ -269,25 +255,15 @@ $(document).ready(function () {
                     $('#jurusan').val(response.data.jurusan_id);
 
                     showToast('Data siswa berhasil dimuat', 'success');
-
                 } else {
-
                     showToast('Data siswa tidak ditemukan', 'error');
-
                 }
-
             },
-
             error: function () {
-
                 showToast('Terjadi kesalahan saat mengambil data.', 'error');
-
             }
-
         });
-
     });
-
 
     // ============================
     // TITLE CASE

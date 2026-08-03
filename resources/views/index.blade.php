@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bank Mini SMKN 1 Kawali</title>
+    <title>BANK MINI K-ONE</title>
+    <meta name="description" content="Aplikasi Bank Mini K-One dari SMKN 1 Kawali. Sistem pengelolaan keuangan, tabungan, dan data nasabah digital untuk sekolah.">
+    <meta name="google-site-verification" content="tOckrmz3hwFznMw0UmOrJ_kuHhMYjfjNyctwHNI7AhM" />
 
     <!-- Font Google: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -479,7 +481,7 @@
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
                                 <!-- BAGIAN BACKEND: INPUT NOMOR TELEPON -->
-                                <input type="tel" name="no_hp_pengirim" value="{{ old('no_hp_pengirim') }}"
+                                <input type="tel" name="no_hp_pengirim" id="no_hp_pengirim" value="{{ old('no_hp_pengirim') }}"
                                     class="w-full px-4 py-3 bg-white border rounded-lg focus:ring-2 focus:ring-merek-biru focus:border-transparent outline-none transition {{ $errors->has('no_hp_pengirim') ? 'border-red-500' : 'border-gray-200' }}"
                                     placeholder="Contoh: 08123456789">
                                 @error('no_hp_pengirim')
@@ -777,6 +779,48 @@ function previewImage(input) {
         window.addEventListener('DOMContentLoaded', function() {
             if (inputTransfer.value) {
                 inputTransfer.value = formatRupiah(inputTransfer.value);
+            }
+        });
+        
+        // Inputan No Hp
+        const inputNoHp = document.getElementById('no_hp_pengirim');
+
+        // Fungsi untuk membersihkan input agar HANYA berisi angka
+        function cleanNonDigits(angka) {
+            // Hapus semua karakter selain angka (0-9)
+            return angka.replace(/[^0-9]/g, '');
+        }
+
+        // Event saat pengguna mengetik/menginput nilai
+        inputNoHp.addEventListener('input', function(e) {
+            this.value = cleanNonDigits(this.value);
+        });
+
+        // Jalankan saat halaman pertama kali dimuat (jika ada nilai awal)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (inputNoHp.value) {
+                inputNoHp.value = cleanNonDigits(inputNoHp.value);
+            }
+        });
+
+        // Inputan No Rekening
+        const inputNoRek = document.getElementById('id_rekening');
+
+        // Fungsi untuk membersihkan input agar HANYA berisi angka
+        function cleanNonDigits(angka) {
+            // Hapus semua karakter selain angka (0-9)
+            return angka.replace(/[^0-9]/g, '');
+        }
+
+        // Event saat pengguna mengetik/menginput nilai
+        inputNoRek.addEventListener('input', function(e) {
+            this.value = cleanNonDigits(this.value);
+        });
+
+        // Jalankan saat halaman pertama kali dimuat (jika ada nilai awal)
+        window.addEventListener('DOMContentLoaded', function() {
+            if (inputNoRek.value) {
+                inputNoRek.value = cleanNonDigits(inputNoRek.value);
             }
         });
 

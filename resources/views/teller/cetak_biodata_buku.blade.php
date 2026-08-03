@@ -31,10 +31,32 @@
 </head>
 
     <div class="biodata-container">
-        <div >
-            <h3>Nama: <strong>{{ $rekening->nasabah->nama_nasabah ?? '-' }}</strong></h3> <!-- Nama Nasabah -->
+        <div>
+            @php
+                $namaAsli = $rekening->nasabah->nama_nasabah ?? '-';
+                
+                // Rapikan spasi dan buat huruf awal setiap kata menjadi kapital (Title Case)
+                $namaAsli = ucwords(strtolower(trim($namaAsli)));
+                
+                // Pecah menjadi array dan reset indeks (array_values) agar aman jika ada spasi ganda
+                $kata = array_values(array_filter(explode(' ', $namaAsli))); 
+                
+                if (count($kata) > 2) {
+                    // Ambil 2 kata pertama secara utuh
+                    $namaFormat = $kata[0] . ' ' . $kata[1];
+                    
+                    // Singkat sisa kata berikutnya dan tambahkan titik
+                    for ($i = 2; $i < count($kata); $i++) {
+                        $namaFormat .= ' ' . strtoupper(substr($kata[$i], 0, 1)) . '.';
+                    }
+                } else {
+                    $namaFormat = $namaAsli;
+                }
+            @endphp
+            
+            <h3>Nama: <strong>{{ $namaFormat }}</strong></h3> <!-- Nama Nasabah -->
         </div>
-        <div >
+        <div>
             <h3>No. Rek: <strong>{{ $rekening->id }}</strong></h3> <!-- Nomor Rekening -->
         </div>
     </div>

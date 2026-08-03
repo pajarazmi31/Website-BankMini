@@ -142,7 +142,7 @@
 
                 <p class="font-bold text-xs lg:text-lg {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
                     @if($isTransferLuarMasuk)
-                        + Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                        <span class="{{ $item->status_verifikasi == 'pending' ? 'text-amber-500' : ($item->status_verifikasi == 'berhasil' ? 'text-green-500' : 'text-gray-500') }}"> Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }} </span>
                     @elseif($isSetoran)
                         + Rp {{ number_format($item->jumlah_penyetoran, 0, ',', '.') }}
                     @elseif($isPenarikan)
@@ -280,7 +280,7 @@
 
                 <p class="font-bold text-xs sm:text-base self-end sm:self-center shrink-0 {{ $isKeluar ? 'text-red-500' : 'text-green-500' }}">
                     @if($isTransferLuarMasuk)
-                        + Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }}
+                        <span class="{{ $item->status_verifikasi == 'pending' ? 'text-amber-500' : ($item->status_verifikasi == 'berhasil' ? 'text-green-500' : 'text-gray-500') }}"> Rp {{ number_format($item->jumlah_transfer, 0, ',', '.') }} </span>
                     @elseif($isSetoran)
                         + Rp {{ number_format($item->jumlah_penyetoran, 0, ',', '.') }}
                     @elseif($isPenarikan)

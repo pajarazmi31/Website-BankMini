@@ -415,7 +415,7 @@ class superVisorController extends Controller
 
 
         $saldoMinimum = Minimum_saldo::where('jenis_minimum', 'penarikan')->first();
-        return view('supervisor.saldominimum', compact('user', 'super', 'saldoMinimum'));
+        return view('supervisor.saldoMinimum', compact('user', 'super', 'saldoMinimum'));
     }
 
     public function saldoMinimumUpdate(Request $request)
