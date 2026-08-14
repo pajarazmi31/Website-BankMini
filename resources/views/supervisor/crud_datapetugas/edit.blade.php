@@ -60,14 +60,23 @@
                         class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
                 </div>
 
-                <!-- Role -->
+                <!-- Role Utama -->
                 <div>
-                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role</label>
-                    <select name="role_id" id="edit_role" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.2em_1.2em] bg-[right_1rem_center] bg-no-repeat">
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role Utama</label>
+                    <select name="role_id" id="edit_role" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none shadow-sm">
                         @foreach($roles as $role)
-                        <option value="{{ $role->id }}" {{ old('role_id', $petugasEdit->user->role_id ?? '') == $role->id ? 'selected' : '' }}>
-                            {{ $role->nama_role }}
-                        </option>
+                        <option value="{{ $role->id }}">{{ $role->nama_role }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Role Kedua -->
+                <div>
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role Kedua (Opsional)</label>
+                    <select name="role_id_2" id="edit_role_2" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none shadow-sm">
+                        <option value="">-- Tidak Ada / Kosongkan --</option>
+                        @foreach($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->nama_role }}</option>
                         @endforeach
                     </select>
                 </div>

@@ -282,14 +282,14 @@ class superVisorController extends Controller
         return view('supervisor.verifikasi.registrasirekening.revisi', compact('nasabah', 'rekening', 'user'));
     }
 
-    public function verifikasiLogin(Request $request)
+public function verifikasiLogin(Request $request)
     {
         $user = Auth::user();
         $perPage = $request->input('per_page', 10);
         $keyword = $request->keyword;
 
-        $data = VerifikasiLogin::with(['user'])
-            // Tambahkan logika pencarian di sini
+        // Tambahkan 'user.role' dan 'user.role2' pada method with()
+        $data = VerifikasiLogin::with(['user.role', 'user.role2'])
             ->when($keyword, function ($query, $keyword) {
                 $query->whereHas('user', function ($q) use ($keyword) {
                     $q->where('name', 'like', '%' . $keyword . '%')
@@ -298,7 +298,6 @@ class superVisorController extends Controller
             })
             ->latest()
             ->paginate($perPage)
-            // Pastikan keyword ikut ditambahkan ke pagination agar tidak hilang saat pindah halaman
             ->appends([
                 'per_page' => $perPage,
                 'keyword' => $keyword
@@ -309,6 +308,7 @@ class superVisorController extends Controller
             compact('user', 'data', 'perPage', 'keyword')
         );
     }
+    
     public function setujuiLogin(String $id)
     {
         VerifikasiLogin::findOrFail($id)

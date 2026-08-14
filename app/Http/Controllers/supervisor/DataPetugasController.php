@@ -23,32 +23,26 @@ class DataPetugasController extends Controller
         $perPage = $request->input('per_page', 10);
         $keyword = $request->keyword;
 
-       $petugas = Petugas::with(['user.role'])
-        ->whereHas('user.role', function ($query) {
-            $query->whereIn('nama_role', [
-                'supervisor',
-                'customerservice',
-                'teller'
-            ]);
-        })->when($keyword, function ($query, $keyword) {
-            $query->where(function ($q) use ($keyword) {
-                // 1. Cari berdasarkan 'kelas' (berada langsung di tabel petugas)
-                $q->where('kelas', 'like', '%' . $keyword . '%')
-                  
-                  // 2. Cari berdasarkan 'name' (harus masuk ke relasi 'user')
-                  ->orWhereHas('user', function ($userQuery) use ($keyword) {
-                      $userQuery->where('name', 'like', '%' . $keyword . '%');
-                  })
-                  
-                  // 3. Opsional: Cari berdasarkan nama role (masuk ke relasi 'user.role')
-                  ->orWhereHas('user.role', function ($roleQuery) use ($keyword) {
-                      $roleQuery->where('nama_role', 'like', '%' . $keyword . '%');
-                  });
-            });
-        })
-        ->orderByDesc('id')
-        ->paginate($perPage)
-        ->appends(['per_page' => $perPage, 'keyword' => $keyword]);
+        // Sesuaikan dengan relasi role utama atau role2
+        $petugas = Petugas::with(['user.role', 'user.role2'])
+            ->whereHas('user', function ($query) {
+                $query->whereHas('role', function($q) {
+                    $q->whereIn('nama_role', ['customerservice', 'teller']);
+                })->orWhereHas('role2', function($q) {
+                    $q->whereIn('nama_role', ['customerservice', 'teller']);
+                });
+            })->when($keyword, function ($query, $keyword) {
+                $query->where(function ($q) use ($keyword) {
+                    $q->where('kelas', 'like', '%' . $keyword . '%')
+                      ->orWhereHas('user', function ($userQuery) use ($keyword) {
+                          $userQuery->where('name', 'like', '%' . $keyword . '%');
+                      });
+                });
+            })
+            ->orderByDesc('id')
+            ->paginate($perPage)
+            ->appends(['per_page' => $perPage, 'keyword' => $keyword]);
+
         $roles = Role::whereIn('nama_role', [
             'customerservice',
             'teller'
@@ -71,17 +65,17 @@ class DataPetugasController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
             'role_id' => 'required|exists:roles,id',
+            'role_id_2' => 'nullable|exists:roles,id|different:role_id',
         ]);
 
         try {
-
             DB::transaction(function () use ($request) {
-
                 $user = User::create([
                     'name' => $request->name,
                     'email' => $request->email,
                     'password' => Hash::make($request->password),
                     'role_id' => $request->role_id,
+                    'role_id_2' => $request->role_id_2,
                 ]);
 
                 Petugas::create([
@@ -94,10 +88,9 @@ class DataPetugasController extends Controller
                 ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil ditambahkan');
         } catch (\Exception $e) {
-
             return back()
                 ->withInput()
-                ->with('error', 'Data petugas gagal ditambahkan');
+                ->with('error', 'Data petugas gagal ditambahkan: ' . $e->getMessage());
         }
     }
 
@@ -110,21 +103,19 @@ class DataPetugasController extends Controller
             'kelas' => 'required',
             'email' => 'required|email|unique:users,email,' . $petugas->user->id,
             'role_id' => 'required|exists:roles,id',
+            'role_id_2' => 'nullable|exists:roles,id|different:role_id',
             'password' => 'nullable|min:6',
         ]);
 
         try {
-
             DB::transaction(function () use ($request, $petugas) {
-
-                $petugas->update([
-                    'kelas' => $request->kelas,
-                ]);
+                $petugas->update(['kelas' => $request->kelas]);
 
                 $userData = [
                     'name' => $request->name,
                     'email' => $request->email,
                     'role_id' => $request->role_id,
+                    'role_id_2' => $request->role_id_2,
                 ];
 
                 if ($request->filled('password')) {
@@ -138,7 +129,6 @@ class DataPetugasController extends Controller
                 ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil diupdate');
         } catch (\Exception $e) {
-
             return back()
                 ->withInput()
                 ->with('error', 'Data petugas gagal diupdate');
@@ -148,15 +138,10 @@ class DataPetugasController extends Controller
     public function destroy($id)
     {
         try {
-
             DB::transaction(function () use ($id) {
-
                 $petugas = Petugas::with('user')->findOrFail($id);
-
                 $user = $petugas->user;
-
                 $petugas->delete();
-
                 if ($user) {
                     $user->delete();
                 }
@@ -166,9 +151,7 @@ class DataPetugasController extends Controller
                 ->route('supervisor.datapetugas')
                 ->with('success', 'Data petugas berhasil dihapus');
         } catch (\Exception $e) {
-
-            return back()
-                ->with('error', 'Data petugas gagal dihapus');
+            return back()->with('error', 'Data petugas gagal dihapus');
         }
     }
 
@@ -185,23 +168,9 @@ class DataPetugasController extends Controller
 
         try {
             Excel::import(new PetugasImport, $request->file('file_excel'));
-
-            return redirect()->route('supervisor.datapetugas')
-                ->with('success', 'Data petugas berhasil di-import dari Excel!');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            // Menangkap error jika validasi baris excel gagal (misal email salah/kosong)
-            $failures = $e->failures();
-            $errorMessages = [];
-            foreach ($failures as $failure) {
-                $errorMessages[] = "Baris ke-" . $failure->row() . " (" . implode(', ', $failure->errors()) . ")";
-            }
-
-            return redirect()->route('supervisor.datapetugas')
-                ->with('error', 'Gagal Validasi: ' . implode(' | ', $errorMessages));
+            return redirect()->route('supervisor.datapetugas')->with('success', 'Data petugas berhasil di-import!');
         } catch (\Exception $e) {
-            // Menangkap error sistem/database asli (misal: table tidak ditemukan, query error)
-            return redirect()->route('supervisor.datapetugas')
-                ->with('error', 'Gagal System: ' . $e->getMessage());
+            return redirect()->route('supervisor.datapetugas')->with('error', 'Gagal import: ' . $e->getMessage());
         }
     }
 }

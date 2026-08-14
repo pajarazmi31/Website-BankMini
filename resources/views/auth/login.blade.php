@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +27,8 @@
                     },
                     colors: {
                         'primary-blue': '#1c4e80',
-                        'accent-yellow': '#eab308', /* Warna kuning untuk teks 'menggunakan' */
+                        'accent-yellow': '#eab308',
+                        /* Warna kuning untuk teks 'menggunakan' */
                     }
                 }
             }
@@ -36,6 +38,7 @@
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <link rel="icon" href="{{ asset('img/Logo Bank Mini K-one.jpeg') }}" type="image/jpeg">
 </head>
+
 <body class="font-sans antialiased text-gray-800 bg-white min-h-screen flex flex-col lg:flex-row overflow-x-hidden">
 
     <!-- Custom Message Box (Pengganti alert) -->
@@ -49,7 +52,9 @@
                 <span id="messageText" class="text-xs text-gray-500 font-medium mt-0.5">Pesan di sini</span>
             </div>
             <button type="button" onclick="closeMessage()" class="text-gray-400 hover:text-gray-600 transition-colors ml-2 focus:outline-none">
-                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
             </button>
         </div>
     </div>
@@ -75,6 +80,7 @@
                 - Form menggunakan method POST ke route('login').
                 - Parameter input: 'email' dan 'password'.
             --}}
+{{-- Form Login Utama --}}
             <form id="loginForm" method="post" action="{{ route('login') }}" class="space-y-6">
                 @csrf
                 <!-- Input Email -->
@@ -86,10 +92,9 @@
                         name="email"
                         value="{{ old('email') }}"
                         required
-                        class="w-full px-4 py-2.5 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm"
-                    >
+                        class="w-full px-4 py-2.5 border @error('email') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm">
                     @error('email')
-                        <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
+                    <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
 
@@ -102,13 +107,11 @@
                             id="password"
                             name="password"
                             required
-                            class="w-full pl-4 pr-10 py-2.5 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm"
-                        >
+                            class="w-full pl-4 pr-10 py-2.5 border @error('password') border-red-500 @else border-gray-300 @enderror rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-transparent transition-all duration-200 text-sm">
                         <button
                             type="button"
                             id="togglePassword"
-                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-primary-blue transition-colors focus:outline-none"
-                        >
+                            class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-primary-blue transition-colors focus:outline-none">
                             <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -116,10 +119,10 @@
                         </button>
                     </div>
                     @error('password')
-                        <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
+                    <p class="text-red-500 text-[10px] mt-1 ml-1 uppercase font-semibold">{{ $message }}</p>
                     @enderror
                 </div>
-                
+
                 <div class="flex items-center justify-end">
                     <a href="{{ route('password.request') }}" class="text-xs font-semibold text-primary-blue hover:text-[#143252] transition-colors">
                         Lupa Password?
@@ -134,6 +137,42 @@
                         Masuk
                     </button>
                 </div>
+            </form>
+
+            <!-- ========================================== -->
+            <!-- MODAL POP UP PILIH ROLE (Berada di Luar Form Utama) -->
+            <!-- ========================================== -->
+            @if(isset($showRoleModal) && $showRoleModal)
+            <div class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/60 backdrop-blur-sm">
+                <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-sm text-center transform transition-all scale-100">
+                    <div class="mb-6">
+                        <h2 class="text-2xl font-bold text-primary-blue mb-2">Pilih Akses Masuk</h2>
+                        <p class="text-gray-500 text-xs">Akun ini memiliki lebih dari 1 peran. Silakan pilih akses role Anda untuk melanjutkan.</p>
+                    </div>
+
+                    <!-- Form Khusus Modal (Mengarah ke proses.login tanpa terikat input email/password utama) -->
+                    <form method="post" action="{{ route('proses.login') }}" class="space-y-3">
+                        @csrf
+                        <button type="submit" name="pilih_role" value="{{ $roleUtama }}" class="w-full bg-primary-blue hover:bg-[#143252] text-white font-semibold py-3.5 rounded-xl transition-all shadow-md">
+                            Masuk sebagai {{ ucfirst($roleUtama) }}
+                        </button>
+
+                        <button type="submit" name="pilih_role" value="{{ $roleKedua }}" class="w-full bg-accent-yellow hover:bg-yellow-600 text-white font-semibold py-3.5 rounded-xl transition-all shadow-md">
+                            Masuk sebagai {{ ucfirst($roleKedua) }}
+                        </button>
+                    </form>
+
+                    <!-- Tombol Batal -->
+                    <form method="post" action="{{ route('logout') }}" class="mt-5">
+                        @csrf
+                        <button type="submit" class="text-xs text-gray-400 hover:text-red-500 underline transition-colors">
+                            Batal & Kembali
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endif
+
             </form>
 
         </div>
@@ -240,15 +279,15 @@
         // Script ini otomatis menangkap pesan 'success', 'failed', atau 'error' dari session.
 
         @if(session('success'))
-            showMessage("{{ session('success') }}", 'success');
+        showMessage("{{ session('success') }}", 'success');
         @endif
 
         @if(session('failed'))
-            showMessage("{{ session('failed') }}", 'error');
+        showMessage("{{ session('failed') }}", 'error');
         @endif
 
         @if(session('error'))
-            showMessage("{{ session('error') }}", 'error');
+        showMessage("{{ session('error') }}", 'error');
         @endif
 
         // Ambil query parameter error (misal dialihkan dari halaman verifikasi)
@@ -259,7 +298,7 @@
             // Bersihkan parameter query dari URL
             window.history.replaceState({}, document.title, window.location.pathname);
         }
-
     </script>
 </body>
+
 </html>

@@ -187,18 +187,15 @@ Route::post('/reset-password', [lupaPasswordController::class, 'resetPassword'])
 
 
 Route::get('/cek-verifikasi-login/{id}', function ($id) {
-
-    $verifikasi = VerifikasiLogin::findOrFail($id);
+    $verifikasi = App\Models\VerifikasiLogin::findOrFail($id);
 
     if ($verifikasi->status === 'disetujui') {
-
-        $user = User::find(
-            session('user_id_verifikasi')
-        );
-
+        $user = App\Models\User::find(session('user_id_verifikasi'));
         Auth::login($user);
 
-        $roleName = $user->role->nama_role;
+        // Ambil role yang diminta saat login dari session
+        $roleName = session('role_verifikasi'); 
+        session(['active_role' => $roleName]); // Set session active_role untuk Middleware
 
         return response()->json([
             'status' => 'approved',

@@ -110,7 +110,10 @@ Selamat Datang, {{ $user->name }}!
                         </td>
 
                         <td class="py-4 px-2 border-b border-gray-50">
-                            {{ $item->user->role->nama_role }}
+                            {{ $item->user->role->nama_role ?? '-' }}
+                            @if($item->user->role2)
+                            <span class="text-xs text-blue-600 font-bold">(& {{ $item->user->role2->nama_role }})</span>
+                            @endif
                         </td>
 
                         <td class="py-4 px-2 border-b border-gray-50">
@@ -137,22 +140,21 @@ Selamat Datang, {{ $user->name }}!
 
                             @endif
                         </td>
-
                         <td class="py-4 px-2 border-b border-gray-50 ">
                             <div class="flex items-center justify-center gap-2">
+                                <!-- Ganti parameter ke-4 di onclick viewDetail -->
                                 <button
                                     type="button"
                                     onclick="viewDetail(
                                             '{{ $item->id }}',
                                             '{{ $item->user->name }}',
                                             '{{ $item->user->email }}',
-                                            '{{ $item->user->role->nama_role }}',
+                                            '{{ $item->user->role->nama_role ?? '-' }} {{ $item->user->role2 ? '& ' . $item->user->role2->nama_role : '' }}',
                                             '{{ $item->status }}',
                                             '{{ $item->created_at->format('d/m/Y H:i') }}',
                                             '{{ $item->waktu_verifikasi ? \Carbon\Carbon::parse($item->waktu_verifikasi)->format('d/m/Y H:i') : '-' }}'
                                         )"
                                     class="w-[30px] h-[30px] rounded-full bg-[#e2e8f0] text-brand-blue flex items-center justify-center hover:bg-gray-300 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[16px]"></i>
-
                                 </button>
 
                                 @if($item->status == 'pending')

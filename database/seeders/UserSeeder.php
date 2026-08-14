@@ -16,34 +16,17 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // ROLE
-
+        // AMBIL DATA ROLE
         $roleTeller = Role::where('nama_role', 'teller')->first();
-
         $roleSupervisor = Role::where('nama_role', 'supervisor')->first();
-
         $roleCs = Role::where('nama_role', 'customerservice')->first();
 
 
-        // USER TELLER
-
-        $userTeller = User::create([
-            'name' => 'Teller',
-            'role_id' => $roleTeller->id,
-            'email' => 'teller@gmail.com',
-            'password' => Hash::make('123456'),
-        ]);
-
-        Petugas::create([
-            'user_id' => $userTeller->id,
-            'kelas' => 'XI AK 1',
-        ]);
-
-        // USER SUPERVISOR
-
+        // 1. USER SUPERVISOR (Hanya 1 Role)
         $userSupervisor = User::create([
             'name' => 'Supervisor',
             'role_id' => $roleSupervisor->id,
+            // role_id_2 otomatis null karena tidak diisi
             'email' => 'supervisor@gmail.com',
             'password' => Hash::make('123456'),
         ]);
@@ -54,16 +37,17 @@ class UserSeeder extends Seeder
         ]);
 
 
-        // USER CUSTOMER SERVICE
-        $userCs = User::create([
-            'name' => 'Customer Service',
-            'role_id' => $roleCs->id,
-            'email' => 'customerservice@gmail.com',
+        // 2. USER GABUNGAN (TELLER & CUSTOMER SERVICE)
+        $userMulti = User::create([
+            'name' => 'Petugas Bank (Teller & CS)',
+            'role_id' => $roleTeller->id,        // Slot Role Utama
+            'role_id_2' => $roleCs->id,          // Slot Role Kedua
+            'email' => 'petugas@gmail.com',
             'password' => Hash::make('123456'),
         ]);
 
         Petugas::create([
-            'user_id' => $userCs->id,
+            'user_id' => $userMulti->id,
             'kelas' => 'XI AK 1',
         ]);
     }

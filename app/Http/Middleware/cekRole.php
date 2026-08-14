@@ -19,11 +19,12 @@ class cekRole
         if (!Auth::user()) {
             return redirect()->route('login');
         }
-        $user = Auth::user();
-        $userRole = $user->role->nama_role;
 
-        if( $userRole != $role ) {
-            abort(403, 'Akses Di Tolak');
+        // Ambil role aktif dari session (akan kita set di Controller Login nanti)
+        $activeRole = session('active_role') ?? $user->role->nama_role;
+
+        if ($activeRole != $role) {
+            abort(403, 'Akses Di Tolak. Anda sedang login sebagai ' . $activeRole);
         }
 
         return $next($request);

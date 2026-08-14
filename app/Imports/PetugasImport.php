@@ -22,16 +22,18 @@ class PetugasImport implements ToCollection, WithHeadingRow, WithValidation
                 continue; 
             }
 
-            // Set default Role ID ke 2 (Teller) sesuai request Anda
+            // Set Role ID ke 2 (Teller) dan Role ID 2 ke 3 (Customer Service)
             $roleId = 2;
+            $roleId2 = 3; 
 
-            DB::transaction(function () use ($row, $roleId) {
-                // Simpan ke tabel users
+            DB::transaction(function () use ($row, $roleId, $roleId2) {
+                // Simpan ke tabel users dengan 2 role sekaligus
                 $user = User::create([
-                    'name'     => $row['nama_petugas'], // Pastikan klop dengan heading excel
-                    'email'    => $row['email'],
-                    'password' => Hash::make($row['password'] ?? 'password123'),
-                    'role_id'  => $roleId,
+                    'name'      => $row['nama_petugas'], 
+                    'email'     => $row['email'],
+                    'password'  => Hash::make($row['password'] ?? 'password123'),
+                    'role_id'   => $roleId,
+                    'role_id_2' => $roleId2, // Menambahkan role kedua di sini
                 ]);
 
                 // Simpan ke tabel petugas
@@ -45,7 +47,6 @@ class PetugasImport implements ToCollection, WithHeadingRow, WithValidation
 
     /**
      * Rules validasi untuk mengecek isi Excel sebelum di-insert
-     * Kolom role_id dihapus dari validasi karena sudah otomatis diset dari sistem
      */
     public function rules(): array
     {

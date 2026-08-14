@@ -7,17 +7,15 @@
         <form action="{{ route('datapetugas.store') }}" method="POST">
             @csrf
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <!-- Input Nama, Kelas, Password, Email tetap seperti biasa -->
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Nama Petugas</label>
-                    <input type="text" name="name" placeholder="Masukkan nama petugas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
+                    <input type="text" name="name" placeholder="Masukkan nama petugas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue shadow-sm">
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Kelas</label>
-                    <select name="kelas"
-                        class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
-
+                    <select name="kelas" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] focus:outline-none focus:border-brand-blue shadow-sm">
                         <option value="">Pilih Kelas</option>
-
                         <option value="X AK 1">X AK 1</option>
                         <option value="X AK 2">X AK 2</option>
                         <option value="XI AK 1">XI AK 1</option>
@@ -25,37 +23,33 @@
                         <option value="XII AK 1">XII AK 1</option>
                         <option value="XII AK 2">XII AK 2</option>
                     </select>
-
-                    @error('kelas')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-                    @enderror
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Password</label>
-                    <div class="relative">
-                        <input type="password" id="tambah_password" name="password" placeholder="********" class="w-full border border-gray-200 rounded-lg pl-4 pr-11 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
-                        <button type="button" onclick="togglePasswordVisibility('tambah_password', 'icon_tambah_password')" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none p-1">
-                            <i id="icon_tambah_password" class="ph ph-eye text-[20px]"></i>
-                        </button>
-                    </div>
+                    <input type="password" name="password" placeholder="********" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue shadow-sm">
                 </div>
                 <div>
                     <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Email</label>
-                    <input type="email" name="email" placeholder="contoh@gmail.com" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm">
-                    @error('email')
-                    <p class="text-red-500 text-sm mt-1">
-                        {{ $message }}
-                    </p>
-                    @enderror
+                    <input type="email" name="email" placeholder="contoh@gmail.com" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue shadow-sm">
                 </div>
+
+                <!-- Role Utama -->
                 <div>
-                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role</label>
-                    <select name="role_id" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-400 focus:outline-none focus:border-brand-blue focus:ring-1 focus:ring-brand-blue transition-all bg-white shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%239ca3af%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.2em_1.2em] bg-[right_1rem_center] bg-no-repeat"
-                        onchange="this.classList.remove('text-gray-400'); this.classList.add('text-gray-800')">
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role Utama</label>
+                    <select name="role_id" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue shadow-sm">
                         @foreach($roles as $role)
-                        <option value="{{ $role->id }}">
-                            {{ $role->nama_role }}
-                        </option>
+                        <option value="{{ $role->id }}">{{ $role->nama_role }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Role Kedua (Opsional untuk Multi-Role) -->
+                <div>
+                    <label class="block text-[13.5px] font-bold text-gray-500 mb-2">Role Kedua (Opsional)</label>
+                    <select name="role_id_2" class="w-full border border-gray-200 rounded-lg px-4 py-3 text-[14px] text-gray-800 focus:outline-none focus:border-brand-blue shadow-sm">
+                        <option value="">-- Tidak Ada / Kosongkan --</option>
+                        @foreach($roles as $role)
+                        <option value="{{ $role->id }}">{{ $role->nama_role }}</option>
                         @endforeach
                     </select>
                 </div>

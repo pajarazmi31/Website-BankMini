@@ -29,7 +29,7 @@
 
     @section('content')
 
-@if ($errors->any())
+    @if ($errors->any())
     <div style="color: red; background: #f8d7da; padding: 10px; margin-bottom: 10px;">
         <ul>
             @foreach ($errors->all() as $error)
@@ -127,16 +127,24 @@
                             <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->user->name }}</td>
                             <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->kelas }}</td>
                             <td class="py-4 px-4 border-b border-gray-50 hidden md:table-cell text-gray-700 font-medium">{{ $p->user->email }}</td>
-                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">{{ $p->user->role->nama_role }}</td>
+                            <td class="py-4 px-4 border-b border-gray-50 text-gray-700 font-medium">
+                                {{ $p->user->role->nama_role ?? '-' }}
+                                @if($p->user->role2)
+                                <span class="text-xs text-blue-600 font-bold">({{ $p->user->role2->nama_role }})</span>
+                                @endif
+                            </td>
                             <td class="py-4 px-2 border-b border-gray-50">
                                 <div class="flex items-center justify-center gap-3">
-                                    <button onclick="viewDetail('{{ $p->user->name }}','{{ $p->kelas }}', '{{ $p->user->email }}', '{{ $p->user->role->nama_role }}')" class="w-[28px] h-[28px] rounded-full bg-[#f1f5f9] text-[#1c3a5a] flex items-center justify-center hover:bg-gray-200 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[15px]"></i></button>
+                                    <button onclick="viewDetail('{{ $p->user->name }}','{{ $p->kelas }}', '{{ $p->user->email }}', '{{ $p->user->role->nama_role ?? '-' }} {{ $p->user->role2 ? ' & ' . $p->user->role2->nama_role : '' }}')" class="w-[28px] h-[28px] rounded-full bg-[#f1f5f9] text-[#1c3a5a] flex items-center justify-center hover:bg-gray-200 transition-colors" title="Lihat Detail"><i class="ph-fill ph-eye text-[15px]"></i></button>
+
                                     <button onclick="viewEdit(
-                                        '{{ $p->id }}',
-                                        '{{ $p->user->name }}',
-                                        '{{ $p->kelas }}',
-                                        '{{ $p->user->email }}',
-                                        '{{ $p->user->role_id }}')" class="w-[28px] h-[28px] rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit Data"><i class="ph-fill ph-pencil-simple text-[15px]"></i></button>
+                    '{{ $p->id }}',
+                    '{{ $p->user->name }}',
+                    '{{ $p->kelas }}',
+                    '{{ $p->user->email }}',
+                    '{{ $p->user->role_id }}',
+                    '{{ $p->user->role_id_2 }}')" class="w-[28px] h-[28px] rounded-full bg-[#dcfce7] text-[#16a34a] flex items-center justify-center hover:bg-green-200 transition-colors" title="Edit Data"><i class="ph-fill ph-pencil-simple text-[15px]"></i></button>
+
                                     <button onclick="openDeleteModal(() => hapusPetugas('{{ $p->id }}'))" class="w-[28px] h-[28px] rounded-full bg-[#fee2e2] text-[#ef4444] flex items-center justify-center hover:bg-red-200 transition-colors" title="Hapus Data"><i class="ph-fill ph-trash text-[15px]"></i></button>
                                 </div>
                             </td>
@@ -177,21 +185,21 @@
         }
 
         // Edit Data
-        function viewEdit(id, nama, kelas, email, roleId) {
-
-            // ambil form
+        function viewEdit(id, nama, kelas, email, roleId, roleId2) {
             const form = document.getElementById('formEditPetugas');
-
-            // set action form
             form.action = `/datapetugas/update/${id}`;
 
-            // isi input
             document.getElementById('edit_nama').value = nama;
             document.getElementById('edit_kelas').value = kelas;
             document.getElementById('edit_email').value = email;
             document.getElementById('edit_role').value = roleId;
 
-            // tampilkan view edit
+            // Jika ada elemen select untuk role kedua di form edit
+            const editRole2 = document.getElementById('edit_role_2');
+            if (editRole2) {
+                editRole2.value = roleId2 ? roleId2 : "";
+            }
+
             switchView('edit');
         }
 
